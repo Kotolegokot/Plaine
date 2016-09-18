@@ -1,9 +1,13 @@
 #include <iostream>
+#include <irrlicht/irrlicht.h>
 
-using namespace std;
+using namespace irr;
 
 int main()
 {
-    cout << "Hello world!" << endl;
+
+
+
+
     return 0;
 }
