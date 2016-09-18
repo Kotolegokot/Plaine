@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <irrlicht/irrlicht.h>
+#include "EventReceiver.h"
+#include "util.h"
 
 using namespace irr;
 
@@ -10,10 +12,11 @@ class Game
 {
 public:
     Game();
-    virtual ~Game();
+    ~Game();
     bool initialize();
     bool reinitialize();
     void terminate();
+    void run();
 
 private:
     bool pause = false;
@@ -23,8 +26,13 @@ private:
     scene::ISceneManager *smgr = nullptr;
     gui::IGUIEnvironment *guienv = nullptr;
     io::IFileSystem *fs = nullptr;
+    EventReceiver *evRec = nullptr;
 
-    void error(const core::stringw &str);
+    gui::IGUIButton *buttonQuit = nullptr;
+
+    void error(const core::stringw &str) const;
+
+    const core::stringw ERR_NOT_INITIALIZED = "game is not initialized!";
 };
 
 #endif // GAME_H

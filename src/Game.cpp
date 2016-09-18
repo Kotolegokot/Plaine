@@ -14,12 +14,14 @@ Game::~Game()
 
 bool Game::initialize()
 {
-    if (initialized)
+    if (initialized) {
+        error(ERR_NOT_INITIALIZED);
         return false;
+    }
 
     device = createDevice(video::EDT_OPENGL, core::dimension2d<u32>(1240, 720));
     if (!device) {
-    error("Couldn't create a device :(\n");
+        error("Couldn't create a device :(\n");
         return false;
     }
     device->setWindowCaption(L"Дерьмо");
@@ -28,6 +30,14 @@ bool Game::initialize()
     smgr = device->getSceneManager();
     guienv = device->getGUIEnvironment();
     fs = device->getFileSystem();
+
+    evRec = new EventReceiver(Context(&pause, device, driver, smgr, guienv, fs));
+    device->setEventReceiver(evRec);
+
+    // Menu
+    buttonQuit = guienv->addButton(core::rect<s32>(20, 20, 100, 40), 0, ID_BUTTON_QUIT, L"Quit", L"Exits program");
+
+    initialized = true;
 }
 
 bool Game::reinitialize()
@@ -43,21 +53,40 @@ void Game::terminate()
 
     device->drop();
     device = nullptr;
-
-    driver->drop();
     driver = nullptr;
-
-    smgr->drop();
     smgr = nullptr;
-
-    guienv->drop();
     guienv = nullptr;
-
-    fs->drop();
     fs = nullptr;
+
+    buttonQuit = nullptr;
 }
 
-void Game::error(const core::stringw &str)
+void Game::error(const core::stringw &str) const
 {
     std::wcerr << "Error: " << str.c_str() << std::endl;
+}
+
+void Game::run()
+{
+    if (!initialized) {
+        error(ERR_NOT_INITIALIZED);
+        return;
+    }
+
+    while (device->run()) {
+        if (pause) {
+            buttonQuit->setVisible(true);
+        } else {
+            buttonQuit->setVisible(false);
+        }
+
+        if (evRec->IsKeyDown(KEY_ESCAPE))
+            pause = !pause;
+
+        driver->beginScene(true, true, video::SColor(0, 3, 243, 250));
+        if (!pause)
+            smgr->drawAll();
+        guienv->drawAll();
+        driver->endScene();
+    }
 }
