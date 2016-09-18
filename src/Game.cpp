@@ -15,7 +15,7 @@ Game::~Game()
 bool Game::initialize()
 {
     if (initialized) {
-        error(ERR_NOT_INITIALIZED);
+        error(ERR_ALREADY_INITIALIZED);
         return false;
     }
 

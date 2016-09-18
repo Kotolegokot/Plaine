@@ -33,6 +33,7 @@ private:
     void error(const core::stringw &str) const;
 
     const core::stringw ERR_NOT_INITIALIZED = "game is not initialized!";
+    const core::stringw ERR_ALREADY_INITIALIZED = "game is already initialized!";
 };
 
 #endif // GAME_H
