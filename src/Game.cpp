@@ -93,8 +93,8 @@ void Game::run()
             screenSizeText->setText(scrs.c_str());
 
             if (screenSize != driver->getScreenSize()) {
-                buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 100, 10));
                 screenSize = driver->getScreenSize();
+                buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 100, 10));
             }
             buttonQuit->setVisible(true);
             screenSizeText->setVisible(true);
