@@ -30,6 +30,7 @@ private:
     EventReceiver *evRec = nullptr;
 
     gui::IGUIButton *buttonQuit = nullptr;
+    gui::IGUIStaticText *screenSizeText = nullptr;
 
     void error(const core::stringw &str) const;
 

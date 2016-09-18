@@ -31,7 +31,7 @@ bool Game::initialize()
     guienv = device->getGUIEnvironment();
     fs = device->getFileSystem();
 
-    evRec = new EventReceiver(Context(&pause, &quit, device, driver, smgr, guienv, fs));
+    evRec = new EventReceiver(Context(&pause, &quit, device));
     device->setEventReceiver(evRec);
 
     device->setResizable(true);
@@ -39,6 +39,7 @@ bool Game::initialize()
     // Menu
     core::dimension2du screenSize = driver->getScreenSize();
     buttonQuit = guienv->addButton(core::rect<s32>(screenSize.Width - 100, 10, screenSize.Width - 20, 30), 0, ID_BUTTON_QUIT, L"Quit", L"Exits program");
+    screenSizeText = guienv->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), true);
 
     initialized = true;
 }
@@ -85,13 +86,21 @@ void Game::run()
             break;
 
         if (pause) {
+            core::stringw scrs = "Screen size: ";
+            scrs += screenSize.Width;
+            scrs += "x";
+            scrs += screenSize.Height;
+            screenSizeText->setText(scrs.c_str());
+
             if (screenSize != driver->getScreenSize()) {
                 buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 100, 10));
                 screenSize = driver->getScreenSize();
             }
             buttonQuit->setVisible(true);
+            screenSizeText->setVisible(true);
         } else {
             buttonQuit->setVisible(false);
+            screenSizeText->setVisible(false);
         }
 
         if (evRec->IsKeyDown(KEY_ESCAPE)) {
