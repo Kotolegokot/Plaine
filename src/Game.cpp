@@ -38,8 +38,8 @@ bool Game::initialize()
 
     // Menu
     core::dimension2du screenSize = driver->getScreenSize();
-    buttonQuit = guienv->addButton(core::rect<s32>(screenSize.Width - 100, 10, screenSize.Width - 20, 30), 0, ID_BUTTON_QUIT, L"Quit", L"Exits program");
     screenSizeText = guienv->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
+    buttonQuit = guienv->addButton(core::rect<s32>(screenSize.Width - 100, 10, screenSize.Width - 20, 30), 0, ID_BUTTON_QUIT, L"Quit", L"Exits program");
 
     initialized = true;
 }
