@@ -35,7 +35,8 @@ bool Game::initialize()
     device->setEventReceiver(evRec);
 
     // Menu
-    buttonQuit = guienv->addButton(core::rect<s32>(20, 20, 100, 40), 0, ID_BUTTON_QUIT, L"Quit", L"Exits program");
+    core::dimension2du screenSize = driver->getScreenSize();
+    buttonQuit = guienv->addButton(core::rect<s32>(screenSize.Width - 100, 10, screenSize.Width - 20, 30), 0, ID_BUTTON_QUIT, L"Quit", L"Exits program");
 
     initialized = true;
 }
@@ -75,12 +76,17 @@ void Game::run()
     }
 
     bool escapePressed = false;
+    core::dimension2du screenSize = driver->getScreenSize();
 
     while (device->run()) {
         if (quit)
             break;
 
         if (pause) {
+            if (screenSize != driver->getScreenSize()) {
+                buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 100, 10));
+                screenSize = driver->getScreenSize();
+            }
             buttonQuit->setVisible(true);
         } else {
             buttonQuit->setVisible(false);
