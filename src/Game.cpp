@@ -31,7 +31,7 @@ bool Game::initialize()
     guienv = device->getGUIEnvironment();
     fs = device->getFileSystem();
 
-    evRec = new EventReceiver(Context(&pause, device, driver, smgr, guienv, fs));
+    evRec = new EventReceiver(Context(&pause, &quit, device, driver, smgr, guienv, fs));
     device->setEventReceiver(evRec);
 
     // Menu
@@ -50,6 +50,7 @@ void Game::terminate()
 {
     pause = false;
     initialized = false;
+    quit = false;
 
     device->drop();
     device = nullptr;
@@ -74,6 +75,9 @@ void Game::run()
     }
 
     while (device->run()) {
+        if (quit)
+            break;
+
         if (pause) {
             buttonQuit->setVisible(true);
         } else {
@@ -93,4 +97,6 @@ void Game::run()
             device->yield();
         }
     }
+
+    device->drop();
 }

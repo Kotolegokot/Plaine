@@ -21,6 +21,7 @@ public:
 private:
     bool pause = false;
     bool initialized = false;
+    bool quit = false;
     IrrlichtDevice *device = nullptr;
     video::IVideoDriver *driver = nullptr;
     scene::ISceneManager *smgr = nullptr;
