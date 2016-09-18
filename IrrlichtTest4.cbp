@@ -31,8 +31,14 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add directory="include" />
 		</Compiler>
+		<Unit filename="include/EventReceiver.h" />
+		<Unit filename="include/Game.h" />
+		<Unit filename="include/util.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/EventReceiver.cpp" />
+		<Unit filename="src/Game.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
