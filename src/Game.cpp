@@ -74,6 +74,8 @@ void Game::run()
         return;
     }
 
+    bool escapePressed = false;
+
     while (device->run()) {
         if (quit)
             break;
@@ -84,8 +86,14 @@ void Game::run()
             buttonQuit->setVisible(false);
         }
 
-        if (evRec->IsKeyDown(KEY_ESCAPE))
-            pause = !pause;
+        if (evRec->IsKeyDown(KEY_ESCAPE)) {
+            if (!escapePressed) {
+                pause = !pause;
+                escapePressed = true;
+            }
+        } else {
+            escapePressed = false;
+        }
 
         if (device->isWindowActive()) {
             driver->beginScene(true, true, video::SColor(0, 3, 243, 250));
