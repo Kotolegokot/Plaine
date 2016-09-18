@@ -83,7 +83,7 @@ void Game::run()
         if (evRec->IsKeyDown(KEY_ESCAPE))
             pause = !pause;
 
-        if (device->isWindowActive())
+        if (device->isWindowActive()) {
             driver->beginScene(true, true, video::SColor(0, 3, 243, 250));
             if (!pause)
                 smgr->drawAll();
