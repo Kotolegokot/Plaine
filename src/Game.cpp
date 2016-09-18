@@ -34,6 +34,8 @@ bool Game::initialize()
     evRec = new EventReceiver(Context(&pause, &quit, device, driver, smgr, guienv, fs));
     device->setEventReceiver(evRec);
 
+    device->setResizable(true);
+
     // Menu
     core::dimension2du screenSize = driver->getScreenSize();
     buttonQuit = guienv->addButton(core::rect<s32>(screenSize.Width - 100, 10, screenSize.Width - 20, 30), 0, ID_BUTTON_QUIT, L"Quit", L"Exits program");
