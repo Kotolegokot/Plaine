@@ -9,15 +9,15 @@ using namespace irr;
 class EventReceiver : public IEventReceiver
 {
 public:
-    EventReceiver(const Context &context);
-
+    EventReceiver();
     virtual bool OnEvent(const SEvent &event);
     virtual bool IsKeyDown(EKEY_CODE keyCode) const;
+
+    bool quit = false;
 
 private:
     bool PressedKeys[KEY_KEY_CODES_COUNT];
     bool UpKeys[KEY_KEY_CODES_COUNT];
-    Context context;
 };
 
 #endif // EVENTRECEIVER_H

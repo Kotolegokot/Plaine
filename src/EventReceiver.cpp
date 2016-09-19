@@ -2,8 +2,7 @@
 
 using namespace irr;
 
-EventReceiver::EventReceiver(const Context &context) :
-    context(context)
+EventReceiver::EventReceiver()
 {
     for (u32 i = 0; i < KEY_KEY_CODES_COUNT; i++)
         PressedKeys[i] = false;
@@ -21,7 +20,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
         switch (event.GUIEvent.EventType) {
         case gui::EGET_BUTTON_CLICKED:
             if (id == ID_BUTTON_QUIT) {
-                *(context.quit) = true;
+                quit = true;
                 return true;
             }
             break;

@@ -32,7 +32,7 @@ bool Game::initializeDevice()
     guienv = device->getGUIEnvironment();
     fs = device->getFileSystem();
 
-    evRec = new EventReceiver(Context(&pause, &quit, device));
+    evRec = new EventReceiver();
     device->setEventReceiver(evRec);
 
     return true;
@@ -71,7 +71,7 @@ void Game::run()
     core::dimension2du screenSize = driver->getScreenSize();
 
     while (device->run()) {
-        if (quit)
+        if (evRec->quit)
             break;
 
         if (pause) {
