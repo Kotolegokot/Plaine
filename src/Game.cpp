@@ -47,8 +47,9 @@ void Game::initializeGUI()
 
 void Game::initializeScene()
 {
-    camera = smgr->addCameraSceneNodeFPS();
-    camera->setPosition(core::vector3df(0, 0, 30));
+    camera = smgr->addCameraSceneNode();
+    cameraAnimator = new SceneNodeAnimatorCameraPlayer(0, 5);
+    camera->addAnimator(cameraAnimator);
 
     light = smgr->addLightSceneNode(0, core::vector3df(.0f, .0f, .0f), video::SColor(video::ECP_RED));
     floatingPieceOfShitNode = smgr->addCubeSceneNode(10.0f, 0, -1, core::vector3df(0, 0, 100));
@@ -104,42 +105,6 @@ void Game::run()
         } else if (!evRec->IsKeyDown(KEY_ESCAPE)) {
             escapePressed = false;
         }
-
-        if (evRec->IsKeyDown(KEY_KEY_W)) {
-            core::vector3df dir = camera->getTarget() - camera->getAbsolutePosition();
-            dir.normalize();
-            camera->setPosition(camera->getPosition() + dir);
-        } else if (evRec->IsKeyDown(KEY_KEY_S)) {
-            core::vector3df dir = camera->getTarget() - camera->getAbsolutePosition();
-            dir.normalize();
-            camera->setPosition(camera->getPosition() - dir);
-        }
-
-        /*if (evRec->IsKeyDown(KEY_KEY_A)) {
-            core::vector3df dir = camera->getTarget() - camera->getAbsolutePosition();
-            dir.normalize();
-            dir.rotateXZBy(90);
-            camera->setPosition(camera->getPosition() + dir);
-        } else if (evRec->IsKeyDown(KEY_KEY_D)) {
-            core::vector3df dir = camera->getTarget() - camera->getAbsolutePosition();
-            dir.normalize();
-            dir.rotateXZBy(90);
-            camera->setPosition(camera->getPosition() - dir);
-        }
-
-        if (evRec->IsKeyDown(KEY_SPACE)) {
-            core::vector3df dir = camera->getTarget() - camera->getAbsolutePosition();
-            dir.normalize();
-            dir.rotateYZBy(90);
-            camera->setPosition(camera->getPosition() - dir);
-        } else if (evRec->IsKeyDown(KEY_LSHIFT)) {
-            core::vector3df dir = camera->getTarget() - camera->getAbsolutePosition();
-            dir.normalize();
-            dir.rotateYZBy(90);
-            camera->setPosition(camera->getPosition() + dir);
-        }*/
-
-
 
         if (device->isWindowActive()) {
             driver->beginScene(true, true, video::SColor(0, 3, 243, 250));

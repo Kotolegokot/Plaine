@@ -5,6 +5,7 @@
 #include <irrlicht/irrlicht.h>
 #include "EventReceiver.h"
 #include "util.h"
+#include "SceneNodeAnimatorCameraPlayer.h"
 
 using namespace irr;
 
@@ -35,6 +36,7 @@ private:
     scene::ILightSceneNode *light = nullptr;
     scene::ISceneNode *floatingPieceOfShitNode = nullptr;
     scene::ISceneNode *floatingPieceOfShitNode2 = nullptr;
+    SceneNodeAnimatorCameraPlayer *cameraAnimator = nullptr;
 
     void error(const core::stringw &str) const;
     bool initializeDevice();

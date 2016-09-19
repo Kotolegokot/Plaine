@@ -15,6 +15,7 @@
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
 					<Add option="-g" />
+					<Add directory="include" />
 				</Compiler>
 			</Target>
 			<Target title="Linux-Release">
@@ -26,6 +27,7 @@
 					<Add option="-O2" />
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -41,6 +43,7 @@
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
 					<Add option="-g" />
+					<Add directory="include" />
 				</Compiler>
 			</Target>
 			<Target title="Windows-Release">
@@ -52,6 +55,7 @@
 				<Compiler>
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
+					<Add directory="include" />
 				</Compiler>
 			</Target>
 		</Build>
@@ -64,6 +68,7 @@
 			<Add library="Irrlicht" />
 			<Add directory="lib" />
 		</Linker>
+		<Unit filename="../../../Downloads/irrlicht-1.8.4/src/SceneNodeAnimatorCameraPlayer.cpp" />
 		<Unit filename="include/EventReceiver.h" />
 		<Unit filename="include/Game.h" />
 		<Unit filename="include/util.h" />
