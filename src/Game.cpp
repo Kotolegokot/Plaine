@@ -30,7 +30,6 @@ bool Game::initializeDevice()
         return false;
     }
     device->setWindowCaption(L"PlaneTest");
-    device->setResizable(true);
 
     driver = device->getVideoDriver();
     sceneManager = device->getSceneManager();
@@ -161,6 +160,7 @@ void Game::menu()
             {
                 this->fullscreen = !this->fullscreen;
                 this->terminate();
+                this->windowSize = core::dimension2d<u32>(1240, 720);
                 if (!initializeDevice())
                         return;
                 initializeScene();
