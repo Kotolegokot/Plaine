@@ -33,6 +33,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
             }
             if (id == ID_BUTTON_MENU) {
                 start = false;
+                settings = false;
                 return true;
             }
             break;

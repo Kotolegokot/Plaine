@@ -44,6 +44,7 @@ private:
     bool initializeDevice();
     void initializeMenuGUI();
     void initializeInGameGUI();
+    void initializeSettingsGUI();
     void initializeScene();
 
     // Constants

@@ -54,6 +54,14 @@ void Game::initializeInGameGUI()
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 40, screenSize.Width - 20, screenSize.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
 }
 
+void Game::initializeSettingsGUI()
+{
+    core::dimension2du screenSize = driver->getScreenSize();
+    screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
+    buttonMenu = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 80, screenSize.Width - 20, screenSize.Height - 50), 0, ID_BUTTON_MENU, L"Back", L"Exit to Main menu");
+    buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 40, screenSize.Width - 20, screenSize.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
+}
+
 void Game::initializeScene()
 {
     camera = sceneManager->addCameraSceneNodeFPS();
@@ -88,6 +96,25 @@ void Game::menu()
             this->run();
             this->initializeMenuGUI();
         }
+        if (eventReceiver->settings){
+            if (buttonStart != nullptr)
+            {
+                buttonStart->remove();
+                buttonSettings->remove();
+                buttonQuit->remove();
+                screenSizeText->remove();
+                buttonStart = nullptr;
+            }
+            this->initializeSettingsGUI();
+        }
+        else if (buttonStart == nullptr)
+            {
+                error("ABR");
+                buttonMenu->remove();
+                buttonQuit->remove();
+                screenSizeText->remove();
+                this->initializeMenuGUI();
+            }
         if (eventReceiver->quit){
             break;
         }
@@ -97,16 +124,23 @@ void Game::menu()
         scrs += screenSize.Height;
         screenSizeText->setText(scrs.c_str());
 
-        if (screenSize != driver->getScreenSize()) {
-            screenSize = driver->getScreenSize();
-            buttonStart->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 120));
-            buttonSettings->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 80));
-            buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 40));
+        if (!eventReceiver->settings){
+            if(screenSize != driver->getScreenSize()) {
+                screenSize = driver->getScreenSize();
+                buttonStart->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 120));
+                buttonSettings->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 80));
+                buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 40));
+            }
+            else if(screenSize != driver->getScreenSize()) {
+                screenSize = driver->getScreenSize();
+                //buttonMenu->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 80));
+                //buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 40));
+            }
         }
 
-        buttonStart->setVisible(true);
-        buttonQuit->setVisible(true);
-        screenSizeText->setVisible(true);
+        //buttonStart->setVisible(true);
+        //buttonQuit->setVisible(true);
+        //screenSizeText->setVisible(true);
 
         device->getCursorControl()->setVisible(true);
         if (device->isWindowActive()) {
