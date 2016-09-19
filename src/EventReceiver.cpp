@@ -27,6 +27,10 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 quit = true;
                 return true;
             }
+            if (id == ID_BUTTON_MENU) {
+                start = false;
+                return true;
+            }
             break;
         default:
             break;

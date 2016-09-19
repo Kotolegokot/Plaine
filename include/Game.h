@@ -28,8 +28,9 @@ private:
     EventReceiver *eventReceiver = nullptr;
 
     // GUI
-    gui::IGUIButton *buttonQuit = nullptr;
     gui::IGUIButton *buttonStart = nullptr;
+    gui::IGUIButton *buttonMenu = nullptr;
+    gui::IGUIButton *buttonQuit = nullptr;
     gui::IGUIStaticText *screenSizeText = nullptr;
 
     // Scene
@@ -40,7 +41,8 @@ private:
 
     void error(const core::stringw &str) const;
     bool initializeDevice();
-    void initializeGUI();
+    void initializeMenuGUI();
+    void initializeInGameGUI();
     void initializeScene();
 
     // Constants
