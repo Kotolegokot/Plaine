@@ -46,8 +46,11 @@ private:
     void error(const core::stringw &str) const;
     bool initializeDevice(core::dimension2d<u32> windowSize = core::dimension2d<u32>(1240, 720));
     void initializeMenuGUI();
+    void terminateMenuGUI();
     void initializeInGameGUI();
+    void terminateInGameGUI();
     void initializeSettingsGUI();
+    void terminateSettingsGUI();
     void initializeScene();
     void terminate();
 

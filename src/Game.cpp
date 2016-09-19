@@ -51,12 +51,27 @@ void Game::initializeMenuGUI()
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 40, screenSize.Width - 20, screenSize.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
 }
 
+void Game::terminateMenuGUI()
+{
+    buttonStart->remove();
+    buttonSettings->remove();
+    buttonQuit->remove();
+    screenSizeText->remove();
+}
+
 void Game::initializeInGameGUI()
 {
     core::dimension2du screenSize = driver->getScreenSize();
     screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
     buttonMenu = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 80, screenSize.Width - 20, screenSize.Height - 50), 0, ID_BUTTON_MENU, L"Menu", L"Exit to Main menu");
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 40, screenSize.Width - 20, screenSize.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
+}
+
+void Game::terminateInGameGUI()
+{
+    buttonMenu->remove();
+    buttonQuit->remove();
+    screenSizeText->remove();
 }
 
 void Game::initializeSettingsGUI()
@@ -71,6 +86,15 @@ void Game::initializeSettingsGUI()
         buttonFullscreen->setEnabled(false);
     else
         buttonWindowed->setEnabled(false);
+}
+
+void Game::terminateSettingsGUI()
+{
+    buttonMenu->remove();
+    buttonQuit->remove();
+    buttonFullscreen->remove();
+    buttonWindowed->remove();
+    screenSizeText->remove();
 }
 
 void Game::initializeScene()
@@ -88,6 +112,11 @@ void Game::error(const core::stringw &str) const
     std::wcerr << "Error: " << str.c_str() << std::endl;
 }
 
+void Game::terminate()
+{
+    device->drop();
+}
+
 void Game::menu()
 {
     this->initializeMenuGUI();
@@ -100,10 +129,7 @@ void Game::menu()
 
     while (device->run()) {
         if (eventReceiver->start){
-            buttonStart->remove();
-            buttonSettings->remove();
-            buttonQuit->remove();
-            screenSizeText->remove();
+            this->terminateMenuGUI();
             this->run();
             this->initializeMenuGUI();
         }
@@ -113,10 +139,7 @@ void Game::menu()
         if (eventReceiver->settings){
             if (buttonStart != nullptr)
             {
-                buttonStart->remove();
-                buttonSettings->remove();
-                buttonQuit->remove();
-                screenSizeText->remove();
+                this->terminateMenuGUI();
                 buttonStart = nullptr;
                 this->initializeSettingsGUI();
             }
@@ -133,11 +156,7 @@ void Game::menu()
         }
         else if (buttonStart == nullptr)
             {
-                buttonMenu->remove();
-                buttonQuit->remove();
-                buttonFullscreen->remove();
-                buttonWindowed->remove();
-                screenSizeText->remove();
+                this->terminateSettingsGUI();
                 this->initializeMenuGUI();
             }
         core::stringw scrs = "Screen size: ";
@@ -174,33 +193,6 @@ void Game::menu()
 
 }
 
-void Game::terminate()
-{
-    device->drop();
-
-    /**bool initialized = false;
-    bool pause = false;
-
-    IrrlichtDevice *device = nullptr;
-    video::IVideoDriver *driver = nullptr;
-    scene::ISceneManager *sceneManager = nullptr;
-    gui::IGUIEnvironment *guiEnvironment = nullptr;
-    io::IFileSystem *fileSystem = nullptr;
-    EventReceiver *eventReceiver = nullptr;
-
-    gui::IGUIButton *buttonStart = nullptr;
-    gui::IGUIButton *buttonSettings = nullptr;
-    gui::IGUIButton *buttonMenu = nullptr;
-    gui::IGUIButton *buttonQuit = nullptr;
-    gui::IGUIStaticText *screenSizeText = nullptr;
-
-    scene::ICameraSceneNode *camera = nullptr;
-    scene::ILightSceneNode *light = nullptr;
-    scene::ISceneNode *floatingPieceOfShitNode = nullptr;
-    scene::ISceneNode *floatingPieceOfShitNode2 = nullptr;**/
-
-}
-
 void Game::run()
 {
 
@@ -212,9 +204,7 @@ void Game::run()
         if (eventReceiver->quit)
             break;
         if (!eventReceiver->start){
-            buttonMenu->remove();
-            buttonQuit->remove();
-            screenSizeText->remove();
+            terminateInGameGUI();
             break;
         }
         if (pause) {
