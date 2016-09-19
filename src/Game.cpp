@@ -41,7 +41,8 @@ void Game::initializeMenuGUI()
 {
     core::dimension2du screenSize = driver->getScreenSize();
     screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
-    buttonStart = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 80, screenSize.Width - 20, screenSize.Height - 50), 0, ID_BUTTON_START, L"Start", L"Start game");
+    buttonStart = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 120, screenSize.Width - 20, screenSize.Height - 90), 0, ID_BUTTON_START, L"Start", L"Start game");
+    buttonSettings = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 80, screenSize.Width - 20, screenSize.Height - 50), 0, ID_BUTTON_SETTINGS, L"Settings", L"Game settings");
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 40, screenSize.Width - 20, screenSize.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
 }
 
@@ -81,6 +82,7 @@ void Game::menu()
     while (device->run()) {
         if (eventReceiver->start){
             buttonStart->remove();
+            buttonSettings->remove();
             buttonQuit->remove();
             screenSizeText->remove();
             this->run();
@@ -97,7 +99,8 @@ void Game::menu()
 
         if (screenSize != driver->getScreenSize()) {
             screenSize = driver->getScreenSize();
-            buttonStart->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 80));
+            buttonStart->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 120));
+            buttonSettings->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 80));
             buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 40));
         }
 

@@ -23,6 +23,10 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 start = true;
                 return true;
             }
+            if (id == ID_BUTTON_SETTINGS) {
+                settings = true;
+                return true;
+            }
             if (id == ID_BUTTON_QUIT) {
                 quit = true;
                 return true;

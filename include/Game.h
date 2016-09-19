@@ -29,6 +29,7 @@ private:
 
     // GUI
     gui::IGUIButton *buttonStart = nullptr;
+    gui::IGUIButton *buttonSettings = nullptr;
     gui::IGUIButton *buttonMenu = nullptr;
     gui::IGUIButton *buttonQuit = nullptr;
     gui::IGUIStaticText *screenSizeText = nullptr;
