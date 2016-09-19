@@ -114,6 +114,8 @@ void Game::error(const core::stringw &str) const
 
 void Game::terminate()
 {
+    device->closeDevice();
+    device->run();
     device->drop();
 }
 
