@@ -18,7 +18,6 @@ public:
 private:
     bool initialized = false;
     bool pause = false;
-    bool quit = false;
 
     IrrlichtDevice *device = nullptr;
     video::IVideoDriver *driver = nullptr;
