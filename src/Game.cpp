@@ -7,7 +7,6 @@ Game::Game()
     if (!initializeDevice())
         return;
     initializeScene();
-
     initialized = true;
 }
 
@@ -16,9 +15,15 @@ Game::~Game()
     device->drop();
 }
 
-bool Game::initializeDevice()
+bool Game::initializeDevice(core::dimension2d<u32> windowSize)
 {
-    device = createDevice(video::EDT_OPENGL, core::dimension2d<u32>(1240, 720));
+    if (this->fullscreen)
+    {
+        IrrlichtDevice *nulldevice = createDevice(video::EDT_NULL);
+        windowSize = nulldevice->getVideoModeList()->getDesktopResolution();
+        nulldevice -> drop();
+    }
+    device = createDevice(video::EDT_OPENGL, windowSize, 32, this->fullscreen);
     if (!device) {
         error("Couldn't create a device :(\n");
         return false;
@@ -58,8 +63,14 @@ void Game::initializeSettingsGUI()
 {
     core::dimension2du screenSize = driver->getScreenSize();
     screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
+    buttonFullscreen = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 120, screenSize.Width - 100, screenSize.Height - 90), 0, ID_BUTTON_FULLSCREEN, L"Fullscreen", L"To Fullscreen Mode");
+    buttonWindowed = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 100, screenSize.Height - 120, screenSize.Width - 20, screenSize.Height - 90), 0, ID_BUTTON_WINDOWED, L"Windowed", L"To Windewed Mode");
     buttonMenu = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 80, screenSize.Width - 20, screenSize.Height - 50), 0, ID_BUTTON_MENU, L"Back", L"Exit to Main menu");
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 40, screenSize.Width - 20, screenSize.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
+    if (this->fullscreen)
+        buttonFullscreen->setEnabled(false);
+    else
+        buttonWindowed->setEnabled(false);
 }
 
 void Game::initializeScene()
@@ -96,6 +107,9 @@ void Game::menu()
             this->run();
             this->initializeMenuGUI();
         }
+        if (eventReceiver->quit){
+            break;
+        }
         if (eventReceiver->settings){
             if (buttonStart != nullptr)
             {
@@ -106,17 +120,26 @@ void Game::menu()
                 buttonStart = nullptr;
                 this->initializeSettingsGUI();
             }
+            if (eventReceiver->toggleFullscreen)
+            {
+                this->fullscreen = !this->fullscreen;
+                this->terminate();
+                if (!initializeDevice())
+                        return;
+                initializeScene();
+                initialized = true;
+                this->initializeMenuGUI();
+            }
         }
         else if (buttonStart == nullptr)
             {
                 buttonMenu->remove();
                 buttonQuit->remove();
+                buttonFullscreen->remove();
+                buttonWindowed->remove();
                 screenSizeText->remove();
                 this->initializeMenuGUI();
             }
-        if (eventReceiver->quit){
-            break;
-        }
         core::stringw scrs = "Screen size: ";
         scrs += screenSize.Width;
         scrs += "x";
@@ -132,11 +155,11 @@ void Game::menu()
             }
             else {
                 screenSize = driver->getScreenSize();
+                buttonFullscreen->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 120));
+                buttonWindowed->setRelativePosition(core::position2di(screenSize.Width - 100, screenSize.Height - 120));
                 buttonMenu->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 80));
                 buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 40));
             }
-
-
         device->getCursorControl()->setVisible(true);
         if (device->isWindowActive()) {
             driver->beginScene(true, true, video::SColor(0, 135, 206, 235));;
@@ -147,7 +170,34 @@ void Game::menu()
         }
     }
 
+    this->terminate();
+
+}
+
+void Game::terminate()
+{
     device->drop();
+
+    /**bool initialized = false;
+    bool pause = false;
+
+    IrrlichtDevice *device = nullptr;
+    video::IVideoDriver *driver = nullptr;
+    scene::ISceneManager *sceneManager = nullptr;
+    gui::IGUIEnvironment *guiEnvironment = nullptr;
+    io::IFileSystem *fileSystem = nullptr;
+    EventReceiver *eventReceiver = nullptr;
+
+    gui::IGUIButton *buttonStart = nullptr;
+    gui::IGUIButton *buttonSettings = nullptr;
+    gui::IGUIButton *buttonMenu = nullptr;
+    gui::IGUIButton *buttonQuit = nullptr;
+    gui::IGUIStaticText *screenSizeText = nullptr;
+
+    scene::ICameraSceneNode *camera = nullptr;
+    scene::ILightSceneNode *light = nullptr;
+    scene::ISceneNode *floatingPieceOfShitNode = nullptr;
+    scene::ISceneNode *floatingPieceOfShitNode2 = nullptr;**/
 
 }
 

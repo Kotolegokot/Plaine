@@ -19,6 +19,7 @@ public:
 private:
     bool initialized = false;
     bool pause = false;
+    bool fullscreen = false;
 
     IrrlichtDevice *device = nullptr;
     video::IVideoDriver *driver = nullptr;
@@ -30,6 +31,8 @@ private:
     // GUI
     gui::IGUIButton *buttonStart = nullptr;
     gui::IGUIButton *buttonSettings = nullptr;
+    gui::IGUIButton *buttonFullscreen = nullptr;
+    gui::IGUIButton *buttonWindowed = nullptr;
     gui::IGUIButton *buttonMenu = nullptr;
     gui::IGUIButton *buttonQuit = nullptr;
     gui::IGUIStaticText *screenSizeText = nullptr;
@@ -41,11 +44,12 @@ private:
     scene::ISceneNode *floatingPieceOfShitNode2 = nullptr;
 
     void error(const core::stringw &str) const;
-    bool initializeDevice();
+    bool initializeDevice(core::dimension2d<u32> windowSize = core::dimension2d<u32>(1240, 720));
     void initializeMenuGUI();
     void initializeInGameGUI();
     void initializeSettingsGUI();
     void initializeScene();
+    void terminate();
 
     // Constants
     const core::stringw ERR_NOT_INITIALIZED = "device has failed to initialize!";
