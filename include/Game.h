@@ -20,6 +20,7 @@ private:
     bool initialized = false;
     bool pause = false;
     bool fullscreen = false;
+    core::dimension2d<u32> windowSize;
 
     IrrlichtDevice *device = nullptr;
     video::IVideoDriver *driver = nullptr;
@@ -35,6 +36,7 @@ private:
     gui::IGUIButton *buttonWindowed = nullptr;
     gui::IGUIButton *buttonMenu = nullptr;
     gui::IGUIButton *buttonQuit = nullptr;
+    gui::IGUIComboBox *resolutionComboBox = nullptr;
     gui::IGUIStaticText *screenSizeText = nullptr;
 
     // Scene
@@ -44,7 +46,7 @@ private:
     scene::ISceneNode *floatingPieceOfShitNode2 = nullptr;
 
     void error(const core::stringw &str) const;
-    bool initializeDevice(core::dimension2d<u32> windowSize = core::dimension2d<u32>(1240, 720));
+    bool initializeDevice();
     void initializeMenuGUI();
     void terminateMenuGUI();
     void initializeInGameGUI();

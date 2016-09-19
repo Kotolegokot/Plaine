@@ -4,6 +4,7 @@ using namespace irr;
 
 Game::Game()
 {
+    windowSize = core::dimension2d<u32>(1240, 720);
     if (!initializeDevice())
         return;
     initializeScene();
@@ -15,7 +16,7 @@ Game::~Game()
     device->drop();
 }
 
-bool Game::initializeDevice(core::dimension2d<u32> windowSize)
+bool Game::initializeDevice()
 {
     if (this->fullscreen)
     {
@@ -82,10 +83,20 @@ void Game::initializeSettingsGUI()
     buttonWindowed = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 100, screenSize.Height - 120, screenSize.Width - 20, screenSize.Height - 90), 0, ID_BUTTON_WINDOWED, L"Windowed", L"To Windewed Mode");
     buttonMenu = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 80, screenSize.Width - 20, screenSize.Height - 50), 0, ID_BUTTON_MENU, L"Back", L"Exit to Main menu");
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 40, screenSize.Width - 20, screenSize.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
+    resolutionComboBox = guiEnvironment->addComboBox(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 150, screenSize.Width - 20, screenSize.Height - 130), 0, ID_RESOLUTION_COMBOBOX);
     if (this->fullscreen)
+    {
         buttonFullscreen->setEnabled(false);
+        resolutionComboBox->setEnabled(false);
+    }
     else
         buttonWindowed->setEnabled(false);
+    resolutionComboBox->addItem(L"640x480", 0);
+    resolutionComboBox->addItem(L"1240x720", 1);
+    if (windowSize == core::dimension2d<u32>(640, 480))
+        resolutionComboBox->setSelected(0);
+    else if (windowSize == core::dimension2d<u32>(1240, 720))
+        resolutionComboBox->setSelected(1);
 }
 
 void Game::terminateSettingsGUI()
@@ -95,6 +106,7 @@ void Game::terminateSettingsGUI()
     buttonFullscreen->remove();
     buttonWindowed->remove();
     screenSizeText->remove();
+    resolutionComboBox->remove();
 }
 
 void Game::initializeScene()
@@ -161,13 +173,41 @@ void Game::menu()
                 this->terminateSettingsGUI();
                 this->initializeMenuGUI();
             }
+        if(eventReceiver->toggleResolution)
+        {
+            switch (resolutionComboBox->getSelected())
+            {
+                case 0:
+                    {
+                        this->terminate();
+                        windowSize = core::dimension2d<u32>(640, 480);
+                        if (!initializeDevice())
+                            return;
+                        initializeScene();
+                        initialized = true;
+                        this->initializeMenuGUI();
+                        break;
+                    }
+                case 1:
+                    {
+                        this->terminate();
+                        windowSize = core::dimension2d<u32>(1240, 720);
+                        if (!initializeDevice())
+                            return;
+                        initializeScene();
+                        initialized = true;
+                        this->initializeMenuGUI();
+                        break;
+                    }
+            }
+        }
         core::stringw scrs = "Screen size: ";
         scrs += screenSize.Width;
         scrs += "x";
         scrs += screenSize.Height;
         screenSizeText->setText(scrs.c_str());
-
         if(screenSize != driver->getScreenSize())
+        {
             if (!eventReceiver->settings){
                 screenSize = driver->getScreenSize();
                 buttonStart->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 120));
@@ -181,6 +221,7 @@ void Game::menu()
                 buttonMenu->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 80));
                 buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 40));
             }
+        }
         device->getCursorControl()->setVisible(true);
         if (device->isWindowActive()) {
             driver->beginScene(true, true, video::SColor(0, 135, 206, 235));;

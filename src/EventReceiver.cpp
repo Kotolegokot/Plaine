@@ -45,6 +45,12 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 return true;
             }
             break;
+        case gui::EGET_COMBO_BOX_CHANGED:
+            {
+                toggleResolution = true;
+                return true;
+                break;
+            }
         default:
             break;
         }
