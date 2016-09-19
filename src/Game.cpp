@@ -42,8 +42,8 @@ void Game::initializeGUI()
 {
     core::dimension2du screenSize = driver->getScreenSize();
     screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
-    buttonStart = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 100, 10, screenSize.Width - 20, 30), 0, ID_BUTTON_START, L"Start", L"Start game");
-    buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 100, 40, screenSize.Width - 20, 60), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
+    buttonStart = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 100, screenSize.Height - 60, screenSize.Width - 20, screenSize.Height - 40), 0, ID_BUTTON_START, L"Start", L"Start game");
+    buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 100, screenSize.Height - 30, screenSize.Width - 20, screenSize.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
 }
 
 void Game::initializeScene()
@@ -71,14 +71,13 @@ void Game::menu()
     core::dimension2du screenSize = driver->getScreenSize();
 
     while (device->run()) {
-        if (eventReceiver->quit){
-            break;
-        }
         if (eventReceiver->start){
             buttonStart->setVisible(false);
             buttonQuit->setVisible(false);
             screenSizeText->setVisible(false);
             this->run();
+        }
+        if (eventReceiver->quit){
             break;
         }
         core::stringw scrs = "Screen size: ";
@@ -89,8 +88,8 @@ void Game::menu()
 
         if (screenSize != driver->getScreenSize()) {
             screenSize = driver->getScreenSize();
-            buttonStart->setRelativePosition(core::position2di(screenSize.Width - 100, 10));
-            buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 100, 40));
+            buttonStart->setRelativePosition(core::position2di(screenSize.Width - 100, screenSize.Height - 60));
+            buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 100, screenSize.Height - 30));
         }
 
         buttonStart->setVisible(true);
@@ -130,7 +129,7 @@ void Game::run()
 
             if (screenSize != driver->getScreenSize()) {
                 screenSize = driver->getScreenSize();
-                buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 100, 10));
+                buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 100, screenSize.Height - 30));
             }
 
             buttonQuit->setVisible(true);
