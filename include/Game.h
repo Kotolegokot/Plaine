@@ -13,15 +13,13 @@ class Game
 public:
     Game();
     ~Game();
-    bool initialize();
-    bool reinitialize();
-    void terminate();
     void run();
 
 private:
-    bool pause = false;
     bool initialized = false;
+    bool pause = false;
     bool quit = false;
+
     IrrlichtDevice *device = nullptr;
     video::IVideoDriver *driver = nullptr;
     scene::ISceneManager *smgr = nullptr;
@@ -29,13 +27,23 @@ private:
     io::IFileSystem *fs = nullptr;
     EventReceiver *evRec = nullptr;
 
+    // GUI
     gui::IGUIButton *buttonQuit = nullptr;
     gui::IGUIStaticText *screenSizeText = nullptr;
 
-    void error(const core::stringw &str) const;
+    // Scene
+    scene::ICameraSceneNode *camera = nullptr;
+    scene::ILightSceneNode *light = nullptr;
+    scene::ISceneNode *floatingPieceOfShitNode = nullptr;
+    scene::ISceneNode *floatingPieceOfShitNode2 = nullptr;
 
-    const core::stringw ERR_NOT_INITIALIZED = "game is not initialized!";
-    const core::stringw ERR_ALREADY_INITIALIZED = "game is already initialized!";
+    void error(const core::stringw &str) const;
+    bool initializeDevice();
+    void initializeGUI();
+    void initializeScene();
+
+    // Constants
+    const core::stringw ERR_NOT_INITIALIZED = "device has failed to initialize!";
 };
 
 #endif // GAME_H

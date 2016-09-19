@@ -4,27 +4,28 @@ using namespace irr;
 
 Game::Game()
 {
-    initialize();
+    if (!initializeDevice())
+        return;
+    initializeGUI();
+    initializeScene();
+
+    initialized = true;
 }
 
 Game::~Game()
 {
-    terminate();
+    device->drop();
 }
 
-bool Game::initialize()
+bool Game::initializeDevice()
 {
-    if (initialized) {
-        error(ERR_ALREADY_INITIALIZED);
-        return false;
-    }
-
     device = createDevice(video::EDT_OPENGL, core::dimension2d<u32>(1240, 720));
     if (!device) {
         error("Couldn't create a device :(\n");
         return false;
     }
     device->setWindowCaption(L"Дерьмо");
+    device->setResizable(true);
 
     driver = device->getVideoDriver();
     smgr = device->getSceneManager();
@@ -34,36 +35,24 @@ bool Game::initialize()
     evRec = new EventReceiver(Context(&pause, &quit, device));
     device->setEventReceiver(evRec);
 
-    device->setResizable(true);
+    return true;
+}
 
-    // Menu
+void Game::initializeGUI()
+{
     core::dimension2du screenSize = driver->getScreenSize();
     screenSizeText = guienv->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
     buttonQuit = guienv->addButton(core::rect<s32>(screenSize.Width - 100, 10, screenSize.Width - 20, 30), 0, ID_BUTTON_QUIT, L"Quit", L"Exits program");
-
-    initialized = true;
 }
 
-bool Game::reinitialize()
+void Game::initializeScene()
 {
-    terminate();
-    return initialize();
-}
+    camera = smgr->addCameraSceneNodeFPS();
+    camera->setPosition(core::vector3df(0, 0, 30));
 
-void Game::terminate()
-{
-    pause = false;
-    initialized = false;
-    quit = false;
-
-    device->drop();
-    device = nullptr;
-    driver = nullptr;
-    smgr = nullptr;
-    guienv = nullptr;
-    fs = nullptr;
-
-    buttonQuit = nullptr;
+    light = smgr->addLightSceneNode(0, core::vector3df(.0f, .0f, .0f), video::SColor(video::ECP_RED));
+    floatingPieceOfShitNode = smgr->addCubeSceneNode(10.0f, 0, -1, core::vector3df(0, 0, 100));
+    floatingPieceOfShitNode2 = smgr->addSphereSceneNode(5.0f, 4, 0, -1, core::vector3df(50, 50, 80));
 }
 
 void Game::error(const core::stringw &str) const
@@ -96,11 +85,15 @@ void Game::run()
                 screenSize = driver->getScreenSize();
                 buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 100, 10));
             }
+
             buttonQuit->setVisible(true);
             screenSizeText->setVisible(true);
+
+            device->getCursorControl()->setVisible(true);
         } else {
             buttonQuit->setVisible(false);
             screenSizeText->setVisible(false);
+            device->getCursorControl()->setVisible(false);
         }
 
         if (evRec->IsKeyDown(KEY_ESCAPE)) {
@@ -108,9 +101,45 @@ void Game::run()
                 pause = !pause;
                 escapePressed = true;
             }
-        } else {
+        } else if (!evRec->IsKeyDown(KEY_ESCAPE)) {
             escapePressed = false;
         }
+
+        if (evRec->IsKeyDown(KEY_KEY_W)) {
+            core::vector3df dir = camera->getTarget() - camera->getAbsolutePosition();
+            dir.normalize();
+            camera->setPosition(camera->getPosition() + dir);
+        } else if (evRec->IsKeyDown(KEY_KEY_S)) {
+            core::vector3df dir = camera->getTarget() - camera->getAbsolutePosition();
+            dir.normalize();
+            camera->setPosition(camera->getPosition() - dir);
+        }
+
+        /*if (evRec->IsKeyDown(KEY_KEY_A)) {
+            core::vector3df dir = camera->getTarget() - camera->getAbsolutePosition();
+            dir.normalize();
+            dir.rotateXZBy(90);
+            camera->setPosition(camera->getPosition() + dir);
+        } else if (evRec->IsKeyDown(KEY_KEY_D)) {
+            core::vector3df dir = camera->getTarget() - camera->getAbsolutePosition();
+            dir.normalize();
+            dir.rotateXZBy(90);
+            camera->setPosition(camera->getPosition() - dir);
+        }
+
+        if (evRec->IsKeyDown(KEY_SPACE)) {
+            core::vector3df dir = camera->getTarget() - camera->getAbsolutePosition();
+            dir.normalize();
+            dir.rotateYZBy(90);
+            camera->setPosition(camera->getPosition() - dir);
+        } else if (evRec->IsKeyDown(KEY_LSHIFT)) {
+            core::vector3df dir = camera->getTarget() - camera->getAbsolutePosition();
+            dir.normalize();
+            dir.rotateYZBy(90);
+            camera->setPosition(camera->getPosition() + dir);
+        }*/
+
+
 
         if (device->isWindowActive()) {
             driver->beginScene(true, true, video::SColor(0, 3, 243, 250));
