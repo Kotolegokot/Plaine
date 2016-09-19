@@ -104,12 +104,11 @@ void Game::menu()
                 buttonQuit->remove();
                 screenSizeText->remove();
                 buttonStart = nullptr;
+                this->initializeSettingsGUI();
             }
-            this->initializeSettingsGUI();
         }
         else if (buttonStart == nullptr)
             {
-                error("ABR");
                 buttonMenu->remove();
                 buttonQuit->remove();
                 screenSizeText->remove();
@@ -124,23 +123,19 @@ void Game::menu()
         scrs += screenSize.Height;
         screenSizeText->setText(scrs.c_str());
 
-        if (!eventReceiver->settings){
-            if(screenSize != driver->getScreenSize()) {
+        if(screenSize != driver->getScreenSize())
+            if (!eventReceiver->settings){
                 screenSize = driver->getScreenSize();
                 buttonStart->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 120));
                 buttonSettings->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 80));
                 buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 40));
             }
-            else if(screenSize != driver->getScreenSize()) {
+            else {
                 screenSize = driver->getScreenSize();
-                //buttonMenu->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 80));
-                //buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 40));
+                buttonMenu->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 80));
+                buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 40));
             }
-        }
 
-        //buttonStart->setVisible(true);
-        //buttonQuit->setVisible(true);
-        //screenSizeText->setVisible(true);
 
         device->getCursorControl()->setVisible(true);
         if (device->isWindowActive()) {
@@ -253,5 +248,4 @@ void Game::run()
         }
     }
     pause = false;
-    //device->drop();
 }
