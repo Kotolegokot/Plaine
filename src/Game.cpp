@@ -6,7 +6,6 @@ Game::Game()
 {
     if (!initializeDevice())
         return;
-    initializeGUI();
     initializeScene();
 
     initialized = true;
@@ -38,11 +37,19 @@ bool Game::initializeDevice()
     return true;
 }
 
-void Game::initializeGUI()
+void Game::initializeMenuGUI()
 {
     core::dimension2du screenSize = driver->getScreenSize();
     screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
     buttonStart = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 80, screenSize.Width - 20, screenSize.Height - 50), 0, ID_BUTTON_START, L"Start", L"Start game");
+    buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 40, screenSize.Width - 20, screenSize.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
+}
+
+void Game::initializeInGameGUI()
+{
+    core::dimension2du screenSize = driver->getScreenSize();
+    screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
+    buttonMenu = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 80, screenSize.Width - 20, screenSize.Height - 50), 0, ID_BUTTON_MENU, L"Menu", L"Exit to Main menu");
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 40, screenSize.Width - 20, screenSize.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
 }
 
@@ -63,6 +70,7 @@ void Game::error(const core::stringw &str) const
 
 void Game::menu()
 {
+    this->initializeMenuGUI();
     if (!initialized) {
         error(ERR_NOT_INITIALIZED);
         return;
@@ -72,10 +80,11 @@ void Game::menu()
 
     while (device->run()) {
         if (eventReceiver->start){
-            buttonStart->setVisible(false);
-            buttonQuit->setVisible(false);
-            screenSizeText->setVisible(false);
+            buttonStart->remove();
+            buttonQuit->remove();
+            screenSizeText->remove();
             this->run();
+            this->initializeMenuGUI();
         }
         if (eventReceiver->quit){
             break;
@@ -113,13 +122,19 @@ void Game::menu()
 void Game::run()
 {
 
+    this->initializeInGameGUI();
     bool escapePressed = false;
     core::dimension2du screenSize = driver->getScreenSize();
 
     while (device->run()) {
         if (eventReceiver->quit)
             break;
-
+        if (!eventReceiver->start){
+            buttonMenu->remove();
+            buttonQuit->remove();
+            screenSizeText->remove();
+            break;
+        }
         if (pause) {
             core::stringw scrs = "Screen size: ";
             scrs += screenSize.Width;
@@ -129,15 +144,18 @@ void Game::run()
 
             if (screenSize != driver->getScreenSize()) {
                 screenSize = driver->getScreenSize();
+                buttonMenu->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 80));
                 buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 40));
             }
 
             buttonQuit->setVisible(true);
+            buttonMenu->setVisible(true);
             screenSizeText->setVisible(true);
 
             device->getCursorControl()->setVisible(true);
         } else {
             buttonQuit->setVisible(false);
+            buttonMenu->setVisible(false);
             screenSizeText->setVisible(false);
             device->getCursorControl()->setVisible(false);
         }
@@ -197,6 +215,6 @@ void Game::run()
             device->yield();
         }
     }
-
-    device->drop();
+    pause = false;
+    //device->drop();
 }
