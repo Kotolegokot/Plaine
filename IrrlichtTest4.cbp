@@ -37,6 +37,7 @@
 				<Option use_console_runner="0" />
 				<Compiler>
 					<Add option="-std=c++11" />
+					<Add option="-g" />
 				</Compiler>
 			</Target>
 			<Target title="Windows-Release">
