@@ -6,6 +6,6 @@
 using namespace irr;
 
 // GUI IDs
-enum { ID_BUTTON_QUIT };
+enum { ID_BUTTON_QUIT, ID_BUTTON_START };
 
 #endif // UTIL_H_INCLUDED

@@ -19,6 +19,10 @@ bool EventReceiver::OnEvent(const SEvent &event)
 
         switch (event.GUIEvent.EventType) {
         case gui::EGET_BUTTON_CLICKED:
+            if (id == ID_BUTTON_START) {
+                start = true;
+                return true;
+            }
             if (id == ID_BUTTON_QUIT) {
                 quit = true;
                 return true;

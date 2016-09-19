@@ -24,16 +24,16 @@ bool Game::initializeDevice()
         error("Couldn't create a device :(\n");
         return false;
     }
-    device->setWindowCaption(L"Дерьмо");
+    device->setWindowCaption(L"PlaneTest");
     device->setResizable(true);
 
     driver = device->getVideoDriver();
-    smgr = device->getSceneManager();
-    guienv = device->getGUIEnvironment();
-    fs = device->getFileSystem();
+    sceneManager = device->getSceneManager();
+    guiEnvironment = device->getGUIEnvironment();
+    fileSystem = device->getFileSystem();
 
-    evRec = new EventReceiver();
-    device->setEventReceiver(evRec);
+    eventReceiver = new EventReceiver();
+    device->setEventReceiver(eventReceiver);
 
     return true;
 }
@@ -41,18 +41,19 @@ bool Game::initializeDevice()
 void Game::initializeGUI()
 {
     core::dimension2du screenSize = driver->getScreenSize();
-    screenSizeText = guienv->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
-    buttonQuit = guienv->addButton(core::rect<s32>(screenSize.Width - 100, 10, screenSize.Width - 20, 30), 0, ID_BUTTON_QUIT, L"Quit", L"Exits program");
+    screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
+    buttonStart = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 100, 10, screenSize.Width - 20, 30), 0, ID_BUTTON_START, L"Start", L"Start game");
+    buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 100, 40, screenSize.Width - 20, 60), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
 }
 
 void Game::initializeScene()
 {
-    camera = smgr->addCameraSceneNodeFPS();
+    camera = sceneManager->addCameraSceneNodeFPS();
     camera->setPosition(core::vector3df(0, 0, 30));
 
-    light = smgr->addLightSceneNode(0, core::vector3df(.0f, .0f, .0f), video::SColor(video::ECP_RED));
-    floatingPieceOfShitNode = smgr->addCubeSceneNode(10.0f, 0, -1, core::vector3df(0, 0, 100));
-    floatingPieceOfShitNode2 = smgr->addSphereSceneNode(5.0f, 4, 0, -1, core::vector3df(50, 50, 80));
+    light = sceneManager->addLightSceneNode(0, core::vector3df(.0f, .0f, .0f), video::SColor(video::ECP_RED));
+    floatingPieceOfShitNode = sceneManager->addCubeSceneNode(10.0f, 0, -1, core::vector3df(0, 0, 100));
+    floatingPieceOfShitNode2 = sceneManager->addSphereSceneNode(5.0f, 4, 0, -1, core::vector3df(50, 50, 80));
 }
 
 void Game::error(const core::stringw &str) const
@@ -60,18 +61,64 @@ void Game::error(const core::stringw &str) const
     std::wcerr << "Error: " << str.c_str() << std::endl;
 }
 
-void Game::run()
+void Game::menu()
 {
     if (!initialized) {
         error(ERR_NOT_INITIALIZED);
         return;
     }
 
+    core::dimension2du screenSize = driver->getScreenSize();
+
+    while (device->run()) {
+        if (eventReceiver->quit){
+            break;
+        }
+        if (eventReceiver->start){
+            buttonStart->setVisible(false);
+            buttonQuit->setVisible(false);
+            screenSizeText->setVisible(false);
+            this->run();
+            break;
+        }
+        core::stringw scrs = "Screen size: ";
+        scrs += screenSize.Width;
+        scrs += "x";
+        scrs += screenSize.Height;
+        screenSizeText->setText(scrs.c_str());
+
+        if (screenSize != driver->getScreenSize()) {
+            screenSize = driver->getScreenSize();
+            buttonStart->setRelativePosition(core::position2di(screenSize.Width - 100, 10));
+            buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 100, 40));
+        }
+
+        buttonStart->setVisible(true);
+        buttonQuit->setVisible(true);
+        screenSizeText->setVisible(true);
+
+        device->getCursorControl()->setVisible(true);
+        if (device->isWindowActive()) {
+            driver->beginScene(true, true, video::SColor(0, 135, 206, 235));;
+            guiEnvironment->drawAll();
+            driver->endScene();
+        } else {
+            device->yield();
+        }
+    }
+
+    device->drop();
+
+}
+
+void Game::run()
+{
+
     bool escapePressed = false;
     core::dimension2du screenSize = driver->getScreenSize();
 
     while (device->run()) {
-        if (evRec->quit)
+        if (eventReceiver->quit)
             break;
 
         if (pause) {
@@ -96,20 +143,20 @@ void Game::run()
             device->getCursorControl()->setVisible(false);
         }
 
-        if (evRec->IsKeyDown(KEY_ESCAPE)) {
+        if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
             if (!escapePressed) {
                 pause = !pause;
                 escapePressed = true;
             }
-        } else if (!evRec->IsKeyDown(KEY_ESCAPE)) {
+        } else if (!eventReceiver->IsKeyDown(KEY_ESCAPE)) {
             escapePressed = false;
         }
 
-        if (evRec->IsKeyDown(KEY_KEY_W)) {
+        if (eventReceiver->IsKeyDown(KEY_KEY_W)) {
             core::vector3df dir = camera->getTarget() - camera->getAbsolutePosition();
             dir.normalize();
             camera->setPosition(camera->getPosition() + dir);
-        } else if (evRec->IsKeyDown(KEY_KEY_S)) {
+        } else if (eventReceiver->IsKeyDown(KEY_KEY_S)) {
             core::vector3df dir = camera->getTarget() - camera->getAbsolutePosition();
             dir.normalize();
             camera->setPosition(camera->getPosition() - dir);
@@ -142,10 +189,10 @@ void Game::run()
 
 
         if (device->isWindowActive()) {
-            driver->beginScene(true, true, video::SColor(0, 3, 243, 250));
+            driver->beginScene(true, true, video::SColor(0, 135, 206, 235));
             if (!pause)
-                smgr->drawAll();
-            guienv->drawAll();
+                sceneManager->drawAll();
+            guiEnvironment->drawAll();
             driver->endScene();
         } else {
             device->yield();

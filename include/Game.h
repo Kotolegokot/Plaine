@@ -14,6 +14,7 @@ public:
     Game();
     ~Game();
     void run();
+    void menu();
 
 private:
     bool initialized = false;
@@ -21,13 +22,14 @@ private:
 
     IrrlichtDevice *device = nullptr;
     video::IVideoDriver *driver = nullptr;
-    scene::ISceneManager *smgr = nullptr;
-    gui::IGUIEnvironment *guienv = nullptr;
-    io::IFileSystem *fs = nullptr;
-    EventReceiver *evRec = nullptr;
+    scene::ISceneManager *sceneManager = nullptr;
+    gui::IGUIEnvironment *guiEnvironment = nullptr;
+    io::IFileSystem *fileSystem = nullptr;
+    EventReceiver *eventReceiver = nullptr;
 
     // GUI
     gui::IGUIButton *buttonQuit = nullptr;
+    gui::IGUIButton *buttonStart = nullptr;
     gui::IGUIStaticText *screenSizeText = nullptr;
 
     // Scene
