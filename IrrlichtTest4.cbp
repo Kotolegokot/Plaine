@@ -68,14 +68,17 @@
 			<Add library="Irrlicht" />
 			<Add directory="lib" />
 		</Linker>
+		<Unit filename="include/Config.h" />
 		<Unit filename="include/EventReceiver.h" />
 		<Unit filename="include/Game.h" />
 		<Unit filename="include/SceneNodeAnimatorCameraPlayer.h" />
 		<Unit filename="include/util.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Config.cpp" />
 		<Unit filename="src/EventReceiver.cpp" />
 		<Unit filename="src/Game.cpp" />
 		<Unit filename="src/SceneNodeAnimatorCameraPlayer.cpp" />
+		<Unit filename="src/util.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
