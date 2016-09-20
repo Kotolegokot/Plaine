@@ -12,4 +12,5 @@ You can use `Code::Blocks` or `make` to build the project.
 You must compile (or get somewhere else) `Irrlicht.dll` and put it into `lib\` in the project root directory. Irrlicht headers are already contained in `include\`.
 
 ## Links
-[Irrlicht](http://irrlicht.sourceforge.net)
+* [Irrlicht](http://irrlicht.sourceforge.net)
+* [Code::Blocks](http://codeblocks.org)
