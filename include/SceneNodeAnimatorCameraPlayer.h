@@ -17,9 +17,10 @@ public:
     void setLateralMoveSpeed(f32 moveSpeed);
     void stop();
 
-    void animateNode(scene::ISceneNode* node, u32 timeMs);
-    scene::ISceneNodeAnimator *createClone(scene::ISceneNode *node, scene::ISceneManager *newManager = 0);
-    bool OnEvent(const SEvent& event);
+    virtual void animateNode(scene::ISceneNode* node, u32 timeMs) override;
+    virtual scene::ISceneNodeAnimator *createClone(scene::ISceneNode *node, scene::ISceneManager *newManager = 0) override;
+    virtual bool OnEvent(const SEvent& event) override;
+    virtual bool isEventReceiverEnabled() const override;
 private:
     f32 straightMoveSpeed = 0;
     f32 lateralMoveSpeed = 0;

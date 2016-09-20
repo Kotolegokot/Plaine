@@ -50,11 +50,15 @@ void SceneNodeAnimatorCameraPlayer::animateNode(scene::ISceneNode *node, u32 tim
 		return;
 
     scene::ICameraSceneNode *camera = static_cast<scene::ICameraSceneNode *>(node);
-    if (firstUpdate)
+    if (firstUpdate) {
         lastAnimationTime = timeMs;
+        firstUpdate = false;
+    }
 
-    if (!camera->isInputReceiverEnabled())
+    if (!camera->isInputReceiverEnabled()) {
+        lastAnimationTime = timeMs;
         return;
+    }
 
     scene::ISceneManager * smgr = camera->getSceneManager();
 	if(smgr && smgr->getActiveCamera() != camera)
@@ -69,21 +73,24 @@ void SceneNodeAnimatorCameraPlayer::animateNode(scene::ISceneNode *node, u32 tim
     dir.normalize();
     core::vector3df up(0, 1, 0);
     core::vector3df left = dir;
-    left.rotateXZBy(90);
+    f32 t = left.X;
+    left.X = -left.Z;
+    left.Z = t;
 
     //movedir * timeDiff * MoveSpeed;
     if (PressedKeys[KEY_KEY_A])
-        pos += left * timeDiff * lateralMoveSpeed;
+        pos += left * timeDiff * lateralMoveSpeed * 0.05f;
     else if (PressedKeys[KEY_KEY_D])
-        pos -= left * timeDiff * lateralMoveSpeed;
+        pos -= left * timeDiff * lateralMoveSpeed * 0.05f;
 
-    if (PressedKeys[KEY_SPACE])
-        pos += up * timeDiff * lateralMoveSpeed;
-    else if (PressedKeys[KEY_LSHIFT])
-        pos -= up * timeDiff * lateralMoveSpeed;
+    if (PressedKeys[KEY_KEY_W])
+        pos += up * timeDiff * lateralMoveSpeed * 0.05f;
+    else if (PressedKeys[KEY_KEY_S])
+        pos -= up * timeDiff * lateralMoveSpeed * 0.05f;
 
-    //pos += dir * timeDiff * straightMoveSpeed;
+    pos += dir * timeDiff * straightMoveSpeed * 0.05f;
 
+    camera->setTarget(pos + dir);
     camera->setPosition(pos);
 }
 
@@ -93,4 +100,9 @@ scene::ISceneNodeAnimator *SceneNodeAnimatorCameraPlayer::createClone(scene::ISc
     SceneNodeAnimatorCameraPlayer *newAnimator = new SceneNodeAnimatorCameraPlayer(straightMoveSpeed, lateralMoveSpeed);
 
 	return newAnimator;
+}
+
+bool SceneNodeAnimatorCameraPlayer::isEventReceiverEnabled() const
+{
+    return true;
 }

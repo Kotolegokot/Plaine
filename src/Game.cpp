@@ -42,14 +42,16 @@ void Game::initializeGUI()
 {
     core::dimension2du screenSize = driver->getScreenSize();
     screenSizeText = guienv->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
+    cameraPosText = guienv->addStaticText(L"CAMERA_POS", core::rect<s32>(10, 10, 400, 30), false);
     buttonQuit = guienv->addButton(core::rect<s32>(screenSize.Width - 100, 10, screenSize.Width - 20, 30), 0, ID_BUTTON_QUIT, L"Quit", L"Exits program");
 }
 
 void Game::initializeScene()
 {
     camera = smgr->addCameraSceneNode();
-    cameraAnimator = new SceneNodeAnimatorCameraPlayer(0, 5);
+    scene::ISceneNodeAnimator *cameraAnimator = new SceneNodeAnimatorCameraPlayer(0.1f, 5);
     camera->addAnimator(cameraAnimator);
+    cameraAnimator->drop();
 
     light = smgr->addLightSceneNode(0, core::vector3df(.0f, .0f, .0f), video::SColor(video::ECP_RED));
     floatingPieceOfShitNode = smgr->addCubeSceneNode(10.0f, 0, -1, core::vector3df(0, 0, 100));
@@ -87,13 +89,28 @@ void Game::run()
                 buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 100, 10));
             }
 
+            camera->setInputReceiverEnabled(false);
+
             buttonQuit->setVisible(true);
             screenSizeText->setVisible(true);
-
+            cameraPosText->setVisible(false);
             device->getCursorControl()->setVisible(true);
         } else {
+            core::stringw cmrp = "Camera position: (";
+            core::vector3df pos = camera->getPosition();
+            cmrp += pos.X;
+            cmrp += ", ";
+            cmrp += pos.Y;
+            cmrp += ", ";
+            cmrp += pos.Z;
+            cmrp += ")";
+            cameraPosText->setText(cmrp.c_str());
+
+            camera->setInputReceiverEnabled(true);
+
             buttonQuit->setVisible(false);
             screenSizeText->setVisible(false);
+            cameraPosText->setVisible(true);
             device->getCursorControl()->setVisible(false);
         }
 
