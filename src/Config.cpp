@@ -174,7 +174,7 @@ void Config::saveConfig(const std::string &filename, const ConfigData &data)
         return;
     }
 
-    outputFile << "resolution=" << data.resolution.Width << "x" << data.resolution.Height << std::endl;
+    outputFile << "resolution=" << data.resolution.Width << "," << data.resolution.Height << std::endl;
     outputFile << "fullscreen=" << (data.fullscreen ? "on" : "off") << std::endl;
     outputFile << "colordepth=" << data.colordepth << std::endl;
     outputFile << "language=" << wide_to_utf8(std::wstring(data.language.c_str())) << std::endl;
