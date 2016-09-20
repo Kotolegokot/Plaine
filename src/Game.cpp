@@ -6,7 +6,7 @@ Game::Game()
 {
     windowSize = core::dimension2d<u32>(1240, 720);
     colorDepth = 32;
-    language = 0;
+    language = L"English";
     if (!initializeDevice())
         return;
     initializeScene();
@@ -115,7 +115,8 @@ void Game::initializeSettingsGUI()
     languageText = guiEnvironment->addStaticText(L"Language:", core::rect<s32>(screenSize.Width - 180, screenSize.Height - 140, screenSize.Width - 130, screenSize.Height - 120), false);
     languageComboBox = guiEnvironment->addComboBox(core::rect<s32>(screenSize.Width - 130, screenSize.Height - 145, screenSize.Width - 20, screenSize.Height - 125), 0, ID_LANGUAGE_COMBOBOX);
     languageComboBox->addItem(L"English", 0);
-    languageComboBox->setSelected(language);
+    if (language == L"English")
+        languageComboBox->setSelected(0);
     buttonMenu = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 80, screenSize.Width - 20, screenSize.Height - 50), 0, ID_BUTTON_MENU, L"Back", L"Exit to Main menu");
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 40, screenSize.Width - 20, screenSize.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
 }

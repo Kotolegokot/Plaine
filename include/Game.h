@@ -22,7 +22,8 @@ private:
     bool pause = false;
     bool fullscreen = false;
     bool customScreenSize = false;
-    int colorDepth, language;
+    u32 colorDepth;
+    core::stringw language;
     core::dimension2d<u32> windowSize;
 
     IrrlichtDevice *device = nullptr;
