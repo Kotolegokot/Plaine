@@ -213,9 +213,9 @@ void Game::menu()
                 buttonStart->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 120));
                 buttonSettings->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 80));
                 buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 40));
-            }
-            else {
+            } else {
                 screenSize = driver->getScreenSize();
+                resolutionComboBox->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 150));
                 buttonFullscreen->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 120));
                 buttonWindowed->setRelativePosition(core::position2di(screenSize.Width - 100, screenSize.Height - 120));
                 buttonMenu->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 80));
