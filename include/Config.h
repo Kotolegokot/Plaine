@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <irrlicht/irrlicht.h>
+#include "util.h"
 
 using namespace irr;
 
