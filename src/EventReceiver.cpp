@@ -40,13 +40,19 @@ bool EventReceiver::OnEvent(const SEvent &event)
             }
             break;
         case gui::EGET_COMBO_BOX_CHANGED:
+            if (id == ID_LANGUAGE_COMBOBOX)
+            {
+                break;
+            }
+            else
             {
                 toggleGraphicMode = true;
                 return true;
-                break;
             }
         default:
-            break;
+            {
+                break;
+            }
         }
     }
     return false;

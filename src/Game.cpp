@@ -6,6 +6,7 @@ Game::Game()
 {
     windowSize = core::dimension2d<u32>(1240, 720);
     colorDepth = 32;
+    language = 0;
     if (!initializeDevice())
         return;
     initializeScene();
@@ -31,15 +32,13 @@ bool Game::initializeDevice()
         return false;
     }
     device->setWindowCaption(L"PlaneTest");
-    device->setResizable(true);
     driver = device->getVideoDriver();
     sceneManager = device->getSceneManager();
     guiEnvironment = device->getGUIEnvironment();
     fileSystem = device->getFileSystem();
-
     eventReceiver = new EventReceiver();
     device->setEventReceiver(eventReceiver);
-
+    device->setResizable(customScreenSize);
     return true;
 }
 
@@ -81,8 +80,8 @@ void Game::initializeSettingsGUI()
 {
     core::dimension2du screenSize = driver->getScreenSize();
     screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
-    resolutionText = guiEnvironment->addStaticText(L"Resolution:", core::rect<s32>(screenSize.Width - 180, screenSize.Height - 165, screenSize.Width - 135, screenSize.Height - 145), false);
-    resolutionComboBox = guiEnvironment->addComboBox(core::rect<s32>(screenSize.Width - 135, screenSize.Height - 170, screenSize.Width - 20, screenSize.Height - 150), 0, ID_RESOLUTION_COMBOBOX);
+    resolutionText = guiEnvironment->addStaticText(L"Resolution:", core::rect<s32>(screenSize.Width - 180, screenSize.Height - 190, screenSize.Width - 135, screenSize.Height - 170), false);
+    resolutionComboBox = guiEnvironment->addComboBox(core::rect<s32>(screenSize.Width - 130, screenSize.Height - 195, screenSize.Width - 20, screenSize.Height - 175), 0, ID_RESOLUTION_COMBOBOX);
     if (fullscreen)
     {
         resolutionComboBox->setEnabled(false);
@@ -94,6 +93,7 @@ void Game::initializeSettingsGUI()
     else {
         resolutionComboBox->addItem(L"640x480", 0);
         resolutionComboBox->addItem(L"1240x720", 1);
+        resolutionComboBox->addItem(L"Custom Resolution", 2);
         if (windowSize == core::dimension2d<u32>(640, 480))
             resolutionComboBox->setSelected(0);
         else if (windowSize == core::dimension2d<u32>(1240, 720))
@@ -101,8 +101,8 @@ void Game::initializeSettingsGUI()
         buttonToggleFullscreen = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 120, screenSize.Width - 20, screenSize.Height - 90), 0, ID_BUTTON_TOGGLE_FULLSCREEN, L"Fullscreen", L"To Fullscreen Mode");
 
     }
-    colorDepthText = guiEnvironment->addStaticText(L"Color Depth:", core::rect<s32>(screenSize.Width - 180, screenSize.Height - 140, screenSize.Width - 130, screenSize.Height - 120), false);
-    colorDepthComboBox = guiEnvironment->addComboBox(core::rect<s32>(screenSize.Width - 130, screenSize.Height - 145, screenSize.Width - 20, screenSize.Height - 125), 0, ID_COLORDEPTH_COMBOBOX);
+    colorDepthText = guiEnvironment->addStaticText(L"Color Depth:", core::rect<s32>(screenSize.Width - 180, screenSize.Height - 165, screenSize.Width - 130, screenSize.Height - 145), false);
+    colorDepthComboBox = guiEnvironment->addComboBox(core::rect<s32>(screenSize.Width - 130, screenSize.Height - 170, screenSize.Width - 20, screenSize.Height - 150), 0, ID_COLORDEPTH_COMBOBOX);
     colorDepthComboBox->addItem(L"8", 0);
     colorDepthComboBox->addItem(L"16", 1);
     colorDepthComboBox->addItem(L"32", 2);
@@ -112,6 +112,10 @@ void Game::initializeSettingsGUI()
         colorDepthComboBox->setSelected(1);
     else if (colorDepth == 32)
         colorDepthComboBox->setSelected(2);
+    languageText = guiEnvironment->addStaticText(L"Language:", core::rect<s32>(screenSize.Width - 180, screenSize.Height - 140, screenSize.Width - 130, screenSize.Height - 120), false);
+    languageComboBox = guiEnvironment->addComboBox(core::rect<s32>(screenSize.Width - 130, screenSize.Height - 145, screenSize.Width - 20, screenSize.Height - 125), 0, ID_LANGUAGE_COMBOBOX);
+    languageComboBox->addItem(L"English", 0);
+    languageComboBox->setSelected(language);
     buttonMenu = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 80, screenSize.Width - 20, screenSize.Height - 50), 0, ID_BUTTON_MENU, L"Back", L"Exit to Main menu");
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 40, screenSize.Width - 20, screenSize.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
 }
@@ -126,6 +130,8 @@ void Game::terminateSettingsGUI()
     resolutionComboBox->remove();
     colorDepthText->remove();
     colorDepthComboBox->remove();
+    languageText->remove();
+    languageComboBox->remove();
 }
 
 void Game::initializeScene()
@@ -183,6 +189,7 @@ void Game::menu()
                 fullscreen = !fullscreen;
                 terminate();
                 windowSize = core::dimension2d<u32>(1240, 720);
+                customScreenSize = false;
                 if (!initializeDevice())
                         return;
                 initialized = true;
@@ -201,11 +208,18 @@ void Game::menu()
                 case 0:
                     {
                         windowSize = core::dimension2d<u32>(640, 480);
+                        customScreenSize = false;
                         break;
                     }
                 case 1:
                     {
                         windowSize = core::dimension2d<u32>(1240, 720);
+                        customScreenSize = false;
+                        break;
+                    }
+                case 2:
+                    {
+                        customScreenSize = true;
                         break;
                     }
             }
@@ -247,10 +261,12 @@ void Game::menu()
                 buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 40));
             } else {
                 screenSize = driver->getScreenSize();
-                resolutionText->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 165));
-                resolutionComboBox->setRelativePosition(core::position2di(screenSize.Width - 135, screenSize.Height - 170));
-                colorDepthText->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 140));
-                colorDepthComboBox->setRelativePosition(core::position2di(screenSize.Width - 130, screenSize.Height - 145));
+                resolutionText->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 190));
+                resolutionComboBox->setRelativePosition(core::position2di(screenSize.Width - 130, screenSize.Height - 195));
+                colorDepthText->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 165));
+                colorDepthComboBox->setRelativePosition(core::position2di(screenSize.Width - 130, screenSize.Height - 170));
+                languageText->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 140));
+                languageComboBox->setRelativePosition(core::position2di(screenSize.Width - 130, screenSize.Height - 145));
                 buttonToggleFullscreen->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 120));
                 buttonMenu->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 80));
                 buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 40));
