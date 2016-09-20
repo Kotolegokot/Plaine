@@ -68,7 +68,6 @@
 			<Add library="Irrlicht" />
 			<Add directory="lib" />
 		</Linker>
-		<Unit filename="../../../Downloads/irrlicht-1.8.4/src/SceneNodeAnimatorCameraPlayer.cpp" />
 		<Unit filename="include/EventReceiver.h" />
 		<Unit filename="include/Game.h" />
 		<Unit filename="include/util.h" />
