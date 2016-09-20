@@ -4,6 +4,7 @@
 using namespace irr;
 
 #include "Game.h"
+#include "Config.h"
 
 int main()
 {
