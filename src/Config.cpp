@@ -43,6 +43,28 @@ struct Item {
         return *(s32 *) data;
     }
 
+    static std::string typeToString(ItemType type)
+    {
+        switch (type) {
+        case INT:
+            return "integer";
+        case FLOAT:
+            return "float";
+        case STRING:
+            return "string";
+        case KEYWORD:
+            return "keyword";
+        case OP_EQUAL:
+            return "'='";
+        case OP_COMMA:
+            return "comma";
+        case NEWLINE:
+            return "new line or end of file";
+        default:
+            return "";
+        }
+    }
+
     ItemType type;
     void *data = nullptr;
 };
@@ -136,7 +158,25 @@ std::vector<Item> parse(const std::string &filename)
         }
     }
 
+    if (items.back().type != Item::NEWLINE)
+        items.push_back(Item(Item::NEWLINE));
+
     return items;
+}
+
+void error(Item::ItemType expected, Item::ItemType found)
+{
+    std::cout << "Error: " + Item::typeToString(expected) + " expected, but " +
+        Item::typeToString(found) + " found." << std::endl;
+}
+
+#define \
+EXPECT(_expected) {\
+    if ((*i).type != _expected) {\
+        error(_expected, (*i).type);\
+        goToNextNEWLINE = true;\
+        break;\
+    }\
 }
 
 ConfigData Config::loadConfig(const std::string &filename)
@@ -145,8 +185,8 @@ ConfigData Config::loadConfig(const std::string &filename)
 
     std::vector<Item> items = parse(filename);
 
-    // Processing items
-    for (const Item &item : items) {
+    // print items
+    /* for (const Item &item : items) {
         if (item.type == Item::INT)
             std::cout << "INT: " << (int) item.getInt() << std::endl;
         else if (item.type == Item::FLOAT)
@@ -161,6 +201,100 @@ ConfigData Config::loadConfig(const std::string &filename)
             std::cout << "OP_COMMA" << std::endl;
         else if (item.type == Item::NEWLINE)
             std::cout << "NEWLINE" << std::endl;
+    } */
+
+    bool goToNextNEWLINE = false;
+    enum { NONE, RESOLUTION, FULLSCREEN, COLORDEPTH, LANGUAGE } state = NONE;
+
+    for (std::vector<Item>::const_iterator i = items.cbegin(); i != items.cend(); ++i) {
+        if (goToNextNEWLINE) {
+            if ((*i).type == Item::NEWLINE)
+                goToNextNEWLINE = false;
+        } else {
+            switch (state) {
+            case NONE:
+                if ((*i).type == Item::KEYWORD) {
+                    if ((*i).getString() == "resolution")
+                        state = RESOLUTION;
+                    else if ((*i).getString() == "fullscreen")
+                        state = FULLSCREEN;
+                    else if ((*i).getString() == "colordepth")
+                        state = COLORDEPTH;
+                    else if ((*i).getString() == "language")
+                        state = LANGUAGE;
+                } else {
+                    error(Item::KEYWORD, (*i).type);
+                    goToNextNEWLINE = true;
+                }
+                break;
+            case RESOLUTION: {
+                core::dimension2d<u32> resolution;
+
+                EXPECT(Item::OP_EQUAL);
+                ++i;
+                EXPECT(Item::INT);
+                resolution.Width = (*i).getInt();
+                ++i;
+                EXPECT(Item::OP_COMMA);
+                ++i;
+                EXPECT(Item::INT);
+                resolution.Height = (*i).getInt();
+                data.resolution = resolution;
+                ++i;
+                EXPECT(Item::NEWLINE);
+
+                state = NONE;
+                break;
+            }
+            case FULLSCREEN:
+                EXPECT(Item::OP_EQUAL);
+                ++i;
+
+                EXPECT(Item::KEYWORD);
+                if ((*i).getString() != "on" && (*i).getString() != "off") {
+                    std::cerr << "Error: on or off expected, but " << Item::typeToString((*i).type) << " found." << std::endl;
+                    goToNextNEWLINE = true;
+                    break;
+                }
+                data.fullscreen = (*i).getString() == "on";
+                ++i;
+                EXPECT(Item::NEWLINE);
+
+                state = NONE;
+                break;
+            case COLORDEPTH:
+                EXPECT(Item::OP_EQUAL);
+                ++i;
+
+                EXPECT(Item::INT);
+                if ((*i).getInt() != 16 && (*i).getInt() != 32) {
+                    std::cerr << "Error: 16 or 32 expected, but " << Item::typeToString((*i).type) << " found." << std::endl;
+                    goToNextNEWLINE = true;
+                    break;
+                }
+                data.colordepth = (*i).getInt();
+                ++i;
+                EXPECT(Item::NEWLINE);
+
+                state = NONE;
+                break;
+            case LANGUAGE:
+                EXPECT(Item::OP_EQUAL);
+                ++i;
+
+                EXPECT(Item::STRING);
+                data.language = "";
+                std::wstring wstr = utf8_to_wide((*i).getString());
+                for (std::wstring::const_iterator si = wstr.cbegin(); si != wstr.cend(); ++si)
+                    data.language.append(*si);
+
+                ++i;
+                EXPECT(Item::NEWLINE);
+
+                state = NONE;
+                break;
+            }
+        }
     }
 
     return data;

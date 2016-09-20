@@ -8,9 +8,6 @@ using namespace irr;
 
 int main()
 {
-    Config config;
-    config.loadConfig("game.conf");
-
     Game game;
     game.menu();
 
