@@ -15,20 +15,29 @@ public:
     Game();
     ~Game();
     void run();
+    void menu();
 
 private:
     bool initialized = false;
     bool pause = false;
+    bool fullscreen = false;
+    core::dimension2d<u32> windowSize;
 
     IrrlichtDevice *device = nullptr;
     video::IVideoDriver *driver = nullptr;
-    scene::ISceneManager *smgr = nullptr;
-    gui::IGUIEnvironment *guienv = nullptr;
-    io::IFileSystem *fs = nullptr;
-    EventReceiver *evRec = nullptr;
+    scene::ISceneManager *sceneManager = nullptr;
+    gui::IGUIEnvironment *guiEnvironment = nullptr;
+    io::IFileSystem *fileSystem = nullptr;
+    EventReceiver *eventReceiver = nullptr;
 
     // GUI
+    gui::IGUIButton *buttonStart = nullptr;
+    gui::IGUIButton *buttonSettings = nullptr;
+    gui::IGUIButton *buttonFullscreen = nullptr;
+    gui::IGUIButton *buttonWindowed = nullptr;
+    gui::IGUIButton *buttonMenu = nullptr;
     gui::IGUIButton *buttonQuit = nullptr;
+    gui::IGUIComboBox *resolutionComboBox = nullptr;
     gui::IGUIStaticText *screenSizeText = nullptr;
     gui::IGUIStaticText *cameraPosText = nullptr;
 
@@ -40,8 +49,14 @@ private:
 
     void error(const core::stringw &str) const;
     bool initializeDevice();
-    void initializeGUI();
+    void initializeMenuGUI();
+    void terminateMenuGUI();
+    void initializeInGameGUI();
+    void terminateInGameGUI();
+    void initializeSettingsGUI();
+    void terminateSettingsGUI();
     void initializeScene();
+    void terminate();
 
     // Constants
     const core::stringw ERR_NOT_INITIALIZED = "device has failed to initialize!";

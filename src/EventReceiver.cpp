@@ -17,11 +17,38 @@ bool EventReceiver::OnEvent(const SEvent &event)
 
         switch (event.GUIEvent.EventType) {
         case gui::EGET_BUTTON_CLICKED:
+            if (id == ID_BUTTON_START) {
+                start = true;
+                return true;
+            }
+            if (id == ID_BUTTON_SETTINGS) {
+                settings = true;
+                return true;
+            }
             if (id == ID_BUTTON_QUIT) {
                 quit = true;
                 return true;
             }
+            if (id == ID_BUTTON_MENU) {
+                start = false;
+                settings = false;
+                return true;
+            }
+            if (id == ID_BUTTON_FULLSCREEN) {
+                toggleFullscreen = true;
+                return true;
+            }
+            if (id == ID_BUTTON_WINDOWED) {
+                toggleFullscreen = true;
+                return true;
+            }
             break;
+        case gui::EGET_COMBO_BOX_CHANGED:
+            {
+                toggleResolution = true;
+                return true;
+                break;
+            }
         default:
             break;
         }

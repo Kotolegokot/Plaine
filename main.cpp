@@ -8,7 +8,7 @@ using namespace irr;
 int main()
 {
     Game game;
-    game.run();
+    game.menu();
 
     return 0;
 }
