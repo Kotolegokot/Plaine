@@ -9,10 +9,7 @@ using namespace irr;
 int main()
 {
     Config config;
-    ConfigData data;
-    data.language = L"Къырымтатар тили";
-    data.resolution.Width = 1000000;
-    config.saveConfig("game.conf", data);
+    config.loadConfig("game.conf");
 
     Game game;
     game.menu();

@@ -1,9 +1,11 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <vector>
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <cctype>
 #include <irrlicht/irrlicht.h>
 #include "util.h"
 
