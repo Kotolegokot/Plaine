@@ -1,4 +1,4 @@
-CC=g++
+CXX=g++
 CFLAGS=-Wall -std=c++11
 SOURCE_DIR=src
 SOURCE=main.cpp $(SOURCE_DIR)/*.cpp
@@ -12,11 +12,11 @@ all: debug release
 
 debug:
 	mkdir bin/Debug -p
-	$(CC) $(CFLAGS) -g $(LIBS) $(INCLUDE) $(SOURCE) -o bin/Debug/$(EXECUTABLE)
+	$(CXX) $(CFLAGS) -g $(LIBS) $(INCLUDE) $(SOURCE) -o bin/Debug/$(EXECUTABLE)
 
 release:
 	mkdir bin/Release -p
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDE) $(SOURCE) -o bin/Release/$(EXECUTABLE)
+	$(CXX) $(CFLAGS) $(LIBS) $(INCLUDE) $(SOURCE) -o bin/Release/$(EXECUTABLE)
 
 clean:
 	rm -rf bin/
