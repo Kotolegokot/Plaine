@@ -21,6 +21,7 @@ private:
     bool initialized = false;
     bool pause = false;
     bool fullscreen = false;
+    int colorDepth;
     core::dimension2d<u32> windowSize;
 
     IrrlichtDevice *device = nullptr;
@@ -37,7 +38,10 @@ private:
     gui::IGUIButton *buttonMenu = nullptr;
     gui::IGUIButton *buttonQuit = nullptr;
     gui::IGUIComboBox *resolutionComboBox = nullptr;
+    gui::IGUIComboBox *colorDepthComboBox = nullptr;
     gui::IGUIStaticText *screenSizeText = nullptr;
+    gui::IGUIStaticText *resolutionText = nullptr;
+    gui::IGUIStaticText *colorDepthText = nullptr;
     gui::IGUIStaticText *cameraPosText = nullptr;
 
     // Scene

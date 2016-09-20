@@ -41,7 +41,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
             break;
         case gui::EGET_COMBO_BOX_CHANGED:
             {
-                toggleResolution = true;
+                toggleGraphicMode = true;
                 return true;
                 break;
             }
