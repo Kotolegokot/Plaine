@@ -1,6 +1,9 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <string>
+#include <fstream>
+#include <iostream>
 #include <irrlicht/irrlicht.h>
 
 using namespace irr;
@@ -16,8 +19,8 @@ class Config
 {
 public:
     Config() = default;
-    ConfigData loadConfig(const core::stringc &filename);
-    void saveConfig(const core::stringc &filename, const ConfigData &data);
+    ConfigData loadConfig(const std::string &filename);
+    void saveConfig(const std::string &filename, const ConfigData &data);
 };
 
 #endif // CONFIG_H

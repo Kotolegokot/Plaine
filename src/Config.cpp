@@ -2,12 +2,21 @@
 
 using namespace irr;
 
-ConfigData loadConfig(const core::stringc &filename)
+ConfigData Config::loadConfig(const std::string &filename)
 {
-
+    ConfigData data;
 }
 
-void saveConfig(const core::stringc &filename, const ConfigData &data)
+void Config::saveConfig(const std::string &filename, const ConfigData &data)
 {
-
+    std::ofstream outputFile(filename);
+    if (!outputFile.is_open()) {
+        std::cerr << "Error: unable to open file\"" << filename << "\" for writing" << std::endl;
+        return;
+    }
+    outputFile << "resolution=" << data.resolution.Width << "x" << data.resolution.Height << std::endl;
+    outputFile << "fullscreen=" << (data.fullscreen ? "on" : "off") << std::endl;
+    outputFile << "colordepth=" << data.colordepth << std::endl;
+    outputFile << "language=" << std::endl;
+    std::wstring sw(data.language.c_str());
 }
