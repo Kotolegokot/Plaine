@@ -34,11 +34,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 settings = false;
                 return true;
             }
-            if (id == ID_BUTTON_FULLSCREEN) {
-                toggleFullscreen = true;
-                return true;
-            }
-            if (id == ID_BUTTON_WINDOWED) {
+            if (id == ID_BUTTON_TOGGLE_FULLSCREEN) {
                 toggleFullscreen = true;
                 return true;
             }

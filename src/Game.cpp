@@ -80,35 +80,34 @@ void Game::initializeSettingsGUI()
 {
     core::dimension2du screenSize = driver->getScreenSize();
     screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
-    buttonFullscreen = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 120, screenSize.Width - 100, screenSize.Height - 90), 0, ID_BUTTON_FULLSCREEN, L"Fullscreen", L"To Fullscreen Mode");
-    buttonWindowed = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 100, screenSize.Height - 120, screenSize.Width - 20, screenSize.Height - 90), 0, ID_BUTTON_WINDOWED, L"Windowed", L"To Windewed Mode");
-    buttonMenu = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 80, screenSize.Width - 20, screenSize.Height - 50), 0, ID_BUTTON_MENU, L"Back", L"Exit to Main menu");
-    buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 40, screenSize.Width - 20, screenSize.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
     resolutionComboBox = guiEnvironment->addComboBox(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 150, screenSize.Width - 20, screenSize.Height - 130), 0, ID_RESOLUTION_COMBOBOX);
     if (this->fullscreen)
     {
-        buttonFullscreen->setEnabled(false);
         resolutionComboBox->setEnabled(false);
         resolutionComboBox->addItem(L"Fullscreen", 0);
         resolutionComboBox->setSelected(0);
+        buttonToggleFullscreen = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 120, screenSize.Width - 20, screenSize.Height - 90), 0, ID_BUTTON_TOGGLE_FULLSCREEN, L"Windowed", L"To Windewed Mode");
+
     }
     else {
-        buttonWindowed->setEnabled(false);
         resolutionComboBox->addItem(L"640x480", 0);
         resolutionComboBox->addItem(L"1240x720", 1);
         if (windowSize == core::dimension2d<u32>(640, 480))
             resolutionComboBox->setSelected(0);
         else if (windowSize == core::dimension2d<u32>(1240, 720))
             resolutionComboBox->setSelected(1);
+        buttonToggleFullscreen = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 120, screenSize.Width - 20, screenSize.Height - 90), 0, ID_BUTTON_TOGGLE_FULLSCREEN, L"Fullscreen", L"To Fullscreen Mode");
+
     }
+    buttonMenu = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 80, screenSize.Width - 20, screenSize.Height - 50), 0, ID_BUTTON_MENU, L"Back", L"Exit to Main menu");
+    buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 40, screenSize.Width - 20, screenSize.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
 }
 
 void Game::terminateSettingsGUI()
 {
     buttonMenu->remove();
     buttonQuit->remove();
-    buttonFullscreen->remove();
-    buttonWindowed->remove();
+    buttonToggleFullscreen->remove();
     screenSizeText->remove();
     resolutionComboBox->remove();
 }
@@ -220,8 +219,7 @@ void Game::menu()
             } else {
                 screenSize = driver->getScreenSize();
                 resolutionComboBox->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 150));
-                buttonFullscreen->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 120));
-                buttonWindowed->setRelativePosition(core::position2di(screenSize.Width - 100, screenSize.Height - 120));
+                buttonToggleFullscreen->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 120));
                 buttonMenu->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 80));
                 buttonQuit->setRelativePosition(core::position2di(screenSize.Width - 180, screenSize.Height - 40));
             }
@@ -285,7 +283,7 @@ void Game::run()
             cameraPosition += position.Z;
             cameraPosition += ")";
             cameraPosText->setText(cameraPosition.c_str());
-            error((core::stringw)position.Z);
+
             camera->setInputReceiverEnabled(true);
 
             buttonQuit->setVisible(false);

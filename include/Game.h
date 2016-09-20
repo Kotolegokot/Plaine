@@ -33,8 +33,7 @@ private:
     // GUI
     gui::IGUIButton *buttonStart = nullptr;
     gui::IGUIButton *buttonSettings = nullptr;
-    gui::IGUIButton *buttonFullscreen = nullptr;
-    gui::IGUIButton *buttonWindowed = nullptr;
+    gui::IGUIButton *buttonToggleFullscreen = nullptr;
     gui::IGUIButton *buttonMenu = nullptr;
     gui::IGUIButton *buttonQuit = nullptr;
     gui::IGUIComboBox *resolutionComboBox = nullptr;
