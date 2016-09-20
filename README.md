@@ -9,4 +9,4 @@ You must have Irrlicht headers and library (the package is usually called `irrli
 You must compile (or get somewhere else) `Irrlicht.dll` and put it into `lib\` in the project root directory. Irrlicht headers are already contained in `include\`.
 
 ## Links
-[Irrlicht](irrlicht.sourceforge.net)
+[Irrlicht](http://irrlicht.sourceforge.net)
