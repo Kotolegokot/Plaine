@@ -89,15 +89,18 @@ void Game::initializeSettingsGUI()
     {
         buttonFullscreen->setEnabled(false);
         resolutionComboBox->setEnabled(false);
-    }
-    else
-        buttonWindowed->setEnabled(false);
-    resolutionComboBox->addItem(L"640x480", 0);
-    resolutionComboBox->addItem(L"1240x720", 1);
-    if (windowSize == core::dimension2d<u32>(640, 480))
+        resolutionComboBox->addItem(L"Fullscreen", 0);
         resolutionComboBox->setSelected(0);
-    else if (windowSize == core::dimension2d<u32>(1240, 720))
-        resolutionComboBox->setSelected(1);
+    }
+    else {
+        buttonWindowed->setEnabled(false);
+        resolutionComboBox->addItem(L"640x480", 0);
+        resolutionComboBox->addItem(L"1240x720", 1);
+        if (windowSize == core::dimension2d<u32>(640, 480))
+            resolutionComboBox->setSelected(0);
+        else if (windowSize == core::dimension2d<u32>(1240, 720))
+            resolutionComboBox->setSelected(1);
+    }
 }
 
 void Game::terminateSettingsGUI()
@@ -167,7 +170,6 @@ void Game::menu()
                 this->windowSize = core::dimension2d<u32>(1240, 720);
                 if (!initializeDevice())
                         return;
-                initializeScene();
                 initialized = true;
                 this->initializeMenuGUI();
             }
@@ -187,7 +189,6 @@ void Game::menu()
                         windowSize = core::dimension2d<u32>(640, 480);
                         if (!initializeDevice())
                             return;
-                        initializeScene();
                         initialized = true;
                         this->initializeMenuGUI();
                         break;
@@ -198,7 +199,6 @@ void Game::menu()
                         windowSize = core::dimension2d<u32>(1240, 720);
                         if (!initializeDevice())
                             return;
-                        initializeScene();
                         initialized = true;
                         this->initializeMenuGUI();
                         break;
@@ -244,6 +244,7 @@ void Game::run()
 {
 
     this->initializeInGameGUI();
+    this->initializeScene();
     bool escapePressed = false;
     core::dimension2du screenSize = driver->getScreenSize();
 
@@ -275,16 +276,16 @@ void Game::run()
             cameraPosText->setVisible(false);
             device->getCursorControl()->setVisible(true);
         } else {
-            core::stringw cmrp = "Camera position: (";
-            core::vector3df pos = camera->getPosition();
-            cmrp += pos.X;
-            cmrp += ", ";
-            cmrp += pos.Y;
-            cmrp += ", ";
-            cmrp += pos.Z;
-            cmrp += ")";
-            cameraPosText->setText(cmrp.c_str());
-
+            core::stringw cameraPosition = "Camera position: (";
+            core::vector3df position = camera->getPosition();
+            cameraPosition += position.X;
+            cameraPosition += ", ";
+            cameraPosition += position.Y;
+            cameraPosition += ", ";
+            cameraPosition += position.Z;
+            cameraPosition += ")";
+            cameraPosText->setText(cameraPosition.c_str());
+            error((core::stringw)position.Z);
             camera->setInputReceiverEnabled(true);
 
             buttonQuit->setVisible(false);
@@ -314,4 +315,5 @@ void Game::run()
         }
     }
     pause = false;
+    sceneManager->clear();
 }
