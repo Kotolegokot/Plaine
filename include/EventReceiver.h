@@ -17,7 +17,6 @@ public:
 
 private:
     bool PressedKeys[KEY_KEY_CODES_COUNT];
-    bool UpKeys[KEY_KEY_CODES_COUNT];
 };
 
 #endif // EVENTRECEIVER_H
