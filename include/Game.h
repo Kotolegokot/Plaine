@@ -24,6 +24,9 @@ private:
     bool pause = false;
 
     bool fullscreen = false;
+    bool customScreenSize = false;
+    u32 colorDepth;
+    core::stringw language;
     core::dimension2d<u32> windowSize;
     u32 colorDepth = 32;
     core::stringw language = L"English";
@@ -42,7 +45,12 @@ private:
     gui::IGUIButton *buttonMenu = nullptr;
     gui::IGUIButton *buttonQuit = nullptr;
     gui::IGUIComboBox *resolutionComboBox = nullptr;
+    gui::IGUIComboBox *colorDepthComboBox = nullptr;
+    gui::IGUIComboBox *languageComboBox = nullptr;
     gui::IGUIStaticText *screenSizeText = nullptr;
+    gui::IGUIStaticText *resolutionText = nullptr;
+    gui::IGUIStaticText *colorDepthText = nullptr;
+    gui::IGUIStaticText *languageText = nullptr;
     gui::IGUIStaticText *cameraPosText = nullptr;
 
     // Scene

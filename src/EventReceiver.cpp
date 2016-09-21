@@ -40,13 +40,19 @@ bool EventReceiver::OnEvent(const SEvent &event)
             }
             break;
         case gui::EGET_COMBO_BOX_CHANGED:
+            if (id == ID_LANGUAGE_COMBOBOX)
             {
-                toggleResolution = true;
-                return true;
                 break;
             }
+            else
+            {
+                toggleGraphicMode = true;
+                return true;
+            }
         default:
-            break;
+            {
+                break;
+            }
         }
     }
     return false;
