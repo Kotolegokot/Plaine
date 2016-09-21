@@ -51,7 +51,7 @@ bool Game::initializeDevice()
     fileSystem = device->getFileSystem();
     eventReceiver = new EventReceiver();
     device->setEventReceiver(eventReceiver);
-    device->setResizable(customScreenSize);
+    device->setResizable(customResolution);
     return true;
 }
 
@@ -119,7 +119,9 @@ void Game::initializeSettingsGUI()
         resolutionComboBox->addItem(L"640x480", 0);
         resolutionComboBox->addItem(L"1240x720", 1);
         resolutionComboBox->addItem(L"Custom Resolution", 2);
-        if (configuration.resolution == core::dimension2d<u32>(640, 480))
+        if (customResolution)
+            resolutionComboBox->setSelected(2);
+        else if (configuration.resolution == core::dimension2d<u32>(640, 480))
             resolutionComboBox->setSelected(0);
         else if (configuration.resolution == core::dimension2d<u32>(1240, 720))
             resolutionComboBox->setSelected(1);
@@ -216,7 +218,7 @@ void Game::menu()
                 configuration.fullscreen = !configuration.fullscreen;
                 terminate();
                 configuration.resolution = core::dimension2d<u32>(1240, 720);
-                customScreenSize = false;
+                customResolution = false;
                 if (!initializeDevice())
                         return;
                 initialized = true;
@@ -245,7 +247,7 @@ void Game::menu()
                     }
                 case 2:
                     {
-                        customScreenSize = true;
+                        customResolution = true;
                         break;
                     }
             }

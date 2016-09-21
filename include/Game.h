@@ -22,7 +22,7 @@ public:
 private:
     bool initialized = false;
     bool pause = false;
-    bool customScreenSize = false;
+    bool customResolution = false;
 
     int buttonWidth, buttonHeight;
 
