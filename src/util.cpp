@@ -36,6 +36,25 @@ std::wstring utf8_to_wide(const std::string &input) {
 	return out;
 }
 
+core::stringw utf8_to_irrwide(const std::string &input) {
+	size_t inbuf_size = input.length() + 1;
+	// maximum possible size, every character is sizeof(wchar_t) bytes
+	size_t outbuf_size = (input.length() + 1) * sizeof(wchar_t);
+
+	char *inbuf = new char[inbuf_size];
+	memcpy(inbuf, input.c_str(), inbuf_size);
+	char *outbuf = new char[outbuf_size];
+	memset(outbuf, 0, outbuf_size);
+
+	convert("WCHAR_T", "UTF-8", outbuf, outbuf_size, inbuf, inbuf_size);
+	core::stringw out((wchar_t *)outbuf);
+
+	delete[] inbuf;
+	delete[] outbuf;
+
+	return out;
+}
+
 std::string wide_to_utf8(const std::wstring &input) {
 	size_t inbuf_size = (input.length() + 1) * sizeof(wchar_t);
 	// maximum possible size: utf-8 encodes codepoints using 1 up to 6 bytes

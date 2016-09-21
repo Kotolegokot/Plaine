@@ -7,6 +7,13 @@ Game::Game()
     windowSize = core::dimension2d<u32>(1240, 720);
     if (!initializeDevice())
         return;
+
+    gui::IGUISkin *skin = guiEnvironment->getSkin();
+    gui::IGUIFont *font = guiEnvironment->getFont("media/fonts/fonthaettenschweiler.bmp");
+    if (font)
+        skin->setFont(font);
+
+
     initializeScene();
     initialized = true;
 }
@@ -281,7 +288,7 @@ void Game::run()
             cameraPosition += position.Y;
             cameraPosition += ", ";
             cameraPosition += position.Z;
-            cameraPosition += ")";
+            cameraPosition += utf8_to_irrwide("мяу8)");
             cameraPosText->setText(cameraPosition.c_str());
 
             camera->setInputReceiverEnabled(true);

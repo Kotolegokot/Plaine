@@ -15,6 +15,7 @@ using namespace irr;
 
 size_t convert(const char *to, const char *from, char *outbuf, size_t outbuf_size, char *inbuf, size_t inbuf_size);
 std::wstring utf8_to_wide(const std::string &input);
+core::stringw utf8_to_irrwide(const std::string &input);
 std::string wide_to_utf8(const std::wstring &input);
 
 // GUI IDs
