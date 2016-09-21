@@ -9,12 +9,14 @@ using namespace irr;
 class SceneNodeAnimatorCameraPlayer : public scene::ISceneNodeAnimator
 {
 public:
-    SceneNodeAnimatorCameraPlayer(f32 straightMoveSpeed = 0, f32 lateralMoveSpeed = 0);
+    SceneNodeAnimatorCameraPlayer(f32 straightMoveSpeed = 0, f32 lateralMoveSpeed = 0, f32 verticalMoveSpeed = 0);
 
     f32 getStraightMoveSpeed() const;
     void setStraightMoveSpeed(f32 moveSpeed);
     f32 getLateralMoveSpeed() const;
     void setLateralMoveSpeed(f32 moveSpeed);
+    f32 getVerticalMoveSpeed() const;
+    void setVerticalMoveSpeed(f32 moveSpeed);
     void stop();
 
     virtual void animateNode(scene::ISceneNode* node, u32 timeMs) override;
@@ -24,9 +26,12 @@ public:
 private:
     f32 straightMoveSpeed = 0;
     f32 lateralMoveSpeed = 0;
+    f32 verticalMoveSpeed = 0;
+    f32 lateralAcceleration = 0;
+    f32 verticalAcceleration = 0;
     s32 lastAnimationTime;
-    bool PressedKeys[KEY_KEY_CODES_COUNT];
 
+    bool PressedKeys[KEY_KEY_CODES_COUNT];
     bool firstUpdate = true;
 };
 
