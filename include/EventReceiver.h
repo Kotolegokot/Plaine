@@ -1,7 +1,7 @@
 #ifndef EVENTRECEIVER_H
 #define EVENTRECEIVER_H
 
-#include <irrlicht/irrlicht.h>
+#include <irrlicht.h>
 #include "util.h"
 
 using namespace irr;

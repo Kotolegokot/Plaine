@@ -2,7 +2,8 @@
 #define GAME_H
 
 #include <iostream>
-#include <irrlicht/irrlicht.h>
+#include <irrlicht.h>
+#include <CGUITTFont.h>
 #include "EventReceiver.h"
 #include "util.h"
 #include "Config.h"

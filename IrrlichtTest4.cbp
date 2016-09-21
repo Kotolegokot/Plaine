@@ -15,7 +15,6 @@
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
 					<Add option="-g" />
-					<Add directory="include" />
 				</Compiler>
 			</Target>
 			<Target title="Linux-Release">
@@ -27,7 +26,6 @@
 					<Add option="-O2" />
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
-					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -43,7 +41,6 @@
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
 					<Add option="-g" />
-					<Add directory="include" />
 				</Compiler>
 			</Target>
 			<Target title="Windows-Release">
@@ -55,7 +52,6 @@
 				<Compiler>
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
-					<Add directory="include" />
 				</Compiler>
 			</Target>
 		</Build>
@@ -63,9 +59,13 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add directory="include" />
+			<Add directory="/usr/include/freetype2" />
+			<Add directory="include/irrlicht" />
+			<Add directory="include/freetype2" />
 		</Compiler>
 		<Linker>
 			<Add library="Irrlicht" />
+			<Add library="freetype" />
 			<Add directory="lib" />
 		</Linker>
 		<Unit filename="include/Config.h" />
@@ -74,6 +74,7 @@
 		<Unit filename="include/SceneNodeAnimatorCameraPlayer.h" />
 		<Unit filename="include/util.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/CGUITTFont.cpp" />
 		<Unit filename="src/Config.cpp" />
 		<Unit filename="src/EventReceiver.cpp" />
 		<Unit filename="src/Game.cpp" />

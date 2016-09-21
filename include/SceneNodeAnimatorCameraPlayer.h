@@ -1,7 +1,7 @@
 #ifndef SCENENODEANIMATORCAMERAPLAYER_H
 #define SCENENODEANIMATORCAMERAPLAYER_H
 
-#include <irrlicht/irrlicht.h>
+#include <irrlicht.h>
 
 using namespace irr;
 

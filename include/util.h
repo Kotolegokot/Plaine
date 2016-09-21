@@ -3,7 +3,7 @@
 
 #include <string>
 #include <cstdlib>
-#include <irrlicht/irrlicht.h>
+#include <irrlicht.h>
 
 #ifndef _WIN32
 #include <iconv.h>
