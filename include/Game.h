@@ -14,7 +14,7 @@ class Game
 {
 public:
     Game();
-    Game(struct ConfigData &data);
+    Game(const struct ConfigData &data);
     ~Game();
     void run();
     void menu();

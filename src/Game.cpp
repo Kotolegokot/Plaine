@@ -9,7 +9,7 @@ Game::Game()
     initialized = true;
 }
 
-Game::Game(struct ConfigData &data)
+Game::Game(const struct ConfigData &data)
 {
     configuration = data;
     if (!initializeDevice())
