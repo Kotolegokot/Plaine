@@ -215,12 +215,8 @@ void Game::menu()
                 if (!initializeDevice())
                         return;
                 initialized = true;
-<<<<<<< HEAD
                 initializeGUI();
-                this->initializeMenuGUI();
-=======
                 initializeMenuGUI();
->>>>>>> settings
             }
         }
         else if (buttonStart == nullptr)
@@ -235,34 +231,16 @@ void Game::menu()
                 case 0:
                     {
                         windowSize = core::dimension2d<u32>(640, 480);
-<<<<<<< HEAD
-                        if (!initializeDevice())
-                            return;
-                        initialized = true;
-                        initializeGUI();
-                        this->initializeMenuGUI();
-=======
-                        customScreenSize = false;
->>>>>>> settings
                         break;
                     }
                 case 1:
                     {
                         windowSize = core::dimension2d<u32>(1240, 720);
-<<<<<<< HEAD
-                        if (!initializeDevice())
-                            return;
-                        initialized = true;
-                        initializeGUI();
-                        this->initializeMenuGUI();
-=======
-                        customScreenSize = false;
                         break;
                     }
                 case 2:
                     {
                         customScreenSize = true;
->>>>>>> settings
                         break;
                     }
             }
@@ -288,6 +266,7 @@ void Game::menu()
             if (!initializeDevice())
                 return;
             initialized = true;
+            initializeGUI();
             initializeMenuGUI();
         }
         core::stringw scrs = "Screen size: ";

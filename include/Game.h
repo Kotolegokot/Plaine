@@ -25,8 +25,6 @@ private:
 
     bool fullscreen = false;
     bool customScreenSize = false;
-    u32 colorDepth;
-    core::stringw language;
     core::dimension2d<u32> windowSize;
     u32 colorDepth = 32;
     core::stringw language = L"English";
