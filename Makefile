@@ -1,9 +1,9 @@
 CXX=g++
 CFLAGS=-Wall -std=c++11
 SOURCE_DIR=src
-SOURCE=main.cpp $(SOURCE_DIR)/*.cpp
-LIBS=-lIrrlicht
-INCLUDE=-Iinclude/
+SOURCE=main.cpp $(SOURCE_DIR)/*.cpp include/cguittfont/CGUITTFont.cpp
+LIBS=-lIrrlicht -lfreetype
+INCLUDE=-Iinclude/ -Iinclude/irrlicht -I/usr/include/freetype2 -Iinclude/cguittfont
 EXECUTABLE=IrrlichtTest4
 
 default: release

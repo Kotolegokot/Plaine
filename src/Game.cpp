@@ -20,7 +20,8 @@ Game::~Game()
 void Game::initializeGUI()
 {
     gui::IGUISkin *skin = guiEnvironment->getSkin();
-    gui::IGUIFont *font = guiEnvironment->getFont("media/fonts/fonthaettenschweiler.bmp");
+    //gui::IGUIFont *font = gui::CGUITTFont::createTTFont(guiEnvironment, io::path("media/fonts/liberationsans.ttf"), 16);
+    gui::IGUIFont *font = guiEnvironment->getFont("media/fonts/liberationsans.ttf");
     if (font)
         skin->setFont(font);
 }

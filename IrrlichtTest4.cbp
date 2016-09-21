@@ -63,6 +63,11 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add directory="include" />
+			<Add directory="/usr/include/freetype2" />
+			<Add directory="/usr/include/irrlicht" />
+			<Add directory="include/irrlicht" />
+			<Add directory="include/freetype2" />
+			<Add directory="include/cguittfont" />
 		</Compiler>
 		<Linker>
 			<Add library="Irrlicht" />
