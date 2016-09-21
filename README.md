@@ -1,7 +1,7 @@
 # PlaneRunner
 Fuck you bitch motherfucker
 
-## Depenpencies
+## Dependencies
 * [Irrlicht](http://irrlicht.sourceforge.net)
 * [Freetype](http://gnuwin32.sourceforge.net/packages/freetype.htm)
 * [iconv](http://gnuwin32.sourceforge.net/packages/libiconv.htm)
