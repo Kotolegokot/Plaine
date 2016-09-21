@@ -5,6 +5,7 @@
 #include <irrlicht/irrlicht.h>
 #include "EventReceiver.h"
 #include "util.h"
+#include "Config.h"
 #include "SceneNodeAnimatorCameraPlayer.h"
 
 using namespace irr;
@@ -13,6 +14,7 @@ class Game
 {
 public:
     Game();
+    Game(struct ConfigData &data);
     ~Game();
     void run();
     void menu();
@@ -20,8 +22,11 @@ public:
 private:
     bool initialized = false;
     bool pause = false;
+
     bool fullscreen = false;
     core::dimension2d<u32> windowSize;
+    u32 colorDepth = 32;
+    core::stringw language = L"English";
 
     IrrlichtDevice *device = nullptr;
     video::IVideoDriver *driver = nullptr;

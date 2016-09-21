@@ -12,6 +12,19 @@ Game::Game()
     initialized = true;
 }
 
+Game::Game(struct ConfigData &data)
+{
+    windowSize = data.resolution;
+    fullscreen = data.fullscreen;
+    colorDepth = data.colordepth;
+    language = data.language;
+    if (!initializeDevice())
+        return;
+    initializeGUI();
+    initializeScene();
+    initialized = true;
+}
+
 Game::~Game()
 {
     device->drop();
@@ -152,7 +165,6 @@ void Game::menu()
         error(ERR_NOT_INITIALIZED);
         return;
     }
-
     core::dimension2du screenSize = driver->getScreenSize();
 
     while (device->run()) {
@@ -293,7 +305,7 @@ void Game::run()
             cameraPosition += position.Y;
             cameraPosition += ", ";
             cameraPosition += position.Z;
-            cameraPosition += utf8_to_irrwide(")");
+            cameraPosition += ")";
             cameraPosText->setText(cameraPosition.c_str());
 
             camera->setInputReceiverEnabled(true);

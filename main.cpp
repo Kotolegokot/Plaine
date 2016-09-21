@@ -8,7 +8,12 @@ using namespace irr;
 
 int main()
 {
-    Game game;
+    ConfigData data;
+    Config conf;
+    conf.saveConfig("config.conf", data);
+    data = conf.loadConfig("config.conf");
+
+    Game game(data);
     game.menu();
 
     return 0;
