@@ -48,6 +48,7 @@ private:
 
     void error(const core::stringw &str) const;
     bool initializeDevice();
+    void initializeGUI();
     void initializeMenuGUI();
     void terminateMenuGUI();
     void initializeInGameGUI();

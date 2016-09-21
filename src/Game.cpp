@@ -7,13 +7,7 @@ Game::Game()
     windowSize = core::dimension2d<u32>(1240, 720);
     if (!initializeDevice())
         return;
-
-    gui::IGUISkin *skin = guiEnvironment->getSkin();
-    gui::IGUIFont *font = guiEnvironment->getFont("media/fonts/fonthaettenschweiler.bmp");
-    if (font)
-        skin->setFont(font);
-
-
+    initializeGUI();
     initializeScene();
     initialized = true;
 }
@@ -21,6 +15,14 @@ Game::Game()
 Game::~Game()
 {
     device->drop();
+}
+
+void Game::initializeGUI()
+{
+    gui::IGUISkin *skin = guiEnvironment->getSkin();
+    gui::IGUIFont *font = guiEnvironment->getFont("media/fonts/fonthaettenschweiler.bmp");
+    if (font)
+        skin->setFont(font);
 }
 
 bool Game::initializeDevice()
@@ -177,6 +179,7 @@ void Game::menu()
                 if (!initializeDevice())
                         return;
                 initialized = true;
+                initializeGUI();
                 this->initializeMenuGUI();
             }
         }
@@ -196,6 +199,7 @@ void Game::menu()
                         if (!initializeDevice())
                             return;
                         initialized = true;
+                        initializeGUI();
                         this->initializeMenuGUI();
                         break;
                     }
@@ -206,6 +210,7 @@ void Game::menu()
                         if (!initializeDevice())
                             return;
                         initialized = true;
+                        initializeGUI();
                         this->initializeMenuGUI();
                         break;
                     }
@@ -288,7 +293,7 @@ void Game::run()
             cameraPosition += position.Y;
             cameraPosition += ", ";
             cameraPosition += position.Z;
-            cameraPosition += utf8_to_irrwide("мяу8)");
+            cameraPosition += utf8_to_irrwide(")");
             cameraPosText->setText(cameraPosition.c_str());
 
             camera->setInputReceiverEnabled(true);
