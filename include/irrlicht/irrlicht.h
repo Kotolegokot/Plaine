@@ -127,7 +127,6 @@
 #include "irrMap.h"
 #include "irrMath.h"
 #include "irrString.h"
-//#include "../cguittfont/irrUString.h"
 #include "irrTypes.h"
 #include "path.h"
 #include "irrXML.h"

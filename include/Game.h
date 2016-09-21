@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <irrlicht.h>
-//#include <CGUITTFont.h>
+#include <CGUITTFont.h>
 #include "EventReceiver.h"
 #include "util.h"
 #include "SceneNodeAnimatorCameraPlayer.h"
