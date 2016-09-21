@@ -9,22 +9,18 @@ using namespace irr;
 class SceneNodeAnimatorCameraPlayer : public scene::ISceneNodeAnimator
 {
 public:
-    SceneNodeAnimatorCameraPlayer(f32 straightMoveSpeed = 0, f32 lateralMoveSpeed = 0, f32 verticalMoveSpeed = 0);
+    SceneNodeAnimatorCameraPlayer(f32 lateralMoveSpeed = 0, f32 verticalMoveSpeed = 0);
 
-    f32 getStraightMoveSpeed() const;
-    void setStraightMoveSpeed(f32 moveSpeed);
     f32 getLateralMoveSpeed() const;
     void setLateralMoveSpeed(f32 moveSpeed);
     f32 getVerticalMoveSpeed() const;
     void setVerticalMoveSpeed(f32 moveSpeed);
-    void stop();
 
     virtual void animateNode(scene::ISceneNode* node, u32 timeMs) override;
     virtual scene::ISceneNodeAnimator *createClone(scene::ISceneNode *node, scene::ISceneManager *newManager = 0) override;
     virtual bool OnEvent(const SEvent& event) override;
     virtual bool isEventReceiverEnabled() const override;
 private:
-    f32 straightMoveSpeed = 0;
     f32 lateralMoveSpeed = 0;
     f32 verticalMoveSpeed = 0;
     f32 lateralAcceleration = 0;

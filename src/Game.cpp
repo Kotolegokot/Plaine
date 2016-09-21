@@ -115,7 +115,7 @@ void Game::terminateSettingsGUI()
 void Game::initializeScene()
 {
     camera = sceneManager->addCameraSceneNode();
-    scene::ISceneNodeAnimator *cameraAnimator = new SceneNodeAnimatorCameraPlayer(0.01f, 5.f, 5.f);
+    scene::ISceneNodeAnimator *cameraAnimator = new SceneNodeAnimatorCameraPlayer(5.f, 5.f);
     camera->addAnimator(cameraAnimator);
     cameraAnimator->drop();
 
