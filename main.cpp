@@ -10,8 +10,8 @@ int main()
 {
     ConfigData data;
     Config conf;
-    conf.saveConfig("config.conf", data);
-    data = conf.loadConfig("config.conf");
+    conf.saveConfig("game.conf", data);
+    data = conf.loadConfig("game.conf");
 
     Game game(data);
     game.menu();
