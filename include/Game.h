@@ -24,6 +24,8 @@ private:
     bool pause = false;
     bool customScreenSize = false;
 
+    int buttonWidth, buttonHeight;
+
     ConfigData configuration;
 
     IrrlichtDevice *device = nullptr;
