@@ -1,6 +1,7 @@
 lib
 obj
 bin
+deps
 IrrlichtTest4.layout
 IrrlichtTest4.depend
 *.conf

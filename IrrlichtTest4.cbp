@@ -60,13 +60,14 @@
 			<Add option="-fexceptions" />
 			<Add directory="include" />
 			<Add directory="/usr/include/freetype2" />
-			<Add directory="include/irrlicht" />
-			<Add directory="include/freetype2" />
+			<Add directory="deps/include/irrlicht" />
+			<Add directory="deps/include/freetype2" />
+			<Add directory="/usr/include/irrlicht" />
 		</Compiler>
 		<Linker>
 			<Add library="Irrlicht" />
 			<Add library="freetype" />
-			<Add directory="lib" />
+			<Add directory="deps/lib" />
 		</Linker>
 		<Unit filename="include/Config.h" />
 		<Unit filename="include/EventReceiver.h" />
