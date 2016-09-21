@@ -22,12 +22,9 @@ public:
 private:
     bool initialized = false;
     bool pause = false;
-
-    bool fullscreen = false;
     bool customScreenSize = false;
-    core::dimension2d<u32> windowSize;
-    u32 colorDepth = 32;
-    core::stringw language = L"English";
+
+    ConfigData configuration;
 
     IrrlichtDevice *device = nullptr;
     video::IVideoDriver *driver = nullptr;

@@ -4,11 +4,6 @@ using namespace irr;
 
 Game::Game()
 {
-    windowSize = core::dimension2d<u32>(1240, 720);
-    colorDepth = 32;
-    language = L"English";
-    if (!initializeDevice())
-        return;
     initializeGUI();
     initializeScene();
     initialized = true;
@@ -16,10 +11,7 @@ Game::Game()
 
 Game::Game(struct ConfigData &data)
 {
-    windowSize = data.resolution;
-    fullscreen = data.fullscreen;
-    colorDepth = data.colordepth;
-    language = data.language;
+    configuration = data;
     if (!initializeDevice())
         return;
     initializeGUI();
@@ -42,13 +34,13 @@ void Game::initializeGUI()
 
 bool Game::initializeDevice()
 {
-    if (fullscreen)
+    if (configuration.fullscreen)
     {
         IrrlichtDevice *nulldevice = createDevice(video::EDT_NULL);
-        windowSize = nulldevice->getVideoModeList()->getDesktopResolution();
+        configuration.resolution = nulldevice->getVideoModeList()->getDesktopResolution();
         nulldevice -> drop();
     }
-    device = createDevice(video::EDT_OPENGL, windowSize, colorDepth, fullscreen);
+    device = createDevice(video::EDT_OPENGL, configuration.resolution, configuration.colordepth, configuration.fullscreen);
     if (!device) {
         error("Couldn't create a device :(\n");
         return false;
@@ -104,7 +96,7 @@ void Game::initializeSettingsGUI()
     screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
     resolutionText = guiEnvironment->addStaticText(L"Resolution:", core::rect<s32>(screenSize.Width - 180, screenSize.Height - 190, screenSize.Width - 135, screenSize.Height - 170), false);
     resolutionComboBox = guiEnvironment->addComboBox(core::rect<s32>(screenSize.Width - 130, screenSize.Height - 195, screenSize.Width - 20, screenSize.Height - 175), 0, ID_RESOLUTION_COMBOBOX);
-    if (fullscreen)
+    if (configuration.fullscreen)
     {
         resolutionComboBox->setEnabled(false);
         resolutionComboBox->addItem(L"Fullscreen", 0);
@@ -116,9 +108,9 @@ void Game::initializeSettingsGUI()
         resolutionComboBox->addItem(L"640x480", 0);
         resolutionComboBox->addItem(L"1240x720", 1);
         resolutionComboBox->addItem(L"Custom Resolution", 2);
-        if (windowSize == core::dimension2d<u32>(640, 480))
+        if (configuration.resolution == core::dimension2d<u32>(640, 480))
             resolutionComboBox->setSelected(0);
-        else if (windowSize == core::dimension2d<u32>(1240, 720))
+        else if (configuration.resolution == core::dimension2d<u32>(1240, 720))
             resolutionComboBox->setSelected(1);
         buttonToggleFullscreen = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 120, screenSize.Width - 20, screenSize.Height - 90), 0, ID_BUTTON_TOGGLE_FULLSCREEN, L"Fullscreen", L"To Fullscreen Mode");
 
@@ -128,16 +120,16 @@ void Game::initializeSettingsGUI()
     colorDepthComboBox->addItem(L"8", 0);
     colorDepthComboBox->addItem(L"16", 1);
     colorDepthComboBox->addItem(L"32", 2);
-    if (colorDepth == 8)
+    if (configuration.colordepth == 8)
         colorDepthComboBox->setSelected(0);
-    else if (colorDepth == 16)
+    else if (configuration.colordepth == 16)
         colorDepthComboBox->setSelected(1);
-    else if (colorDepth == 32)
+    else if (configuration.colordepth == 32)
         colorDepthComboBox->setSelected(2);
     languageText = guiEnvironment->addStaticText(L"Language:", core::rect<s32>(screenSize.Width - 180, screenSize.Height - 140, screenSize.Width - 130, screenSize.Height - 120), false);
     languageComboBox = guiEnvironment->addComboBox(core::rect<s32>(screenSize.Width - 130, screenSize.Height - 145, screenSize.Width - 20, screenSize.Height - 125), 0, ID_LANGUAGE_COMBOBOX);
     languageComboBox->addItem(L"English", 0);
-    if (language == L"English")
+    if (configuration.language == L"English")
         languageComboBox->setSelected(0);
     buttonMenu = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 80, screenSize.Width - 20, screenSize.Height - 50), 0, ID_BUTTON_MENU, L"Back", L"Exit to Main menu");
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - 180, screenSize.Height - 40, screenSize.Width - 20, screenSize.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
@@ -176,6 +168,8 @@ void Game::error(const core::stringw &str) const
 
 void Game::terminate()
 {
+    Config conf;
+    conf.saveConfig("game.conf", configuration);
     device->closeDevice();
     device->run();
     device->drop();
@@ -208,9 +202,9 @@ void Game::menu()
             }
             if (eventReceiver->toggleFullscreen)
             {
-                fullscreen = !fullscreen;
+                configuration.fullscreen = !configuration.fullscreen;
                 terminate();
-                windowSize = core::dimension2d<u32>(1240, 720);
+                configuration.resolution = core::dimension2d<u32>(1240, 720);
                 customScreenSize = false;
                 if (!initializeDevice())
                         return;
@@ -230,12 +224,12 @@ void Game::menu()
             {
                 case 0:
                     {
-                        windowSize = core::dimension2d<u32>(640, 480);
+                        configuration.resolution = core::dimension2d<u32>(640, 480);
                         break;
                     }
                 case 1:
                     {
-                        windowSize = core::dimension2d<u32>(1240, 720);
+                        configuration.resolution = core::dimension2d<u32>(1240, 720);
                         break;
                     }
                 case 2:
@@ -248,17 +242,17 @@ void Game::menu()
             {
                 case 0:
                 {
-                    colorDepth = 8;
+                    configuration.colordepth = 8;
                     break;
                 }
                 case 1:
                 {
-                    colorDepth = 16;
+                    configuration.colordepth = 16;
                     break;
                 }
                 case 2:
                 {
-                    colorDepth = 32;
+                    configuration.colordepth = 32;
                     break;
                 }
             }
