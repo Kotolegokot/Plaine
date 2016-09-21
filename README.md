@@ -9,7 +9,7 @@ Fuck you bitch motherfucker
 * [Code::Blocks](http://codeblocks.org) (optional, but strongly recommended under Windows)
 
 ## Building
-Simply open the project in Code::Blocks, choose the appropriate build target and press Ctrl-F9. Libs must be put into `lib/` (i.e. `lib/Irrlicht.dll`) directory, and their headers into `include\` (i.e. `include\irrlicht`). Under Linux standard paths (`/usr/lib/`, `/usr/include/` etc.) work as well.
+Simply open the project in Code::Blocks, choose the appropriate build target and press Ctrl-F9. Libs must be put into `deps/lib/` (i.e. `deps/lib/Irrlicht.dll`) directory, and their headers into `deps/include\` (i.e. `deps/include\irrlicht`). Linux standard paths (`/usr/lib/`, `/usr/include/` etc.) work as well.
 
 Also you can use `automake` to build the project. The following targets are available:
 * `make debug`
