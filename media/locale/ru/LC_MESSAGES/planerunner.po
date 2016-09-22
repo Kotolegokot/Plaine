@@ -1,0 +1,94 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-22 14:34+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/Game.cpp:66
+msgid "Start"
+msgstr "Старт"
+
+#: src/Game.cpp:66
+msgid "Start game"
+msgstr "Начать игру"
+
+#: src/Game.cpp:67
+msgid "Settings"
+msgstr "Настройки"
+
+#: src/Game.cpp:67
+msgid "Game settings"
+msgstr ""
+
+#: src/Game.cpp:68 src/Game.cpp:89 src/Game.cpp:148
+msgid "Quit"
+msgstr ""
+
+#: src/Game.cpp:68 src/Game.cpp:89 src/Game.cpp:148
+msgid "Exit game"
+msgstr ""
+
+#: src/Game.cpp:88
+msgid "Menu"
+msgstr ""
+
+#: src/Game.cpp:88 src/Game.cpp:147
+msgid "Exit to Main menu"
+msgstr ""
+
+#: src/Game.cpp:108
+msgid "Resolution:"
+msgstr ""
+
+#: src/Game.cpp:113 src/Game.cpp:128
+msgid "Fullscreen"
+msgstr ""
+
+#: src/Game.cpp:115
+msgid "Windowed"
+msgstr ""
+
+#: src/Game.cpp:115
+msgid "To Windewed Mode"
+msgstr ""
+
+#: src/Game.cpp:121
+msgid "Custom Resolution"
+msgstr ""
+
+#: src/Game.cpp:128
+msgid "To Fullscreen Mode"
+msgstr ""
+
+#: src/Game.cpp:131
+msgid "Color Depth:"
+msgstr ""
+
+#: src/Game.cpp:142
+msgid "Language:"
+msgstr ""
+
+#: src/Game.cpp:147
+msgid "Back"
+msgstr ""
+
+#: src/Game.cpp:279 src/Game.cpp:342
+msgid "Screen size: "
+msgstr ""
+
+#: src/Game.cpp:366
+msgid "Camera position: ("
+msgstr ""

@@ -5,9 +5,14 @@ using namespace irr;
 
 #include "Game.h"
 #include "Config.h"
+#include "util.h"
 
 int main()
 {
+    setlocale(LC_ALL, "");
+    bindtextdomain("planerunner", "media/locale/");
+    textdomain("planerunner");
+
     ConfigData data;
     Config conf;
     data = conf.loadConfig("game.conf");
