@@ -60,6 +60,7 @@
 			<Add option="-fexceptions" />
 			<Add directory="include" />
 			<Add directory="/usr/include/freetype2" />
+			<Add directory="deps/include/" />
 			<Add directory="deps/include/irrlicht" />
 			<Add directory="deps/include/freetype2" />
 			<Add directory="/usr/include/irrlicht" />

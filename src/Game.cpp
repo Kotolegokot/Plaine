@@ -78,15 +78,14 @@ void Game::terminateMenuGUI()
 
 void Game::initializeInGameGUI()
 {
-    core::dimension2du screenSize = driver->getScreenSize();
     buttonWidth = configuration.resolution.Width / 6;
     if (buttonWidth < 180)
         buttonWidth = 180;
     buttonHeight = buttonWidth * 1/8;
     cameraPosText = guiEnvironment->addStaticText(L"CAMERA_POS", core::rect<s32>(10, 10, 400, 30), false);
     screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
-    buttonMenu = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - buttonWidth - 20, screenSize.Height - 2*buttonHeight - 20, screenSize.Width - 20, screenSize.Height - buttonHeight - 20), 0, ID_BUTTON_MENU, L"Menu", L"Exit to Main menu");
-    buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - buttonWidth - 20, screenSize.Height - buttonHeight - 10, screenSize.Width - 20, screenSize.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
+    buttonMenu = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 2*buttonHeight - 20, configuration.resolution.Width - 20, configuration.resolution.Height - buttonHeight - 20), 0, ID_BUTTON_MENU, L"Menu", L"Exit to Main menu");
+    buttonQuit = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - buttonHeight - 10, configuration.resolution.Width - 20, configuration.resolution.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
 }
 
 void Game::terminateInGameGUI()
@@ -99,20 +98,19 @@ void Game::terminateInGameGUI()
 
 void Game::initializeSettingsGUI()
 {
-    core::dimension2du screenSize = driver->getScreenSize();
     buttonWidth = configuration.resolution.Width / 6;
     if (buttonWidth < 180)
         buttonWidth = 180;
     buttonHeight = buttonWidth * 1/8;
     screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
-    resolutionText = guiEnvironment->addStaticText(L"Resolution:", core::rect<s32>(screenSize.Width - buttonWidth - 20, screenSize.Height - 6*buttonHeight - 55, screenSize.Width - 135, screenSize.Height - 5*buttonHeight - 55), false);
-    resolutionComboBox = guiEnvironment->addComboBox(core::rect<s32>(screenSize.Width - 3*buttonWidth/5 - 20, screenSize.Height - 6*buttonHeight - 60, screenSize.Width - 20, screenSize.Height - 5*buttonHeight - 60), 0, ID_RESOLUTION_COMBOBOX);
+    resolutionText = guiEnvironment->addStaticText(L"Resolution:", core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 6*buttonHeight - 55, configuration.resolution.Width - 135, configuration.resolution.Height - 5*buttonHeight - 55), false);
+    resolutionComboBox = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 6*buttonHeight - 60, configuration.resolution.Width - 20, configuration.resolution.Height - 5*buttonHeight - 60), 0, ID_RESOLUTION_COMBOBOX);
     if (configuration.fullscreen)
     {
         resolutionComboBox->setEnabled(false);
         resolutionComboBox->addItem(L"Fullscreen", 0);
         resolutionComboBox->setSelected(0);
-        buttonToggleFullscreen = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - buttonWidth - 20, screenSize.Height - 3*buttonHeight - 30, screenSize.Width - 20, screenSize.Height - 2*buttonHeight - 30), 0, ID_BUTTON_TOGGLE_FULLSCREEN, L"Windowed", L"To Windewed Mode");
+        buttonToggleFullscreen = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 3*buttonHeight - 30, configuration.resolution.Width - 20, configuration.resolution.Height - 2*buttonHeight - 30), 0, ID_BUTTON_TOGGLE_FULLSCREEN, L"Windowed", L"To Windewed Mode");
 
     }
     else {
@@ -125,11 +123,11 @@ void Game::initializeSettingsGUI()
             resolutionComboBox->setSelected(0);
         else if (configuration.resolution == core::dimension2d<u32>(1240, 720))
             resolutionComboBox->setSelected(1);
-        buttonToggleFullscreen = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - buttonWidth - 20, screenSize.Height - 3*buttonHeight - 30, screenSize.Width - 20, screenSize.Height - 2*buttonHeight - 30), 0, ID_BUTTON_TOGGLE_FULLSCREEN, L"Fullscreen", L"To Fullscreen Mode");
+        buttonToggleFullscreen = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 3*buttonHeight - 30, configuration.resolution.Width - 20, configuration.resolution.Height - 2*buttonHeight - 30), 0, ID_BUTTON_TOGGLE_FULLSCREEN, L"Fullscreen", L"To Fullscreen Mode");
 
     }
-    colorDepthText = guiEnvironment->addStaticText(L"Color Depth:", core::rect<s32>(screenSize.Width - buttonWidth - 20, screenSize.Height - 5*buttonHeight - 45, screenSize.Width - 130, screenSize.Height - 4*buttonHeight - 45), false);
-    colorDepthComboBox = guiEnvironment->addComboBox(core::rect<s32>(screenSize.Width - 3*buttonWidth/5 - 20, screenSize.Height - 5*buttonHeight - 50, screenSize.Width - 20, screenSize.Height - 4*buttonHeight - 50), 0, ID_COLORDEPTH_COMBOBOX);
+    colorDepthText = guiEnvironment->addStaticText(L"Color Depth:", core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 5*buttonHeight - 45, configuration.resolution.Width - 130, configuration.resolution.Height - 4*buttonHeight - 45), false);
+    colorDepthComboBox = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 5*buttonHeight - 50, configuration.resolution.Width - 20, configuration.resolution.Height - 4*buttonHeight - 50), 0, ID_COLORDEPTH_COMBOBOX);
     colorDepthComboBox->addItem(L"8", 0);
     colorDepthComboBox->addItem(L"16", 1);
     colorDepthComboBox->addItem(L"32", 2);
@@ -139,13 +137,13 @@ void Game::initializeSettingsGUI()
         colorDepthComboBox->setSelected(1);
     else if (configuration.colordepth == 32)
         colorDepthComboBox->setSelected(2);
-    languageText = guiEnvironment->addStaticText(L"Language:", core::rect<s32>(screenSize.Width - buttonWidth - 20, screenSize.Height - 4*buttonHeight - 35, screenSize.Width - 130, screenSize.Height - 3*buttonHeight - 35), false);
-    languageComboBox = guiEnvironment->addComboBox(core::rect<s32>(screenSize.Width - 3*buttonWidth/5 - 20, screenSize.Height - 4*buttonHeight - 40, screenSize.Width - 20, screenSize.Height - 3*buttonHeight - 40), 0, ID_LANGUAGE_COMBOBOX);
+    languageText = guiEnvironment->addStaticText(L"Language:", core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 4*buttonHeight - 35, configuration.resolution.Width - 130, configuration.resolution.Height - 3*buttonHeight - 35), false);
+    languageComboBox = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 4*buttonHeight - 40, configuration.resolution.Width - 20, configuration.resolution.Height - 3*buttonHeight - 40), 0, ID_LANGUAGE_COMBOBOX);
     languageComboBox->addItem(L"English", 0);
     if (configuration.language == L"English")
         languageComboBox->setSelected(0);
-    buttonMenu = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - buttonWidth - 20, screenSize.Height - 2*buttonHeight - 20, screenSize.Width - 20, screenSize.Height - buttonHeight - 20), 0, ID_BUTTON_MENU, L"Back", L"Exit to Main menu");
-    buttonQuit = guiEnvironment->addButton(core::rect<s32>(screenSize.Width - buttonWidth - 20, screenSize.Height - buttonHeight - 10, screenSize.Width - 20, screenSize.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
+    buttonMenu = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 2*buttonHeight - 20, configuration.resolution.Width - 20, configuration.resolution.Height - buttonHeight - 20), 0, ID_BUTTON_MENU, L"Back", L"Exit to Main menu");
+    buttonQuit = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - buttonHeight - 10, configuration.resolution.Width - 20, configuration.resolution.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
 }
 
 void Game::terminateSettingsGUI()
