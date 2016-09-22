@@ -4,7 +4,6 @@ Fuck you bitch motherfucker
 ## Dependencies
 * [Irrlicht](http://irrlicht.sourceforge.net)
 * [Freetype](http://gnuwin32.sourceforge.net/packages/freetype.htm)
-* [iconv](http://gnuwin32.sourceforge.net/packages/libiconv.htm)
 * [zlib](http://www.zlib.net/)
 * [Code::Blocks](http://codeblocks.org) (optional, but strongly recommended under Windows)
 
@@ -18,3 +17,6 @@ Also you can use `automake` to build the project. The following targets are avai
 * `make all` : both `debug` and `release`
 
 You can change the compiler used by specifying the CXX variable (i.e. `make release CXX=clang++`). The default one is `g++`.
+
+### Compiler
+TDM-GCC (Windows), gcc (linux), clang (linux) have been tested to successfully bulid the project.
