@@ -4,7 +4,7 @@ Fuck you bitch motherfucker
 ## Dependencies
 * [Irrlicht](http://irrlicht.sourceforge.net)
 * [Freetype](http://gnuwin32.sourceforge.net/packages/freetype.htm)
-* [zlib](http://www.zlib.net/)
+* [zlib](http://www.zlib.net/) (as a dependency of Freetype)
 * [Code::Blocks](http://codeblocks.org) (optional, but strongly recommended under Windows)
 
 ## Building
