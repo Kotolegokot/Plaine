@@ -145,7 +145,7 @@ namespace gui
 			struct PagedGlyphTextures
 			{
 				PagedGlyphTextures(video::IImage* surface, const irr::core::recti& pageRect)
-					: Surface(surface), PageRect(pageRect)
+					: PageRect(pageRect), Surface(surface)
 				{
 					if ( Surface )
 						Surface->grab();
