@@ -9,13 +9,14 @@ using namespace irr;
 
 int main()
 {
-    setlocale(LC_ALL, "");
-    bindtextdomain("planerunner", "media/locale/");
-    textdomain("planerunner");
 
     ConfigData data;
     Config conf;
     data = conf.loadConfig("game.conf");
+
+    setlocale(LC_ALL, "");
+    bindtextdomain("planerunner", "media/locale/");
+    textdomain("planerunner");
 
     Game game(data);
     game.menu();
