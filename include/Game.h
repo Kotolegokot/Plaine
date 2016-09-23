@@ -7,6 +7,7 @@
 #include "EventReceiver.h"
 #include "util.h"
 #include "Config.h"
+#include "GUI.h"
 #include "SceneNodeAnimatorCameraPlayer.h"
 
 using namespace irr;
@@ -25,31 +26,14 @@ private:
     bool pause = false;
     bool customResolution = false;
 
-    int buttonWidth, buttonHeight;
-
     ConfigData configuration;
-
+    GUI *gui = nullptr;
     IrrlichtDevice *device = nullptr;
     video::IVideoDriver *driver = nullptr;
     scene::ISceneManager *sceneManager = nullptr;
     gui::IGUIEnvironment *guiEnvironment = nullptr;
     io::IFileSystem *fileSystem = nullptr;
     EventReceiver *eventReceiver = nullptr;
-
-    // GUI
-    gui::IGUIButton *buttonStart = nullptr;
-    gui::IGUIButton *buttonSettings = nullptr;
-    gui::IGUIButton *buttonToggleFullscreen = nullptr;
-    gui::IGUIButton *buttonMenu = nullptr;
-    gui::IGUIButton *buttonQuit = nullptr;
-    gui::IGUIComboBox *resolutionComboBox = nullptr;
-    gui::IGUIComboBox *colorDepthComboBox = nullptr;
-    gui::IGUIComboBox *languageComboBox = nullptr;
-    gui::IGUIStaticText *screenSizeText = nullptr;
-    gui::IGUIStaticText *resolutionText = nullptr;
-    gui::IGUIStaticText *colorDepthText = nullptr;
-    gui::IGUIStaticText *languageText = nullptr;
-    gui::IGUIStaticText *cameraPosText = nullptr;
 
     // Scene
     scene::ICameraSceneNode *camera = nullptr;
@@ -60,12 +44,6 @@ private:
     void error(const core::stringw &str) const;
     bool initializeDevice();
     void initializeGUI();
-    void initializeMenuGUI();
-    void terminateMenuGUI();
-    void initializeInGameGUI();
-    void terminateInGameGUI();
-    void initializeSettingsGUI();
-    void terminateSettingsGUI();
     void initializeScene();
     void terminate();
 
