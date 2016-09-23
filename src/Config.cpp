@@ -204,7 +204,7 @@ ConfigData Config::loadConfig(const std::string &filename)
     } */
 
     bool goToNextNEWLINE = false;
-    enum { NONE, RESOLUTION, FULLSCREEN, COLORDEPTH, LANGUAGE } state = NONE;
+    enum { NONE, RESOLUTION, FULLSCREEN, COLORDEPTH, LANGUAGE, CUSTOM_RESOLUTION } state = NONE;
 
     for (std::vector<Item>::const_iterator i = items.cbegin(); i != items.cend(); ++i) {
         if (goToNextNEWLINE) {
@@ -222,6 +222,8 @@ ConfigData Config::loadConfig(const std::string &filename)
                         state = COLORDEPTH;
                     else if ((*i).getString() == "language")
                         state = LANGUAGE;
+                    else if ((*i).getString() == "customResolution")
+                        state = CUSTOM_RESOLUTION;
                 } else {
                     error(Item::KEYWORD, (*i).type);
                     goToNextNEWLINE = true;
@@ -246,7 +248,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                 state = NONE;
                 break;
             }
-            case FULLSCREEN:
+            case FULLSCREEN: {
                 EXPECT(Item::OP_EQUAL);
                 ++i;
 
@@ -262,12 +264,13 @@ ConfigData Config::loadConfig(const std::string &filename)
 
                 state = NONE;
                 break;
-            case COLORDEPTH:
+            }
+            case COLORDEPTH: {
                 EXPECT(Item::OP_EQUAL);
                 ++i;
 
                 EXPECT(Item::INT);
-                if ((*i).getInt() != 16 && (*i).getInt() != 32) {
+                if ((*i).getInt() != 8 && (*i).getInt() != 16 && (*i).getInt() != 32) {
                     std::cerr << "Error: 16 or 32 expected, but " << Item::typeToString((*i).type) << " found." << std::endl;
                     goToNextNEWLINE = true;
                     break;
@@ -278,7 +281,8 @@ ConfigData Config::loadConfig(const std::string &filename)
 
                 state = NONE;
                 break;
-            case LANGUAGE:
+            }
+            case LANGUAGE: {
                 EXPECT(Item::OP_EQUAL);
                 ++i;
 
@@ -293,6 +297,24 @@ ConfigData Config::loadConfig(const std::string &filename)
 
                 state = NONE;
                 break;
+            }
+            case CUSTOM_RESOLUTION: {
+                EXPECT(Item::OP_EQUAL);
+                ++i;
+
+                EXPECT(Item::KEYWORD);
+                if ((*i).getString() != "on" && (*i).getString() != "off") {
+                    std::cerr << "Error: on or off expected, but " << Item::typeToString((*i).type) << " found." << std::endl;
+                    goToNextNEWLINE = true;
+                    break;
+                }
+                data.customResolution = (*i).getString() == "on";
+                ++i;
+                EXPECT(Item::NEWLINE);
+
+                state = NONE;
+                break;
+            }
             }
         }
     }
@@ -312,4 +334,5 @@ void Config::saveConfig(const std::string &filename, const ConfigData &data)
     outputFile << "fullscreen=" << (data.fullscreen ? "on" : "off") << std::endl;
     outputFile << "colordepth=" << data.colordepth << std::endl;
     outputFile << "language=" << "\"" << wide_to_utf8(std::wstring(data.language.c_str())) << "\"" << std::endl;
+    outputFile << "customResolution=" << (data.customResolution ? "on" : "off") << std::endl;
 }
