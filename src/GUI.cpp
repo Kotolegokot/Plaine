@@ -53,23 +53,50 @@ void GUI::initializeSettingsGUI()
     resolutionComboBox = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 6*buttonHeight - 60, configuration.resolution.Width - 20, configuration.resolution.Height - 5*buttonHeight - 60), 0, ID_RESOLUTION_COMBOBOX);
     if (configuration.fullscreen)
     {
-        resolutionComboBox->setEnabled(false);
-        resolutionComboBox->addItem(L"Fullscreen", 0);
+        core::stringw scrs;
+        scrs += configuration.resolution.Width;
+        scrs += "x";
+        scrs += configuration.resolution.Height;
+        scrs += L" (Fullscreen)";
+        resolutionComboBox->addItem(scrs.c_str(), 0);
         resolutionComboBox->setSelected(0);
+        resolutionComboBox->setEnabled(false);
         buttonToggleFullscreen = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 3*buttonHeight - 30, configuration.resolution.Width - 20, configuration.resolution.Height - 2*buttonHeight - 30), 0, ID_BUTTON_TOGGLE_FULLSCREEN, L"Windowed", L"To Windewed Mode");
 
     }
     else {
         resolutionComboBox->addItem(L"640x480", 0);
         resolutionComboBox->addItem(L"1240x720", 1);
-        resolutionComboBox->addItem(L"Custom Resolution", 2);
-        //if (customResolution)
-        //    resolutionComboBox->setSelected(2);
-        //else
-            if (configuration.resolution == core::dimension2d<u32>(640, 480))
+        if (configuration.customResolution)
+        {
+            core::stringw scrs;
+            scrs += configuration.resolution.Width;
+            scrs += "x";
+            scrs += configuration.resolution.Height;
+            scrs += L" (Custom)";
+            resolutionComboBox->addItem(scrs.c_str(), 2);
+            resolutionComboBox->setSelected(2);
+        }
+        else if (configuration.resolution == core::dimension2d<u32>(640, 480))
+        {
             resolutionComboBox->setSelected(0);
+            resolutionComboBox->addItem(L"Custom Resolution", 2);
+        }
         else if (configuration.resolution == core::dimension2d<u32>(1240, 720))
+        {
             resolutionComboBox->setSelected(1);
+            resolutionComboBox->addItem(L"Custom Resolution", 2);
+        }
+        else
+        {
+            core::stringw scrs;
+            scrs += configuration.resolution.Width;
+            scrs += "x";
+            scrs += configuration.resolution.Height;
+            scrs += L" (Custom)";
+            resolutionComboBox->addItem(scrs.c_str(), 2);
+            resolutionComboBox->setSelected(2);
+        }
         buttonToggleFullscreen = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 3*buttonHeight - 30, configuration.resolution.Width - 20, configuration.resolution.Height - 2*buttonHeight - 30), 0, ID_BUTTON_TOGGLE_FULLSCREEN, L"Fullscreen", L"To Fullscreen Mode");
 
     }
@@ -170,6 +197,14 @@ void GUI::resizeGUI()
             buttonToggleFullscreen->setRelativePosition(core::position2di(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 3*buttonHeight - 30));
             buttonMenu->setRelativePosition(core::position2di(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 2*buttonHeight - 20));
             buttonQuit->setRelativePosition(core::position2di(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - buttonHeight - 10));
+            resolutionComboBox->removeItem(2);
+            core::stringw scrs;
+            scrs += configuration.resolution.Width;
+            scrs += "x";
+            scrs += configuration.resolution.Height;
+            scrs += L" (Custom)";
+            resolutionComboBox->addItem(scrs.c_str(), 2);
+            resolutionComboBox->setSelected(2);
             break;
         }
     }

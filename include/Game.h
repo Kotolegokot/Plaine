@@ -24,7 +24,6 @@ public:
 private:
     bool initialized = false;
     bool pause = false;
-    bool customResolution = false;
 
     ConfigData configuration;
     GUI *gui = nullptr;
