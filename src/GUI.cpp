@@ -47,7 +47,7 @@ void GUI::initializeSettingsGUI()
     buttonWidth = configuration.resolution.Width / 6;
     if (buttonWidth < 180)
         buttonWidth = 180;
-    buttonHeight = buttonWidth * 1/8;
+    buttonHeight = buttonWidth /8;
     screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
     resolutionText = guiEnvironment->addStaticText(L"Resolution:", core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 6*buttonHeight - 55, configuration.resolution.Width - 135, configuration.resolution.Height - 5*buttonHeight - 55), false);
     resolutionComboBox = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 6*buttonHeight - 60, configuration.resolution.Width - 20, configuration.resolution.Height - 5*buttonHeight - 60), 0, ID_RESOLUTION_COMBOBOX);
@@ -167,9 +167,9 @@ void GUI::resizeGUI()
             if (buttonWidth < 180)
                 buttonWidth = 180;
             buttonHeight = buttonWidth * 1/8;
-            buttonStart->setRelativePosition(core::position2di(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 3*buttonHeight - 30));
-            buttonSettings->setRelativePosition(core::position2di(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 2*buttonHeight - 20));
-            buttonQuit->setRelativePosition(core::position2di(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - buttonHeight - 10));
+            buttonStart->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 3*buttonHeight - 30, configuration.resolution.Width - 20, configuration.resolution.Height - 2*buttonHeight - 30));
+            buttonSettings->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 2*buttonHeight - 20, configuration.resolution.Width - 20, configuration.resolution.Height - buttonHeight - 20));
+            buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - buttonHeight - 10, configuration.resolution.Width - 20, configuration.resolution.Height - 10));
             break;
         }
         case(INGAME_MENU):
@@ -178,8 +178,8 @@ void GUI::resizeGUI()
             if (buttonWidth < 180)
                 buttonWidth = 180;
             buttonHeight = buttonWidth * 1/8;
-            buttonMenu->setRelativePosition(core::position2di(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 2*buttonHeight - 20));
-            buttonQuit->setRelativePosition(core::position2di(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - buttonHeight - 10));
+            buttonMenu->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 2*buttonHeight - 20, configuration.resolution.Width - 20, configuration.resolution.Height - buttonHeight - 20));
+            buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - buttonHeight - 10, configuration.resolution.Width - 20, configuration.resolution.Height - 10));
             break;
         }
         case(SETTINGS):
@@ -188,15 +188,15 @@ void GUI::resizeGUI()
             if (buttonWidth < 180)
                 buttonWidth = 180;
             buttonHeight = buttonWidth * 1/8;
-            resolutionText->setRelativePosition(core::position2di(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 6*buttonHeight - 55));
-            resolutionComboBox->setRelativePosition(core::position2di(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 6*buttonHeight - 60));
-            colorDepthText->setRelativePosition(core::position2di(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 5*buttonHeight - 45));
-            colorDepthComboBox->setRelativePosition(core::position2di(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 5*buttonHeight - 50));
-            languageText->setRelativePosition(core::position2di(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 4*buttonHeight - 35));
-            languageComboBox->setRelativePosition(core::position2di(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 4*buttonHeight - 40));
-            buttonToggleFullscreen->setRelativePosition(core::position2di(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 3*buttonHeight - 30));
-            buttonMenu->setRelativePosition(core::position2di(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 2*buttonHeight - 20));
-            buttonQuit->setRelativePosition(core::position2di(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - buttonHeight - 10));
+            resolutionText->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 6*buttonHeight - 55, configuration.resolution.Width - 135, configuration.resolution.Height - 5*buttonHeight - 55));
+            resolutionComboBox->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 6*buttonHeight - 60, configuration.resolution.Width - 20, configuration.resolution.Height - 5*buttonHeight - 60));
+            colorDepthText->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 5*buttonHeight - 45, configuration.resolution.Width - 130, configuration.resolution.Height - 4*buttonHeight - 45));
+            colorDepthComboBox->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 5*buttonHeight - 50, configuration.resolution.Width - 20, configuration.resolution.Height - 4*buttonHeight - 50));
+            languageText->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 4*buttonHeight - 35, configuration.resolution.Width - 130, configuration.resolution.Height - 3*buttonHeight - 35));
+            languageComboBox->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 4*buttonHeight - 40, configuration.resolution.Width - 20, configuration.resolution.Height - 3*buttonHeight - 40));
+            buttonToggleFullscreen->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 3*buttonHeight - 30, configuration.resolution.Width - 20, configuration.resolution.Height - 2*buttonHeight - 30));
+            buttonMenu->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 2*buttonHeight - 20, configuration.resolution.Width - 20, configuration.resolution.Height - buttonHeight - 20));
+            buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - buttonHeight - 10, configuration.resolution.Width - 20, configuration.resolution.Height - 10));
             resolutionComboBox->removeItem(2);
             core::stringw scrs;
             scrs += configuration.resolution.Width;
