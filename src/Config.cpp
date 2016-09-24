@@ -288,9 +288,9 @@ ConfigData Config::loadConfig(const std::string &filename)
 
                 EXPECT(Item::STRING);
                 data.language = "";
-                std::wstring wstr = utf8_to_wide((*i).getString());
-                for (std::wstring::const_iterator si = wstr.cbegin(); si != wstr.cend(); ++si)
-                    data.language.append(*si);
+                std::string str = (*i).getString();
+                for (std::string::const_iterator si = str.cbegin(); si != str.cend(); ++si)
+                    data.language.push_back(*si);
 
                 ++i;
                 EXPECT(Item::NEWLINE);
@@ -333,6 +333,6 @@ void Config::saveConfig(const std::string &filename, const ConfigData &data)
     outputFile << "resolution=" << data.resolution.Width << "," << data.resolution.Height << std::endl;
     outputFile << "fullscreen=" << (data.fullscreen ? "on" : "off") << std::endl;
     outputFile << "colordepth=" << data.colordepth << std::endl;
-    outputFile << "language=" << "\"" << wide_to_utf8(std::wstring(data.language.c_str())) << "\"" << std::endl;
+    outputFile << "language=" << "\"" << std::string(data.language.c_str()) << "\"" << std::endl;
     outputFile << "resizable=" << (data.resizable ? "on" : "off") << std::endl;
 }
