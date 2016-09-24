@@ -199,7 +199,6 @@ void Game::menu()
 
 void Game::run()
 {
-
     gui->initializeInGameGUI();
     initializeScene();
     bool escapePressed = false;
@@ -269,6 +268,7 @@ void Game::run()
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
+            pause = true;
             device->yield();
         }
     }
