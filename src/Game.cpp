@@ -227,9 +227,7 @@ void Game::run()
 
             camera->setInputReceiverEnabled(false);
 
-            gui->buttonQuit->setVisible(true);
-            gui->buttonMenu->setVisible(true);
-            gui->screenSizeText->setVisible(true);
+            gui->setVisible(true);
             gui->cameraPosText->setVisible(false);
             device->getCursorControl()->setVisible(true);
         } else {
@@ -245,9 +243,7 @@ void Game::run()
 
             camera->setInputReceiverEnabled(true);
 
-            gui->buttonQuit->setVisible(false);
-            gui->buttonMenu->setVisible(false);
-            gui->screenSizeText->setVisible(false);
+            gui->setVisible(false);
             gui->cameraPosText->setVisible(true);
             device->getCursorControl()->setVisible(false);
         }
@@ -259,6 +255,11 @@ void Game::run()
             }
         } else if (!eventReceiver->IsKeyDown(KEY_ESCAPE)) {
             escapePressed = false;
+        }
+        if (eventReceiver->resume)
+        {
+            eventReceiver->resume = false;
+            pause = false;
         }
 
         if (device->isWindowActive()) {

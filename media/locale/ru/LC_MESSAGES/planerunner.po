@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-22 14:34+0300\n"
-"PO-Revision-Date: 2016-09-23 18:45-0700\n"
+"PO-Revision-Date: 2016-09-24 20:27+0300\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,64 +33,64 @@ msgstr "Настройки"
 
 #: src/Game.cpp:67
 msgid "Game settings"
-msgstr ""
+msgstr "Настройки игры"
 
 #: src/Game.cpp:68 src/Game.cpp:89 src/Game.cpp:148
 msgid "Quit"
-msgstr ""
+msgstr "Выход"
 
 #: src/Game.cpp:68 src/Game.cpp:89 src/Game.cpp:148
 msgid "Exit game"
-msgstr ""
+msgstr "Выход из игры"
 
 #: src/Game.cpp:88
 msgid "Menu"
-msgstr ""
+msgstr "Меню"
 
 #: src/Game.cpp:88 src/Game.cpp:147
 msgid "Exit to Main menu"
-msgstr ""
+msgstr "Выход в главное меню"
 
 #: src/Game.cpp:108
 msgid "Resolution:"
-msgstr ""
+msgstr "Разрешение:"
 
 #: src/Game.cpp:113 src/Game.cpp:128
 msgid "Fullscreen"
-msgstr ""
+msgstr "Полноэкранный режим"
 
 #: src/Game.cpp:115
 msgid "Windowed"
-msgstr ""
+msgstr "Оконный режим"
 
 #: src/Game.cpp:115
 msgid "To Windewed Mode"
-msgstr ""
+msgstr "В оконный режим"
 
 #: src/Game.cpp:121
 msgid "Custom Resolution"
-msgstr ""
+msgstr "Пользовательское разрешение"
 
 #: src/Game.cpp:128
 msgid "To Fullscreen Mode"
-msgstr ""
+msgstr "В полноэкранный режим"
 
 #: src/Game.cpp:131
 msgid "Color Depth:"
-msgstr ""
+msgstr "Глубина цвета:"
 
 #: src/Game.cpp:142
 msgid "Language:"
-msgstr ""
+msgstr "Язык:"
 
 #: src/Game.cpp:147
 msgid "Back"
-msgstr ""
+msgstr "Назад"
 
 #: src/Game.cpp:279 src/Game.cpp:342
 msgid "Screen size: "
-msgstr ""
+msgstr "Размер экрана"
 
 #: src/Game.cpp:366
 msgid "Camera position: ("
-msgstr ""
+msgstr "Позиция камеры: ("

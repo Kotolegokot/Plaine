@@ -21,6 +21,7 @@ public:
     gui::IGUIButton *buttonStart = nullptr;
     gui::IGUIButton *buttonSettings = nullptr;
     gui::IGUIButton *buttonToggleFullscreen = nullptr;
+    gui::IGUIButton *buttonResume = nullptr;
     gui::IGUIButton *buttonMenu = nullptr;
     gui::IGUIButton *buttonQuit = nullptr;
     gui::IGUIComboBox *resolutionComboBox = nullptr;
@@ -38,6 +39,7 @@ public:
     void initializeSettingsGUI();
     void terminateGUI();
     void resizeGUI();
+    void setVisible(bool state);
 private:
     void terminateMenuGUI();
     void terminateSettingsGUI();
