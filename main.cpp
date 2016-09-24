@@ -1,11 +1,12 @@
 #include <iostream>
+#include <clocale>
 #include <irrlicht.h>
-
-using namespace irr;
 
 #include "Game.h"
 #include "Config.h"
 #include "util.h"
+
+using namespace irr;
 
 int main()
 {
