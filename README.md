@@ -5,6 +5,7 @@ Fuck you bitch motherfucker
 * [Irrlicht](http://irrlicht.sourceforge.net)
 * [Freetype](http://gnuwin32.sourceforge.net/packages/freetype.htm)
 * [zlib](http://www.zlib.net/) (as a dependency of Freetype)
+* [gettext](http://ftp.gnu.org/pub/gnu/gettext/)
 * [Code::Blocks](http://codeblocks.org) (optional, but strongly recommended under Windows)
 
 ## Building
