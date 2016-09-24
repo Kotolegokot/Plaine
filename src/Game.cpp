@@ -97,7 +97,7 @@ void Game::menu()
             run();
             gui->initializeMenuGUI();
         }
-        if (eventReceiver->quit){
+        if (eventReceiver->quit || eventReceiver->IsKeyDown(KEY_ESCAPE)){
             break;
         }
         if (eventReceiver->settings){
@@ -198,7 +198,7 @@ void Game::menu()
         }
     }
 
-    this->terminate();
+    terminate();
 
 }
 
