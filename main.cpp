@@ -16,6 +16,7 @@ int main()
 
     setlocale(LC_ALL, "");
     bindtextdomain("planerunner", "media/locale/");
+    bind_textdomain_codeset("planerunner", "utf-8");
     textdomain("planerunner");
 
     Game game(data);
