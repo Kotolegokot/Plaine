@@ -84,6 +84,17 @@ std::wstring utf8_to_wide(const std::string &input) {
 	return out;
 }
 
+core::stringw utf8_to_irrwide(const std::string &input) {
+	size_t outbuf_size = input.size() + 1;
+	wchar_t *outbuf = new wchar_t[outbuf_size];
+	memset(outbuf, 0, outbuf_size * sizeof(wchar_t));
+	MultiByteToWideChar(CP_UTF8, 0, input.c_str(), input.size(), outbuf, outbuf_size);
+    core::stringw out(outbuf);
+	delete[] outbuf;
+
+	return out;
+}
+
 std::string wide_to_utf8(const std::wstring &input) {
 	size_t outbuf_size = (input.size() + 1) * 6;
 	char *outbuf = new char[outbuf_size];

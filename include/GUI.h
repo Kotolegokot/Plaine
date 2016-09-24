@@ -2,6 +2,7 @@
 #define GUI_H
 
 #include "Config.h"
+#include "util.h"
 
 enum Stage{ MENU, SETTINGS, INGAME_MENU };
 

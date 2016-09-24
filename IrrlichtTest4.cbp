@@ -68,6 +68,7 @@
 		<Linker>
 			<Add library="Irrlicht" />
 			<Add library="freetype" />
+			<Add library="intl" />
 			<Add directory="deps/lib" />
 		</Linker>
 		<Unit filename="include/CGUITTFont.h" />
