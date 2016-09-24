@@ -56,7 +56,7 @@ void GUI::initializeSettingsGUI()
         buttonWidth = 180;
     buttonHeight = buttonWidth /8;
     screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
-    resolutionText = guiEnvironment->addStaticText(_wp("Resolution:"), core::rect<s32>(configuration.resolution.Width - 7*buttonWidth/5 - 30, configuration.resolution.Height - 6*buttonHeight - 55, configuration.resolution.Width - buttonWidth - 30, configuration.resolution.Height - 5*buttonHeight - 55), false);
+    resolutionText = guiEnvironment->addStaticText(_wp("Resolution:"), core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/2 - 30, configuration.resolution.Height - 6*buttonHeight - 60, configuration.resolution.Width - buttonWidth - 30, configuration.resolution.Height - 5*buttonHeight - 60), false);
     resolutionComboBox = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 6*buttonHeight - 60, configuration.resolution.Width - 20, configuration.resolution.Height - 5*buttonHeight - 60), 0, ID_COMBOBOX_RESOLUTION);
     if (configuration.fullscreen)
     {
@@ -107,7 +107,7 @@ void GUI::initializeSettingsGUI()
         buttonToggleFullscreen = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 3*buttonHeight - 30, configuration.resolution.Width - 20, configuration.resolution.Height - 2*buttonHeight - 30), 0, ID_BUTTON_TOGGLE_FULLSCREEN, _wp("Fullscreen"), _wp("To Fullscreen Mode"));
 
     }
-    colorDepthText = guiEnvironment->addStaticText(_wp("Color Depth:"), core::rect<s32>(configuration.resolution.Width - 7*buttonWidth/5 - 30, configuration.resolution.Height - 5*buttonHeight - 45, configuration.resolution.Width - buttonWidth - 30, configuration.resolution.Height - 4*buttonHeight - 45), false);
+    colorDepthText = guiEnvironment->addStaticText(_wp("Color Depth:"), core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/2 - 30, configuration.resolution.Height - 5*buttonHeight - 50, configuration.resolution.Width - buttonWidth - 30, configuration.resolution.Height - 4*buttonHeight - 50), false);
     colorDepthComboBox = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 5*buttonHeight - 50, configuration.resolution.Width - 20, configuration.resolution.Height - 4*buttonHeight - 50), 0, ID_COMBOBOX_COLORDEPTH);
     colorDepthComboBox->addItem(L"8", 0);
     colorDepthComboBox->addItem(L"16", 1);
@@ -118,7 +118,7 @@ void GUI::initializeSettingsGUI()
         colorDepthComboBox->setSelected(1);
     else if (configuration.colordepth == 32)
         colorDepthComboBox->setSelected(2);
-    languageText = guiEnvironment->addStaticText(_wp("Language:"), core::rect<s32>(configuration.resolution.Width - 7*buttonWidth/5 - 30, configuration.resolution.Height - 4*buttonHeight - 35, configuration.resolution.Width - buttonWidth - 30, configuration.resolution.Height - 3*buttonHeight - 35), false);
+    languageText = guiEnvironment->addStaticText(_wp("Language:"), core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/2 - 30, configuration.resolution.Height - 4*buttonHeight - 40, configuration.resolution.Width - buttonWidth - 30, configuration.resolution.Height - 3*buttonHeight - 40), false);
     languageComboBox = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 4*buttonHeight - 40, configuration.resolution.Width - 20, configuration.resolution.Height - 3*buttonHeight - 40), 0, ID_COMBOBOX_LANGUAGE);
     languageComboBox->addItem(L"English", 0);
     languageComboBox->addItem(L"Русский", 1);
@@ -236,12 +236,12 @@ void GUI::resizeGUI()
             if (buttonWidth < 180)
                 buttonWidth = 180;
             buttonHeight = buttonWidth * 1/8;
-            resolutionText->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 6*buttonHeight - 55, configuration.resolution.Width - 135, configuration.resolution.Height - 5*buttonHeight - 55));
-            resolutionComboBox->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 6*buttonHeight - 60, configuration.resolution.Width - 20, configuration.resolution.Height - 5*buttonHeight - 60));
-            colorDepthText->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 5*buttonHeight - 45, configuration.resolution.Width - 130, configuration.resolution.Height - 4*buttonHeight - 45));
-            colorDepthComboBox->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 5*buttonHeight - 50, configuration.resolution.Width - 20, configuration.resolution.Height - 4*buttonHeight - 50));
-            languageText->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 4*buttonHeight - 35, configuration.resolution.Width - 130, configuration.resolution.Height - 3*buttonHeight - 35));
-            languageComboBox->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 4*buttonHeight - 40, configuration.resolution.Width - 20, configuration.resolution.Height - 3*buttonHeight - 40));
+            resolutionText->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/2 - 30, configuration.resolution.Height - 6*buttonHeight - 60, configuration.resolution.Width - buttonWidth - 30, configuration.resolution.Height - 5*buttonHeight - 60));
+            resolutionComboBox->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 6*buttonHeight - 60, configuration.resolution.Width - 20, configuration.resolution.Height - 5*buttonHeight - 60));
+            colorDepthText->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/2 - 30, configuration.resolution.Height - 5*buttonHeight - 50, configuration.resolution.Width - buttonWidth - 30, configuration.resolution.Height - 4*buttonHeight - 50));
+            colorDepthComboBox->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 5*buttonHeight - 50, configuration.resolution.Width - 20, configuration.resolution.Height - 4*buttonHeight - 50));
+            languageText->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/2 - 30, configuration.resolution.Height - 4*buttonHeight - 40, configuration.resolution.Width - buttonWidth - 30, configuration.resolution.Height - 3*buttonHeight - 40));
+            languageComboBox->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 4*buttonHeight - 40, configuration.resolution.Width - 20, configuration.resolution.Height - 3*buttonHeight - 40));
             buttonToggleFullscreen->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 3*buttonHeight - 30, configuration.resolution.Width - 20, configuration.resolution.Height - 2*buttonHeight - 30));
             buttonMenu->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 2*buttonHeight - 20, configuration.resolution.Width - 20, configuration.resolution.Height - buttonHeight - 20));
             buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - buttonHeight - 10, configuration.resolution.Width - 20, configuration.resolution.Height - 10));
