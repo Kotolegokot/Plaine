@@ -11,12 +11,12 @@ using namespace irr;
 
 void setLanguage(std::string language)
 {
-    std::string str = "LANGUAGE=";
-    str += language;
     #ifdef _WIN32
+        std::string str = "LANGUAGE=";
+        str += language;
         _wputenv(utf8_to_wide(str).c_str());
     #else
-        putenv(str.c_str());
+        setenv("LANGUAGE", language.c_str(), false);
     #endif // _WIN32
 }
 
