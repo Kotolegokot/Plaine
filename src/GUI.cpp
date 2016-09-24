@@ -29,6 +29,7 @@ void GUI::initializeInGameGUI()
     buttonHeight = buttonWidth * 1/8;
     cameraPosText = guiEnvironment->addStaticText(L"CAMERA_POS", core::rect<s32>(10, 10, 400, 30), false);
     screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
+    buttonResume = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 3*buttonHeight - 30, configuration.resolution.Width - 20, configuration.resolution.Height - 2*buttonHeight - 30), 0, ID_BUTTON_RESUME, L"Resume", L"Resume Game");
     buttonMenu = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 2*buttonHeight - 20, configuration.resolution.Width - 20, configuration.resolution.Height - buttonHeight - 20), 0, ID_BUTTON_MENU, L"Menu", L"Exit to Main menu");
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - buttonHeight - 10, configuration.resolution.Width - 20, configuration.resolution.Height - 10), 0, ID_BUTTON_QUIT, L"Quit", L"Exit game");
     stage = INGAME_MENU;
@@ -36,6 +37,7 @@ void GUI::initializeInGameGUI()
 
 void GUI::terminateInGameGUI()
 {
+    buttonResume->remove();
     buttonMenu->remove();
     buttonQuit->remove();
     cameraPosText->remove();
@@ -50,7 +52,7 @@ void GUI::initializeSettingsGUI()
     buttonHeight = buttonWidth /8;
     screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
     resolutionText = guiEnvironment->addStaticText(L"Resolution:", core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 6*buttonHeight - 55, configuration.resolution.Width - 135, configuration.resolution.Height - 5*buttonHeight - 55), false);
-    resolutionComboBox = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 6*buttonHeight - 60, configuration.resolution.Width - 20, configuration.resolution.Height - 5*buttonHeight - 60), 0, ID_RESOLUTION_COMBOBOX);
+    resolutionComboBox = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 6*buttonHeight - 60, configuration.resolution.Width - 20, configuration.resolution.Height - 5*buttonHeight - 60), 0, ID_COMBOBOX_RESOLUTION);
     if (configuration.fullscreen)
     {
         core::stringw scrs;
@@ -101,7 +103,7 @@ void GUI::initializeSettingsGUI()
 
     }
     colorDepthText = guiEnvironment->addStaticText(L"Color Depth:", core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 5*buttonHeight - 45, configuration.resolution.Width - 130, configuration.resolution.Height - 4*buttonHeight - 45), false);
-    colorDepthComboBox = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 5*buttonHeight - 50, configuration.resolution.Width - 20, configuration.resolution.Height - 4*buttonHeight - 50), 0, ID_COLORDEPTH_COMBOBOX);
+    colorDepthComboBox = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 5*buttonHeight - 50, configuration.resolution.Width - 20, configuration.resolution.Height - 4*buttonHeight - 50), 0, ID_COMBOBOX_COLORDEPTH);
     colorDepthComboBox->addItem(L"8", 0);
     colorDepthComboBox->addItem(L"16", 1);
     colorDepthComboBox->addItem(L"32", 2);
@@ -112,7 +114,7 @@ void GUI::initializeSettingsGUI()
     else if (configuration.colordepth == 32)
         colorDepthComboBox->setSelected(2);
     languageText = guiEnvironment->addStaticText(L"Language:", core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 4*buttonHeight - 35, configuration.resolution.Width - 130, configuration.resolution.Height - 3*buttonHeight - 35), false);
-    languageComboBox = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 4*buttonHeight - 40, configuration.resolution.Width - 20, configuration.resolution.Height - 3*buttonHeight - 40), 0, ID_LANGUAGE_COMBOBOX);
+    languageComboBox = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 4*buttonHeight - 40, configuration.resolution.Width - 20, configuration.resolution.Height - 3*buttonHeight - 40), 0, ID_COMBOBOX_LANGUAGE);
     languageComboBox->addItem(L"English", 0);
     if (configuration.language == L"English")
         languageComboBox->setSelected(0);
@@ -152,6 +154,42 @@ void GUI::terminateGUI()
         case(SETTINGS):
         {
             terminateSettingsGUI();
+            break;
+        }
+    }
+}
+
+void GUI::setVisible(bool state)
+{
+    switch (stage)
+    {
+    case(MENU):
+        {
+            buttonStart->setVisible(state);
+            buttonMenu->setVisible(state);
+            buttonQuit->setVisible(state);
+            break;
+        }
+        case(INGAME_MENU):
+        {
+            buttonResume->setVisible(state);
+            buttonMenu->setVisible(state);
+            buttonQuit->setVisible(state);
+            screenSizeText->setVisible(state);
+            break;
+        }
+        case(SETTINGS):
+        {
+            screenSizeText->setVisible(state);
+            resolutionText->setVisible(state);
+            resolutionComboBox->setVisible(state);
+            colorDepthText->setVisible(state);
+            colorDepthComboBox->setVisible(state);
+            languageText->setVisible(state);
+            languageComboBox->setVisible(state);
+            buttonToggleFullscreen->setVisible(state);
+            buttonMenu->setVisible(state);
+            buttonQuit->setVisible(state);
             break;
         }
     }

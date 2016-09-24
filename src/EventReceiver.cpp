@@ -25,6 +25,10 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 settings = true;
                 return true;
             }
+            if (id == ID_BUTTON_RESUME) {
+                resume = true;
+                return true;
+            }
             if (id == ID_BUTTON_QUIT) {
                 quit = true;
                 return true;
@@ -40,7 +44,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
             }
             break;
         case gui::EGET_COMBO_BOX_CHANGED:
-            if (id == ID_LANGUAGE_COMBOBOX)
+            if (id == ID_COMBOBOX_LANGUAGE)
             {
                 break;
             }
