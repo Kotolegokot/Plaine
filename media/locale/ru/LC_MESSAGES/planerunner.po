@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-24 21:12+0300\n"
+"POT-Creation-Date: 2016-09-24 21:32+0300\n"
 "PO-Revision-Date: 2016-09-24 21:28+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -20,11 +20,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: src/Game.cpp:175 src/Game.cpp:216
+#: src/Game.cpp:175 src/Game.cpp:215
 msgid "Screen size: "
 msgstr "Размер экрана: "
 
-#: src/Game.cpp:234
+#: src/Game.cpp:233
 msgid "Camera position: ("
 msgstr "Позиция камеры: ("
 
@@ -81,7 +81,7 @@ msgid "Windowed"
 msgstr "Оконный режим"
 
 #: src/GUI.cpp:71
-msgid "To Windewed Mode"
+msgid "To Windowed Mode"
 msgstr "В оконный режим"
 
 #: src/GUI.cpp:83 src/GUI.cpp:103 src/GUI.cpp:250
