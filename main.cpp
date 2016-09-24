@@ -9,17 +9,6 @@
 
 using namespace irr;
 
-void setLanguage(std::string language)
-{
-    #ifdef _WIN32
-        std::string str = "LANGUAGE=";
-        str += language;
-        _wputenv(utf8_to_wide(str).c_str());
-    #else
-        setenv("LANGUAGE", language.c_str(), false);
-    #endif // _WIN32
-}
-
 int main()
 {
     ConfigData data;

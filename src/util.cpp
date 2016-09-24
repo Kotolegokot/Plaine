@@ -1,6 +1,12 @@
 #include "util.h"
 
 #ifndef _WIN32
+
+void setLanguage(std::string language)
+{
+        setenv("LANGUAGE", language.c_str(), false);
+}
+
 size_t convert(const char *to, const char *from, char *outbuf, size_t outbuf_size, char *inbuf, size_t inbuf_size) {
 	iconv_t cd = iconv_open(to, from);
 
@@ -74,6 +80,14 @@ std::string wide_to_utf8(const std::wstring &input) {
 	return out;
 }
 #else
+
+void setLanguage(std::string language)
+{
+        std::string str = "LANGUAGE=";
+        str += language;
+        _wputenv(utf8_to_wide(str).c_str());
+}
+
 std::wstring utf8_to_wide(const std::string &input) {
 	size_t outbuf_size = input.size() + 1;
 	wchar_t *outbuf = new wchar_t[outbuf_size];

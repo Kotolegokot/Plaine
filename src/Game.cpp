@@ -119,59 +119,65 @@ void Game::menu()
                 initializeGUI();
                 gui->initializeMenuGUI();
             }
+            if(eventReceiver->toggleGraphicMode)
+            {
+                switch (gui->resolutionComboBox->getSelected())
+                {
+                case 0:
+                        configuration.resolution = core::dimension2d<u32>(640, 480);
+                        configuration.resizable = false;
+                        break;
+                case 1:
+                        configuration.resolution = core::dimension2d<u32>(1240, 720);
+                        configuration.resizable = false;
+                        break;
+                case 2:
+                        configuration.resizable = true;
+                        break;
+                }
+                switch (gui->colorDepthComboBox->getSelected())
+                {
+                case 0:
+                    configuration.colordepth = 8;
+                    break;
+                case 1:
+                    configuration.colordepth = 16;
+                    break;
+                case 2:
+                    configuration.colordepth = 32;
+                    break;
+                }
+                terminate();
+                if (!initializeDevice())
+                    return;
+                initialized = true;
+                initializeGUI();
+                gui->initializeMenuGUI();
+            }
+            if (eventReceiver->toggleLanguage)
+            {
+                switch (gui->languageComboBox->getSelected())
+                {
+                case 0:
+                    configuration.language = "en";
+                    break;
+                case 1:
+                    error(L"ARGH");
+                    configuration.language = "ru";
+                    break;
+                }
+                eventReceiver->toggleLanguage = false;
+                setLanguage(configuration.language);
+                gui->terminateGUI();
+                eventReceiver->settings = false;
+                gui->initializeMenuGUI();
+            }
         }
         else if (gui->buttonStart == nullptr)
             {
                 gui->terminateGUI();
                 gui->initializeMenuGUI();
             }
-        if(eventReceiver->toggleGraphicMode)
-        {
-            switch (gui->resolutionComboBox->getSelected())
-            {
-                case 0:
-                    {
-                        configuration.resolution = core::dimension2d<u32>(640, 480);
-                        configuration.resizable = false;
-                        break;
-                    }
-                case 1:
-                    {
-                        configuration.resolution = core::dimension2d<u32>(1240, 720);
-                        configuration.resizable = false;
-                        break;
-                    }
-                case 2:
-                    {
-                        configuration.resizable = true;
-                        break;
-                    }
-            }
-            switch (gui->colorDepthComboBox->getSelected())
-            {
-                case 0:
-                {
-                    configuration.colordepth = 8;
-                    break;
-                }
-                case 1:
-                {
-                    configuration.colordepth = 16;
-                    break;
-                }
-                case 2:
-                {
-                    configuration.colordepth = 32;
-                    break;
-                }
-            }
-            terminate();
-            if (!initializeDevice())
-                return;
-            initialized = true;
-            initializeGUI();
-            gui->initializeMenuGUI();
-        }
         core::stringw scrs = _w("Screen size: ");
         scrs += configuration.resolution.Width;
         scrs += "x";
