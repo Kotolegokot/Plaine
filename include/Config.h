@@ -16,7 +16,7 @@ struct ConfigData {
     bool resizable = false;
     core::dimension2d<u32> resolution = core::dimension2d<u32>(640, 480);;
     u32 colordepth = 32;
-    core::stringw language = L"English";
+    std::string language = "c";
 };
 
 class Config

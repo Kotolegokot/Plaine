@@ -46,6 +46,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
         case gui::EGET_COMBO_BOX_CHANGED:
             if (id == ID_COMBOBOX_LANGUAGE)
             {
+                toggleLanguage = true;
                 break;
             }
             else
