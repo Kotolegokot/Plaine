@@ -52,7 +52,7 @@ bool Game::initializeDevice()
     fileSystem = device->getFileSystem();
     eventReceiver = new EventReceiver();
     device->setEventReceiver(eventReceiver);
-    device->setResizable(configuration.customResolution);
+    device->setResizable(configuration.resizable);
     return true;
 }
 
@@ -112,7 +112,7 @@ void Game::menu()
                 configuration.fullscreen = !configuration.fullscreen;
                 terminate();
                 configuration.resolution = core::dimension2d<u32>(1240, 720);
-                configuration.customResolution = false;
+                configuration.resizable = false;
                 if (!initializeDevice())
                         return;
                 initialized = true;
@@ -132,18 +132,18 @@ void Game::menu()
                 case 0:
                     {
                         configuration.resolution = core::dimension2d<u32>(640, 480);
-                        configuration.customResolution = false;
+                        configuration.resizable = false;
                         break;
                     }
                 case 1:
                     {
                         configuration.resolution = core::dimension2d<u32>(1240, 720);
-                        configuration.customResolution = false;
+                        configuration.resizable = false;
                         break;
                     }
                 case 2:
                     {
-                        configuration.customResolution = true;
+                        configuration.resizable = true;
                         break;
                     }
             }
