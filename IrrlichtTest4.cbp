@@ -42,6 +42,9 @@
 					<Add option="-std=c++11" />
 					<Add option="-g" />
 				</Compiler>
+				<Linker>
+					<Add library="intl" />
+				</Linker>
 			</Target>
 			<Target title="Windows-Release">
 				<Option output="bin/Release/IrrlichtTest4" prefix_auto="1" extension_auto="1" />
@@ -53,6 +56,9 @@
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
 				</Compiler>
+				<Linker>
+					<Add library="intl" />
+				</Linker>
 			</Target>
 		</Build>
 		<Compiler>

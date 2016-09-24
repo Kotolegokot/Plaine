@@ -172,7 +172,7 @@ void Game::menu()
             initializeGUI();
             gui->initializeMenuGUI();
         }
-        core::stringw scrs = "Screen size: ";
+        core::stringw scrs = _w("Screen size: ");
         scrs += configuration.resolution.Width;
         scrs += "x";
         scrs += configuration.resolution.Height;
@@ -199,7 +199,6 @@ void Game::menu()
 
 void Game::run()
 {
-
     gui->initializeInGameGUI();
     initializeScene();
     bool escapePressed = false;
@@ -213,9 +212,8 @@ void Game::run()
             gui->terminateGUI();
             break;
         }
-        if (pause)
-        {
-            core::stringw scrs = "Screen size: ";
+        if (pause) {
+            core::stringw scrs = _w("Screen size: ");
             scrs += configuration.resolution.Width;
             scrs += "x";
             scrs += configuration.resolution.Height;
@@ -233,7 +231,7 @@ void Game::run()
             gui->cameraPosText->setVisible(false);
             device->getCursorControl()->setVisible(true);
         } else {
-            core::stringw cameraPosition = "Camera position: (";
+            core::stringw cameraPosition = _w("Camera position: (");
             core::vector3df position = camera->getPosition();
             cameraPosition += position.X;
             cameraPosition += ", ";
@@ -271,6 +269,7 @@ void Game::run()
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
+            pause = true;
             device->yield();
         }
     }
