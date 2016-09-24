@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-24 21:12+0300\n"
-"PO-Revision-Date: 2016-09-24 20:27+0300\n"
+"PO-Revision-Date: 2016-09-24 21:28+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: src/Game.cpp:175 src/Game.cpp:216
 msgid "Screen size: "
-msgstr "Размер экрана"
+msgstr "Размер экрана: "
 
 #: src/Game.cpp:234
 msgid "Camera position: ("
@@ -73,9 +73,8 @@ msgid "Resolution:"
 msgstr "Разрешение:"
 
 #: src/GUI.cpp:67
-#, fuzzy
 msgid " (Fullscreen)"
-msgstr "Полноэкранный режим"
+msgstr " (Полноэкранный режим)"
 
 #: src/GUI.cpp:71
 msgid "Windowed"
@@ -91,7 +90,7 @@ msgstr " (пользовательское)"
 
 #: src/GUI.cpp:90 src/GUI.cpp:95
 msgid "Custom Resolution"
-msgstr "Пользовательское разрешение"
+msgstr "Пользовательское"
 
 #: src/GUI.cpp:107
 msgid "Fullscreen"

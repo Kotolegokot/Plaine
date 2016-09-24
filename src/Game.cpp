@@ -180,7 +180,6 @@ void Game::menu()
         if(configuration.resolution != driver->getScreenSize())
         {
             configuration.resolution = driver->getScreenSize();
-            error(L"ARGH");
             gui->resizeGUI();
         }
         device->getCursorControl()->setVisible(true);
