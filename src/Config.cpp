@@ -204,7 +204,7 @@ ConfigData Config::loadConfig(const std::string &filename)
     } */
 
     bool goToNextNEWLINE = false;
-    enum { NONE, RESOLUTION, FULLSCREEN, COLORDEPTH, LANGUAGE, CUSTOM_RESOLUTION } state = NONE;
+    enum { NONE, RESOLUTION, FULLSCREEN, COLORDEPTH, LANGUAGE, RESIZABLE } state = NONE;
 
     for (std::vector<Item>::const_iterator i = items.cbegin(); i != items.cend(); ++i) {
         if (goToNextNEWLINE) {
@@ -222,8 +222,8 @@ ConfigData Config::loadConfig(const std::string &filename)
                         state = COLORDEPTH;
                     else if ((*i).getString() == "language")
                         state = LANGUAGE;
-                    else if ((*i).getString() == "customResolution")
-                        state = CUSTOM_RESOLUTION;
+                    else if ((*i).getString() == "resizable")
+                        state = RESIZABLE;
                 } else {
                     error(Item::KEYWORD, (*i).type);
                     goToNextNEWLINE = true;
@@ -298,7 +298,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                 state = NONE;
                 break;
             }
-            case CUSTOM_RESOLUTION: {
+            case RESIZABLE: {
                 EXPECT(Item::OP_EQUAL);
                 ++i;
 
@@ -308,7 +308,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                     goToNextNEWLINE = true;
                     break;
                 }
-                data.customResolution = (*i).getString() == "on";
+                data.resizable = (*i).getString() == "on";
                 ++i;
                 EXPECT(Item::NEWLINE);
 
@@ -334,5 +334,5 @@ void Config::saveConfig(const std::string &filename, const ConfigData &data)
     outputFile << "fullscreen=" << (data.fullscreen ? "on" : "off") << std::endl;
     outputFile << "colordepth=" << data.colordepth << std::endl;
     outputFile << "language=" << "\"" << wide_to_utf8(std::wstring(data.language.c_str())) << "\"" << std::endl;
-    outputFile << "customResolution=" << (data.customResolution ? "on" : "off") << std::endl;
+    outputFile << "resizable=" << (data.resizable ? "on" : "off") << std::endl;
 }

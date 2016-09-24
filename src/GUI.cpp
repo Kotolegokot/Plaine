@@ -67,7 +67,7 @@ void GUI::initializeSettingsGUI()
     else {
         resolutionComboBox->addItem(L"640x480", 0);
         resolutionComboBox->addItem(L"1240x720", 1);
-        if (configuration.customResolution)
+        if (configuration.resizable)
         {
             core::stringw scrs;
             scrs += configuration.resolution.Width;
