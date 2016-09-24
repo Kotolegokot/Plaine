@@ -4,7 +4,13 @@
 
 void setLanguage(std::string language)
 {
-        setenv("LANGUAGE", language.c_str(), false);
+    setenv("LANGUAGE", language.c_str(), true);
+
+    // stinky hack (from https://www.gnu.org/software/gettext/manual/html_node/gettext-grok.html)
+    {
+        extern int  _nl_msg_cat_cntr;
+        ++_nl_msg_cat_cntr;
+    }
 }
 
 size_t convert(const char *to, const char *from, char *outbuf, size_t outbuf_size, char *inbuf, size_t inbuf_size) {
