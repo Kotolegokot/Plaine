@@ -33,7 +33,7 @@ bool Game::initializeDevice()
         configuration.resolution = nulldevice->getVideoModeList()->getDesktopResolution();
         nulldevice -> drop();
     }
-    device = createDevice(video::EDT_OPENGL, configuration.resolution, configuration.colordepth, configuration.fullscreen);
+    device = createDevice(video::EDT_OPENGL, configuration.resolution, configuration.colordepth, configuration.fullscreen, configuration.stencilBuffer, configuration.vsync);
     if (!device) {
         error("Couldn't create a device :(\n");
         return false;
@@ -141,6 +141,8 @@ void Game::menu()
                     configuration.colordepth = 32;
                     break;
                 }
+                configuration.vsync = gui->vsyncCheckBox->isChecked();
+                configuration.stencilBuffer = gui->stencilBufferCheckBox->isChecked();
                 terminate();
                 if (!initializeDevice())
                     return;

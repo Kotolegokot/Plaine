@@ -131,8 +131,8 @@ void GUI::initializeSettingsGUI()
         colorDepthComboBox->setSelected(1);
     else if (configuration.colordepth == 32)
         colorDepthComboBox->setSelected(2);
-    vsyncCheckBox = guiEnvironment->addCheckBox(true, core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 5*buttonHeight - 5*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 4*buttonHeight - 5*SPACE), 0, ID_CHECKBOX_VSYNC, _wp("VSync"));
-    stencilBufferCheckBox = guiEnvironment->addCheckBox(true, core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 4*buttonHeight - 4*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 4*SPACE), 0, ID_CHECKBOX_STENCILBUFFER, _wp("Stencil Buffer"));
+    vsyncCheckBox = guiEnvironment->addCheckBox(configuration.vsync, core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 5*buttonHeight - 5*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 4*buttonHeight - 5*SPACE), 0, ID_CHECKBOX_VSYNC, _wp("VSync"));
+    stencilBufferCheckBox = guiEnvironment->addCheckBox(configuration.stencilBuffer, core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 4*buttonHeight - 4*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 4*SPACE), 0, ID_CHECKBOX_STENCILBUFFER, _wp("Stencil Buffer"));
     buttonMenu = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 2*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - buttonHeight - 2*SPACE),
         0, ID_BUTTON_MENU, _wp("Back"), _wp("Exit to Main menu"));
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE),
