@@ -9,21 +9,22 @@ ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, f32 farValue, f32 b
 void ObstacleGenerator::generate(const core::vector3df &playerPosition)
 {
     // The Z loop must be the first here, because the "nodes" deque must be sorted by nodes' Z coordinate
-    for (f32 z = preciseEdge(playerPosition.Z); z < preciseEdge(playerPosition.Z + farValueWithBuffer()); z += STEP)
-        for (f32 x = preciseEdge(playerPosition.X - farValueWithBuffer()); x < preciseEdge(playerPosition.X + farValueWithBuffer()); x += STEP)
-            for (f32 y = preciseEdge(playerPosition.Y - farValueWithBuffer()); y < preciseEdge(playerPosition.Y + farValueWithBuffer()); y += STEP) {
+    for (f32 z = preciseEdge(playerPosition.Z); z <= preciseEdge(playerPosition.Z + farValueWithBuffer()); z += STEP)
+        for (f32 x = preciseEdge(playerPosition.X - farValueWithBuffer()); x <= preciseEdge(playerPosition.X + farValueWithBuffer()); x += STEP)
+            for (f32 y = preciseEdge(playerPosition.Y - farValueWithBuffer()); y <= preciseEdge(playerPosition.Y + farValueWithBuffer()); y += STEP) {
                 bool insideX = false, insideY = false, insideZ = false;
-                insideX = x > generatedEdgeLeft && x < generatedEdgeRight;
-                insideY = y > generatedEdgeBottom && y < generatedEdgeTop;
-                insideZ = z < generatedEdgeZ;
+                insideX = x >= generatedEdgeLeft && x <= generatedEdgeRight;
+                insideY = y >= generatedEdgeBottom && y <= generatedEdgeTop;
+                insideZ = z <= generatedEdgeZ;
                 if (!(insideX && insideY && insideZ)) {
                     f32 newX = x + getRandomf(-100, 100);
                     f32 newY = y + getRandomf(-100, 100);
                     f32 newZ = z + getRandomf(-100, 100);
 
                     scene::ISceneManager *sceneManager = device->getSceneManager();
-                    scene::ISceneNode *node = sceneManager->addCubeSceneNode(200.f, 0, -1, core::vector3df(newX, newY, newZ));
+                    scene::ISceneNode *node = sceneManager->addCubeSceneNode(250.f, 0, -1, core::vector3df(newX, newY, newZ));
                     node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
+                    node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
 
                     nodes.push_back(node);
                     cubeCount++;

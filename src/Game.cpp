@@ -61,6 +61,8 @@ void Game::initializeScene()
     light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), video::SColorf(1, 1, 1), 300);
     light->setVisible(true);
 
+    driver->setFog(video::SColor(0, 138, 125, 81), video::EFT_FOG_LINEAR, 1300, 1600, .003f, true, false);
+
     obstacleGenerator = new ObstacleGenerator(device, camera->getFarValue(), 500);
 }
 
