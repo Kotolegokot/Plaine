@@ -261,6 +261,7 @@ void Game::run()
         if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
             if (!escapePressed) {
                 pause = !pause;
+                eventReceiver->pause = pause;
                 escapePressed = true;
             }
         } else if (!eventReceiver->IsKeyDown(KEY_ESCAPE)) {
@@ -270,6 +271,7 @@ void Game::run()
         {
             eventReceiver->resume = false;
             pause = false;
+            eventReceiver->pause = pause;
         }
 
         if (device->isWindowActive()) {

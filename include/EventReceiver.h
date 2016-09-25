@@ -13,7 +13,7 @@ public:
     virtual bool OnEvent(const SEvent &event);
     virtual bool IsKeyDown(EKEY_CODE keyCode) const;
 
-    bool quit = false, start = false, settings = false, toggleFullscreen = false, toggleGraphicMode = false, toggleLanguage = false, resume = false;
+    bool quit = false, start = false, settings = false, toggleFullscreen = false, toggleGraphicMode = false, toggleLanguage = false, resume = false, pause=false;
 
 private:
     bool PressedKeys[KEY_KEY_CODES_COUNT];
