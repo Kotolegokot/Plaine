@@ -9,8 +9,10 @@ using namespace irr;
 class SceneNodeAnimatorCameraPlayer : public scene::ISceneNodeAnimator
 {
 public:
-    SceneNodeAnimatorCameraPlayer(f32 lateralMoveSpeed = 0, f32 verticalMoveSpeed = 0);
+    SceneNodeAnimatorCameraPlayer(f32 forwardMoveSpeed = 0, f32 lateralMoveSpeed = 0, f32 verticalMoveSpeed = 0);
 
+    f32 getForwardMoveSpeed() const;
+    void setForwardMoveSpeed(f32 moveSpeed);
     f32 getLateralMoveSpeed() const;
     void setLateralMoveSpeed(f32 moveSpeed);
     f32 getVerticalMoveSpeed() const;
@@ -21,6 +23,7 @@ public:
     virtual bool OnEvent(const SEvent& event) override;
     virtual bool isEventReceiverEnabled() const override;
 private:
+    f32 forwardMoveSpeed = 0;
     f32 lateralMoveSpeed = 0;
     f32 verticalMoveSpeed = 0;
     f32 lateralAcceleration = 0;

@@ -37,6 +37,7 @@ private:
 
     // Scene
     scene::ICameraSceneNode *camera = nullptr;
+    scene::ILightSceneNode *light = nullptr;
     ObstacleGenerator *obstacleGenerator = nullptr;
 
     void error(const core::stringw &str) const;

@@ -2,13 +2,22 @@
 
 using namespace irr;
 
-SceneNodeAnimatorCameraPlayer::SceneNodeAnimatorCameraPlayer(f32 lateralMoveSpeed, f32 verticalMoveSpeed) :
-    lateralMoveSpeed(lateralMoveSpeed), verticalMoveSpeed(verticalMoveSpeed)
+SceneNodeAnimatorCameraPlayer::SceneNodeAnimatorCameraPlayer(f32 forwardMoveSpeed, f32 lateralMoveSpeed, f32 verticalMoveSpeed) :
+    forwardMoveSpeed(forwardMoveSpeed), lateralMoveSpeed(lateralMoveSpeed), verticalMoveSpeed(verticalMoveSpeed)
 {
     for (u32 i = 0; i < KEY_KEY_CODES_COUNT; i++)
         PressedKeys[i] = false;
 }
 
+f32 SceneNodeAnimatorCameraPlayer::getForwardMoveSpeed() const
+{
+    return forwardMoveSpeed;
+}
+
+void SceneNodeAnimatorCameraPlayer::setForwardMoveSpeed(f32 moveSpeed)
+{
+    forwardMoveSpeed = moveSpeed;
+}
 
 f32 SceneNodeAnimatorCameraPlayer::getLateralMoveSpeed() const
 {
@@ -17,8 +26,7 @@ f32 SceneNodeAnimatorCameraPlayer::getLateralMoveSpeed() const
 
 void SceneNodeAnimatorCameraPlayer::setLateralMoveSpeed(f32 moveSpeed)
 {
-    if (moveSpeed >= 0)
-        lateralMoveSpeed = moveSpeed;
+    lateralMoveSpeed = moveSpeed;
 }
 
 f32 SceneNodeAnimatorCameraPlayer::getVerticalMoveSpeed() const
@@ -28,8 +36,7 @@ f32 SceneNodeAnimatorCameraPlayer::getVerticalMoveSpeed() const
 
 void SceneNodeAnimatorCameraPlayer::setVerticalMoveSpeed(f32 moveSpeed)
 {
-    if (moveSpeed >= 0)
-        verticalMoveSpeed = moveSpeed;
+    verticalMoveSpeed = moveSpeed;
 }
 
 bool SceneNodeAnimatorCameraPlayer::OnEvent(const SEvent &event)
@@ -102,6 +109,8 @@ void SceneNodeAnimatorCameraPlayer::animateNode(scene::ISceneNode *node, u32 tim
         verticalAcceleration -= timeDiff * 0.01f * MAX_ACCELERATION / 10;
     else if (verticalAcceleration < 0)
         verticalAcceleration += timeDiff * 0.01f * MAX_ACCELERATION / 10;
+
+    pos += dir * timeDiff * forwardMoveSpeed * 0.01f;
 
     // apply all the changes
     camera->setTarget(pos + dir);

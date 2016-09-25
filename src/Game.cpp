@@ -59,10 +59,13 @@ bool Game::initializeDevice()
 void Game::initializeScene()
 {
     camera = sceneManager->addCameraSceneNode();
-    scene::ISceneNodeAnimator *cameraAnimator = new SceneNodeAnimatorCameraPlayer(5.f, 5.f);
-    camera->setFarValue(2000);
+    scene::ISceneNodeAnimator *cameraAnimator = new SceneNodeAnimatorCameraPlayer(35.f, 15.f, 15.f);
+    camera->setFarValue(1500);
     camera->addAnimator(cameraAnimator);
     cameraAnimator->drop();
+
+    light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, 20), video::SColorf(1, 1, 1), 100);
+    light->setVisible(true);
 
     obstacleGenerator = new ObstacleGenerator(device, camera->getFarValue());
 }
