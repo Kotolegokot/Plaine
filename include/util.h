@@ -23,6 +23,7 @@ std::wstring utf8_to_wide(const std::string &input);
 core::stringw utf8_to_irrwide(const std::string &input);
 std::string wide_to_utf8(const std::wstring &input);
 void setLanguage(std::string language, bool replace);
+f32 getRandomf(f32 min = 0, f32 max = 1);
 
 // GUI IDs
 enum { ID_BUTTON_QUIT,

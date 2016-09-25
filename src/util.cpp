@@ -1,4 +1,7 @@
 #include "util.h"
+#include <random>
+
+using namespace irr;
 
 #ifndef _WIN32
 
@@ -125,3 +128,11 @@ std::string wide_to_utf8(const std::wstring &input) {
 	return out;
 }
 #endif // _WIN32
+
+f32 getRandomf(f32 min, f32 max)
+{
+    static std::default_random_engine engine;
+    static std::uniform_real_distribution<> distribution(min, max);
+
+    return distribution(engine);
+}

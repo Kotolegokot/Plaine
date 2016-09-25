@@ -1,7 +1,8 @@
 #include <iostream>
 #include <clocale>
+#include <cstdlib>
+#include <random>
 #include <irrlicht.h>
-#include <stdlib.h>
 
 #include "Game.h"
 #include "Config.h"
@@ -15,7 +16,6 @@ int main()
     Config conf;
     data = conf.loadConfig("game.conf");
     setLanguage(data.language, false);
-
 
     setlocale(LC_ALL, "");
     bindtextdomain("planerunner", "media/locale/");

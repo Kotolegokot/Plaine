@@ -33,7 +33,7 @@ bool Game::initializeDevice()
         configuration.resolution = nulldevice->getVideoModeList()->getDesktopResolution();
         nulldevice -> drop();
     }
-    device = createDevice(video::EDT_OPENGL, configuration.resolution, configuration.colordepth, configuration.fullscreen);
+    device = createDevice(video::EDT_OPENGL, configuration.resolution, configuration.colordepth, configuration.fullscreen, true);
     if (!device) {
         error("Couldn't create a device :(\n");
         return false;
@@ -46,6 +46,7 @@ bool Game::initializeDevice()
     eventReceiver = new EventReceiver();
     device->setEventReceiver(eventReceiver);
     device->setResizable(configuration.resizable);
+
     return true;
 }
 
@@ -57,10 +58,10 @@ void Game::initializeScene()
     camera->addAnimator(cameraAnimator);
     cameraAnimator->drop();
 
-    light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, 20), video::SColorf(1, 1, 1), 100);
+    light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), video::SColorf(1, 1, 1), 300);
     light->setVisible(true);
 
-    obstacleGenerator = new ObstacleGenerator(device, camera->getFarValue(), 300);
+    obstacleGenerator = new ObstacleGenerator(device, camera->getFarValue(), 500);
 }
 
 void Game::error(const core::stringw &str) const

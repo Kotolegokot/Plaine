@@ -37,7 +37,7 @@ private:
     f32 generatedEdgeTop = 0;
     f32 generatedEdgeBottom = 0;
 
-    const f32 STEP = 200;
+    const f32 STEP = 400;
 };
 
 #endif // OBSTACLEGENERATOR_H

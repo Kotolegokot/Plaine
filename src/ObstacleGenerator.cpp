@@ -1,4 +1,5 @@
 #include "ObstacleGenerator.h"
+#include "util.h"
 
 using namespace irr;
 
@@ -16,8 +17,12 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                 insideY = y > generatedEdgeBottom && y < generatedEdgeTop;
                 insideZ = z < generatedEdgeZ;
                 if (!(insideX && insideY && insideZ)) {
+                    f32 newX = x + getRandomf(-100, 100);
+                    f32 newY = y + getRandomf(-100, 100);
+                    f32 newZ = z + getRandomf(-100, 100);
+
                     scene::ISceneManager *sceneManager = device->getSceneManager();
-                    scene::ISceneNode *node = sceneManager->addCubeSceneNode(50.f, 0, -1, core::vector3df(x, y, z));
+                    scene::ISceneNode *node = sceneManager->addCubeSceneNode(200.f, 0, -1, core::vector3df(newX, newY, newZ));
                     node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
 
                     nodes.push_back(node);
@@ -42,7 +47,7 @@ f32 ObstacleGenerator::preciseEdge(f32 edge) const
 void ObstacleGenerator::removeLeftBehind(f32 playerZ)
 {
     while (!nodes.empty())
-        if (nodes.front()->getPosition().Z < playerZ) {
+        if (nodes.front()->getPosition().Z < playerZ - buffer) {
             nodes.front()->remove();
             nodes.pop_front();
             cubeCount--;
