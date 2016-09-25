@@ -13,6 +13,7 @@ public:
 
     ConfigData &configuration;
     int buttonWidth, buttonHeight;
+    const int SPACE = 10;
     Stage stage;
 
     gui::IGUIEnvironment *guiEnvironment = nullptr;
