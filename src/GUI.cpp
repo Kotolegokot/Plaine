@@ -159,18 +159,23 @@ void GUI::terminateGUI()
     case(MENU):
         {
             terminateMenuGUI();
+            stage = TERMINATED;
             break;
         }
-        case(INGAME_MENU):
+    case(INGAME_MENU):
         {
             terminateInGameGUI();
+            stage = TERMINATED;
             break;
         }
-        case(SETTINGS):
+    case(SETTINGS):
         {
             terminateSettingsGUI();
+            stage = TERMINATED;
             break;
         }
+    case(TERMINATED):
+        break;
     }
 }
 

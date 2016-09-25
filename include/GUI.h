@@ -4,7 +4,7 @@
 #include "Config.h"
 #include "util.h"
 
-enum Stage{ MENU, SETTINGS, INGAME_MENU };
+enum Stage{ MENU, SETTINGS, INGAME_MENU, TERMINATED };
 
 class GUI
 {
