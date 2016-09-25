@@ -190,16 +190,16 @@ void Game::menu()
                 eventReceiver->toggleGUI = true;
             }
         }
-        core::stringw scrs = _w("Screen size: ");
-        scrs += configuration.resolution.Width;
-        scrs += "x";
-        scrs += configuration.resolution.Height;
-        gui->textScreenSize->setText(scrs.c_str());
         if(configuration.resolution != driver->getScreenSize())
         {
             configuration.resolution = driver->getScreenSize();
             gui->resizeGUI();
         }
+        core::stringw scrs = _w("Screen size: ");
+        scrs += configuration.resolution.Width;
+        scrs += "x";
+        scrs += configuration.resolution.Height;
+        gui->textScreenSize->setText(scrs.c_str());
         device->getCursorControl()->setVisible(true);
         if (device->isWindowActive()) {
             driver->beginScene(true, true, video::SColor(0, 135, 206, 235));;

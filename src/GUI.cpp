@@ -2,7 +2,7 @@
 
 using namespace irr;
 
-void GUI::recalculationButtonProportions()
+void GUI::recalculateButtonProportions()
 {
     buttonWidth = configuration.resolution.Width / 6;
     if (buttonWidth < 200)
@@ -12,7 +12,7 @@ void GUI::recalculationButtonProportions()
 
 void GUI::initializeMenuGUI()
 {
-    recalculationButtonProportions();
+    recalculateButtonProportions();
     textScreenSize = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
     buttonStart = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 3*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 3*SPACE),
         0, ID_BUTTON_START, _wp("Start"), _wp("Start game"));
@@ -33,7 +33,7 @@ void GUI::terminateMenuGUI()
 
 void GUI::initializeInGameGUI()
 {
-    recalculationButtonProportions();
+    recalculateButtonProportions();
     textCameraPos = guiEnvironment->addStaticText(L"CAMERA_POS", core::rect<s32>(10, 10, 400, 30), false);
     textCameraPos->setBackgroundColor(video::SColor(120, 255, 255, 255));
     textCubeCount = guiEnvironment->addStaticText(L"CUBE_COUNT", core::rect<s32>(10, 10 + 24, 400, 30 + 24), false);
@@ -59,7 +59,7 @@ void GUI::terminateInGameGUI()
 
 void GUI::initializeSettingsGUI()
 {
-    recalculationButtonProportions();
+    recalculateButtonProportions();
     textScreenSize = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
     textLanguage = guiEnvironment->addStaticText(_wp("Language:"), core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 9*buttonHeight - 9*SPACE, configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 9*SPACE), false);
     comboBoxLanguage = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 9*buttonHeight - 9*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 9*SPACE), 0, ID_COMBOBOX_LANGUAGE);
@@ -170,6 +170,7 @@ void GUI::initializeControlSettingsGUI()
         0, ID_BUTTON_SETTINGS, _wp("Back"), _wp("Back to game settings"));
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE),
         0, ID_BUTTON_QUIT, _wp("Quit"), _wp("Exit game"));
+    stage = CONTROL_SETTINGS;
 }
 
 void GUI::terminateControlSettingsGUI()
@@ -201,6 +202,12 @@ void GUI::terminateGUI()
             stage = TERMINATED;
             break;
         }
+     case(CONTROL_SETTINGS):
+        {
+            terminateControlSettingsGUI();
+            stage = TERMINATED;
+            break;
+        }
     case(TERMINATED):
         break;
     }
@@ -212,8 +219,9 @@ void GUI::setVisible(bool state)
     {
     case (MENU):
         {
+            textScreenSize->setVisible(state);
             buttonStart->setVisible(state);
-            buttonMenu->setVisible(state);
+            buttonSettings->setVisible(state);
             buttonQuit->setVisible(state);
             break;
         }
@@ -242,6 +250,13 @@ void GUI::setVisible(bool state)
             buttonQuit->setVisible(state);
             break;
         }
+    case (CONTROL_SETTINGS):
+        {
+            textScreenSize->setVisible(state);
+            buttonSettings->setVisible(state);
+            buttonQuit->setVisible(state);
+            break;
+        }
     case (TERMINATED):
         break;
     }
@@ -249,11 +264,11 @@ void GUI::setVisible(bool state)
 
 void GUI::resizeGUI()
 {
+    recalculateButtonProportions();
     switch (stage)
     {
     case (MENU):
         {
-            recalculationButtonProportions();
             buttonStart->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 3*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 3*SPACE));
             buttonSettings->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 2*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - buttonHeight - 2*SPACE));
             buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE));
@@ -261,7 +276,6 @@ void GUI::resizeGUI()
         }
     case (INGAME_MENU):
         {
-            recalculationButtonProportions();
             buttonResume->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 3*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 3*SPACE));
             buttonMenu->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 2*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - buttonHeight - 2*SPACE));
             buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE));
@@ -269,7 +283,6 @@ void GUI::resizeGUI()
         }
     case (SETTINGS):
         {
-            recalculationButtonProportions();
             textLanguage->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 9*buttonHeight - 9*SPACE, configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 9*SPACE));
             comboBoxLanguage->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 9*buttonHeight - 9*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 9*SPACE));
             textResolution->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 8*SPACE, configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 7*buttonHeight - 8*SPACE));
@@ -290,6 +303,12 @@ void GUI::resizeGUI()
             scrs += _wp(" (Custom)");
             comboBoxResolution->addItem(scrs.c_str(), 2);
             comboBoxResolution->setSelected(2);
+            break;
+        }
+    case (CONTROL_SETTINGS):
+        {
+            buttonSettings->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 2*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - buttonHeight - 2*SPACE));
+            buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE));
             break;
         }
     case (TERMINATED):

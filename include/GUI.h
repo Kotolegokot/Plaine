@@ -39,7 +39,7 @@ public:
     gui::IGUICheckBox *checkBoxStencilBuffer = nullptr;
 
 
-    void recalculationButtonProportions();
+    void recalculateButtonProportions();
     void initializeMenuGUI();
     void initializeInGameGUI();
     void initializeSettingsGUI();
