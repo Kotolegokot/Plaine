@@ -101,7 +101,7 @@ void SceneNodeAnimatorCameraPlayer::animateNode(scene::ISceneNode *node, u32 tim
 
     // vertical movement
     if (PressedKeys[KEY_KEY_W] && PressedKeys[KEY_KEY_S] ||
-            PressedKeys[KEY_KEY_J] && PressedKeys[KEY_KEY_J]) {
+            PressedKeys[KEY_KEY_K] && PressedKeys[KEY_KEY_J]) {
         // nothing
     } else if (PressedKeys[KEY_KEY_W] || PressedKeys[KEY_KEY_K]) {
         if (verticalAcceleration < MAX_ACCELERATION)

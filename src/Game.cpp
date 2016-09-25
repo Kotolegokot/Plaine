@@ -267,6 +267,8 @@ void Game::run()
             gui->cameraPosText->setVisible(true);
             gui->cubeCountText->setVisible(true);
             device->getCursorControl()->setVisible(false);
+
+            obstacleGenerator->generate(camera->getPosition());
         }
 
         if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
@@ -282,8 +284,6 @@ void Game::run()
             eventReceiver->resume = false;
             pause = false;
         }
-
-        obstacleGenerator->generate(camera->getPosition());
 
         if (device->isWindowActive()) {
             driver->beginScene(true, true, video::SColor(0, 135, 206, 235));
