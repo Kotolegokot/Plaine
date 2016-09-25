@@ -163,6 +163,22 @@ void GUI::terminateSettingsGUI()
     buttonQuit->remove();
 }
 
+void GUI::initializeControlSettingsGUI()
+{
+    textScreenSize = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
+    buttonSettings = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 2*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - buttonHeight - 2*SPACE),
+        0, ID_BUTTON_SETTINGS, _wp("Back"), _wp("Back to game settings"));
+    buttonQuit = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE),
+        0, ID_BUTTON_QUIT, _wp("Quit"), _wp("Exit game"));
+}
+
+void GUI::terminateControlSettingsGUI()
+{
+    buttonSettings->remove();
+    buttonQuit->remove();
+    textScreenSize->remove();
+}
+
 void GUI::terminateGUI()
 {
     switch (stage)

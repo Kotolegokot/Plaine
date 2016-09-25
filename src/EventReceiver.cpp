@@ -18,11 +18,12 @@ bool EventReceiver::OnEvent(const SEvent &event)
         switch (event.GUIEvent.EventType) {
         case gui::EGET_BUTTON_CLICKED:
             if (id == ID_BUTTON_START) {
-                start = true;
+                stage = INGAME_MENU;
                 return true;
             }
             else if (id == ID_BUTTON_SETTINGS) {
-                settings = true;
+                stage = SETTINGS;
+                toggleGUI = true;
                 return true;
             }
             else if (id == ID_BUTTON_RESUME) {
@@ -34,12 +35,17 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 return true;
             }
             else if (id == ID_BUTTON_MENU) {
-                start = false;
-                settings = false;
+                stage = MENU;
+                toggleGUI = true;
                 return true;
             }
             else if (id == ID_BUTTON_TOGGLE_FULLSCREEN) {
                 toggleFullscreen = true;
+                return true;
+            }
+            else if (id == ID_BUTTON_CONTROL_SETTINGS) {
+                stage = CONTROL_SETTINGS;
+                toggleGUI = true;
                 return true;
             }
             break;

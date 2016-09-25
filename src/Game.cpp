@@ -91,21 +91,31 @@ void Game::menu()
     gui->initializeMenuGUI();
 
     while (device->run()) {
-        if (eventReceiver->start){
+        if (eventReceiver->stage == INGAME_MENU){
             gui->terminateGUI();
             run();
-            gui->initializeMenuGUI();
         }
         if (eventReceiver->quit || eventReceiver->IsKeyDown(KEY_ESCAPE)){
             break;
         }
-        if (eventReceiver->settings){
-            if (gui->buttonStart != nullptr)
+        if (eventReceiver->toggleGUI)
+        {
+            gui->terminateGUI();
+            switch (eventReceiver->stage)
             {
-                gui->terminateGUI();
-                gui->buttonStart = nullptr;
+            case(MENU):
+                gui->initializeMenuGUI();
+                break;
+            case(SETTINGS):
                 gui->initializeSettingsGUI();
+                break;
+            case(CONTROL_SETTINGS):
+                gui->initializeControlSettingsGUI();
+                break;
             }
+            eventReceiver->toggleGUI = false;
+        }
+        if (eventReceiver->stage == SETTINGS){
             if (eventReceiver->toggleFullscreen)
             {
                 configuration.fullscreen = !configuration.fullscreen;
@@ -176,16 +186,10 @@ void Game::menu()
                 }
                 eventReceiver->toggleLanguage = false;
                 setLanguage(configuration.language, true);
-                gui->terminateGUI();
-                eventReceiver->settings = false;
-                gui->initializeMenuGUI();
+                eventReceiver->stage = MENU;
+                eventReceiver->toggleGUI = true;
             }
         }
-        else if (gui->buttonStart == nullptr)
-            {
-                gui->terminateGUI();
-                gui->initializeMenuGUI();
-            }
         core::stringw scrs = _w("Screen size: ");
         scrs += configuration.resolution.Width;
         scrs += "x";
@@ -215,10 +219,7 @@ void Game::run()
 
     while (device->run())
     {
-        if (eventReceiver->quit)
-            break;
-        if (!eventReceiver->start){
-            gui->terminateGUI();
+        if (eventReceiver->stage == MENU || eventReceiver->quit){
             break;
         }
         if (pause) {
