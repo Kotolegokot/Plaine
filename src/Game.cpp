@@ -20,7 +20,7 @@ Game::Game(const struct ConfigData &data)
 
 Game::~Game()
 {
-    device->drop();
+    terminate();
 }
 
 void Game::initializeGUI()
@@ -77,6 +77,7 @@ void Game::terminate()
 {
     Config conf;
     conf.saveConfig("game.conf", configuration);
+    gui->terminateGUI();
     device->closeDevice();
     device->run();
     device->drop();
@@ -204,9 +205,6 @@ void Game::menu()
             device->yield();
         }
     }
-
-    terminate();
-
 }
 
 void Game::run()
