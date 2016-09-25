@@ -8,7 +8,6 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-26 00:23+0300\n"
-"PO-Revision-Date: 2016-09-24 21:28+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -30,7 +29,6 @@ msgstr "Позиция камеры: ("
 
 #: src/Game.cpp:257
 msgid "Cubes: "
-msgstr ""
 
 #: src/GUI.cpp:18
 msgid "Start"
@@ -114,11 +112,11 @@ msgstr "Глубина цвета:"
 
 #: src/GUI.cpp:140
 msgid "VSync"
-msgstr ""
+msgstr "Вертикальная синхронизация"
 
 #: src/GUI.cpp:141
 msgid "Stencil Buffer"
-msgstr ""
+msgstr "Буфер трафарета"
 
 #: src/GUI.cpp:143
 msgid "Back"
