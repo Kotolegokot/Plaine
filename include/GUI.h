@@ -28,6 +28,7 @@ public:
     gui::IGUIComboBox *colorDepthComboBox = nullptr;
     gui::IGUIComboBox *languageComboBox = nullptr;
     gui::IGUIStaticText *screenSizeText = nullptr;
+    gui::IGUIStaticText *cubeCountText = nullptr;
     gui::IGUIStaticText *resolutionText = nullptr;
     gui::IGUIStaticText *colorDepthText = nullptr;
     gui::IGUIStaticText *languageText = nullptr;

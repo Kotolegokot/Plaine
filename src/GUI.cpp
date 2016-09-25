@@ -1,5 +1,7 @@
 #include "GUI.h"
 
+using namespace irr;
+
 void GUI::recalculationButtonProportions()
 {
     buttonWidth = configuration.resolution.Width / 6;
@@ -33,6 +35,9 @@ void GUI::initializeInGameGUI()
 {
     recalculationButtonProportions();
     cameraPosText = guiEnvironment->addStaticText(L"CAMERA_POS", core::rect<s32>(10, 10, 400, 30), false);
+    cameraPosText->setBackgroundColor(video::SColor(120, 255, 255, 255));
+    cubeCountText = guiEnvironment->addStaticText(L"CUBE_COUNT", core::rect<s32>(10, 10 + 24, 400, 30 + 24), false);
+    cubeCountText->setBackgroundColor(video::SColor(120, 255, 255, 255));
     screenSizeText = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
     buttonResume = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 3*buttonHeight - 30, configuration.resolution.Width - 20, configuration.resolution.Height - 2*buttonHeight - 30), 0, ID_BUTTON_RESUME, _wp("Resume"), _wp("Resume Game"));
     buttonMenu = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 2*buttonHeight - 20, configuration.resolution.Width - 20, configuration.resolution.Height - buttonHeight - 20),
@@ -48,6 +53,7 @@ void GUI::terminateInGameGUI()
     buttonMenu->remove();
     buttonQuit->remove();
     cameraPosText->remove();
+    cubeCountText->remove();
     screenSizeText->remove();
 }
 

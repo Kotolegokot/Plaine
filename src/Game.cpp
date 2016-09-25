@@ -240,22 +240,32 @@ void Game::run()
 
             gui->setVisible(true);
             gui->cameraPosText->setVisible(false);
+            gui->cubeCountText->setVisible(false);
             device->getCursorControl()->setVisible(true);
         } else {
-            core::stringw cameraPosition = _w("Camera position: (");
-            core::vector3df position = camera->getPosition();
-            cameraPosition += position.X;
-            cameraPosition += ", ";
-            cameraPosition += position.Y;
-            cameraPosition += ", ";
-            cameraPosition += position.Z;
-            cameraPosition += ")";
-            gui->cameraPosText->setText(cameraPosition.c_str());
+            {
+                core::stringw cameraPosition = _w("Camera position: (");
+                core::vector3df position = camera->getPosition();
+                cameraPosition += position.X;
+                cameraPosition += ", ";
+                cameraPosition += position.Y;
+                cameraPosition += ", ";
+                cameraPosition += position.Z;
+                cameraPosition += ")";
+                gui->cameraPosText->setText(cameraPosition.c_str());
+            }
+
+            {
+                core::stringw cubeCount = _w("Cubes: ");
+                cubeCount += obstacleGenerator->getCubeCount();
+                gui->cubeCountText->setText(cubeCount.c_str());
+            }
 
             camera->setInputReceiverEnabled(true);
 
             gui->setVisible(false);
             gui->cameraPosText->setVisible(true);
+            gui->cubeCountText->setVisible(true);
             device->getCursorControl()->setVisible(false);
         }
 

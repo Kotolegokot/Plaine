@@ -21,6 +21,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
 
                     nodes.push_back(node);
+                    cubeCount++;
                 }
             }
 
@@ -44,9 +45,15 @@ void ObstacleGenerator::removeLeftBehind(f32 playerZ)
         if (nodes.front()->getPosition().Z < playerZ) {
             nodes.front()->remove();
             nodes.pop_front();
+            cubeCount--;
         } else {
             break;
         }
+}
+
+u32 ObstacleGenerator::getCubeCount() const
+{
+    return cubeCount;
 }
 
 f32 ObstacleGenerator::farValueWithBuffer() const

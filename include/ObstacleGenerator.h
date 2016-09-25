@@ -11,6 +11,8 @@ class ObstacleGenerator
 public:
     ObstacleGenerator(IrrlichtDevice *device, f32 farValue = 1500, f32 buffer = 300);
     void generate(const core::vector3df &playerPosition);
+    u32 getCubeCount() const;
+
     void setFarValue(f32 value);
     f32 getFarValue() const;
     void setBuffer(f32 buffer);
@@ -23,6 +25,8 @@ private:
 
     IrrlichtDevice *device = nullptr;
     std::deque<scene::ISceneNode *> nodes;
+
+    u32 cubeCount = 0;
 
     f32 farValue = 0;
     f32 buffer = 0;
