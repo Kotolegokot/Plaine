@@ -2,9 +2,9 @@
 
 #ifndef _WIN32
 
-void setLanguage(std::string language)
+void setLanguage(std::string language, bool replace)
 {
-    setenv("LANGUAGE", language.c_str(), true);
+    setenv("LANGUAGE", language.c_str(), replace);
 
     // stinky hack (from https://www.gnu.org/software/gettext/manual/html_node/gettext-grok.html)
     {
@@ -87,7 +87,7 @@ std::string wide_to_utf8(const std::wstring &input) {
 }
 #else
 
-void setLanguage(std::string language)
+void setLanguage(std::string language, bool)
 {
         std::string str = "LANGUAGE=";
         str += language;

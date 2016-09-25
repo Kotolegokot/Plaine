@@ -122,10 +122,16 @@ void GUI::initializeSettingsGUI()
     languageComboBox = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/5 - 20, configuration.resolution.Height - 4*buttonHeight - 40, configuration.resolution.Width - 20, configuration.resolution.Height - 3*buttonHeight - 40), 0, ID_COMBOBOX_LANGUAGE);
     languageComboBox->addItem(L"English", 0);
     languageComboBox->addItem(L"Русский", 1);
+    languageComboBox->addItem(L"Qırımtatarca", 2);
+    languageComboBox->addItem(L"Къырымтатарджа", 3);
     if (configuration.language == "en")
         languageComboBox->setSelected(0);
     else if (configuration.language == "ru")
         languageComboBox->setSelected(1);
+    else if (configuration.language == "crh-latin")
+        languageComboBox->setSelected(2);
+    else if (configuration.language == "crh-cyrillic")
+        languageComboBox->setSelected(3);
     buttonMenu = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 2*buttonHeight - 20, configuration.resolution.Width - 20, configuration.resolution.Height - buttonHeight - 20),
         0, ID_BUTTON_MENU, _wp("Back"), _wp("Exit to Main menu"));
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - buttonHeight - 10, configuration.resolution.Width - 20, configuration.resolution.Height - 10),

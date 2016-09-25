@@ -22,7 +22,7 @@ size_t convert(const char *to, const char *from, char *outbuf, size_t outbuf_siz
 std::wstring utf8_to_wide(const std::string &input);
 core::stringw utf8_to_irrwide(const std::string &input);
 std::string wide_to_utf8(const std::wstring &input);
-void setLanguage(std::string language);
+void setLanguage(std::string language, bool replace);
 
 // GUI IDs
 enum { ID_BUTTON_QUIT,

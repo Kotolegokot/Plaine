@@ -162,12 +162,19 @@ void Game::menu()
                     configuration.language = "en";
                     break;
                 case 1:
-                    error(L"ARGH");
                     configuration.language = "ru";
                     break;
+                case 2:
+                    configuration.language = "crh-latin";
+                    break;
+                case 3:
+                    configuration.language = "crh-cyrillic";
+                    break;
+                default:
+                    configuration.language = "";
                 }
                 eventReceiver->toggleLanguage = false;
-                setLanguage(configuration.language);
+                setLanguage(configuration.language, true);
                 gui->terminateGUI();
                 eventReceiver->settings = false;
                 gui->initializeMenuGUI();
