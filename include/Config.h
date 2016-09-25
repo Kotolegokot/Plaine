@@ -13,10 +13,12 @@ using namespace irr;
 
 struct ConfigData {
     bool fullscreen = false;
-    bool resizable = false;
     core::dimension2d<u32> resolution = core::dimension2d<u32>(640, 480);;
     u32 colordepth = 32;
     std::string language = "c";
+    bool resizable = false;
+    bool vsync = true;
+    bool stencilBuffer = true;
 };
 
 class Config

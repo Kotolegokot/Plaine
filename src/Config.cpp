@@ -204,7 +204,7 @@ ConfigData Config::loadConfig(const std::string &filename)
     } */
 
     bool goToNextNEWLINE = false;
-    enum { NONE, RESOLUTION, FULLSCREEN, COLORDEPTH, LANGUAGE, RESIZABLE } state = NONE;
+    enum { NONE, RESOLUTION, FULLSCREEN, COLORDEPTH, LANGUAGE, RESIZABLE, VSYNC, STENCILBUFFER } state = NONE;
 
     for (std::vector<Item>::const_iterator i = items.cbegin(); i != items.cend(); ++i) {
         if (goToNextNEWLINE) {
@@ -224,6 +224,10 @@ ConfigData Config::loadConfig(const std::string &filename)
                         state = LANGUAGE;
                     else if ((*i).getString() == "resizable")
                         state = RESIZABLE;
+                    else if ((*i).getString() == "vsync")
+                        state = VSYNC;
+                    else if ((*i).getString() == "stencilbuffer")
+                        state = STENCILBUFFER;
                 } else {
                     error(Item::KEYWORD, (*i).type);
                     goToNextNEWLINE = true;
@@ -315,6 +319,40 @@ ConfigData Config::loadConfig(const std::string &filename)
                 state = NONE;
                 break;
             }
+            case VSYNC: {
+                EXPECT(Item::OP_EQUAL);
+                ++i;
+
+                EXPECT(Item::KEYWORD);
+                if ((*i).getString() != "on" && (*i).getString() != "off") {
+                    std::cerr << "Error: on or off expected, but " << Item::typeToString((*i).type) << " found." << std::endl;
+                    goToNextNEWLINE = true;
+                    break;
+                }
+                data.vsync = (*i).getString() == "on";
+                ++i;
+                EXPECT(Item::NEWLINE);
+
+                state = NONE;
+                break;
+            }
+            case STENCILBUFFER: {
+                EXPECT(Item::OP_EQUAL);
+                ++i;
+
+                EXPECT(Item::KEYWORD);
+                if ((*i).getString() != "on" && (*i).getString() != "off") {
+                    std::cerr << "Error: on or off expected, but " << Item::typeToString((*i).type) << " found." << std::endl;
+                    goToNextNEWLINE = true;
+                    break;
+                }
+                data.stencilBuffer = (*i).getString() == "on";
+                ++i;
+                EXPECT(Item::NEWLINE);
+
+                state = NONE;
+                break;
+            }
             }
         }
     }
@@ -335,4 +373,6 @@ void Config::saveConfig(const std::string &filename, const ConfigData &data)
     outputFile << "colordepth=" << data.colordepth << std::endl;
     outputFile << "language=" << "\"" << std::string(data.language.c_str()) << "\"" << std::endl;
     outputFile << "resizable=" << (data.resizable ? "on" : "off") << std::endl;
+    outputFile << "vsync=" << (data.vsync ? "on" : "off") << std::endl;
+    outputFile << "stencilbuffer=" << (data.stencilBuffer ? "on" : "off") << std::endl;
 }

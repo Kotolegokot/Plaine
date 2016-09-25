@@ -13,6 +13,7 @@ public:
 
     ConfigData &configuration;
     int buttonWidth, buttonHeight;
+    const int SPACE = 10;
     Stage stage;
 
     gui::IGUIEnvironment *guiEnvironment = nullptr;
@@ -33,6 +34,8 @@ public:
     gui::IGUIStaticText *colorDepthText = nullptr;
     gui::IGUIStaticText *languageText = nullptr;
     gui::IGUIStaticText *cameraPosText = nullptr;
+    gui::IGUICheckBox *vsyncCheckBox = nullptr;
+    gui::IGUICheckBox *stencilBufferCheckBox = nullptr;
 
 
     void recalculationButtonProportions();
