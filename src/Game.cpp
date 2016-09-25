@@ -2,13 +2,6 @@
 
 using namespace irr;
 
-Game::Game()
-{
-    initializeGUI();
-    initializeScene();
-    initialized = true;
-}
-
 Game::Game(const struct ConfigData &data)
 {
     configuration = data;
