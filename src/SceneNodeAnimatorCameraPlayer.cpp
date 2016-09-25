@@ -83,10 +83,10 @@ void SceneNodeAnimatorCameraPlayer::animateNode(scene::ISceneNode *node, u32 tim
     left.Z = t;
 
     // lateral movement
-    if (PressedKeys[KEY_KEY_A]) {
+    if (PressedKeys[KEY_KEY_A] || PressedKeys[KEY_KEY_H]) {
         if (lateralAcceleration < MAX_ACCELERATION)
             lateralAcceleration += timeDiff * 0.01f * MAX_ACCELERATION / 6;
-    } else if (PressedKeys[KEY_KEY_D]) {
+    } else if (PressedKeys[KEY_KEY_D] || PressedKeys[KEY_KEY_L]) {
         if (lateralAcceleration > -MAX_ACCELERATION)
             lateralAcceleration -= timeDiff * 0.01f * MAX_ACCELERATION / 6;
     }
@@ -97,10 +97,10 @@ void SceneNodeAnimatorCameraPlayer::animateNode(scene::ISceneNode *node, u32 tim
         lateralAcceleration += timeDiff * 0.01f * MAX_ACCELERATION / 10;
 
     // vertical movement
-    if (PressedKeys[KEY_KEY_W]) {
+    if (PressedKeys[KEY_KEY_W] || PressedKeys[KEY_KEY_K]) {
         if (verticalAcceleration < MAX_ACCELERATION)
             verticalAcceleration += timeDiff * 0.01f * MAX_ACCELERATION / 6;
-    } else if (PressedKeys[KEY_KEY_S]) {
+    } else if (PressedKeys[KEY_KEY_S] || PressedKeys[KEY_KEY_J]) {
         if (verticalAcceleration > -MAX_ACCELERATION)
             verticalAcceleration -= timeDiff * 0.01f * MAX_ACCELERATION / 6;
     }
