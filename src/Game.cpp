@@ -120,7 +120,7 @@ void Game::menu()
             }
             if(eventReceiver->toggleGraphicMode)
             {
-                switch (gui->resolutionComboBox->getSelected())
+                switch (gui->comboBoxResolution->getSelected())
                 {
                 case 0:
                         configuration.resolution = core::dimension2d<u32>(640, 480);
@@ -134,7 +134,7 @@ void Game::menu()
                         configuration.resizable = true;
                         break;
                 }
-                switch (gui->colorDepthComboBox->getSelected())
+                switch (gui->comboBoxColorDepth->getSelected())
                 {
                 case 0:
                     configuration.colordepth = 8;
@@ -146,8 +146,8 @@ void Game::menu()
                     configuration.colordepth = 32;
                     break;
                 }
-                configuration.vsync = gui->vsyncCheckBox->isChecked();
-                configuration.stencilBuffer = gui->stencilBufferCheckBox->isChecked();
+                configuration.vsync = gui->checkBoxVSync->isChecked();
+                configuration.stencilBuffer = gui->checkBoxStencilBuffer->isChecked();
                 terminate();
                 if (!initializeDevice())
                     return;
@@ -157,7 +157,7 @@ void Game::menu()
             }
             if (eventReceiver->toggleLanguage)
             {
-                switch (gui->languageComboBox->getSelected())
+                switch (gui->comboBoxLanguage->getSelected())
                 {
                 case 0:
                     configuration.language = "en";
@@ -190,7 +190,7 @@ void Game::menu()
         scrs += configuration.resolution.Width;
         scrs += "x";
         scrs += configuration.resolution.Height;
-        gui->screenSizeText->setText(scrs.c_str());
+        gui->textScreenSize->setText(scrs.c_str());
         if(configuration.resolution != driver->getScreenSize())
         {
             configuration.resolution = driver->getScreenSize();
@@ -226,7 +226,7 @@ void Game::run()
             scrs += configuration.resolution.Width;
             scrs += "x";
             scrs += configuration.resolution.Height;
-            gui->screenSizeText->setText(scrs.c_str());
+            gui->textScreenSize->setText(scrs.c_str());
 
             if (configuration.resolution != driver->getScreenSize())
             {
@@ -237,8 +237,8 @@ void Game::run()
             camera->setInputReceiverEnabled(false);
 
             gui->setVisible(true);
-            gui->cameraPosText->setVisible(false);
-            gui->cubeCountText->setVisible(false);
+            gui->textCameraPos->setVisible(false);
+            gui->textCubeCount->setVisible(false);
             device->getCursorControl()->setVisible(true);
         } else {
             {
@@ -250,20 +250,20 @@ void Game::run()
                 cameraPosition += ", ";
                 cameraPosition += position.Z;
                 cameraPosition += ")";
-                gui->cameraPosText->setText(cameraPosition.c_str());
+                gui->textCameraPos->setText(cameraPosition.c_str());
             }
 
             {
                 core::stringw cubeCount = _w("Cubes: ");
                 cubeCount += obstacleGenerator->getCubeCount();
-                gui->cubeCountText->setText(cubeCount.c_str());
+                gui->textCubeCount->setText(cubeCount.c_str());
             }
 
             camera->setInputReceiverEnabled(true);
 
             gui->setVisible(false);
-            gui->cameraPosText->setVisible(true);
-            gui->cubeCountText->setVisible(true);
+            gui->textCameraPos->setVisible(true);
+            gui->textCubeCount->setVisible(true);
             device->getCursorControl()->setVisible(false);
 
             obstacleGenerator->generate(camera->getPosition());

@@ -4,7 +4,7 @@
 #include "Config.h"
 #include "util.h"
 
-enum Stage{ MENU, SETTINGS, INGAME_MENU, TERMINATED };
+enum Stage{ MENU, SETTINGS, INGAME_MENU, CONTROL_SETTINGS, TERMINATED };
 
 class GUI
 {
@@ -22,32 +22,35 @@ public:
     gui::IGUIButton *buttonStart = nullptr;
     gui::IGUIButton *buttonSettings = nullptr;
     gui::IGUIButton *buttonToggleFullscreen = nullptr;
+    gui::IGUIButton *buttonControlSettings = nullptr;
     gui::IGUIButton *buttonResume = nullptr;
     gui::IGUIButton *buttonMenu = nullptr;
     gui::IGUIButton *buttonQuit = nullptr;
-    gui::IGUIComboBox *resolutionComboBox = nullptr;
-    gui::IGUIComboBox *colorDepthComboBox = nullptr;
-    gui::IGUIComboBox *languageComboBox = nullptr;
-    gui::IGUIStaticText *screenSizeText = nullptr;
-    gui::IGUIStaticText *cubeCountText = nullptr;
-    gui::IGUIStaticText *resolutionText = nullptr;
-    gui::IGUIStaticText *colorDepthText = nullptr;
-    gui::IGUIStaticText *languageText = nullptr;
-    gui::IGUIStaticText *cameraPosText = nullptr;
-    gui::IGUICheckBox *vsyncCheckBox = nullptr;
-    gui::IGUICheckBox *stencilBufferCheckBox = nullptr;
+    gui::IGUIComboBox *comboBoxResolution = nullptr;
+    gui::IGUIComboBox *comboBoxColorDepth = nullptr;
+    gui::IGUIComboBox *comboBoxLanguage = nullptr;
+    gui::IGUIStaticText *textScreenSize = nullptr;
+    gui::IGUIStaticText *textCubeCount = nullptr;
+    gui::IGUIStaticText *textResolution = nullptr;
+    gui::IGUIStaticText *textColorDepth = nullptr;
+    gui::IGUIStaticText *textLanguage = nullptr;
+    gui::IGUIStaticText *textCameraPos = nullptr;
+    gui::IGUICheckBox *checkBoxVSync = nullptr;
+    gui::IGUICheckBox *checkBoxStencilBuffer = nullptr;
 
 
     void recalculationButtonProportions();
     void initializeMenuGUI();
     void initializeInGameGUI();
     void initializeSettingsGUI();
+    void initializeControlSettingsGUI();
     void terminateGUI();
     void resizeGUI();
     void setVisible(bool state);
 private:
     void terminateMenuGUI();
     void terminateSettingsGUI();
+    void terminateControlSettingsGUI();
     void terminateInGameGUI();
 };
 
