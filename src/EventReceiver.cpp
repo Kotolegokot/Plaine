@@ -12,7 +12,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
 {
     if (event.EventType == EET_KEY_INPUT_EVENT) {
         PressedKeys[event.KeyInput.Key] = event.KeyInput.PressedDown;
-        return pause;
+        return escapePressed;
     } else if (event.EventType == EET_GUI_EVENT) {
         s32 id = event.GUIEvent.Caller->getID();
         switch (event.GUIEvent.EventType) {

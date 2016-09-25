@@ -211,7 +211,6 @@ void Game::run()
 {
     gui->initializeInGameGUI();
     initializeScene();
-    bool escapePressed = false;
     configuration.resolution = driver->getScreenSize();
 
     while (device->run())
@@ -259,19 +258,17 @@ void Game::run()
         }
 
         if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
-            if (!escapePressed) {
+            if (!eventReceiver->escapePressed) {
                 pause = !pause;
-                eventReceiver->pause = pause;
-                escapePressed = true;
+                eventReceiver->escapePressed = true;
             }
         } else if (!eventReceiver->IsKeyDown(KEY_ESCAPE)) {
-            escapePressed = false;
+            eventReceiver->escapePressed = false;
         }
         if (eventReceiver->resume)
         {
             eventReceiver->resume = false;
             pause = false;
-            eventReceiver->pause = pause;
         }
 
         if (device->isWindowActive()) {
