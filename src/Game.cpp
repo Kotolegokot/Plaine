@@ -53,7 +53,7 @@ bool Game::initializeDevice()
 void Game::initializeScene()
 {
     camera = sceneManager->addCameraSceneNode();
-    scene::ISceneNodeAnimator *cameraAnimator = new SceneNodeAnimatorCameraPlayer(35.f, 15.f, 15.f);
+    scene::ISceneNodeAnimator *cameraAnimator = new SceneNodeAnimatorCameraPlayer(35.f, 15.f, 15.f, configuration.controls);
     camera->setFarValue(1500);
     camera->addAnimator(cameraAnimator);
     cameraAnimator->drop();

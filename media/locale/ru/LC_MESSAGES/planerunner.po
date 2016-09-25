@@ -8,6 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-26 00:23+0300\n"
+"PO-Revision-Date: 2016-09-26 00:47+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -29,6 +30,7 @@ msgstr "Позиция камеры: ("
 
 #: src/Game.cpp:257
 msgid "Cubes: "
+msgstr "Кубы: "
 
 #: src/GUI.cpp:18
 msgid "Start"

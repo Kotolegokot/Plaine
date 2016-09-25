@@ -2,8 +2,8 @@
 
 using namespace irr;
 
-SceneNodeAnimatorCameraPlayer::SceneNodeAnimatorCameraPlayer(f32 forwardMoveSpeed, f32 lateralMoveSpeed, f32 verticalMoveSpeed) :
-    forwardMoveSpeed(forwardMoveSpeed), lateralMoveSpeed(lateralMoveSpeed), verticalMoveSpeed(verticalMoveSpeed)
+SceneNodeAnimatorCameraPlayer::SceneNodeAnimatorCameraPlayer(f32 forwardMoveSpeed, f32 lateralMoveSpeed, f32 verticalMoveSpeed, const struct Controls &controls) :
+    forwardMoveSpeed(forwardMoveSpeed), lateralMoveSpeed(lateralMoveSpeed), verticalMoveSpeed(verticalMoveSpeed), controls(controls)
 {
     for (u32 i = 0; i < KEY_KEY_CODES_COUNT; i++)
         PressedKeys[i] = false;
@@ -83,13 +83,13 @@ void SceneNodeAnimatorCameraPlayer::animateNode(scene::ISceneNode *node, u32 tim
     left.Z = t;
 
     // lateral movement
-    if (PressedKeys[KEY_KEY_A] && PressedKeys[KEY_KEY_D] ||
+    if (PressedKeys[controls.left] && PressedKeys[controls.right] ||
             PressedKeys[KEY_KEY_H] && PressedKeys[KEY_KEY_L]) {
         // nothing
-    } else if (PressedKeys[KEY_KEY_A] || PressedKeys[KEY_KEY_H]) {
+    } else if (PressedKeys[controls.left]) {
         if (lateralAcceleration < MAX_ACCELERATION)
             lateralAcceleration += timeDiff * 0.01f * MAX_ACCELERATION / 6;
-    } else if (PressedKeys[KEY_KEY_D] || PressedKeys[KEY_KEY_L]) {
+    } else if (PressedKeys[controls.right]) {
         if (lateralAcceleration > -MAX_ACCELERATION)
             lateralAcceleration -= timeDiff * 0.01f * MAX_ACCELERATION / 6;
     }
@@ -100,13 +100,12 @@ void SceneNodeAnimatorCameraPlayer::animateNode(scene::ISceneNode *node, u32 tim
         lateralAcceleration += timeDiff * 0.01f * MAX_ACCELERATION / 10;
 
     // vertical movement
-    if (PressedKeys[KEY_KEY_W] && PressedKeys[KEY_KEY_S] ||
-            PressedKeys[KEY_KEY_K] && PressedKeys[KEY_KEY_J]) {
+    if (PressedKeys[controls.up] && PressedKeys[controls.down]) {
         // nothing
-    } else if (PressedKeys[KEY_KEY_W] || PressedKeys[KEY_KEY_K]) {
+    } else if (PressedKeys[controls.up]) {
         if (verticalAcceleration < MAX_ACCELERATION)
             verticalAcceleration += timeDiff * 0.01f * MAX_ACCELERATION / 6;
-    } else if (PressedKeys[KEY_KEY_S] || PressedKeys[KEY_KEY_J]) {
+    } else if (PressedKeys[controls.down]) {
         if (verticalAcceleration > -MAX_ACCELERATION)
             verticalAcceleration -= timeDiff * 0.01f * MAX_ACCELERATION / 6;
     }
