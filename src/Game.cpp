@@ -67,7 +67,7 @@ void Game::initializeScene()
     light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, 20), video::SColorf(1, 1, 1), 100);
     light->setVisible(true);
 
-    obstacleGenerator = new ObstacleGenerator(device, camera->getFarValue());
+    obstacleGenerator = new ObstacleGenerator(device, camera->getFarValue(), 300);
 }
 
 void Game::error(const core::stringw &str) const

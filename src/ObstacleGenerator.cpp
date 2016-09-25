@@ -2,15 +2,15 @@
 
 using namespace irr;
 
-ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, f32 farValue) :
-    device(device), farValue(farValue) {}
+ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, f32 farValue, f32 buffer) :
+    device(device), farValue(farValue), buffer(buffer) {}
 
 void ObstacleGenerator::generate(const core::vector3df &playerPosition)
 {
     // The Z loop must be the first here, because the "nodes" deque must be sorted by nodes' Z coordinate
-    for (f32 z = preciseEdge(playerPosition.Z); z < preciseEdge(playerPosition.Z + farValue); z += STEP)
-        for (f32 x = preciseEdge(playerPosition.X - farValue); x < preciseEdge(playerPosition.X + farValue); x += STEP)
-            for (f32 y = preciseEdge(playerPosition.Y - farValue); y < preciseEdge(playerPosition.Y + farValue); y += STEP) {
+    for (f32 z = preciseEdge(playerPosition.Z); z < preciseEdge(playerPosition.Z + farValueWithBuffer()); z += STEP)
+        for (f32 x = preciseEdge(playerPosition.X - farValueWithBuffer()); x < preciseEdge(playerPosition.X + farValueWithBuffer()); x += STEP)
+            for (f32 y = preciseEdge(playerPosition.Y - farValueWithBuffer()); y < preciseEdge(playerPosition.Y + farValueWithBuffer()); y += STEP) {
                 bool insideX = false, insideY = false, insideZ = false;
                 insideX = x > generatedEdgeLeft && x < generatedEdgeRight;
                 insideY = y > generatedEdgeBottom && y < generatedEdgeTop;
@@ -24,11 +24,11 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                 }
             }
 
-    generatedEdgeLeft = preciseEdge(playerPosition.X - farValue);
-    generatedEdgeRight = preciseEdge(playerPosition.X + farValue);
-    generatedEdgeBottom = preciseEdge(playerPosition.Y - farValue);
-    generatedEdgeTop = preciseEdge(playerPosition.Y + farValue);
-    generatedEdgeZ = preciseEdge(playerPosition.Z + farValue);
+    generatedEdgeLeft = preciseEdge(playerPosition.X - farValueWithBuffer());
+    generatedEdgeRight = preciseEdge(playerPosition.X + farValueWithBuffer());
+    generatedEdgeBottom = preciseEdge(playerPosition.Y - farValueWithBuffer());
+    generatedEdgeTop = preciseEdge(playerPosition.Y + farValueWithBuffer());
+    generatedEdgeZ = preciseEdge(playerPosition.Z + farValueWithBuffer());
 
     removeLeftBehind(playerPosition.Z);
 }
@@ -49,6 +49,11 @@ void ObstacleGenerator::removeLeftBehind(f32 playerZ)
         }
 }
 
+f32 ObstacleGenerator::farValueWithBuffer() const
+{
+    return farValue + buffer;
+}
+
 void ObstacleGenerator::setFarValue(f32 value)
 {
     farValue = value;
@@ -57,4 +62,14 @@ void ObstacleGenerator::setFarValue(f32 value)
 f32 ObstacleGenerator::getFarValue() const
 {
     return farValue;
+}
+
+void ObstacleGenerator::setBuffer(f32 buffer)
+{
+    this->buffer = buffer;
+}
+
+f32 ObstacleGenerator::getBuffer() const
+{
+    return buffer;
 }
