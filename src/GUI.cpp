@@ -183,14 +183,14 @@ void GUI::setVisible(bool state)
 {
     switch (stage)
     {
-    case(MENU):
+    case (MENU):
         {
             buttonStart->setVisible(state);
             buttonMenu->setVisible(state);
             buttonQuit->setVisible(state);
             break;
         }
-        case(INGAME_MENU):
+    case (INGAME_MENU):
         {
             buttonResume->setVisible(state);
             buttonMenu->setVisible(state);
@@ -198,7 +198,7 @@ void GUI::setVisible(bool state)
             screenSizeText->setVisible(state);
             break;
         }
-        case(SETTINGS):
+    case (SETTINGS):
         {
             screenSizeText->setVisible(state);
             resolutionText->setVisible(state);
@@ -212,6 +212,8 @@ void GUI::setVisible(bool state)
             buttonQuit->setVisible(state);
             break;
         }
+    case (TERMINATED):
+        break;
     }
 }
 
@@ -219,7 +221,7 @@ void GUI::resizeGUI()
 {
     switch (stage)
     {
-    case(MENU):
+    case (MENU):
         {
             recalculationButtonProportions();
             buttonStart->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 3*buttonHeight - 30, configuration.resolution.Width - 20, configuration.resolution.Height - 2*buttonHeight - 30));
@@ -227,7 +229,7 @@ void GUI::resizeGUI()
             buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - buttonHeight - 10, configuration.resolution.Width - 20, configuration.resolution.Height - 10));
             break;
         }
-        case(INGAME_MENU):
+    case (INGAME_MENU):
         {
             recalculationButtonProportions();
             buttonResume->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 3*buttonHeight - 30, configuration.resolution.Width - 20, configuration.resolution.Height - 2*buttonHeight - 30));
@@ -235,7 +237,7 @@ void GUI::resizeGUI()
             buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - buttonHeight - 10, configuration.resolution.Width - 20, configuration.resolution.Height - 10));
             break;
         }
-        case(SETTINGS):
+    case (SETTINGS):
         {
             recalculationButtonProportions();
             resolutionText->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/2 - 30, configuration.resolution.Height - 6*buttonHeight - 60, configuration.resolution.Width - buttonWidth - 30, configuration.resolution.Height - 5*buttonHeight - 60));
@@ -257,5 +259,7 @@ void GUI::resizeGUI()
             resolutionComboBox->setSelected(2);
             break;
         }
+    case (TERMINATED):
+        break;
     }
 }
