@@ -166,10 +166,10 @@ void Game::menu()
                     configuration.language = "ru";
                     break;
                 case 2:
-                    configuration.language = "crh-latin";
+                    configuration.language = "crh";
                     break;
                 case 3:
-                    configuration.language = "crh-cyrillic";
+                    configuration.language = "crh@cyrillic";
                     break;
                 default:
                     configuration.language = "";

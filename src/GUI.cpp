@@ -127,9 +127,9 @@ void GUI::initializeSettingsGUI()
         languageComboBox->setSelected(0);
     else if (configuration.language == "ru")
         languageComboBox->setSelected(1);
-    else if (configuration.language == "crh-latin")
+    else if (configuration.language == "crh")
         languageComboBox->setSelected(2);
-    else if (configuration.language == "crh-cyrillic")
+    else if (configuration.language == "crh@cyrillic")
         languageComboBox->setSelected(3);
     buttonMenu = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 20, configuration.resolution.Height - 2*buttonHeight - 20, configuration.resolution.Width - 20, configuration.resolution.Height - buttonHeight - 20),
         0, ID_BUTTON_MENU, _wp("Back"), _wp("Exit to Main menu"));
