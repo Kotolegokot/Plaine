@@ -34,6 +34,7 @@ public:
     gui::IGUIStaticText *cameraPosText = nullptr;
 
 
+    void recalculationButtonProportions();
     void initializeMenuGUI();
     void initializeInGameGUI();
     void initializeSettingsGUI();
