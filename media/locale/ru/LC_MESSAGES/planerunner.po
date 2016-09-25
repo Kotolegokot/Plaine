@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-25 04:01+0300\n"
+"POT-Creation-Date: 2016-09-26 00:23+0300\n"
 "PO-Revision-Date: 2016-09-24 21:28+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -20,94 +20,106 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: src/Game.cpp:181 src/Game.cpp:221
+#: src/Game.cpp:189 src/Game.cpp:225
 msgid "Screen size: "
 msgstr "Размер экрана: "
 
-#: src/Game.cpp:239
+#: src/Game.cpp:245
 msgid "Camera position: ("
 msgstr "Позиция камеры: ("
 
-#: src/GUI.cpp:11
+#: src/Game.cpp:257
+msgid "Cubes: "
+msgstr ""
+
+#: src/GUI.cpp:18
 msgid "Start"
 msgstr "Старт"
 
-#: src/GUI.cpp:11
+#: src/GUI.cpp:18
 msgid "Start game"
 msgstr "Начать игру"
 
-#: src/GUI.cpp:13
+#: src/GUI.cpp:20
 msgid "Settings"
 msgstr "Настройки"
 
-#: src/GUI.cpp:13
+#: src/GUI.cpp:20
 msgid "Game settings"
 msgstr "Настройки игры"
 
-#: src/GUI.cpp:15 src/GUI.cpp:39 src/GUI.cpp:132
+#: src/GUI.cpp:22 src/GUI.cpp:46 src/GUI.cpp:145
 msgid "Quit"
 msgstr "Выход"
 
-#: src/GUI.cpp:15 src/GUI.cpp:39 src/GUI.cpp:132
+#: src/GUI.cpp:22 src/GUI.cpp:46 src/GUI.cpp:145
 msgid "Exit game"
 msgstr "Выход из игры"
 
-#: src/GUI.cpp:35
+#: src/GUI.cpp:42
 msgid "Resume"
 msgstr "Продолжить"
 
-#: src/GUI.cpp:35
+#: src/GUI.cpp:42
 msgid "Resume Game"
 msgstr "Продолжить игру"
 
-#: src/GUI.cpp:37
+#: src/GUI.cpp:44
 msgid "Menu"
 msgstr "Меню"
 
-#: src/GUI.cpp:37 src/GUI.cpp:130
+#: src/GUI.cpp:44 src/GUI.cpp:143
 msgid "Exit to Main menu"
 msgstr "Выход в главное меню"
 
-#: src/GUI.cpp:59
-msgid "Resolution:"
-msgstr "Разрешение:"
-
-#: src/GUI.cpp:67
-msgid " (Fullscreen)"
-msgstr " (Полноэкранный режим)"
-
-#: src/GUI.cpp:71
-msgid "Windowed"
-msgstr "Оконный режим"
-
-#: src/GUI.cpp:71
-msgid "To Windowed Mode"
-msgstr "В оконный режим"
-
-#: src/GUI.cpp:83 src/GUI.cpp:103 src/GUI.cpp:253
-msgid " (Custom)"
-msgstr " (пользовательское)"
-
-#: src/GUI.cpp:90 src/GUI.cpp:95
-msgid "Custom Resolution"
-msgstr "Пользовательское"
-
-#: src/GUI.cpp:107
-msgid "Fullscreen"
-msgstr "Полноэкранный режим"
-
-#: src/GUI.cpp:107
-msgid "To Fullscreen Mode"
-msgstr "В полноэкранный режим"
-
-#: src/GUI.cpp:110
-msgid "Color Depth:"
-msgstr "Глубина цвета:"
-
-#: src/GUI.cpp:121
+#: src/GUI.cpp:64
 msgid "Language:"
 msgstr "Язык:"
 
-#: src/GUI.cpp:130
+#: src/GUI.cpp:78
+msgid "Resolution:"
+msgstr "Разрешение:"
+
+#: src/GUI.cpp:86
+msgid " (Fullscreen)"
+msgstr " (Полноэкранный режим)"
+
+#: src/GUI.cpp:90
+msgid "Windowed"
+msgstr "Оконный режим"
+
+#: src/GUI.cpp:90
+msgid "To Windowed Mode"
+msgstr "В оконный режим"
+
+#: src/GUI.cpp:102 src/GUI.cpp:122 src/GUI.cpp:271
+msgid " (Custom)"
+msgstr " (пользовательское)"
+
+#: src/GUI.cpp:109 src/GUI.cpp:114
+msgid "Custom Resolution"
+msgstr "Пользовательское"
+
+#: src/GUI.cpp:126
+msgid "Fullscreen"
+msgstr "Полноэкранный режим"
+
+#: src/GUI.cpp:126
+msgid "To Fullscreen Mode"
+msgstr "В полноэкранный режим"
+
+#: src/GUI.cpp:129
+msgid "Color Depth:"
+msgstr "Глубина цвета:"
+
+#: src/GUI.cpp:140
+msgid "VSync"
+msgstr ""
+
+#: src/GUI.cpp:141
+msgid "Stencil Buffer"
+msgstr ""
+
+#: src/GUI.cpp:143
 msgid "Back"
 msgstr "Назад"
