@@ -60,12 +60,11 @@ void Game::initializeScene()
 {
     camera = sceneManager->addCameraSceneNode();
     scene::ISceneNodeAnimator *cameraAnimator = new SceneNodeAnimatorCameraPlayer(5.f, 5.f);
+    camera->setFarValue(2000);
     camera->addAnimator(cameraAnimator);
     cameraAnimator->drop();
 
-    light = sceneManager->addLightSceneNode(0, core::vector3df(.0f, .0f, .0f), video::SColor(video::ECP_RED));
-    floatingPieceOfShitNode = sceneManager->addCubeSceneNode(10.0f, 0, -1, core::vector3df(0, 0, 100));
-    floatingPieceOfShitNode2 = sceneManager->addSphereSceneNode(5.0f, 4, 0, -1, core::vector3df(50, 50, 80));
+    obstacleGenerator = new ObstacleGenerator(device, camera->getFarValue());
 }
 
 void Game::error(const core::stringw &str) const
@@ -270,6 +269,8 @@ void Game::run()
             eventReceiver->resume = false;
             pause = false;
         }
+
+        obstacleGenerator->generate(camera->getPosition());
 
         if (device->isWindowActive()) {
             driver->beginScene(true, true, video::SColor(0, 135, 206, 235));

@@ -9,6 +9,7 @@
 #include "Config.h"
 #include "GUI.h"
 #include "SceneNodeAnimatorCameraPlayer.h"
+#include "ObstacleGenerator.h"
 
 using namespace irr;
 
@@ -36,9 +37,7 @@ private:
 
     // Scene
     scene::ICameraSceneNode *camera = nullptr;
-    scene::ILightSceneNode *light = nullptr;
-    scene::ISceneNode *floatingPieceOfShitNode = nullptr;
-    scene::ISceneNode *floatingPieceOfShitNode2 = nullptr;
+    ObstacleGenerator *obstacleGenerator = nullptr;
 
     void error(const core::stringw &str) const;
     bool initializeDevice();
