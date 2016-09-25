@@ -33,6 +33,8 @@ public:
     gui::IGUIStaticText *colorDepthText = nullptr;
     gui::IGUIStaticText *languageText = nullptr;
     gui::IGUIStaticText *cameraPosText = nullptr;
+    gui::IGUICheckBox *vsyncCheckBox = nullptr;
+    gui::IGUICheckBox *stencilBufferCheckBox = nullptr;
 
 
     void recalculationButtonProportions();
