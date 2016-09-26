@@ -216,8 +216,8 @@ void Game::menu()
             }
         }
         if (eventReceiver->stage == CONTROL_SETTINGS){
-                if((eventReceiver->changingControlUp || eventReceiver->changingControlDown ||
-                    eventReceiver->changingControlLeft || eventReceiver->changingControlRight))
+                if((eventReceiver->changingControlUp || eventReceiver->changingControlLeft ||
+                    eventReceiver->changingControlDown || eventReceiver->changingControlRight))
                 {
                     //if something pressed after choice of key that user want to replace
                    if (eventReceiver->lastKey != KEY_KEY_CODES_COUNT)
@@ -230,15 +230,15 @@ void Game::menu()
                         {} //nothing
                         else if (eventReceiver->changingControlUp)
                             configuration.controls.up = eventReceiver->lastKey;
-                        else if (eventReceiver->changingControlDown)
-                            configuration.controls.down = eventReceiver->lastKey;
                         else if (eventReceiver->changingControlLeft)
                             configuration.controls.left = eventReceiver->lastKey;
+                        else if (eventReceiver->changingControlDown)
+                            configuration.controls.down = eventReceiver->lastKey;
                         else if (eventReceiver->changingControlRight)
                             configuration.controls.right = eventReceiver->lastKey;
                         eventReceiver->changingControlUp = false;
-                        eventReceiver->changingControlDown = false;
                         eventReceiver->changingControlLeft = false;
+                        eventReceiver->changingControlDown = false;
                         eventReceiver->changingControlRight = false;
                         eventReceiver->lastKey = KEY_KEY_CODES_COUNT;
                         gui->terminateGUI();
@@ -246,10 +246,10 @@ void Game::menu()
                    }
                    else if (eventReceiver->changingControlUp)
                         gui->buttonControlUp->setText(_wp("Press button"));
-                    else if (eventReceiver->changingControlDown)
-                        gui->buttonControlDown->setText(_wp("Press button"));
                     else if (eventReceiver->changingControlLeft)
                         gui->buttonControlLeft->setText(_wp("Press button"));
+                    else if (eventReceiver->changingControlDown)
+                        gui->buttonControlDown->setText(_wp("Press button"));
                     else if (eventReceiver->changingControlRight)
                         gui->buttonControlRight->setText(_wp("Press button"));
                 }
