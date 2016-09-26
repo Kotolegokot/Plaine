@@ -216,33 +216,26 @@ void Game::menu()
             }
         }
         if (eventReceiver->stage == CONTROL_SETTINGS){
-                if((eventReceiver->changingControlUp || eventReceiver->changingControlDown || eventReceiver->changingControlLeft || eventReceiver->changingControlRight))
+                if((eventReceiver->changingControlUp || eventReceiver->changingControlDown ||
+                    eventReceiver->changingControlLeft || eventReceiver->changingControlRight))
                 {
                     //if something pressed after choice of key that user want to replace
                    if (eventReceiver->lastKey != KEY_KEY_CODES_COUNT)
                    {
-                       if (eventReceiver->lastKey == KEY_ESCAPE)
+                       if ((eventReceiver->lastKey == KEY_ESCAPE) ||
+                           (eventReceiver->lastKey == configuration.controls.up) ||
+                           (eventReceiver->lastKey == configuration.controls.left) ||
+                           (eventReceiver->lastKey == configuration.controls.down) ||
+                           (eventReceiver->lastKey == configuration.controls.right))
                         {} //nothing
                         else if (eventReceiver->changingControlUp)
-                        {
                             configuration.controls.up = eventReceiver->lastKey;
-                            eventReceiver->changingControlUp = false;
-                        }
                         else if (eventReceiver->changingControlDown)
-                        {
                             configuration.controls.down = eventReceiver->lastKey;
-                            eventReceiver->changingControlDown = false;
-                        }
                         else if (eventReceiver->changingControlLeft)
-                        {
                             configuration.controls.left = eventReceiver->lastKey;
-                            eventReceiver->changingControlLeft = false;
-                        }
                         else if (eventReceiver->changingControlRight)
-                        {
                             configuration.controls.right = eventReceiver->lastKey;
-                            eventReceiver->changingControlRight = false;
-                        }
                         eventReceiver->changingControlUp = false;
                         eventReceiver->changingControlDown = false;
                         eventReceiver->changingControlLeft = false;

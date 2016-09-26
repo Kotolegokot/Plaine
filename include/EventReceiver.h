@@ -3,7 +3,7 @@
 
 #include <irrlicht.h>
 #include "util.h"
-#include "Gui.h"
+#include "GUI.h"
 
 using namespace irr;
 

@@ -136,3 +136,70 @@ f32 getRandomf(f32 min, f32 max)
 
     return distribution(engine);
 }
+
+const wchar_t* keyCodeToString(const EKEY_CODE &keyCode)
+{
+    if ((keyCode >= 48 && keyCode<= 57) || (keyCode >= 65 && keyCode<= 90))
+        return _wp(std::string(1, keyCode).c_str());
+    switch(keyCode)
+    {
+    case(KEY_UP):
+        return _wp("Up Arrow");
+        break;
+    case(KEY_LEFT):
+        return _wp("Left Arrow");
+        break;
+    case(KEY_DOWN):
+        return _wp("Down Arrow");
+        break;
+    case(KEY_RIGHT):
+        return _wp("Right Arrow");
+        break;
+    case(KEY_NUMPAD0):
+        return L"NUM 0";
+        break;
+    case(KEY_NUMPAD1):
+        return L"NUM 1";
+        break;
+    case(KEY_NUMPAD2):
+        return L"NUM 2";
+        break;
+    case(KEY_NUMPAD3):
+        return L"NUM 3";
+        break;
+    case(KEY_NUMPAD4):
+        return L"NUM 4";
+        break;
+    case(KEY_NUMPAD5):
+        return L"NUM 5";
+        break;
+    case(KEY_NUMPAD6):
+        return L"NUM 6";
+        break;
+    case(KEY_NUMPAD7):
+        return L"NUM 7";
+        break;
+    case(KEY_NUMPAD8):
+        return L"NUM 8";
+        break;
+    case(KEY_NUMPAD9):
+        return L"NUM 9";
+        break;
+    case(KEY_TAB):
+        return L"Tab";
+        break;
+    case(KEY_BACK):
+        return L"Back";
+        break;
+    case(KEY_SPACE):
+        return L"Space";
+        break;
+    case(KEY_SHIFT):
+        return L"Shift";
+        break;
+    case(KEY_CONTROL):
+        return L"Ctrl";
+        break;
+    }
+    return L"";
+}

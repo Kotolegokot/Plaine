@@ -22,6 +22,7 @@ size_t convert(const char *to, const char *from, char *outbuf, size_t outbuf_siz
 std::wstring utf8_to_wide(const std::string &input);
 core::stringw utf8_to_irrwide(const std::string &input);
 std::string wide_to_utf8(const std::wstring &input);
+const wchar_t* keyCodeToString(const EKEY_CODE &keyCode);
 void setLanguage(std::string language, bool replace);
 f32 getRandomf(f32 min = 0, f32 max = 1);
 
