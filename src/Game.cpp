@@ -226,7 +226,8 @@ void Game::menu()
                            (eventReceiver->lastKey == configuration.controls.up) ||
                            (eventReceiver->lastKey == configuration.controls.left) ||
                            (eventReceiver->lastKey == configuration.controls.down) ||
-                           (eventReceiver->lastKey == configuration.controls.right))
+                           (eventReceiver->lastKey == configuration.controls.right) ||
+                           keyCodeName(eventReceiver->lastKey) == "")
                         {} //nothing
                         else if (eventReceiver->changingControlUp)
                             configuration.controls.up = eventReceiver->lastKey;
