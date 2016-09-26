@@ -11,8 +11,13 @@ EventReceiver::EventReceiver()
 bool EventReceiver::OnEvent(const SEvent &event)
 {
     if (event.EventType == EET_KEY_INPUT_EVENT) {
-        PressedKeys[event.KeyInput.Key] = event.KeyInput.PressedDown;
-        return escapePressed;
+        if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight)) {
+            PressedKeys[event.KeyInput.Key] = event.KeyInput.PressedDown;
+            return escapePressed;
+        } else {
+            lastKey = event.KeyInput.Key;
+
+            }
     } else if (event.EventType == EET_GUI_EVENT) {
         s32 id = event.GUIEvent.Caller->getID();
         switch (event.GUIEvent.EventType) {
@@ -46,6 +51,30 @@ bool EventReceiver::OnEvent(const SEvent &event)
             else if (id == ID_BUTTON_CONTROL_SETTINGS) {
                 stage = CONTROL_SETTINGS;
                 toggleGUI = true;
+                return true;
+            }
+            else if (id == ID_BUTTON_CONTROL_UP) {
+                if(!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight)) {
+                    changingControlUp = true;
+                }
+                return true;
+            }
+            else if (id == ID_BUTTON_CONTROL_DOWN) {
+                if(!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight)) {
+                    changingControlDown = true;
+                }
+                return true;
+            }
+            else if (id == ID_BUTTON_CONTROL_LEFT) {
+                if(!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight)) {
+                    changingControlLeft = true;
+                }
+                return true;
+            }
+            else if (id == ID_BUTTON_CONTROL_RIGHT) {
+                if(!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight)) {
+                    changingControlRight = true;
+                }
                 return true;
             }
             break;

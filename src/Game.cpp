@@ -191,8 +191,44 @@ void Game::menu()
             }
         }
         if (eventReceiver->stage == CONTROL_SETTINGS){
+                if((eventReceiver->changingControlUp || eventReceiver->changingControlDown || eventReceiver->changingControlLeft || eventReceiver->changingControlRight))
+                {
+                   if (eventReceiver->lastKey != KEY_KEY_CODES_COUNT)
+                   {
+                        if (eventReceiver->changingControlUp)
+                        {
+                            configuration.controls.up = eventReceiver->lastKey;
+                            eventReceiver->changingControlUp = false;
+                        }
+                        else if (eventReceiver->changingControlDown)
+                        {
+                            configuration.controls.down = eventReceiver->lastKey;
+                            eventReceiver->changingControlDown = false;
+                        }
+                        else if (eventReceiver->changingControlLeft)
+                        {
+                            configuration.controls.left = eventReceiver->lastKey;
+                            eventReceiver->changingControlLeft = false;
+                        }
+                        else if (eventReceiver->changingControlRight)
+                        {
+                            configuration.controls.right = eventReceiver->lastKey;
+                            eventReceiver->changingControlRight = false;
+                        }
+                        eventReceiver->lastKey = KEY_KEY_CODES_COUNT;
+                        eventReceiver->toggleGUI = true;
+                   }
+                   else if (eventReceiver->changingControlUp)
+                        gui->buttonControlUp->setText(_wp("Press button"));
+                    else if (eventReceiver->changingControlDown)
+                        gui->buttonControlDown->setText(_wp("Press button"));
+                    else if (eventReceiver->changingControlLeft)
+                        gui->buttonControlLeft->setText(_wp("Press button"));
+                    else if (eventReceiver->changingControlRight)
+                        gui->buttonControlRight->setText(_wp("Press button"));
+                }
         }
-        if(configuration.resolution != driver->getScreenSize())
+        if (configuration.resolution != driver->getScreenSize())
         {
             configuration.resolution = driver->getScreenSize();
             gui->resizeGUI();
