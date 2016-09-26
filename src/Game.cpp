@@ -132,6 +132,11 @@ void Game::menu()
             case(CONTROL_SETTINGS):
                 gui->initializeControlSettingsGUI();
                 break;
+            case(INGAME_MENU):
+                gui->initializeInGameGUI();
+                break;
+            case(TERMINATED):
+                break;
             }
             eventReceiver->toggleGUI = false;
         }
