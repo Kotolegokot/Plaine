@@ -267,7 +267,7 @@ void Game::menu()
         gui->textScreenSize->setText(scrs.c_str());
         device->getCursorControl()->setVisible(true);
         if (device->isWindowActive()) {
-            driver->beginScene(true, true, video::SColor(0, 135, 206, 235));;
+            driver->beginScene(true, true, video::SColor(0, 10, 53, 64));;
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
@@ -350,7 +350,7 @@ void Game::run()
         }
 
         if (device->isWindowActive()) {
-            driver->beginScene(true, true, video::SColor(0, 135, 206, 235));
+            driver->beginScene(true, true, video::SColor(0, 10, 53, 64));
             if (!pause)
                 sceneManager->drawAll();
             guiEnvironment->drawAll();
