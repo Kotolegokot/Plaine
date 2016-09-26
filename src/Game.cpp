@@ -234,25 +234,26 @@ void Game::menu()
                     //if something pressed after choice of key that user want to replace
                    if (eventReceiver->lastKey != KEY_KEY_CODES_COUNT)
                    {
-                       if ((eventReceiver->lastKey == KEY_ESCAPE) ||
-                           keyCodeName(eventReceiver->lastKey) == "")
-                        {} //nothing
-                        if (eventReceiver->lastKey == configuration.controls.up)
-                            configuration.controls.up = KEY_KEY_CODES_COUNT;
-                        else if (eventReceiver->lastKey == configuration.controls.left)
-                            configuration.controls.left = KEY_KEY_CODES_COUNT;
-                        else if (eventReceiver->lastKey == configuration.controls.down)
-                            configuration.controls.down = KEY_KEY_CODES_COUNT;
-                        else if (eventReceiver->lastKey == configuration.controls.right)
-                            configuration.controls.right = KEY_KEY_CODES_COUNT;
-                        if (eventReceiver->changingControlUp)
-                            configuration.controls.up = eventReceiver->lastKey;
-                        else if (eventReceiver->changingControlLeft)
-                            configuration.controls.left = eventReceiver->lastKey;
-                        else if (eventReceiver->changingControlDown)
-                            configuration.controls.down = eventReceiver->lastKey;
-                        else if (eventReceiver->changingControlRight)
-                            configuration.controls.right = eventReceiver->lastKey;
+                       if ((eventReceiver->lastKey != KEY_ESCAPE) &&
+                           keyCodeName(eventReceiver->lastKey) != "")
+                        {
+                            if (eventReceiver->lastKey == configuration.controls.up)
+                                configuration.controls.up = KEY_KEY_CODES_COUNT;
+                            else if (eventReceiver->lastKey == configuration.controls.left)
+                                configuration.controls.left = KEY_KEY_CODES_COUNT;
+                            else if (eventReceiver->lastKey == configuration.controls.down)
+                                configuration.controls.down = KEY_KEY_CODES_COUNT;
+                            else if (eventReceiver->lastKey == configuration.controls.right)
+                                configuration.controls.right = KEY_KEY_CODES_COUNT;
+                            if (eventReceiver->changingControlUp)
+                                configuration.controls.up = eventReceiver->lastKey;
+                            else if (eventReceiver->changingControlLeft)
+                                configuration.controls.left = eventReceiver->lastKey;
+                            else if (eventReceiver->changingControlDown)
+                                configuration.controls.down = eventReceiver->lastKey;
+                            else if (eventReceiver->changingControlRight)
+                                configuration.controls.right = eventReceiver->lastKey;
+                        }
                         eventReceiver->changingControlUp = false;
                         eventReceiver->changingControlLeft = false;
                         eventReceiver->changingControlDown = false;
