@@ -28,6 +28,10 @@ bool EventReceiver::OnEvent(const SEvent &event)
             else if (id == ID_BUTTON_SETTINGS) {
                 stage = SETTINGS;
                 toggleGUI = true;
+                changingControlUp = false;
+                changingControlDown = false;
+                changingControlLeft = false;
+                changingControlRight = false;
                 return true;
             }
             else if (id == ID_BUTTON_RESUME) {
