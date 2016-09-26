@@ -53,7 +53,7 @@ bool Game::initializeDevice()
 void Game::initializeScene()
 {
     camera = sceneManager->addCameraSceneNode();
-    scene::ISceneNodeAnimator *cameraAnimator = new SceneNodeAnimatorCameraPlayer(35.f, 15.f, 15.f);
+    scene::ISceneNodeAnimator *cameraAnimator = new SceneNodeAnimatorCameraPlayer(35.f, 15.f, 15.f, configuration.controls);
     camera->setFarValue(1500);
     camera->addAnimator(cameraAnimator);
     cameraAnimator->drop();
@@ -91,21 +91,56 @@ void Game::menu()
     gui->initializeMenuGUI();
 
     while (device->run()) {
-        if (eventReceiver->start){
+        if (eventReceiver->stage == INGAME_MENU){
             gui->terminateGUI();
             run();
-            gui->initializeMenuGUI();
         }
-        if (eventReceiver->quit || eventReceiver->IsKeyDown(KEY_ESCAPE)){
+        if (eventReceiver->quit) {
             break;
         }
-        if (eventReceiver->settings){
-            if (gui->buttonStart != nullptr)
+        if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
+            if (!eventReceiver->escapePressed)
             {
-                gui->terminateGUI();
-                gui->buttonStart = nullptr;
-                gui->initializeSettingsGUI();
+                eventReceiver->escapePressed = true;
+                if (eventReceiver->stage == MENU)
+                    return;
+                else if (eventReceiver->stage == SETTINGS)
+                    {
+                        eventReceiver->stage = MENU;
+                        eventReceiver->toggleGUI = true;
+                    }
+                else if (eventReceiver->stage == CONTROL_SETTINGS)
+                    {
+                        eventReceiver->stage = SETTINGS;
+                        eventReceiver->toggleGUI = true;
+                    }
             }
+        }
+        else if (!eventReceiver->IsKeyDown(KEY_ESCAPE))
+            eventReceiver->escapePressed = false;
+        if (eventReceiver->toggleGUI)
+        {
+            gui->terminateGUI();
+            switch (eventReceiver->stage)
+            {
+            case(MENU):
+                gui->initializeMenuGUI();
+                break;
+            case(SETTINGS):
+                gui->initializeSettingsGUI();
+                break;
+            case(CONTROL_SETTINGS):
+                gui->initializeControlSettingsGUI();
+                break;
+            case(INGAME_MENU):
+                gui->initializeInGameGUI();
+                break;
+            case(TERMINATED):
+                break;
+            }
+            eventReceiver->toggleGUI = false;
+        }
+        if (eventReceiver->stage == SETTINGS){
             if (eventReceiver->toggleFullscreen)
             {
                 configuration.fullscreen = !configuration.fullscreen;
@@ -120,7 +155,7 @@ void Game::menu()
             }
             if(eventReceiver->toggleGraphicMode)
             {
-                switch (gui->resolutionComboBox->getSelected())
+                switch (gui->comboBoxResolution->getSelected())
                 {
                 case 0:
                         configuration.resolution = core::dimension2d<u32>(640, 480);
@@ -134,7 +169,7 @@ void Game::menu()
                         configuration.resizable = true;
                         break;
                 }
-                switch (gui->colorDepthComboBox->getSelected())
+                switch (gui->comboBoxColorDepth->getSelected())
                 {
                 case 0:
                     configuration.colordepth = 8;
@@ -146,8 +181,8 @@ void Game::menu()
                     configuration.colordepth = 32;
                     break;
                 }
-                configuration.vsync = gui->vsyncCheckBox->isChecked();
-                configuration.stencilBuffer = gui->stencilBufferCheckBox->isChecked();
+                configuration.vsync = gui->checkBoxVSync->isChecked();
+                configuration.stencilBuffer = gui->checkBoxStencilBuffer->isChecked();
                 terminate();
                 if (!initializeDevice())
                     return;
@@ -157,7 +192,7 @@ void Game::menu()
             }
             if (eventReceiver->toggleLanguage)
             {
-                switch (gui->languageComboBox->getSelected())
+                switch (gui->comboBoxLanguage->getSelected())
                 {
                 case 0:
                     configuration.language = "en";
@@ -176,29 +211,75 @@ void Game::menu()
                 }
                 eventReceiver->toggleLanguage = false;
                 setLanguage(configuration.language, true);
-                gui->terminateGUI();
-                eventReceiver->settings = false;
-                gui->initializeMenuGUI();
+                eventReceiver->stage = MENU;
+                eventReceiver->toggleGUI = true;
             }
         }
-        else if (gui->buttonStart == nullptr)
-            {
-                gui->terminateGUI();
-                gui->initializeMenuGUI();
-            }
-        core::stringw scrs = _w("Screen size: ");
-        scrs += configuration.resolution.Width;
-        scrs += "x";
-        scrs += configuration.resolution.Height;
-        gui->screenSizeText->setText(scrs.c_str());
-        if(configuration.resolution != driver->getScreenSize())
+        if (eventReceiver->stage == CONTROL_SETTINGS){
+                if (eventReceiver->defaultControls)
+                {
+                    configuration.controls = Controls();
+                    eventReceiver->changingControlUp = false;
+                    eventReceiver->changingControlLeft = false;
+                    eventReceiver->changingControlDown = false;
+                    eventReceiver->changingControlRight = false;
+                    eventReceiver->defaultControls = false;
+                    eventReceiver->lastKey = KEY_KEY_CODES_COUNT;
+                    gui->terminateGUI();
+                    gui->initializeControlSettingsGUI();
+                }
+                if((eventReceiver->changingControlUp || eventReceiver->changingControlLeft ||
+                    eventReceiver->changingControlDown || eventReceiver->changingControlRight))
+                {
+                    //if something pressed after choice of key that user want to replace
+                   if (eventReceiver->lastKey != KEY_KEY_CODES_COUNT)
+                   {
+                       if ((eventReceiver->lastKey == KEY_ESCAPE) ||
+                           (eventReceiver->lastKey == configuration.controls.up) ||
+                           (eventReceiver->lastKey == configuration.controls.left) ||
+                           (eventReceiver->lastKey == configuration.controls.down) ||
+                           (eventReceiver->lastKey == configuration.controls.right) ||
+                           keyCodeName(eventReceiver->lastKey) == "")
+                        {} //nothing
+                        else if (eventReceiver->changingControlUp)
+                            configuration.controls.up = eventReceiver->lastKey;
+                        else if (eventReceiver->changingControlLeft)
+                            configuration.controls.left = eventReceiver->lastKey;
+                        else if (eventReceiver->changingControlDown)
+                            configuration.controls.down = eventReceiver->lastKey;
+                        else if (eventReceiver->changingControlRight)
+                            configuration.controls.right = eventReceiver->lastKey;
+                        eventReceiver->changingControlUp = false;
+                        eventReceiver->changingControlLeft = false;
+                        eventReceiver->changingControlDown = false;
+                        eventReceiver->changingControlRight = false;
+                        eventReceiver->lastKey = KEY_KEY_CODES_COUNT;
+                        gui->terminateGUI();
+                        gui->initializeControlSettingsGUI();
+                   }
+                   else if (eventReceiver->changingControlUp)
+                        gui->buttonControlUp->setText(_wp("Press button"));
+                    else if (eventReceiver->changingControlLeft)
+                        gui->buttonControlLeft->setText(_wp("Press button"));
+                    else if (eventReceiver->changingControlDown)
+                        gui->buttonControlDown->setText(_wp("Press button"));
+                    else if (eventReceiver->changingControlRight)
+                        gui->buttonControlRight->setText(_wp("Press button"));
+                }
+        }
+        if (configuration.resolution != driver->getScreenSize())
         {
             configuration.resolution = driver->getScreenSize();
             gui->resizeGUI();
         }
+        core::stringw scrs = _w("Screen size: ");
+        scrs += configuration.resolution.Width;
+        scrs += "x";
+        scrs += configuration.resolution.Height;
+        gui->textScreenSize->setText(scrs.c_str());
         device->getCursorControl()->setVisible(true);
         if (device->isWindowActive()) {
-            driver->beginScene(true, true, video::SColor(0, 135, 206, 235));;
+            driver->beginScene(true, true, video::SColor(0, 10, 53, 64));;
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
@@ -215,10 +296,7 @@ void Game::run()
 
     while (device->run())
     {
-        if (eventReceiver->quit)
-            break;
-        if (!eventReceiver->start){
-            gui->terminateGUI();
+        if (eventReceiver->stage == MENU || eventReceiver->quit){
             break;
         }
         if (pause) {
@@ -226,7 +304,7 @@ void Game::run()
             scrs += configuration.resolution.Width;
             scrs += "x";
             scrs += configuration.resolution.Height;
-            gui->screenSizeText->setText(scrs.c_str());
+            gui->textScreenSize->setText(scrs.c_str());
 
             if (configuration.resolution != driver->getScreenSize())
             {
@@ -237,8 +315,8 @@ void Game::run()
             camera->setInputReceiverEnabled(false);
 
             gui->setVisible(true);
-            gui->cameraPosText->setVisible(false);
-            gui->cubeCountText->setVisible(false);
+            gui->textCameraPos->setVisible(false);
+            gui->textCubeCount->setVisible(false);
             device->getCursorControl()->setVisible(true);
         } else {
             {
@@ -250,20 +328,20 @@ void Game::run()
                 cameraPosition += ", ";
                 cameraPosition += position.Z;
                 cameraPosition += ")";
-                gui->cameraPosText->setText(cameraPosition.c_str());
+                gui->textCameraPos->setText(cameraPosition.c_str());
             }
 
             {
                 core::stringw cubeCount = _w("Cubes: ");
                 cubeCount += obstacleGenerator->getCubeCount();
-                gui->cubeCountText->setText(cubeCount.c_str());
+                gui->textCubeCount->setText(cubeCount.c_str());
             }
 
             camera->setInputReceiverEnabled(true);
 
             gui->setVisible(false);
-            gui->cameraPosText->setVisible(true);
-            gui->cubeCountText->setVisible(true);
+            gui->textCameraPos->setVisible(true);
+            gui->textCubeCount->setVisible(true);
             device->getCursorControl()->setVisible(false);
 
             obstacleGenerator->generate(camera->getPosition());
@@ -284,7 +362,7 @@ void Game::run()
         }
 
         if (device->isWindowActive()) {
-            driver->beginScene(true, true, video::SColor(0, 135, 206, 235));
+            driver->beginScene(true, true, video::SColor(0, 10, 53, 64));
             if (!pause)
                 sceneManager->drawAll();
             guiEnvironment->drawAll();

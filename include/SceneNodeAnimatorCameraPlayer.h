@@ -2,6 +2,7 @@
 #define SCENENODEANIMATORCAMERAPLAYER_H
 
 #include <irrlicht.h>
+#include "Config.h"
 
 using namespace irr;
 
@@ -9,7 +10,7 @@ using namespace irr;
 class SceneNodeAnimatorCameraPlayer : public scene::ISceneNodeAnimator
 {
 public:
-    SceneNodeAnimatorCameraPlayer(f32 forwardMoveSpeed = 0, f32 lateralMoveSpeed = 0, f32 verticalMoveSpeed = 0);
+    SceneNodeAnimatorCameraPlayer(f32 forwardMoveSpeed = 0, f32 lateralMoveSpeed = 0, f32 verticalMoveSpeed = 0, const struct Controls &controls = Controls());
 
     f32 getForwardMoveSpeed() const;
     void setForwardMoveSpeed(f32 moveSpeed);
@@ -32,6 +33,8 @@ private:
 
     bool PressedKeys[KEY_KEY_CODES_COUNT];
     bool firstUpdate = true;
+
+    Controls controls;
 };
 
 #endif // SCENENODEANIMATORCAMERAPLAYER_H

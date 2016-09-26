@@ -136,3 +136,86 @@ f32 getRandomf(f32 min, f32 max)
 
     return distribution(engine);
 }
+
+core::stringw keyCodeName(const EKEY_CODE &keyCode)
+{
+    if ((keyCode >= 48 && keyCode<= 57) || (keyCode >= 65 && keyCode <= 90)) {
+        core::stringw str;
+        str.append(keyCode);
+        return str;
+    }
+    switch(keyCode)
+    {
+    case(KEY_UP):
+        return _w("Up Arrow");
+        break;
+    case(KEY_LEFT):
+        return _w("Left Arrow");
+        break;
+    case(KEY_DOWN):
+        return _w("Down Arrow");
+        break;
+    case(KEY_RIGHT):
+        return _w("Right Arrow");
+        break;
+    case(KEY_NUMPAD0):
+        return L"NUM 0";
+        break;
+    case(KEY_NUMPAD1):
+        return L"NUM 1";
+        break;
+    case(KEY_NUMPAD2):
+        return L"NUM 2";
+        break;
+    case(KEY_NUMPAD3):
+        return L"NUM 3";
+        break;
+    case(KEY_NUMPAD4):
+        return L"NUM 4";
+        break;
+    case(KEY_NUMPAD5):
+        return L"NUM 5";
+        break;
+    case(KEY_NUMPAD6):
+        return L"NUM 6";
+        break;
+    case(KEY_NUMPAD7):
+        return L"NUM 7";
+        break;
+    case(KEY_NUMPAD8):
+        return L"NUM 8";
+        break;
+    case(KEY_NUMPAD9):
+        return L"NUM 9";
+        break;
+    case(KEY_TAB):
+        return L"Tab";
+        break;
+    case(KEY_BACK):
+        return L"Back";
+        break;
+    case(KEY_SPACE):
+        return _w("Space");
+        break;
+    case(KEY_LSHIFT):
+        return L"Left Shift";
+        break;
+    case(KEY_LCONTROL):
+        return L"Left Ctrl";
+        break;
+    case(KEY_RSHIFT):
+        return L"Right Shift";
+        break;
+    case(KEY_RCONTROL):
+        return L"Right Ctrl";
+        break;
+    case(KEY_LMENU):
+        return L"Alt";
+        break;
+    case(KEY_RMENU):
+        return L"Right Alt";
+        break;
+    default:
+        return L"";
+    }
+}

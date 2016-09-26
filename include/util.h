@@ -22,6 +22,7 @@ size_t convert(const char *to, const char *from, char *outbuf, size_t outbuf_siz
 std::wstring utf8_to_wide(const std::string &input);
 core::stringw utf8_to_irrwide(const std::string &input);
 std::string wide_to_utf8(const std::wstring &input);
+core::stringw keyCodeName(const EKEY_CODE &keyCode);
 void setLanguage(std::string language, bool replace);
 f32 getRandomf(f32 min = 0, f32 max = 1);
 
@@ -32,6 +33,12 @@ enum { ID_BUTTON_QUIT,
     ID_BUTTON_MENU,
     ID_BUTTON_TOGGLE_FULLSCREEN,
     ID_BUTTON_RESUME,
+    ID_BUTTON_CONTROL_SETTINGS,
+    ID_BUTTON_CONTROL_UP,
+    ID_BUTTON_CONTROL_LEFT,
+    ID_BUTTON_CONTROL_DOWN,
+    ID_BUTTON_CONTROL_RIGHT,
+    ID_BUTTON_DEFUALT_CONTROLS,
     ID_COMBOBOX_RESOLUTION,
     ID_COMBOBOX_COLORDEPTH,
     ID_COMBOBOX_LANGUAGE,
