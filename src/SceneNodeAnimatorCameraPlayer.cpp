@@ -83,8 +83,7 @@ void SceneNodeAnimatorCameraPlayer::animateNode(scene::ISceneNode *node, u32 tim
     left.Z = t;
 
     // lateral movement
-    if (PressedKeys[controls.left] && PressedKeys[controls.right] ||
-            PressedKeys[KEY_KEY_H] && PressedKeys[KEY_KEY_L]) {
+    if (PressedKeys[controls.left] && PressedKeys[controls.right]){
         // nothing
     } else if (PressedKeys[controls.left]) {
         if (lateralAcceleration < MAX_ACCELERATION)
