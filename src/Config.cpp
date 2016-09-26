@@ -3,7 +3,7 @@
 using namespace irr;
 
 struct Item {
-    enum ItemType { INT, FLOAT, STRING, KEYWORD, OP_EQUAL, OP_COMMA, NEWLINE };
+    enum ItemType { INT, FLOAT, STRING, KEYWORD, OP_EQUAL, OP_COMMA, OP_COLON, NEWLINE };
 
     Item(ItemType type) :
         type(type) {}
@@ -58,6 +58,8 @@ struct Item {
             return "'='";
         case OP_COMMA:
             return "comma";
+        case OP_COLON:
+            return ":";
         case NEWLINE:
             return "new line or end of file";
         default:
@@ -93,6 +95,8 @@ std::vector<Item> parse(const std::string &filename)
                 items.push_back(Item(Item::OP_EQUAL));
             } else if (c == ',') {
                 items.push_back(Item(Item::OP_COMMA));
+            } else if (c == ':') {
+                items.push_back(Item(Item::OP_COLON));
             } else if (isspace(c)) {
                 // nothing
             } else if (c == '"') {
@@ -204,7 +208,7 @@ ConfigData Config::loadConfig(const std::string &filename)
     } */
 
     bool goToNextNEWLINE = false;
-    enum { NONE, RESOLUTION, FULLSCREEN, COLORDEPTH, LANGUAGE, RESIZABLE, VSYNC, STENCILBUFFER } state = NONE;
+    enum { NONE, RESOLUTION, FULLSCREEN, COLORDEPTH, LANGUAGE, RESIZABLE, VSYNC, STENCILBUFFER, CONTROLS, CONTROL_UP, CONTROL_LEFT, CONTROL_DOWN, CONTROL_RIGHT } state = NONE;
 
     for (std::vector<Item>::const_iterator i = items.cbegin(); i != items.cend(); ++i) {
         if (goToNextNEWLINE) {
@@ -228,6 +232,16 @@ ConfigData Config::loadConfig(const std::string &filename)
                         state = VSYNC;
                     else if ((*i).getString() == "stencilbuffer")
                         state = STENCILBUFFER;
+                    else if ((*i).getString() == "controls")
+                        state = CONTROLS;
+                    else if ((*i).getString() == "up")
+                        state = CONTROL_UP;
+                    else if ((*i).getString() == "left")
+                        state = CONTROL_LEFT;
+                    else if ((*i).getString() == "down")
+                        state = CONTROL_DOWN;
+                    else if ((*i).getString() == "right")
+                        state = CONTROL_RIGHT;
                 } else {
                     error(Item::KEYWORD, (*i).type);
                     goToNextNEWLINE = true;
@@ -275,7 +289,7 @@ ConfigData Config::loadConfig(const std::string &filename)
 
                 EXPECT(Item::INT);
                 if ((*i).getInt() != 8 && (*i).getInt() != 16 && (*i).getInt() != 32) {
-                    std::cerr << "Error: 16 or 32 expected, but " << Item::typeToString((*i).type) << " found." << std::endl;
+                    std::cerr << "Error: 8, 16 or 32 expected, but " << Item::typeToString((*i).type) << " found." << std::endl;
                     goToNextNEWLINE = true;
                     break;
                 }
@@ -353,6 +367,63 @@ ConfigData Config::loadConfig(const std::string &filename)
                 state = NONE;
                 break;
             }
+            case CONTROLS: {
+                EXPECT(Item::OP_COLON);
+                ++i;
+                EXPECT(Item::NEWLINE);
+                ++i;
+
+                state = NONE;
+                break;
+            }
+            case CONTROL_UP: {
+                EXPECT(Item::OP_EQUAL);
+                ++i;
+
+                EXPECT(Item::INT);
+                data.controls.up = (EKEY_CODE)(*i).getInt();
+                ++i;
+                EXPECT(Item::NEWLINE);
+
+                state = NONE;
+                break;
+            }
+            case CONTROL_LEFT: {
+                EXPECT(Item::OP_EQUAL);
+                ++i;
+
+                EXPECT(Item::INT);
+                data.controls.left = (EKEY_CODE)(*i).getInt();
+                ++i;
+                EXPECT(Item::NEWLINE);
+
+                state = NONE;
+                break;
+            }
+            case CONTROL_DOWN: {
+                EXPECT(Item::OP_EQUAL);
+                ++i;
+
+                EXPECT(Item::INT);
+                data.controls.down = (EKEY_CODE)(*i).getInt();
+                ++i;
+                EXPECT(Item::NEWLINE);
+
+                state = NONE;
+                break;
+            }
+            case CONTROL_RIGHT: {
+                EXPECT(Item::OP_EQUAL);
+                ++i;
+
+                EXPECT(Item::INT);
+                data.controls.right = (EKEY_CODE)(*i).getInt();
+                ++i;
+                EXPECT(Item::NEWLINE);
+
+                state = NONE;
+                break;
+            }
             }
         }
     }
@@ -375,4 +446,9 @@ void Config::saveConfig(const std::string &filename, const ConfigData &data)
     outputFile << "resizable=" << (data.resizable ? "on" : "off") << std::endl;
     outputFile << "vsync=" << (data.vsync ? "on" : "off") << std::endl;
     outputFile << "stencilbuffer=" << (data.stencilBuffer ? "on" : "off") << std::endl;
+    outputFile << "controls:" << std::endl;
+    outputFile << "    up=" << data.controls.up << std::endl;
+    outputFile << "    left=" << data.controls.left << std::endl;
+    outputFile << "    down=" << data.controls.down << std::endl;
+    outputFile << "    right=" << data.controls.right << std::endl;
 }

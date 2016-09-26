@@ -209,6 +209,11 @@ core::stringw keyCodeName(const EKEY_CODE &keyCode)
     case(KEY_RCONTROL):
         return L"Right Ctrl";
         break;
+    case(KEY_LMENU):
+        return L"Alt";
+        break;
+    case(KEY_RMENU):
+        break;
     default:
         return L"";
     }
