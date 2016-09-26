@@ -235,13 +235,17 @@ void Game::menu()
                    if (eventReceiver->lastKey != KEY_KEY_CODES_COUNT)
                    {
                        if ((eventReceiver->lastKey == KEY_ESCAPE) ||
-                           (eventReceiver->lastKey == configuration.controls.up) ||
-                           (eventReceiver->lastKey == configuration.controls.left) ||
-                           (eventReceiver->lastKey == configuration.controls.down) ||
-                           (eventReceiver->lastKey == configuration.controls.right) ||
                            keyCodeName(eventReceiver->lastKey) == "")
                         {} //nothing
-                        else if (eventReceiver->changingControlUp)
+                        if (eventReceiver->lastKey == configuration.controls.up)
+                            configuration.controls.up = KEY_KEY_CODES_COUNT;
+                        else if (eventReceiver->lastKey == configuration.controls.left)
+                            configuration.controls.left = KEY_KEY_CODES_COUNT;
+                        else if (eventReceiver->lastKey == configuration.controls.down)
+                            configuration.controls.down = KEY_KEY_CODES_COUNT;
+                        else if (eventReceiver->lastKey == configuration.controls.right)
+                            configuration.controls.right = KEY_KEY_CODES_COUNT;
+                        if (eventReceiver->changingControlUp)
                             configuration.controls.up = eventReceiver->lastKey;
                         else if (eventReceiver->changingControlLeft)
                             configuration.controls.left = eventReceiver->lastKey;
