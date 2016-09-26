@@ -190,6 +190,8 @@ void Game::menu()
                 eventReceiver->toggleGUI = true;
             }
         }
+        if (eventReceiver->stage == CONTROL_SETTINGS){
+        }
         if(configuration.resolution != driver->getScreenSize())
         {
             configuration.resolution = driver->getScreenSize();

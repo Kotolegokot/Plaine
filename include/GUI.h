@@ -23,6 +23,10 @@ public:
     gui::IGUIButton *buttonSettings = nullptr;
     gui::IGUIButton *buttonToggleFullscreen = nullptr;
     gui::IGUIButton *buttonControlSettings = nullptr;
+    gui::IGUIButton *buttonControlUp = nullptr;
+    gui::IGUIButton *buttonControlDown = nullptr;
+    gui::IGUIButton *buttonControlLeft = nullptr;
+    gui::IGUIButton *buttonControlRight = nullptr;
     gui::IGUIButton *buttonResume = nullptr;
     gui::IGUIButton *buttonMenu = nullptr;
     gui::IGUIButton *buttonQuit = nullptr;
@@ -35,6 +39,10 @@ public:
     gui::IGUIStaticText *textColorDepth = nullptr;
     gui::IGUIStaticText *textLanguage = nullptr;
     gui::IGUIStaticText *textCameraPos = nullptr;
+    gui::IGUIStaticText *textControlUp = nullptr;
+    gui::IGUIStaticText *textControlDown = nullptr;
+    gui::IGUIStaticText *textControlLeft = nullptr;
+    gui::IGUIStaticText *textControlRight = nullptr;
     gui::IGUICheckBox *checkBoxVSync = nullptr;
     gui::IGUICheckBox *checkBoxStencilBuffer = nullptr;
 
