@@ -16,7 +16,6 @@ bool EventReceiver::OnEvent(const SEvent &event)
             return escapePressed;
         } else {
             lastKey = event.KeyInput.Key;
-
             }
     } else if (event.EventType == EET_GUI_EVENT) {
         s32 id = event.GUIEvent.Caller->getID();

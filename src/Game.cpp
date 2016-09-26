@@ -95,9 +95,29 @@ void Game::menu()
             gui->terminateGUI();
             run();
         }
-        if (eventReceiver->quit || eventReceiver->IsKeyDown(KEY_ESCAPE)){
+        if (eventReceiver->quit) {
             break;
         }
+        if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
+            if (!eventReceiver->escapePressed)
+            {
+                eventReceiver->escapePressed = true;
+                if (eventReceiver->stage == MENU)
+                    return;
+                else if (eventReceiver->stage == SETTINGS)
+                    {
+                        eventReceiver->stage = MENU;
+                        eventReceiver->toggleGUI = true;
+                    }
+                else if (eventReceiver->stage == CONTROL_SETTINGS)
+                    {
+                        eventReceiver->stage = SETTINGS;
+                        eventReceiver->toggleGUI = true;
+                    }
+            }
+        }
+        else if (!eventReceiver->IsKeyDown(KEY_ESCAPE))
+            eventReceiver->escapePressed = false;
         if (eventReceiver->toggleGUI)
         {
             gui->terminateGUI();
@@ -193,9 +213,12 @@ void Game::menu()
         if (eventReceiver->stage == CONTROL_SETTINGS){
                 if((eventReceiver->changingControlUp || eventReceiver->changingControlDown || eventReceiver->changingControlLeft || eventReceiver->changingControlRight))
                 {
+                    //if something pressed after choice of key that user want to replace
                    if (eventReceiver->lastKey != KEY_KEY_CODES_COUNT)
                    {
-                        if (eventReceiver->changingControlUp)
+                       if (eventReceiver->lastKey == KEY_ESCAPE)
+                        {} //nothing
+                        else if (eventReceiver->changingControlUp)
                         {
                             configuration.controls.up = eventReceiver->lastKey;
                             eventReceiver->changingControlUp = false;
@@ -215,8 +238,13 @@ void Game::menu()
                             configuration.controls.right = eventReceiver->lastKey;
                             eventReceiver->changingControlRight = false;
                         }
+                        eventReceiver->changingControlUp = false;
+                        eventReceiver->changingControlDown = false;
+                        eventReceiver->changingControlLeft = false;
+                        eventReceiver->changingControlRight = false;
                         eventReceiver->lastKey = KEY_KEY_CODES_COUNT;
-                        eventReceiver->toggleGUI = true;
+                        gui->terminateGUI();
+                        gui->initializeControlSettingsGUI();
                    }
                    else if (eventReceiver->changingControlUp)
                         gui->buttonControlUp->setText(_wp("Press button"));
