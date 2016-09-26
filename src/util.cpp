@@ -213,6 +213,7 @@ core::stringw keyCodeName(const EKEY_CODE &keyCode)
         return L"Alt";
         break;
     case(KEY_RMENU):
+        return L"Right Alt";
         break;
     default:
         return L"";
