@@ -197,11 +197,17 @@ core::stringw keyCodeName(const EKEY_CODE &keyCode)
     case(KEY_SPACE):
         return _w("Space");
         break;
-    case(KEY_SHIFT):
-        return L"Shift";
+    case(KEY_LSHIFT):
+        return L"Left Shift";
         break;
-    case(KEY_CONTROL):
-        return L"Ctrl";
+    case(KEY_LCONTROL):
+        return L"Left Ctrl";
+        break;
+    case(KEY_RSHIFT):
+        return L"Right Shift";
+        break;
+    case(KEY_RCONTROL):
+        return L"Right Ctrl";
         break;
     default:
         return L"";
