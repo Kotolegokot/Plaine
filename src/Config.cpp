@@ -371,7 +371,6 @@ ConfigData Config::loadConfig(const std::string &filename)
                 EXPECT(Item::OP_COLON);
                 ++i;
                 EXPECT(Item::NEWLINE);
-                ++i;
 
                 state = NONE;
                 break;
