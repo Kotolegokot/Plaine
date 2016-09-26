@@ -27,6 +27,7 @@ public:
     gui::IGUIButton *buttonControlDown = nullptr;
     gui::IGUIButton *buttonControlLeft = nullptr;
     gui::IGUIButton *buttonControlRight = nullptr;
+    gui::IGUIButton *buttonDefultControls = nullptr;
     gui::IGUIButton *buttonResume = nullptr;
     gui::IGUIButton *buttonMenu = nullptr;
     gui::IGUIButton *buttonQuit = nullptr;

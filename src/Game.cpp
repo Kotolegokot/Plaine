@@ -216,6 +216,18 @@ void Game::menu()
             }
         }
         if (eventReceiver->stage == CONTROL_SETTINGS){
+                if (eventReceiver->defaultControls)
+                {
+                    configuration.controls = Controls();
+                    eventReceiver->changingControlUp = false;
+                    eventReceiver->changingControlLeft = false;
+                    eventReceiver->changingControlDown = false;
+                    eventReceiver->changingControlRight = false;
+                    eventReceiver->defaultControls = false;
+                    eventReceiver->lastKey = KEY_KEY_CODES_COUNT;
+                    gui->terminateGUI();
+                    gui->initializeControlSettingsGUI();
+                }
                 if((eventReceiver->changingControlUp || eventReceiver->changingControlLeft ||
                     eventReceiver->changingControlDown || eventReceiver->changingControlRight))
                 {

@@ -80,6 +80,10 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 }
                 return true;
             }
+            else if (id == ID_BUTTON_DEFUALT_CONTROLS){
+                defaultControls = true;
+                return true;
+            }
             break;
         case gui::EGET_COMBO_BOX_CHANGED:
             if (id == ID_COMBOBOX_LANGUAGE)
