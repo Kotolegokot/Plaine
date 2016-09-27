@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-28 02:34+0300\n"
+"POT-Creation-Date: 2016-09-28 02:47+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,19 +17,19 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/Game.cpp:288 src/Game.cpp:290 src/Game.cpp:292 src/Game.cpp:294
-msgid "Press button"
+#: src/Game.cpp:294 src/Game.cpp:296 src/Game.cpp:298 src/Game.cpp:300
+msgid "Press a key"
 msgstr ""
 
-#: src/Game.cpp:302 src/Game.cpp:332
+#: src/Game.cpp:308 src/Game.cpp:338
 msgid "Screen size: "
 msgstr ""
 
-#: src/Game.cpp:352
+#: src/Game.cpp:358
 msgid "Camera position: ("
 msgstr ""
 
-#: src/Game.cpp:364
+#: src/Game.cpp:370
 msgid "Cubes: "
 msgstr ""
 
