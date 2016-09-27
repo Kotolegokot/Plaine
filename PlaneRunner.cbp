@@ -90,6 +90,7 @@
 		<Unit filename="include/EventReceiver.h" />
 		<Unit filename="include/GUI.h" />
 		<Unit filename="include/Game.h" />
+		<Unit filename="include/KinematicMotionState.h" />
 		<Unit filename="include/MotionState.h" />
 		<Unit filename="include/ObstacleGenerator.h" />
 		<Unit filename="include/SceneNodeAnimatorCameraPlayer.h" />
@@ -100,6 +101,7 @@
 		<Unit filename="src/EventReceiver.cpp" />
 		<Unit filename="src/GUI.cpp" />
 		<Unit filename="src/Game.cpp" />
+		<Unit filename="src/KinematicMotionState.cpp" />
 		<Unit filename="src/MotionState.cpp" />
 		<Unit filename="src/ObstacleGenerator.cpp" />
 		<Unit filename="src/SceneNodeAnimatorCameraPlayer.cpp" />
