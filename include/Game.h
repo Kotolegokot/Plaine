@@ -12,6 +12,7 @@
 #include "GUI.h"
 #include "SceneNodeAnimatorCameraPlayer.h"
 #include "ObstacleGenerator.h"
+#include "KinematicMotionState.h"
 
 using namespace irr;
 
@@ -46,6 +47,8 @@ private:
     // Scene
     scene::ICameraSceneNode *camera = nullptr;
     scene::ILightSceneNode *light = nullptr;
+    btCollisionShape *planeShape = nullptr;
+    btRigidBody *planeBody = nullptr;
     ObstacleGenerator *obstacleGenerator = nullptr;
 
     void error(const core::stringw &str) const;

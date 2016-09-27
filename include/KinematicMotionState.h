@@ -17,6 +17,7 @@ public:
     KinematicMotionState(const btTransform &startTransform = btTransform::getIdentity(), scene::ISceneNode *node = nullptr);
 	~KinematicMotionState();
 	void setNode(scene::ISceneNode *node);
+	scene::ISceneNode *getNode() const;
 	virtual void getWorldTransform(btTransform &worldTrans) const;
 	virtual void setWorldTransform(const btTransform &worldTrans); // does nothing
 	void setKinematicWorldTransform(const btTransform &worldTrans);

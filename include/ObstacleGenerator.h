@@ -47,8 +47,6 @@ private:
 
     // Bullet
     btCollisionShape *cubeShape = nullptr;
-    btVector3 cubeInertia = btVector3(0, 0, 0);
-    btRigidBody::btRigidBodyConstructionInfo *cubeConstructionInfo = nullptr;
 
     btDynamicsWorld *world = nullptr;
 };

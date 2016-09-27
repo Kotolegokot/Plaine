@@ -15,6 +15,11 @@ void MotionState::setNode(scene::ISceneNode *node)
     this->node = node;
 }
 
+scene::ISceneNode *MotionState::getNode() const
+{
+    return node;
+}
+
 void MotionState::getWorldTransform(btTransform &worldTrans) const
 {
     worldTrans = transform;

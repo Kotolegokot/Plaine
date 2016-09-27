@@ -8,7 +8,6 @@ ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, btDynamicsWorld *wo
 {
     // Bullet
     cubeShape = new btBoxShape(btVector3(CUBE_SIDE / 2, CUBE_SIDE / 2, CUBE_SIDE / 2));
-    cubeShape->calculateLocalInertia(1, cubeInertia);
 }
 
 ObstacleGenerator::~ObstacleGenerator()
@@ -52,13 +51,17 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
 
 btRigidBody *ObstacleGenerator::createCube(const core::vector3df &position)
 {
+    const btScalar mass = 1;
+
     scene::ISceneNode *cubeNode = device->getSceneManager()->addCubeSceneNode(CUBE_SIDE, 0, -1, position);
     cubeNode->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
     cubeNode->setMaterialFlag(video::EMF_FOG_ENABLE, true);
 
     btMotionState *motionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1),
         btVector3(position.X, position.Y, position.Z)), cubeNode);
-    btRigidBody::btRigidBodyConstructionInfo cubeCI(1,  motionState, cubeShape, cubeInertia);
+    btVector3 cubeInertia(0, 0, 0);
+    cubeShape->calculateLocalInertia(mass, cubeInertia);
+    btRigidBody::btRigidBodyConstructionInfo cubeCI(mass,  motionState, cubeShape, cubeInertia);
     btRigidBody *cubeBody = new btRigidBody(cubeCI);
     world->addRigidBody(cubeBody);
 

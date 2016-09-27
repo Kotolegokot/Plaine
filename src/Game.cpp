@@ -53,15 +53,6 @@ bool Game::initializeDevice()
 
 void Game::initializeScene()
 {
-    camera = sceneManager->addCameraSceneNode();
-    scene::ISceneNodeAnimator *cameraAnimator = new SceneNodeAnimatorCameraPlayer(35.f, 15.f, 15.f, configuration.controls);
-    camera->setFarValue(1500);
-    camera->addAnimator(cameraAnimator);
-    cameraAnimator->drop();
-
-    light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), video::SColorf(1, 1, 1), 300);
-    light->setVisible(true);
-
     driver->setFog(video::SColor(0, 138, 125, 81), video::EFT_FOG_LINEAR, 1300, 1600, .003f, true, false);
 
     // Bullet
@@ -76,6 +67,30 @@ void Game::initializeScene()
     // create world
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0, -100, 0));
+
+    scene::ISceneNode *planeNode = sceneManager->addSphereSceneNode(50, 16, 0, -1, core::vector3df(0, 0, 100));
+    planeNode->setMaterialTexture(0, driver->getTexture("media/textures/lsd.png"));
+
+    camera = sceneManager->addCameraSceneNode(planeNode);
+    camera->setPosition(core::vector3df(0, 0, -80));
+    scene::ISceneNodeAnimator *cameraAnimator = new SceneNodeAnimatorCameraPlayer(35.f, 15.f, 15.f, configuration.controls);
+    camera->setFarValue(1500);
+    camera->addAnimator(cameraAnimator);
+    cameraAnimator->drop();
+
+    light = sceneManager->addLightSceneNode(planeNode, core::vector3df(0, 0, -100), video::SColorf(1, 1, 1), 300);
+    light->setVisible(true);
+
+    const btScalar planeMass = 1;
+
+    planeShape = new btSphereShape(50);
+    btMotionState *planeMotionState = new KinematicMotionState(btTransform(btQuaternion(0, 0, 0, 1),
+        btVector3(0, 0, 0)), planeNode);
+    btVector3 planeInertia(0, 0, 0);
+    planeShape->calculateLocalInertia(planeMass, planeInertia);
+    btRigidBody::btRigidBodyConstructionInfo planeCI(planeMass,  planeMotionState, planeShape, planeInertia);
+    planeBody = new btRigidBody(planeCI);
+    dynamicsWorld->addRigidBody(planeBody);
 
     obstacleGenerator = new ObstacleGenerator(device, dynamicsWorld, camera->getFarValue(), 500);
 }
@@ -97,6 +112,9 @@ void Game::terminateDevice()
 
 void Game::terminateScene()
 {
+    dynamicsWorld->removeRigidBody(planeBody);
+    delete planeBody->getMotionState();
+    delete planeBody;
     // IMPORTANT: obstacleGenerator must be deleted before dynamicsWorld and sceneManager
     delete obstacleGenerator;
     sceneManager->clear();
@@ -377,7 +395,7 @@ void Game::run()
             gui->textCubeCount->setVisible(true);
             device->getCursorControl()->setVisible(false);
 
-            obstacleGenerator->generate(camera->getPosition());
+            obstacleGenerator->generate(((KinematicMotionState *) planeBody->getMotionState())->getNode()->getPosition());
         }
 
         if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
