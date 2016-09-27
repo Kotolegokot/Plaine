@@ -12,8 +12,8 @@ Stage GUI::getStage()
 void GUI::recalculateButtonProportions()
 {
     buttonWidth = configuration.resolution.Width / 6;
-    if (buttonWidth < 200)
-        buttonWidth = 200;
+    if (buttonWidth < 220)
+        buttonWidth = 220;
     buttonHeight = buttonWidth * 1/8;
 }
 
