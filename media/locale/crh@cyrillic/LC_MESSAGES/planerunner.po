@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-26 00:23+0300\n"
+"POT-Creation-Date: 2016-09-28 02:34+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,106 +17,170 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/Game.cpp:189 src/Game.cpp:225
+#: src/Game.cpp:288 src/Game.cpp:290 src/Game.cpp:292 src/Game.cpp:294
+msgid "Press button"
+msgstr ""
+
+#: src/Game.cpp:302 src/Game.cpp:332
 msgid "Screen size: "
 msgstr ""
 
-#: src/Game.cpp:245
+#: src/Game.cpp:352
 msgid "Camera position: ("
 msgstr ""
 
-#: src/Game.cpp:257
+#: src/Game.cpp:364
 msgid "Cubes: "
 msgstr ""
 
-#: src/GUI.cpp:18
+#: src/GUI.cpp:50
 msgid "Start"
 msgstr "Къырымтатарджа"
 
-#: src/GUI.cpp:18
+#: src/GUI.cpp:50
 msgid "Start game"
 msgstr ""
 
-#: src/GUI.cpp:20
+#: src/GUI.cpp:52
 msgid "Settings"
 msgstr ""
 
-#: src/GUI.cpp:20
+#: src/GUI.cpp:52
 msgid "Game settings"
 msgstr ""
 
-#: src/GUI.cpp:22 src/GUI.cpp:46 src/GUI.cpp:145
+#: src/GUI.cpp:54 src/GUI.cpp:79 src/GUI.cpp:186 src/GUI.cpp:227
 msgid "Quit"
 msgstr ""
 
-#: src/GUI.cpp:22 src/GUI.cpp:46 src/GUI.cpp:145
+#: src/GUI.cpp:54 src/GUI.cpp:79 src/GUI.cpp:186 src/GUI.cpp:227
 msgid "Exit game"
 msgstr ""
 
-#: src/GUI.cpp:42
+#: src/GUI.cpp:75
 msgid "Resume"
 msgstr ""
 
-#: src/GUI.cpp:42
+#: src/GUI.cpp:75
 msgid "Resume Game"
 msgstr ""
 
-#: src/GUI.cpp:44
+#: src/GUI.cpp:77
 msgid "Menu"
 msgstr ""
 
-#: src/GUI.cpp:44 src/GUI.cpp:143
+#: src/GUI.cpp:77 src/GUI.cpp:184
 msgid "Exit to Main menu"
 msgstr ""
 
-#: src/GUI.cpp:64
+#: src/GUI.cpp:97
 msgid "Language:"
 msgstr ""
 
-#: src/GUI.cpp:78
+#: src/GUI.cpp:111
 msgid "Resolution:"
 msgstr ""
 
-#: src/GUI.cpp:86
+#: src/GUI.cpp:119
 msgid " (Fullscreen)"
 msgstr ""
 
-#: src/GUI.cpp:90
-msgid "Windowed"
-msgstr ""
-
-#: src/GUI.cpp:90
-msgid "To Windowed Mode"
-msgstr ""
-
-#: src/GUI.cpp:102 src/GUI.cpp:122 src/GUI.cpp:271
+#: src/GUI.cpp:134 src/GUI.cpp:154 src/GUI.cpp:376
 msgid " (Custom)"
 msgstr ""
 
-#: src/GUI.cpp:109 src/GUI.cpp:114
+#: src/GUI.cpp:141 src/GUI.cpp:146
 msgid "Custom Resolution"
 msgstr ""
 
-#: src/GUI.cpp:126
-msgid "Fullscreen"
-msgstr ""
-
-#: src/GUI.cpp:126
-msgid "To Fullscreen Mode"
-msgstr ""
-
-#: src/GUI.cpp:129
+#: src/GUI.cpp:159
 msgid "Color Depth:"
 msgstr ""
 
-#: src/GUI.cpp:140
+#: src/GUI.cpp:171
 msgid "VSync"
 msgstr ""
 
-#: src/GUI.cpp:141
+#: src/GUI.cpp:173
 msgid "Stencil Buffer"
 msgstr ""
 
-#: src/GUI.cpp:143
+#: src/GUI.cpp:177
+msgid "Windowed"
+msgstr ""
+
+#: src/GUI.cpp:177
+msgid "To Windowed Mode"
+msgstr ""
+
+#: src/GUI.cpp:180
+msgid "Fullscreen"
+msgstr ""
+
+#: src/GUI.cpp:180
+msgid "To Fullscreen Mode"
+msgstr ""
+
+#: src/GUI.cpp:182
+msgid "Controls"
+msgstr ""
+
+#: src/GUI.cpp:182
+msgid "Edit control settings"
+msgstr ""
+
+#: src/GUI.cpp:184 src/GUI.cpp:225
 msgid "Back"
+msgstr ""
+
+#: src/GUI.cpp:210
+msgid "Up: "
+msgstr ""
+
+#: src/GUI.cpp:212 src/GUI.cpp:215 src/GUI.cpp:218 src/GUI.cpp:221
+msgid "Click to change"
+msgstr ""
+
+#: src/GUI.cpp:213
+msgid "Left: "
+msgstr ""
+
+#: src/GUI.cpp:216
+msgid "Down: "
+msgstr ""
+
+#: src/GUI.cpp:219
+msgid "Right: "
+msgstr ""
+
+#: src/GUI.cpp:223
+msgid "Default"
+msgstr ""
+
+#: src/GUI.cpp:223
+msgid "Default control settings"
+msgstr ""
+
+#: src/GUI.cpp:225
+msgid "Back to game settings"
+msgstr ""
+
+#: src/util.cpp:150
+msgid "Up Arrow"
+msgstr ""
+
+#: src/util.cpp:153
+msgid "Left Arrow"
+msgstr ""
+
+#: src/util.cpp:156
+msgid "Down Arrow"
+msgstr ""
+
+#: src/util.cpp:159
+msgid "Right Arrow"
+msgstr ""
+
+#: src/util.cpp:198
+msgid "Space"
 msgstr ""
