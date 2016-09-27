@@ -4,17 +4,14 @@
 #include "Config.h"
 #include "util.h"
 
-enum Stage{ MENU, SETTINGS, INGAME_MENU, CONTROL_SETTINGS, TERMINATED };
+enum Stage { MENU, SETTINGS, INGAME_MENU, CONTROL_SETTINGS, TERMINATED };
 
 class GUI
 {
 public:
-    GUI(struct ConfigData &data, gui::IGUIEnvironment *guiEnv) : configuration(data), guiEnvironment(guiEnv){}
-
+    GUI(struct ConfigData &data, gui::IGUIEnvironment *guiEnv);
     ConfigData &configuration;
     int buttonWidth, buttonHeight;
-    const int SPACE = 10;
-    Stage stage;
 
     gui::IGUIEnvironment *guiEnvironment = nullptr;
 
@@ -46,17 +43,24 @@ public:
     gui::IGUIStaticText *textControlRight = nullptr;
     gui::IGUICheckBox *checkBoxVSync = nullptr;
     gui::IGUICheckBox *checkBoxStencilBuffer = nullptr;
+    gui::IGUIWindow *settingsMessageBox = nullptr;
 
 
     void recalculateButtonProportions();
+    void initialize(Stage stage);
+    void terminate();
+    void resizeGUI();
+    void setVisible(bool state);
+    Stage getStage();
+private:
+    Stage stage;
+    const int SPACE = 10;
+
     void initializeMenuGUI();
     void initializeInGameGUI();
     void initializeSettingsGUI();
     void initializeControlSettingsGUI();
-    void terminateGUI();
-    void resizeGUI();
-    void setVisible(bool state);
-private:
+
     void terminateMenuGUI();
     void terminateSettingsGUI();
     void terminateControlSettingsGUI();

@@ -13,7 +13,7 @@ Game::Game(const struct ConfigData &data)
 
 Game::~Game()
 {
-    terminate();
+    terminateDevice();
 }
 
 void Game::initializeGUI()
@@ -21,6 +21,7 @@ void Game::initializeGUI()
     gui::IGUIFont *font = gui::CGUITTFont::createTTFont(driver, fileSystem, io::path("media/fonts/font.ttf"), 13, true, true);
     if (font)
         skin->setFont(font);
+
     gui = new GUI(configuration, guiEnvironment);
 }
 
@@ -71,14 +72,19 @@ void Game::error(const core::stringw &str) const
     std::wcerr << "Error: " << str.c_str() << std::endl;
 }
 
-void Game::terminate()
+void Game::terminateDevice()
 {
     Config conf;
     conf.saveConfig("game.conf", configuration);
-    gui->terminateGUI();
+    gui->terminate();
     device->closeDevice();
     device->run();
     device->drop();
+}
+
+void Game::terminateScene()
+{
+    sceneManager->clear();
 }
 
 void Game::menu()
@@ -88,10 +94,11 @@ void Game::menu()
         return;
     }
     configuration.resolution = driver->getScreenSize();
-    gui->initializeMenuGUI();
+    gui->initialize(MENU);
+
     while (device->run()) {
         if (eventReceiver->stage == INGAME_MENU){
-            gui->terminateGUI();
+            gui->terminate();
             run();
         }
         if (eventReceiver->quit) {
@@ -119,20 +126,21 @@ void Game::menu()
             eventReceiver->escapePressed = false;
         if (eventReceiver->toggleGUI)
         {
-            gui->terminateGUI();
+            if (gui->getStage() == SETTINGS && eventReceiver->stage==MENU && (eventReceiver->toggleGraphicMode))
+            gui->terminate();
             switch (eventReceiver->stage)
             {
             case(MENU):
-                gui->initializeMenuGUI();
+                gui->initialize(MENU);
                 break;
             case(SETTINGS):
-                gui->initializeSettingsGUI();
+                gui->initialize(SETTINGS);
                 break;
             case(CONTROL_SETTINGS):
-                gui->initializeControlSettingsGUI();
+                gui->initialize(CONTROL_SETTINGS);
                 break;
             case(INGAME_MENU):
-                gui->initializeInGameGUI();
+                gui->initialize(INGAME_MENU);
                 break;
             case(TERMINATED):
                 break;
@@ -143,14 +151,15 @@ void Game::menu()
             if (eventReceiver->toggleFullscreen)
             {
                 configuration.fullscreen = !configuration.fullscreen;
-                terminate();
-                configuration.resolution = core::dimension2d<u32>(1240, 720);
+                configuration.resolution = core::dimension2d<u32>(640, 480);
                 configuration.resizable = false;
+                gui->terminate();
                 if (!initializeDevice())
-                        return;
-                initialized = true;
+                    return;
                 initializeGUI();
-                gui->initializeMenuGUI();
+                initialized = true;
+                gui->initialize(MENU);
+
             }
             if(eventReceiver->toggleGraphicMode)
             {
@@ -182,12 +191,6 @@ void Game::menu()
                 }
                 configuration.vsync = gui->checkBoxVSync->isChecked();
                 configuration.stencilBuffer = gui->checkBoxStencilBuffer->isChecked();
-                terminate();
-                if (!initializeDevice())
-                    return;
-                initialized = true;
-                initializeGUI();
-                gui->initializeMenuGUI();
             }
             if (eventReceiver->toggleLanguage)
             {
@@ -210,8 +213,6 @@ void Game::menu()
                 }
                 eventReceiver->toggleLanguage = false;
                 setLanguage(configuration.language, true);
-                eventReceiver->stage = MENU;
-                eventReceiver->toggleGUI = true;
             }
         }
         if (eventReceiver->stage == CONTROL_SETTINGS){
@@ -224,8 +225,8 @@ void Game::menu()
                     eventReceiver->changingControlRight = false;
                     eventReceiver->defaultControls = false;
                     eventReceiver->lastKey = KEY_KEY_CODES_COUNT;
-                    gui->terminateGUI();
-                    gui->initializeControlSettingsGUI();
+                    gui->terminate();
+                    gui->initialize(CONTROL_SETTINGS);
                 }
                 if((eventReceiver->changingControlUp || eventReceiver->changingControlLeft ||
                     eventReceiver->changingControlDown || eventReceiver->changingControlRight))
@@ -258,8 +259,8 @@ void Game::menu()
                         eventReceiver->changingControlDown = false;
                         eventReceiver->changingControlRight = false;
                         eventReceiver->lastKey = KEY_KEY_CODES_COUNT;
-                        gui->terminateGUI();
-                        gui->initializeControlSettingsGUI();
+                        gui->terminate();
+                        gui->initialize(CONTROL_SETTINGS);
                    }
                    else if (eventReceiver->changingControlUp)
                         gui->buttonControlUp->setText(_wp("Press button"));
@@ -290,11 +291,13 @@ void Game::menu()
             device->yield();
         }
     }
+
+    gui->terminate();
 }
 
 void Game::run()
 {
-    gui->initializeInGameGUI();
+    gui->initialize(INGAME_MENU);
     initializeScene();
     configuration.resolution = driver->getScreenSize();
 
@@ -377,5 +380,6 @@ void Game::run()
         }
     }
     pause = false;
-    sceneManager->clear();
+    terminateScene();
+    gui->terminate();
 }

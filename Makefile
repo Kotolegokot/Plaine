@@ -21,3 +21,9 @@ release:
 clean:
 	rm -rf bin/
 	rm -rf obj/
+
+run_debug:
+	./bin/Debug/PlaneRunner
+
+run_release:
+	./bin/Release/PlaneRunner
