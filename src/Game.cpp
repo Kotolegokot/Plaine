@@ -169,7 +169,9 @@ void Game::menu()
                     return;
                 initializeGUI();
                 initialized = true;
+                eventReceiver->stage = SETTINGS;
                 gui->initialize(SETTINGS);
+                eventReceiver->needRestartInMenu = false;
             }
             if (eventReceiver->toggleResolution)
             {
@@ -193,7 +195,9 @@ void Game::menu()
                     return;
                 initializeGUI();
                 initialized = true;
+                eventReceiver->stage = SETTINGS;
                 gui->initialize(SETTINGS);
+                eventReceiver->needRestartInMenu = false;
             }
             if(eventReceiver->toggleColorDepth)
             {
@@ -235,6 +239,8 @@ void Game::menu()
                 }
                 eventReceiver->toggleLanguage = false;
                 setLanguage(configuration.language, true);
+                gui->terminate();
+                gui->initialize(SETTINGS);
             }
         }
         if (eventReceiver->stage == CONTROL_SETTINGS){
