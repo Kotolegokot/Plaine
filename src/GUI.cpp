@@ -2,12 +2,39 @@
 
 using namespace irr;
 
+GUI::GUI (struct ConfigData &data, gui::IGUIEnvironment *guiEnv) : configuration(data), guiEnvironment(guiEnv) {}
+
 void GUI::recalculateButtonProportions()
 {
     buttonWidth = configuration.resolution.Width / 6;
     if (buttonWidth < 200)
         buttonWidth = 200;
     buttonHeight = buttonWidth * 1/8;
+}
+
+void GUI::initialize(Stage stage)
+{
+    switch (stage)
+    {
+    case(MENU):
+        initializeMenuGUI();
+        stage = TERMINATED;
+        break;
+    case(INGAME_MENU):
+        initializeInGameGUI();
+        stage = TERMINATED;
+        break;
+    case(SETTINGS):
+        initializeSettingsGUI();
+        stage = TERMINATED;
+        break;
+     case(CONTROL_SETTINGS):
+        initializeControlSettingsGUI();
+        stage = TERMINATED;
+        break;
+    case(TERMINATED):
+        break;
+    }
 }
 
 void GUI::initializeMenuGUI()
@@ -209,7 +236,7 @@ void GUI::terminateControlSettingsGUI()
     textScreenSize->remove();
 }
 
-void GUI::terminateGUI()
+void GUI::terminate()
 {
     switch (stage)
     {

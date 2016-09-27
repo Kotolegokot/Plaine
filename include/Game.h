@@ -43,7 +43,9 @@ private:
     bool initializeDevice();
     void initializeGUI();
     void initializeScene();
-    void terminate();
+    void terminateBullet();
+    void terminateScene();
+    void terminateDevice();
 
     // Constants
     const core::stringw ERR_NOT_INITIALIZED = "device has failed to initialize!";
