@@ -18,7 +18,6 @@ Game::~Game()
 
 void Game::initializeGUI()
 {
-    gui::IGUISkin *skin = guiEnvironment->getSkin();
     gui::IGUIFont *font = gui::CGUITTFont::createTTFont(driver, fileSystem, io::path("media/fonts/font.ttf"), 13, true, true);
     if (font)
         skin->setFont(font);
@@ -42,6 +41,7 @@ bool Game::initializeDevice()
     driver = device->getVideoDriver();
     sceneManager = device->getSceneManager();
     guiEnvironment = device->getGUIEnvironment();
+    skin = guiEnvironment->getSkin();
     fileSystem = device->getFileSystem();
     eventReceiver = new EventReceiver();
     device->setEventReceiver(eventReceiver);
@@ -89,7 +89,6 @@ void Game::menu()
     }
     configuration.resolution = driver->getScreenSize();
     gui->initializeMenuGUI();
-
     while (device->run()) {
         if (eventReceiver->stage == INGAME_MENU){
             gui->terminateGUI();
@@ -284,7 +283,7 @@ void Game::menu()
         gui->textScreenSize->setText(scrs.c_str());
         device->getCursorControl()->setVisible(true);
         if (device->isWindowActive()) {
-            driver->beginScene(true, true, video::SColor(0, 10, 53, 64));;
+            driver->beginScene(true, true, video::SColor(0, 10, 53, 64));
             guiEnvironment->drawAll();
             driver->endScene();
         } else {

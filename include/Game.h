@@ -33,6 +33,7 @@ private:
     gui::IGUIEnvironment *guiEnvironment = nullptr;
     io::IFileSystem *fileSystem = nullptr;
     EventReceiver *eventReceiver = nullptr;
+    gui::IGUISkin *skin = nullptr;
 
     // Scene
     scene::ICameraSceneNode *camera = nullptr;
