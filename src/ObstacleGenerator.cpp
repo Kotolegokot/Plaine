@@ -3,8 +3,23 @@
 
 using namespace irr;
 
-ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, f32 farValue, f32 buffer) :
-    device(device), farValue(farValue), buffer(buffer) {}
+ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, btDynamicsWorld *world, f32 farValue, f32 buffer) :
+    device(device), world(world), farValue(farValue), buffer(buffer)
+{
+    // Bullet
+    cubeShape = new btBoxShape(btVector3(CUBE_SIDE / 2, CUBE_SIDE / 2, CUBE_SIDE / 2));
+    cubeShape->calculateLocalInertia(1, cubeInertia);
+}
+
+ObstacleGenerator::~ObstacleGenerator()
+{
+    while (!cubes.empty()) {
+        world->removeRigidBody(cubes.front());
+        delete cubes.front()->getMotionState();
+        delete cubes.front();
+        cubes.pop_front();
+    }
+}
 
 void ObstacleGenerator::generate(const core::vector3df &playerPosition)
 {
@@ -21,12 +36,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     f32 newY = y + getRandomf(-100, 100);
                     f32 newZ = z + getRandomf(-100, 100);
 
-                    scene::ISceneManager *sceneManager = device->getSceneManager();
-                    scene::ISceneNode *node = sceneManager->addCubeSceneNode(250.f, 0, -1, core::vector3df(newX, newY, newZ));
-                    node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
-                    node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
-
-                    nodes.push_back(node);
+                    cubes.push_back(createCube(core::vector3df(newX, newY, newZ)));
                     cubeCount++;
                 }
             }
@@ -40,6 +50,21 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
     removeLeftBehind(playerPosition.Z);
 }
 
+btRigidBody *ObstacleGenerator::createCube(const core::vector3df &position)
+{
+    scene::ISceneNode *cubeNode = device->getSceneManager()->addCubeSceneNode(CUBE_SIDE, 0, -1, position);
+    cubeNode->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
+    cubeNode->setMaterialFlag(video::EMF_FOG_ENABLE, true);
+
+    btMotionState *motionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1),
+        btVector3(position.X, position.Y, position.Z)), cubeNode);
+    btRigidBody::btRigidBodyConstructionInfo cubeCI(1,  motionState, cubeShape, cubeInertia);
+    btRigidBody *cubeBody = new btRigidBody(cubeCI);
+    world->addRigidBody(cubeBody);
+
+    return cubeBody;
+}
+
 f32 ObstacleGenerator::preciseEdge(f32 edge) const
 {
     return edge - (edge - floor(edge / STEP)*STEP);
@@ -47,14 +72,19 @@ f32 ObstacleGenerator::preciseEdge(f32 edge) const
 
 void ObstacleGenerator::removeLeftBehind(f32 playerZ)
 {
-    while (!nodes.empty())
-        if (nodes.front()->getPosition().Z < playerZ - buffer) {
-            nodes.front()->remove();
-            nodes.pop_front();
+    while (!cubes.empty()) {
+        btTransform transform;
+        cubes.front()->getMotionState()->getWorldTransform(transform);
+        if (transform.getOrigin().z() < playerZ - buffer) {
+            world->removeRigidBody(cubes.front());
+            delete cubes.front()->getMotionState();
+            delete cubes.front();
+            cubes.pop_front();
             cubeCount--;
         } else {
             break;
         }
+    }
 }
 
 u32 ObstacleGenerator::getCubeCount() const

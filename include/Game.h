@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <irrlicht.h>
+#include <btBulletDynamicsCommon.h>
+#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include <CGUITTFont.h>
 #include "EventReceiver.h"
 #include "util.h"
@@ -34,6 +36,13 @@ private:
     io::IFileSystem *fileSystem = nullptr;
     EventReceiver *eventReceiver = nullptr;
 
+    // Bullet
+    btBroadphaseInterface *broadphase = nullptr;
+    btDefaultCollisionConfiguration *collisionConfiguration = nullptr;
+    btCollisionDispatcher *dispatcher = nullptr;
+    btSequentialImpulseConstraintSolver *solver = nullptr;
+    btDiscreteDynamicsWorld *dynamicsWorld = nullptr;
+
     // Scene
     scene::ICameraSceneNode *camera = nullptr;
     scene::ILightSceneNode *light = nullptr;
@@ -43,7 +52,6 @@ private:
     bool initializeDevice();
     void initializeGUI();
     void initializeScene();
-    void terminateBullet();
     void terminateScene();
     void terminateDevice();
 

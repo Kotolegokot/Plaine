@@ -64,7 +64,20 @@ void Game::initializeScene()
 
     driver->setFog(video::SColor(0, 138, 125, 81), video::EFT_FOG_LINEAR, 1300, 1600, .003f, true, false);
 
-    obstacleGenerator = new ObstacleGenerator(device, camera->getFarValue(), 500);
+    // Bullet
+    // add broadphase interface
+    broadphase = new btDbvtBroadphase();
+    // configurate collision
+    collisionConfiguration = new btDefaultCollisionConfiguration();
+    dispatcher = new btCollisionDispatcher(collisionConfiguration);
+    btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
+    // add constraint solver
+    solver = new btSequentialImpulseConstraintSolver;
+    // create world
+    dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
+    dynamicsWorld->setGravity(btVector3(0, -100, 0));
+
+    obstacleGenerator = new ObstacleGenerator(device, dynamicsWorld, camera->getFarValue(), 500);
 }
 
 void Game::error(const core::stringw &str) const
@@ -84,7 +97,14 @@ void Game::terminateDevice()
 
 void Game::terminateScene()
 {
+    // IMPORTANT: obstacleGenerator must be deleted before dynamicsWorld and sceneManager
+    delete obstacleGenerator;
     sceneManager->clear();
+    delete dynamicsWorld;
+    delete solver;
+    delete dispatcher;
+    delete collisionConfiguration;
+    delete broadphase;
 }
 
 void Game::menu()
@@ -375,6 +395,8 @@ void Game::run()
         }
 
         if (device->isWindowActive()) {
+            dynamicsWorld->stepSimulation(1 / 60.f);
+
             driver->beginScene(true, true, video::SColor(0, 10, 53, 64));
             if (!pause)
                 sceneManager->drawAll();
@@ -386,6 +408,7 @@ void Game::run()
         }
     }
     pause = false;
+
     terminateScene();
     gui->terminate();
 }

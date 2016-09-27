@@ -1,7 +1,14 @@
 #include "MotionState.h"
 
+using namespace irr;
+
 MotionState::MotionState(const btTransform &startTransform, scene::ISceneNode *node) :
     transform(startTransform), node(node) {}
+
+MotionState::~MotionState()
+{
+    node->remove();
+}
 
 void MotionState::setNode(scene::ISceneNode *node)
 {
