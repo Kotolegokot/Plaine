@@ -291,13 +291,13 @@ void Game::menu()
                         gui->initialize(CONTROL_SETTINGS);
                    }
                    else if (eventReceiver->changingControlUp)
-                        gui->buttonControlUp->setText(_wp("Press button"));
+                        gui->buttonControlUp->setText(_wp("Press a key"));
                     else if (eventReceiver->changingControlLeft)
-                        gui->buttonControlLeft->setText(_wp("Press button"));
+                        gui->buttonControlLeft->setText(_wp("Press a key"));
                     else if (eventReceiver->changingControlDown)
-                        gui->buttonControlDown->setText(_wp("Press button"));
+                        gui->buttonControlDown->setText(_wp("Press a key"));
                     else if (eventReceiver->changingControlRight)
-                        gui->buttonControlRight->setText(_wp("Press button"));
+                        gui->buttonControlRight->setText(_wp("Press a key"));
                 }
         }
         if (configuration.resolution != driver->getScreenSize())
