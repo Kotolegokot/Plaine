@@ -124,9 +124,19 @@ void Game::menu()
         }
         else if (!eventReceiver->IsKeyDown(KEY_ESCAPE))
             eventReceiver->escapePressed = false;
+        if (gui->getStage() == SETTINGS && eventReceiver->stage == MENU && eventReceiver->needRestartInMenu)
+            {
+                gui->terminate();
+                terminateDevice();
+                if (!initializeDevice())
+                    return;
+                initializeGUI();
+                initialized = true;
+                gui->initialize(MENU);
+                eventReceiver->needRestartInMenu = false;
+            }
         if (eventReceiver->toggleGUI)
         {
-            if (gui->getStage() == SETTINGS && eventReceiver->stage==MENU && (eventReceiver->toggleGraphicMode))
             gui->terminate();
             switch (eventReceiver->stage)
             {
@@ -154,14 +164,14 @@ void Game::menu()
                 configuration.resolution = core::dimension2d<u32>(640, 480);
                 configuration.resizable = false;
                 gui->terminate();
+                terminateDevice();
                 if (!initializeDevice())
                     return;
                 initializeGUI();
                 initialized = true;
-                gui->initialize(MENU);
-
+                gui->initialize(SETTINGS);
             }
-            if(eventReceiver->toggleGraphicMode)
+            if (eventReceiver->toggleResolution)
             {
                 switch (gui->comboBoxResolution->getSelected())
                 {
@@ -177,6 +187,16 @@ void Game::menu()
                         configuration.resizable = true;
                         break;
                 }
+                gui->terminate();
+                terminateDevice();
+                if (!initializeDevice())
+                    return;
+                initializeGUI();
+                initialized = true;
+                gui->initialize(SETTINGS);
+            }
+            if(eventReceiver->toggleColorDepth)
+            {
                 switch (gui->comboBoxColorDepth->getSelected())
                 {
                 case 0:
@@ -191,6 +211,8 @@ void Game::menu()
                 }
                 configuration.vsync = gui->checkBoxVSync->isChecked();
                 configuration.stencilBuffer = gui->checkBoxStencilBuffer->isChecked();
+                eventReceiver->toggleColorDepth = false;
+                eventReceiver->needRestartInMenu = true;
             }
             if (eventReceiver->toggleLanguage)
             {
