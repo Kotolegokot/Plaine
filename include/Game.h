@@ -4,6 +4,7 @@
 #include <iostream>
 #include <irrlicht.h>
 #include <CGUITTFont.h>
+#include <ITimer.h>
 #include "EventReceiver.h"
 #include "util.h"
 #include "Config.h"
@@ -34,6 +35,7 @@ private:
     io::IFileSystem *fileSystem = nullptr;
     EventReceiver *eventReceiver = nullptr;
     gui::IGUISkin *skin = nullptr;
+    ITimer *timer = nullptr;
 
     // Scene
     scene::ICameraSceneNode *camera = nullptr;

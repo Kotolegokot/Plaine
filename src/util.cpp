@@ -219,3 +219,22 @@ core::stringw keyCodeName(const EKEY_CODE &keyCode)
         return L"";
     }
 }
+
+video::SColor iridescentColor(const u32 &currentTime)
+{
+    static video::SColor color = video::SColor(0, getRandomf(0, 255), getRandomf(0, 255), getRandomf(0, 255));
+    static video::SColor oldColor = color;
+    static f32 diff;
+    static u32 time = 0;
+    if (currentTime >= time)
+        {
+            oldColor = color;
+            color = video::SColor(0, getRandomf(0, 255), getRandomf(0, 255), getRandomf(0, 255));
+            time = currentTime + COLOR_CHANGE_INTERVAL;
+        }
+    diff = (time - currentTime)/COLOR_CHANGE_INTERVAL;
+
+    return video::SColor(0, color.getRed() + int((oldColor.getRed()) - (color.getRed()))*diff,
+                                    color.getGreen() + int(oldColor.getGreen() - color.getGreen())*diff,
+                                    color.getBlue() + int(oldColor.getBlue() - color.getBlue())*diff);
+}

@@ -2,6 +2,7 @@
 
 using namespace irr;
 
+
 Game::Game(const struct ConfigData &data)
 {
     configuration = data;
@@ -39,6 +40,7 @@ bool Game::initializeDevice()
         return false;
     }
     device->setWindowCaption(L"PlaneTest");
+    timer=device->getTimer();
     driver = device->getVideoDriver();
     sceneManager = device->getSceneManager();
     guiEnvironment = device->getGUIEnvironment();
@@ -95,7 +97,8 @@ void Game::menu()
     }
     configuration.resolution = driver->getScreenSize();
     gui->initialize(MENU);
-
+    timer->setTime(0);
+    timer->start();
     while (device->run()) {
         if (eventReceiver->stage == INGAME_MENU){
             gui->terminate();
@@ -312,7 +315,7 @@ void Game::menu()
         gui->textScreenSize->setText(scrs.c_str());
         device->getCursorControl()->setVisible(true);
         if (device->isWindowActive()) {
-            driver->beginScene(true, true, video::SColor(0, 10, 53, 64));
+            driver->beginScene(true, true, iridescentColor(timer->getTime()));
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
@@ -328,12 +331,12 @@ void Game::run()
     gui->initialize(INGAME_MENU);
     initializeScene();
     configuration.resolution = driver->getScreenSize();
-
     while (device->run())
     {
         if (eventReceiver->stage == MENU || eventReceiver->quit){
             break;
         }
+        driver->setFog(iridescentColor(timer->getTime()), video::EFT_FOG_LINEAR, 800.0f, 1500.0f, 0.01f, true, true);
         if (pause) {
             core::stringw scrs = _w("Screen size: ");
             scrs += configuration.resolution.Width;
@@ -397,7 +400,7 @@ void Game::run()
         }
 
         if (device->isWindowActive()) {
-            driver->beginScene(true, true, video::SColor(0, 10, 53, 64));
+            driver->beginScene(true, true, iridescentColor(timer->getTime()));
             if (!pause)
                 sceneManager->drawAll();
             guiEnvironment->drawAll();

@@ -22,8 +22,11 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     f32 newZ = z + getRandomf(-100, 100);
 
                     scene::ISceneManager *sceneManager = device->getSceneManager();
-                    scene::ISceneNode *node = sceneManager->addCubeSceneNode(250.f, 0, -1, core::vector3df(newX, newY, newZ));
+                    scene::ISceneNode *node = sceneManager->addCubeSceneNode(250.0f, 0, -1, core::vector3df(newX, newY, newZ));
                     node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
+                    node->setMaterialFlag(video::EMF_ANISOTROPIC_FILTER, true);
+                    node->setMaterialFlag(video::EMF_TRILINEAR_FILTER, true);
+                    node->setMaterialFlag(video::EMF_ANTI_ALIASING, true);
                     node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
 
                     nodes.push_back(node);

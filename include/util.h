@@ -25,6 +25,7 @@ std::string wide_to_utf8(const std::wstring &input);
 core::stringw keyCodeName(const EKEY_CODE &keyCode);
 void setLanguage(std::string language, bool replace);
 f32 getRandomf(f32 min = 0, f32 max = 1);
+video::SColor iridescentColor(const u32 &currentTime);
 
 // GUI IDs
 enum { ID_BUTTON_QUIT,
@@ -44,5 +45,9 @@ enum { ID_BUTTON_QUIT,
     ID_COMBOBOX_LANGUAGE,
     ID_CHECKBOX_VSYNC,
     ID_CHECKBOX_STENCILBUFFER};
+
+
+//const
+const f32 COLOR_CHANGE_INTERVAL = 3000.0f;
 
 #endif // UTIL_H_INCLUDED
