@@ -49,7 +49,8 @@ bool Game::initializeDevice()
     eventReceiver = new EventReceiver();
     device->setEventReceiver(eventReceiver);
     device->setResizable(configuration.resizable);
-
+    timer->setTime(0);
+    timer->start();
     return true;
 }
 
@@ -97,8 +98,6 @@ void Game::menu()
     }
     configuration.resolution = driver->getScreenSize();
     gui->initialize(MENU);
-    timer->setTime(0);
-    timer->start();
     while (device->run()) {
         if (eventReceiver->stage == INGAME_MENU){
             gui->terminate();
