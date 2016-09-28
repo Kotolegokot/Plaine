@@ -28,6 +28,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     node->setMaterialFlag(video::EMF_TRILINEAR_FILTER, true);
                     node->setMaterialFlag(video::EMF_ANTI_ALIASING, true);
                     node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
+                    node->setDebugDataVisible(true);
 
                     nodes.push_back(node);
                     cubeCount++;
