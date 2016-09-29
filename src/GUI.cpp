@@ -11,14 +11,18 @@ Stage GUI::getStage()
 
 void GUI::recalculateButtonProportions()
 {
+    //width for buttons calculates from width of window
     buttonWidth = configuration.resolution.Width / 6;
+    //minimal width for buttons
     if (buttonWidth < 220)
         buttonWidth = 220;
+    //height calculated from width
     buttonHeight = buttonWidth * 1/8;
 }
 
 void GUI::initialize(Stage stage)
 {
+    //choose specific method for initializing GUI
     switch (stage)
     {
     case(MENU):
@@ -246,6 +250,7 @@ void GUI::terminateControlSettingsGUI()
 
 void GUI::terminate()
 {
+    //choose specific method for terminating GUI
     switch (stage)
     {
     case(MENU):
@@ -337,6 +342,7 @@ void GUI::setVisible(bool state)
 
 void GUI::resizeGUI()
 {
+    //changing gui position and size when window is resizing
     recalculateButtonProportions();
     switch (stage)
     {
@@ -368,6 +374,7 @@ void GUI::resizeGUI()
             buttonControlSettings->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 3*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 3*SPACE));
             buttonMenu->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 2*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - buttonHeight - 2*SPACE));
             buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE));
+            //if window size has changed, its resolution is not standard
             comboBoxResolution->removeItem(2);
             core::stringw scrs;
             scrs += configuration.resolution.Width;

@@ -24,17 +24,17 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     scene::ISceneManager *sceneManager = device->getSceneManager();
                     scene::ISceneNode *node = sceneManager->addCubeSceneNode(250.0f, 0, -1, core::vector3df(newX, newY, newZ));
                     node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
+                    node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
+                    //some graphic enhancements
                     node->setMaterialFlag(video::EMF_ANISOTROPIC_FILTER, true);
                     node->setMaterialFlag(video::EMF_TRILINEAR_FILTER, true);
                     node->setMaterialFlag(video::EMF_ANTI_ALIASING, true);
-                    node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
                     node->setDebugDataVisible(true);
 
                     nodes.push_back(node);
                     cubeCount++;
                 }
             }
-
     generatedEdgeLeft = preciseEdge(playerPosition.X - farValueWithBuffer());
     generatedEdgeRight = preciseEdge(playerPosition.X + farValueWithBuffer());
     generatedEdgeBottom = preciseEdge(playerPosition.Y - farValueWithBuffer());

@@ -51,6 +51,10 @@ bool Game::initializeDevice()
     device->setResizable(configuration.resizable);
     timer->setTime(0);
     timer->start();
+    video::ECOLOR_FORMAT format = driver->getColorFormat();
+    if (format == video::ECF_A8R8G8B8)
+        std::cout << "asd";
+    std::cout << format << std::endl;
     return true;
 }
 
@@ -58,7 +62,7 @@ void Game::initializeScene()
 {
     camera = sceneManager->addCameraSceneNode();
     scene::ISceneNodeAnimator *cameraAnimator = new SceneNodeAnimatorCameraPlayer(35.f, 15.f, 15.f, configuration.controls);
-    camera->setFarValue(1500);
+    camera->setFarValue(2000);
     camera->addAnimator(cameraAnimator);
     cameraAnimator->drop();
 
@@ -268,6 +272,7 @@ void Game::menu()
                        if ((eventReceiver->lastKey != KEY_ESCAPE) &&
                            keyCodeName(eventReceiver->lastKey) != "")
                         {
+                            //if key is already occupied somewhere
                             if (eventReceiver->lastKey == configuration.controls.up)
                                 configuration.controls.up = KEY_KEY_CODES_COUNT;
                             else if (eventReceiver->lastKey == configuration.controls.left)
@@ -276,6 +281,7 @@ void Game::menu()
                                 configuration.controls.down = KEY_KEY_CODES_COUNT;
                             else if (eventReceiver->lastKey == configuration.controls.right)
                                 configuration.controls.right = KEY_KEY_CODES_COUNT;
+                            //if not
                             if (eventReceiver->changingControlUp)
                                 configuration.controls.up = eventReceiver->lastKey;
                             else if (eventReceiver->changingControlLeft)
