@@ -12,6 +12,7 @@ class MotionState : public btMotionState
 protected:
 	btTransform transform;
  	scene::ISceneNode *node = nullptr;
+    static btVector3 quatToEuler(const btQuaternion &quat);
 
 public:
 	MotionState(const btTransform &startTransform = btTransform::getIdentity(), scene::ISceneNode *node = nullptr);
@@ -20,9 +21,6 @@ public:
 	scene::ISceneNode *getNode() const;
 	virtual void getWorldTransform(btTransform &worldTrans) const;
 	virtual void setWorldTransform(const btTransform &worldTrans);
-
-private:
-    static btVector3 quatToEuler(const btQuaternion &quat);
 };
 
 #endif // MOTIONSTATE_H

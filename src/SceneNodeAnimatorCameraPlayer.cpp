@@ -49,6 +49,7 @@ bool SceneNodeAnimatorCameraPlayer::OnEvent(const SEvent &event)
 
 void SceneNodeAnimatorCameraPlayer::animateNode(scene::ISceneNode *node, u32 timeMs)
 {
+return;
     const f32 MAX_ACCELERATION = 4;
 
     if (!node || node->getType() != scene::ESNT_CAMERA)

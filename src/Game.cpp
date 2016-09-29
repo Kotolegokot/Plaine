@@ -68,11 +68,11 @@ void Game::initializeScene()
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0, -100, 0));
 
-    scene::ISceneNode *planeNode = sceneManager->addSphereSceneNode(50, 16, 0, -1, core::vector3df(0, 0, 100));
+    scene::ISceneNode *planeNode = sceneManager->addSphereSceneNode(50, 16, 0, -1, core::vector3df(0, 0, 0));
     planeNode->setMaterialTexture(0, driver->getTexture("media/textures/lsd.png"));
 
     camera = sceneManager->addCameraSceneNode(planeNode);
-    camera->setPosition(core::vector3df(0, 0, -80));
+    camera->setPosition(core::vector3df(0, 0, -600));
     scene::ISceneNodeAnimator *cameraAnimator = new SceneNodeAnimatorCameraPlayer(35.f, 15.f, 15.f, configuration.controls);
     camera->setFarValue(1500);
     camera->addAnimator(cameraAnimator);
@@ -81,13 +81,12 @@ void Game::initializeScene()
     light = sceneManager->addLightSceneNode(planeNode, core::vector3df(0, 0, -100), video::SColorf(1, 1, 1), 300);
     light->setVisible(true);
 
-    const btScalar planeMass = 1;
+    const btScalar planeMass = 0;
 
     planeShape = new btSphereShape(50);
     btMotionState *planeMotionState = new KinematicMotionState(btTransform(btQuaternion(0, 0, 0, 1),
         btVector3(0, 0, 0)), planeNode);
     btVector3 planeInertia(0, 0, 0);
-    planeShape->calculateLocalInertia(planeMass, planeInertia);
     btRigidBody::btRigidBodyConstructionInfo planeCI(planeMass,  planeMotionState, planeShape, planeInertia);
     planeBody = new btRigidBody(planeCI);
     dynamicsWorld->addRigidBody(planeBody);

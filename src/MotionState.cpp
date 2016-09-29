@@ -31,8 +31,8 @@ void MotionState::setWorldTransform(const btTransform &worldTrans)
 
     if (node) {
         btQuaternion quatRotation = worldTrans.getRotation();
-        btVector3 eulerRotation = quatToEuler(quatRotation);
-        node->setRotation(core::vector3df(eulerRotation.x(), eulerRotation.y(), eulerRotation.z()));
+        core::quaternion irrQuatRotation(quatRotation.x(), quatRotation.y(), quatRotation.z(), quatRotation.w());
+        node->setRotationQ(irrQuatRotation);
         btVector3 pos = worldTrans.getOrigin();
         node->setPosition(core::vector3df(pos.x(), pos.y(), pos.z()));
     }
@@ -44,9 +44,9 @@ btVector3 MotionState::quatToEuler(const btQuaternion &quat)
     btScalar q0 = quat.w(), q1 = quat.x(),
         q2 = quat.y(), q3 = quat.z();
 
-    result.setX(atan(2*(q0*q1 + q2*q3)/(1 - 2*(q1*q1 + q2*q2))));
+    result.setX(atan2(2*(q0*q1 + q2*q3), 1 - 2*(q1*q1 + q2*q2)));
     result.setY(asin(2*(q0*q2 - q3*q1)));
-    result.setZ(atan(2*(q0*q3 + q1*q2)/(1 - 2*(q2*q2 + q3*q3))));
+    result.setZ(atan2(2*(q0*q3 + q1*q2), 1 - 2*(q2*q2 + q3*q3)));
 
     return result;
 }
