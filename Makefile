@@ -1,10 +1,10 @@
 CXX=g++
 CFLAGS=-Wall -std=c++11
 SOURCE=main.cpp src/*.cpp
-LIB=-lfreetype -lPlaneRunnerIrrlicht -lBulletDynamics -lBulletCollision -lLinearMath
+LIB=-lfreetype -lIrrlicht -lBulletDynamics -lBulletCollision -lLinearMath
 
-SOURCE_INCLUDE=-Iinclude/ -Ideps/include/planerunner_irrlicht/ -I/usr/include/freetype2/ -I/usr/include/bullet
-LIB_INCLUDE=-Ldeps/lib/ -Wl,-rpath,deps/lib/
+SOURCE_INCLUDE=-Iinclude/ -/usr/include/irrlicht/ -I/usr/include/freetype2/ -I/usr/include/bullet/
+LIB_INCLUDE=-Ldeps/lib/
 EXECUTABLE=PlaneRunner
 
 default: release

@@ -67,17 +67,18 @@
 			<Add directory="include" />
 			<Add directory="/usr/include/freetype2" />
 			<Add directory="deps/include/" />
-			<Add directory="deps/include/planerunner_irrlicht" />
+			<Add directory="deps/include/irrlicht" />
 			<Add directory="deps/include/freetype2" />
 			<Add directory="/usr/include/bullet" />
 			<Add directory="deps/include/bullet" />
+			<Add directory="/usr/include/irrlicht" />
 		</Compiler>
 		<Linker>
 			<Add library="freetype" />
 			<Add library="BulletDynamics" />
 			<Add library="BulletCollision" />
 			<Add library="LinearMath" />
-			<Add library="PlaneRunnerIrrlicht" />
+			<Add library="Irrlicht" />
 			<Add directory="deps/lib" />
 		</Linker>
 		<Unit filename="include/CGUITTFont.h" />
