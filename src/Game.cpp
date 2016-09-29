@@ -60,7 +60,26 @@ bool Game::initializeDevice()
 
 void Game::initializeScene()
 {
-    camera = sceneManager->addCameraSceneNode();
+    driver->setFog(video::SColor(0, 138, 125, 81), video::EFT_FOG_LINEAR, 1300, 1600, .003f, true, false);
+
+    // Bullet
+    // add broadphase interface
+    broadphase = new btDbvtBroadphase();
+    // configurate collision
+    collisionConfiguration = new btDefaultCollisionConfiguration();
+    dispatcher = new btCollisionDispatcher(collisionConfiguration);
+    btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
+    // add constraint solver
+    solver = new btSequentialImpulseConstraintSolver;
+    // create world
+    dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
+    dynamicsWorld->setGravity(btVector3(0, -100, 0));
+
+    scene::ISceneNode *planeNode = sceneManager->addSphereSceneNode(50, 16, 0, -1, core::vector3df(0, 0, 0));
+    planeNode->setMaterialTexture(0, driver->getTexture("media/textures/lsd.png"));
+
+    camera = sceneManager->addCameraSceneNode(planeNode);
+    camera->setPosition(core::vector3df(0, 0, -600));
     scene::ISceneNodeAnimator *cameraAnimator = new SceneNodeAnimatorCameraPlayer(35.f, 15.f, 15.f, configuration.controls);
     camera->setFarValue(2000);
     camera->addAnimator(cameraAnimator);
@@ -70,9 +89,17 @@ void Game::initializeScene()
     light->setLightType(video::ELT_DIRECTIONAL);
     light->setVisible(true);
 
-    driver->setFog(video::SColor(0, 138, 125, 81), video::EFT_FOG_LINEAR, 1300, 1600, .003f, true, true);
+    const btScalar planeMass = 0;
 
-    obstacleGenerator = new ObstacleGenerator(device, camera->getFarValue(), 500);
+    planeShape = new btSphereShape(50);
+    btMotionState *planeMotionState = new KinematicMotionState(btTransform(btQuaternion(0, 0, 0, 1),
+        btVector3(0, 0, 0)), planeNode);
+    btVector3 planeInertia(0, 0, 0);
+    btRigidBody::btRigidBodyConstructionInfo planeCI(planeMass,  planeMotionState, planeShape, planeInertia);
+    planeBody = new btRigidBody(planeCI);
+    dynamicsWorld->addRigidBody(planeBody);
+
+    obstacleGenerator = new ObstacleGenerator(device, dynamicsWorld, camera->getFarValue(), 500);
 }
 
 void Game::error(const core::stringw &str) const
@@ -92,7 +119,17 @@ void Game::terminateDevice()
 
 void Game::terminateScene()
 {
+    dynamicsWorld->removeRigidBody(planeBody);
+    delete planeBody->getMotionState();
+    delete planeBody;
+    // IMPORTANT: obstacleGenerator must be deleted before dynamicsWorld and sceneManager
+    delete obstacleGenerator;
     sceneManager->clear();
+    delete dynamicsWorld;
+    delete solver;
+    delete dispatcher;
+    delete collisionConfiguration;
+    delete broadphase;
 }
 
 void Game::menu()
@@ -392,7 +429,7 @@ void Game::run()
             gui->textCubeCount->setVisible(true);
             device->getCursorControl()->setVisible(false);
 
-            obstacleGenerator->generate(camera->getPosition());
+            obstacleGenerator->generate(((KinematicMotionState *) planeBody->getMotionState())->getNode()->getPosition());
         }
 
         if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
@@ -410,6 +447,7 @@ void Game::run()
         }
 
         if (device->isWindowActive()) {
+            dynamicsWorld->stepSimulation(1 / 60.f);
             driver->beginScene(true, true, iridescentColor(timer->getTime()));
             if (!pause)
                 sceneManager->drawAll();
@@ -421,6 +459,7 @@ void Game::run()
         }
     }
     pause = false;
+
     terminateScene();
     gui->terminate();
 }

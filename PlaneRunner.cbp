@@ -69,11 +69,16 @@
 			<Add directory="deps/include/" />
 			<Add directory="deps/include/irrlicht" />
 			<Add directory="deps/include/freetype2" />
+			<Add directory="/usr/include/bullet" />
+			<Add directory="deps/include/bullet" />
 			<Add directory="/usr/include/irrlicht" />
 		</Compiler>
 		<Linker>
-			<Add library="Irrlicht" />
 			<Add library="freetype" />
+			<Add library="BulletDynamics" />
+			<Add library="BulletCollision" />
+			<Add library="LinearMath" />
+			<Add library="Irrlicht" />
 			<Add directory="deps/lib" />
 		</Linker>
 		<Unit filename="include/CGUITTFont.h" />
@@ -81,6 +86,8 @@
 		<Unit filename="include/EventReceiver.h" />
 		<Unit filename="include/GUI.h" />
 		<Unit filename="include/Game.h" />
+		<Unit filename="include/KinematicMotionState.h" />
+		<Unit filename="include/MotionState.h" />
 		<Unit filename="include/ObstacleGenerator.h" />
 		<Unit filename="include/SceneNodeAnimatorCameraPlayer.h" />
 		<Unit filename="include/util.h" />
@@ -90,6 +97,8 @@
 		<Unit filename="src/EventReceiver.cpp" />
 		<Unit filename="src/GUI.cpp" />
 		<Unit filename="src/Game.cpp" />
+		<Unit filename="src/KinematicMotionState.cpp" />
+		<Unit filename="src/MotionState.cpp" />
 		<Unit filename="src/ObstacleGenerator.cpp" />
 		<Unit filename="src/SceneNodeAnimatorCameraPlayer.cpp" />
 		<Unit filename="src/util.cpp" />

@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <irrlicht.h>
+#include <btBulletDynamicsCommon.h>
+#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include <CGUITTFont.h>
 #include <ITimer.h>
 #include "EventReceiver.h"
@@ -11,6 +13,7 @@
 #include "GUI.h"
 #include "SceneNodeAnimatorCameraPlayer.h"
 #include "ObstacleGenerator.h"
+#include "KinematicMotionState.h"
 
 using namespace irr;
 
@@ -37,16 +40,24 @@ private:
     gui::IGUISkin *skin = nullptr;
     ITimer *timer = nullptr;
 
+    // Bullet
+    btBroadphaseInterface *broadphase = nullptr;
+    btDefaultCollisionConfiguration *collisionConfiguration = nullptr;
+    btCollisionDispatcher *dispatcher = nullptr;
+    btSequentialImpulseConstraintSolver *solver = nullptr;
+    btDiscreteDynamicsWorld *dynamicsWorld = nullptr;
+
     // Scene
     scene::ICameraSceneNode *camera = nullptr;
     scene::ILightSceneNode *light = nullptr;
+    btCollisionShape *planeShape = nullptr;
+    btRigidBody *planeBody = nullptr;
     ObstacleGenerator *obstacleGenerator = nullptr;
 
     void error(const core::stringw &str) const;
     bool initializeDevice();
     void initializeGUI();
     void initializeScene();
-    void terminateBullet();
     void terminateScene();
     void terminateDevice();
 
