@@ -77,7 +77,7 @@
 			<Add library="BulletDynamics" />
 			<Add library="BulletCollision" />
 			<Add library="LinearMath" />
-			<Add library=":libPlaneRunnerIrrlicht.so.1.8" />
+			<Add library="PlaneRunnerIrrlicht" />
 			<Add directory="deps/lib" />
 		</Linker>
 		<Unit filename="include/CGUITTFont.h" />
