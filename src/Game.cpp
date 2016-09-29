@@ -62,10 +62,11 @@ void Game::initializeScene()
     camera->addAnimator(cameraAnimator);
     cameraAnimator->drop();
 
-    light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), video::SColorf(1, 1, 1), 300);
+    light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), video::SColor(0, getRandomf(0, 255), getRandomf(0, 255), getRandomf(0, 255)), 300);
+    light->setLightType(video::ELT_DIRECTIONAL);
     light->setVisible(true);
 
-    driver->setFog(video::SColor(0, 138, 125, 81), video::EFT_FOG_LINEAR, 1300, 1600, .003f, true, false);
+    driver->setFog(video::SColor(0, 138, 125, 81), video::EFT_FOG_LINEAR, 1300, 1600, .003f, true, true);
 
     obstacleGenerator = new ObstacleGenerator(device, camera->getFarValue(), 500);
 }
@@ -330,12 +331,16 @@ void Game::run()
     gui->initialize(INGAME_MENU);
     initializeScene();
     configuration.resolution = driver->getScreenSize();
+    video::SLight lightData;
     while (device->run())
     {
         if (eventReceiver->stage == MENU || eventReceiver->quit){
             break;
         }
         driver->setFog(iridescentColor(timer->getTime()), video::EFT_FOG_LINEAR, 800.0f, 1500.0f, 0.01f, true, true);
+        lightData = light->getLightData();
+        lightData.DiffuseColor = iridescentColor(timer->getTime());
+        light->setLightData(lightData);
         if (pause) {
             core::stringw scrs = _w("Screen size: ");
             scrs += configuration.resolution.Width;
