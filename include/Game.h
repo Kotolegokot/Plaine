@@ -6,6 +6,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include <CGUITTFont.h>
+#include <ITimer.h>
 #include "EventReceiver.h"
 #include "util.h"
 #include "Config.h"
@@ -36,6 +37,8 @@ private:
     gui::IGUIEnvironment *guiEnvironment = nullptr;
     io::IFileSystem *fileSystem = nullptr;
     EventReceiver *eventReceiver = nullptr;
+    gui::IGUISkin *skin = nullptr;
+    ITimer *timer = nullptr;
 
     // Bullet
     btBroadphaseInterface *broadphase = nullptr;

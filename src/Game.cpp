@@ -2,6 +2,7 @@
 
 using namespace irr;
 
+
 Game::Game(const struct ConfigData &data)
 {
     configuration = data;
@@ -18,7 +19,6 @@ Game::~Game()
 
 void Game::initializeGUI()
 {
-    gui::IGUISkin *skin = guiEnvironment->getSkin();
     gui::IGUIFont *font = gui::CGUITTFont::createTTFont(driver, fileSystem, io::path("media/fonts/font.ttf"), 13, true, true);
     if (font)
         skin->setFont(font);
@@ -40,14 +40,17 @@ bool Game::initializeDevice()
         return false;
     }
     device->setWindowCaption(L"PlaneTest");
+    timer=device->getTimer();
     driver = device->getVideoDriver();
     sceneManager = device->getSceneManager();
     guiEnvironment = device->getGUIEnvironment();
+    skin = guiEnvironment->getSkin();
     fileSystem = device->getFileSystem();
     eventReceiver = new EventReceiver();
     device->setEventReceiver(eventReceiver);
     device->setResizable(configuration.resizable);
-
+    timer->setTime(0);
+    timer->start();
     return true;
 }
 
@@ -78,7 +81,8 @@ void Game::initializeScene()
     camera->addAnimator(cameraAnimator);
     cameraAnimator->drop();
 
-    light = sceneManager->addLightSceneNode(planeNode, core::vector3df(0, 0, -100), video::SColorf(1, 1, 1), 300);
+    light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), video::SColor(0, getRandomf(0, 255), getRandomf(0, 255), getRandomf(0, 255)), 300);
+    light->setLightType(video::ELT_DIRECTIONAL);
     light->setVisible(true);
 
     const btScalar planeMass = 0;
@@ -132,7 +136,6 @@ void Game::menu()
     }
     configuration.resolution = driver->getScreenSize();
     gui->initialize(MENU);
-
     while (device->run()) {
         if (eventReceiver->stage == INGAME_MENU){
             gui->terminate();
@@ -161,6 +164,17 @@ void Game::menu()
         }
         else if (!eventReceiver->IsKeyDown(KEY_ESCAPE))
             eventReceiver->escapePressed = false;
+        if (gui->getStage() == SETTINGS && eventReceiver->stage == MENU && eventReceiver->needRestartInMenu)
+            {
+                gui->terminate();
+                terminateDevice();
+                if (!initializeDevice())
+                    return;
+                initializeGUI();
+                initialized = true;
+                gui->initialize(MENU);
+                eventReceiver->needRestartInMenu = false;
+            }
         if (eventReceiver->toggleGUI)
         {
             gui->terminate();
@@ -187,16 +201,19 @@ void Game::menu()
             if (eventReceiver->toggleFullscreen)
             {
                 configuration.fullscreen = !configuration.fullscreen;
-                terminateDevice();
-                configuration.resolution = core::dimension2d<u32>(1240, 720);
+                configuration.resolution = core::dimension2d<u32>(640, 480);
                 configuration.resizable = false;
+                gui->terminate();
+                terminateDevice();
                 if (!initializeDevice())
-                        return;
-                initialized = true;
+                    return;
                 initializeGUI();
-                gui->initialize(MENU);
+                initialized = true;
+                eventReceiver->stage = SETTINGS;
+                gui->initialize(SETTINGS);
+                eventReceiver->needRestartInMenu = false;
             }
-            if(eventReceiver->toggleGraphicMode)
+            if (eventReceiver->toggleResolution)
             {
                 switch (gui->comboBoxResolution->getSelected())
                 {
@@ -212,6 +229,18 @@ void Game::menu()
                         configuration.resizable = true;
                         break;
                 }
+                gui->terminate();
+                terminateDevice();
+                if (!initializeDevice())
+                    return;
+                initializeGUI();
+                initialized = true;
+                eventReceiver->stage = SETTINGS;
+                gui->initialize(SETTINGS);
+                eventReceiver->needRestartInMenu = false;
+            }
+            if(eventReceiver->toggleColorDepth)
+            {
                 switch (gui->comboBoxColorDepth->getSelected())
                 {
                 case 0:
@@ -226,12 +255,8 @@ void Game::menu()
                 }
                 configuration.vsync = gui->checkBoxVSync->isChecked();
                 configuration.stencilBuffer = gui->checkBoxStencilBuffer->isChecked();
-                terminateDevice();
-                if (!initializeDevice())
-                    return;
-                initialized = true;
-                initializeGUI();
-                gui->initialize(MENU);
+                eventReceiver->toggleColorDepth = false;
+                eventReceiver->needRestartInMenu = true;
             }
             if (eventReceiver->toggleLanguage)
             {
@@ -254,8 +279,8 @@ void Game::menu()
                 }
                 eventReceiver->toggleLanguage = false;
                 setLanguage(configuration.language, true);
-                eventReceiver->stage = MENU;
-                eventReceiver->toggleGUI = true;
+                gui->terminate();
+                gui->initialize(SETTINGS);
             }
         }
         if (eventReceiver->stage == CONTROL_SETTINGS){
@@ -306,13 +331,13 @@ void Game::menu()
                         gui->initialize(CONTROL_SETTINGS);
                    }
                    else if (eventReceiver->changingControlUp)
-                        gui->buttonControlUp->setText(_wp("Press button"));
+                        gui->buttonControlUp->setText(_wp("Press a key"));
                     else if (eventReceiver->changingControlLeft)
-                        gui->buttonControlLeft->setText(_wp("Press button"));
+                        gui->buttonControlLeft->setText(_wp("Press a key"));
                     else if (eventReceiver->changingControlDown)
-                        gui->buttonControlDown->setText(_wp("Press button"));
+                        gui->buttonControlDown->setText(_wp("Press a key"));
                     else if (eventReceiver->changingControlRight)
-                        gui->buttonControlRight->setText(_wp("Press button"));
+                        gui->buttonControlRight->setText(_wp("Press a key"));
                 }
         }
         if (configuration.resolution != driver->getScreenSize())
@@ -327,7 +352,7 @@ void Game::menu()
         gui->textScreenSize->setText(scrs.c_str());
         device->getCursorControl()->setVisible(true);
         if (device->isWindowActive()) {
-            driver->beginScene(true, true, video::SColor(0, 10, 53, 64));;
+            driver->beginScene(true, true, iridescentColor(timer->getTime()));
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
@@ -343,12 +368,16 @@ void Game::run()
     gui->initialize(INGAME_MENU);
     initializeScene();
     configuration.resolution = driver->getScreenSize();
-
+    video::SLight lightData;
     while (device->run())
     {
         if (eventReceiver->stage == MENU || eventReceiver->quit){
             break;
         }
+        driver->setFog(iridescentColor(timer->getTime()), video::EFT_FOG_LINEAR, 800.0f, 1500.0f, 0.01f, true, true);
+        lightData = light->getLightData();
+        lightData.DiffuseColor = iridescentColor(timer->getTime());
+        light->setLightData(lightData);
         if (pause) {
             core::stringw scrs = _w("Screen size: ");
             scrs += configuration.resolution.Width;
@@ -413,8 +442,7 @@ void Game::run()
 
         if (device->isWindowActive()) {
             dynamicsWorld->stepSimulation(1 / 60.f);
-
-            driver->beginScene(true, true, video::SColor(0, 10, 53, 64));
+            driver->beginScene(true, true, iridescentColor(timer->getTime()));
             if (!pause)
                 sceneManager->drawAll();
             guiEnvironment->drawAll();

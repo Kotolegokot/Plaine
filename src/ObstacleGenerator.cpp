@@ -56,6 +56,11 @@ btRigidBody *ObstacleGenerator::createCube(const core::vector3df &position)
     scene::ISceneNode *cubeNode = device->getSceneManager()->addCubeSceneNode(CUBE_SIDE, 0, -1, position);
     cubeNode->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
     cubeNode->setMaterialFlag(video::EMF_FOG_ENABLE, true);
+	cubeNode->setMaterialFlag(video::EMF_ANISOTROPIC_FILTER, true);
+	cubeNode->setMaterialFlag(video::EMF_TRILINEAR_FILTER, true);
+	cubeNode->setMaterialFlag(video::EMF_ANTI_ALIASING, true);
+	cubeNode->setMaterialFlag(video::EMF_FOG_ENABLE, true);
+	cubeNode->setDebugDataVisible(true);
 
     btMotionState *motionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1),
         btVector3(position.X, position.Y, position.Z)), cubeNode);

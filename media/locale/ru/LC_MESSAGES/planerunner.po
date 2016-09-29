@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-26 00:23+0300\n"
-"PO-Revision-Date: 2016-09-26 00:47+0300\n"
+"POT-Creation-Date: 2016-09-28 02:47+0300\n"
+"PO-Revision-Date: 2016-09-28 02:52+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -20,106 +20,170 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: src/Game.cpp:189 src/Game.cpp:225
+#: src/Game.cpp:294 src/Game.cpp:296 src/Game.cpp:298 src/Game.cpp:300
+msgid "Press a key"
+msgstr "Нажмите клавишу"
+
+#: src/Game.cpp:308 src/Game.cpp:338
 msgid "Screen size: "
 msgstr "Размер экрана: "
 
-#: src/Game.cpp:245
+#: src/Game.cpp:358
 msgid "Camera position: ("
 msgstr "Позиция камеры: ("
 
-#: src/Game.cpp:257
+#: src/Game.cpp:370
 msgid "Cubes: "
 msgstr "Кубы: "
 
-#: src/GUI.cpp:18
+#: src/GUI.cpp:50
 msgid "Start"
 msgstr "Старт"
 
-#: src/GUI.cpp:18
+#: src/GUI.cpp:50
 msgid "Start game"
 msgstr "Начать игру"
 
-#: src/GUI.cpp:20
+#: src/GUI.cpp:52
 msgid "Settings"
 msgstr "Настройки"
 
-#: src/GUI.cpp:20
+#: src/GUI.cpp:52
 msgid "Game settings"
 msgstr "Настройки игры"
 
-#: src/GUI.cpp:22 src/GUI.cpp:46 src/GUI.cpp:145
+#: src/GUI.cpp:54 src/GUI.cpp:79 src/GUI.cpp:186 src/GUI.cpp:227
 msgid "Quit"
 msgstr "Выход"
 
-#: src/GUI.cpp:22 src/GUI.cpp:46 src/GUI.cpp:145
+#: src/GUI.cpp:54 src/GUI.cpp:79 src/GUI.cpp:186 src/GUI.cpp:227
 msgid "Exit game"
 msgstr "Выход из игры"
 
-#: src/GUI.cpp:42
+#: src/GUI.cpp:75
 msgid "Resume"
 msgstr "Продолжить"
 
-#: src/GUI.cpp:42
+#: src/GUI.cpp:75
 msgid "Resume Game"
 msgstr "Продолжить игру"
 
-#: src/GUI.cpp:44
+#: src/GUI.cpp:77
 msgid "Menu"
 msgstr "Меню"
 
-#: src/GUI.cpp:44 src/GUI.cpp:143
+#: src/GUI.cpp:77 src/GUI.cpp:184
 msgid "Exit to Main menu"
 msgstr "Выход в главное меню"
 
-#: src/GUI.cpp:64
+#: src/GUI.cpp:97
 msgid "Language:"
 msgstr "Язык:"
 
-#: src/GUI.cpp:78
+#: src/GUI.cpp:111
 msgid "Resolution:"
 msgstr "Разрешение:"
 
-#: src/GUI.cpp:86
+#: src/GUI.cpp:119
 msgid " (Fullscreen)"
 msgstr " (Полноэкранный режим)"
 
-#: src/GUI.cpp:90
-msgid "Windowed"
-msgstr "Оконный режим"
-
-#: src/GUI.cpp:90
-msgid "To Windowed Mode"
-msgstr "В оконный режим"
-
-#: src/GUI.cpp:102 src/GUI.cpp:122 src/GUI.cpp:271
+#: src/GUI.cpp:134 src/GUI.cpp:154 src/GUI.cpp:376
 msgid " (Custom)"
 msgstr " (пользовательское)"
 
-#: src/GUI.cpp:109 src/GUI.cpp:114
+#: src/GUI.cpp:141 src/GUI.cpp:146
 msgid "Custom Resolution"
 msgstr "Пользовательское"
 
-#: src/GUI.cpp:126
-msgid "Fullscreen"
-msgstr "Полноэкранный режим"
-
-#: src/GUI.cpp:126
-msgid "To Fullscreen Mode"
-msgstr "В полноэкранный режим"
-
-#: src/GUI.cpp:129
+#: src/GUI.cpp:159
 msgid "Color Depth:"
 msgstr "Глубина цвета:"
 
-#: src/GUI.cpp:140
+#: src/GUI.cpp:171
 msgid "VSync"
 msgstr "Вертикальная синхронизация"
 
-#: src/GUI.cpp:141
+#: src/GUI.cpp:173
 msgid "Stencil Buffer"
 msgstr "Буфер трафарета"
 
-#: src/GUI.cpp:143
+#: src/GUI.cpp:177
+msgid "Windowed"
+msgstr "Оконный режим"
+
+#: src/GUI.cpp:177
+msgid "To Windowed Mode"
+msgstr "В оконный режим"
+
+#: src/GUI.cpp:180
+msgid "Fullscreen"
+msgstr "Полноэкранный режим"
+
+#: src/GUI.cpp:180
+msgid "To Fullscreen Mode"
+msgstr "В полноэкранный режим"
+
+#: src/GUI.cpp:182
+msgid "Controls"
+msgstr "Управление"
+
+#: src/GUI.cpp:182
+msgid "Edit control settings"
+msgstr "Редактировать настройки управления"
+
+#: src/GUI.cpp:184 src/GUI.cpp:225
 msgid "Back"
 msgstr "Назад"
+
+#: src/GUI.cpp:210
+msgid "Up: "
+msgstr "Вверх: "
+
+#: src/GUI.cpp:212 src/GUI.cpp:215 src/GUI.cpp:218 src/GUI.cpp:221
+msgid "Click to change"
+msgstr "Кликните для изменения"
+
+#: src/GUI.cpp:213
+msgid "Left: "
+msgstr "Влево: "
+
+#: src/GUI.cpp:216
+msgid "Down: "
+msgstr "Вниз: "
+
+#: src/GUI.cpp:219
+msgid "Right: "
+msgstr "Вправо: "
+
+#: src/GUI.cpp:223
+msgid "Default"
+msgstr "По умолчанию"
+
+#: src/GUI.cpp:223
+msgid "Default control settings"
+msgstr "Настройки управления по умолчанию"
+
+#: src/GUI.cpp:225
+msgid "Back to game settings"
+msgstr "Назад к настройкам игры"
+
+#: src/util.cpp:150
+msgid "Up Arrow"
+msgstr "Стрелка вверх"
+
+#: src/util.cpp:153
+msgid "Left Arrow"
+msgstr "Стрелка влево"
+
+#: src/util.cpp:156
+msgid "Down Arrow"
+msgstr "Стрелка вниз"
+
+#: src/util.cpp:159
+msgid "Right Arrow"
+msgstr "Стрелка вправо"
+
+#: src/util.cpp:198
+msgid "Space"
+msgstr "Пробел"

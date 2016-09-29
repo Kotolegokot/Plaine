@@ -43,6 +43,7 @@ public:
     gui::IGUIStaticText *textControlRight = nullptr;
     gui::IGUICheckBox *checkBoxVSync = nullptr;
     gui::IGUICheckBox *checkBoxStencilBuffer = nullptr;
+    gui::IGUIWindow *settingsMessageBox = nullptr;
 
 
     void recalculateButtonProportions();
@@ -50,6 +51,7 @@ public:
     void terminate();
     void resizeGUI();
     void setVisible(bool state);
+    Stage getStage();
 private:
     Stage stage;
     const int SPACE = 10;

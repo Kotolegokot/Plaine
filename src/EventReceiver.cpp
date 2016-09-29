@@ -91,14 +91,19 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 toggleLanguage = true;
                 break;
             }
-            else
+            else if (id == ID_COMBOBOX_RESOLUTION)
             {
-                toggleGraphicMode = true;
+                toggleResolution = true;
+                return true;
+            }
+            else if (id == ID_COMBOBOX_COLORDEPTH)
+            {
+                toggleColorDepth = true;
                 return true;
             }
         case gui::EGET_CHECKBOX_CHANGED:
             {
-                toggleGraphicMode = true;
+                toggleColorDepth = true;
                 return true;
             }
         default:
