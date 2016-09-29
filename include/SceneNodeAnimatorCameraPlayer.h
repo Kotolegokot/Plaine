@@ -3,6 +3,7 @@
 
 #include <irrlicht.h>
 #include "Config.h"
+#include "KinematicMotionState.h"
 
 using namespace irr;
 
@@ -10,7 +11,8 @@ using namespace irr;
 class SceneNodeAnimatorCameraPlayer : public scene::ISceneNodeAnimator
 {
 public:
-    SceneNodeAnimatorCameraPlayer(f32 forwardMoveSpeed = 0, f32 lateralMoveSpeed = 0, f32 verticalMoveSpeed = 0, const struct Controls &controls = Controls());
+    SceneNodeAnimatorCameraPlayer(KinematicMotionState *motionState, f32 forwardMoveSpeed = 0, f32 lateralMoveSpeed = 0, f32 verticalMoveSpeed = 0,
+        const struct Controls &controls = Controls());
 
     f32 getForwardMoveSpeed() const;
     void setForwardMoveSpeed(f32 moveSpeed);
@@ -18,6 +20,9 @@ public:
     void setLateralMoveSpeed(f32 moveSpeed);
     f32 getVerticalMoveSpeed() const;
     void setVerticalMoveSpeed(f32 moveSpeed);
+
+    KinematicMotionState *getMotionState() const;
+    void setMotionState(KinematicMotionState *motionState);
 
     virtual void animateNode(scene::ISceneNode* node, u32 timeMs) override;
     virtual scene::ISceneNodeAnimator *createClone(scene::ISceneNode *node, scene::ISceneManager *newManager = 0) override;
@@ -35,6 +40,7 @@ private:
     bool firstUpdate = true;
 
     Controls controls;
+    KinematicMotionState *motionState = nullptr;
 };
 
 #endif // SCENENODEANIMATORCAMERAPLAYER_H

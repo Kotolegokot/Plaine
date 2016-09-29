@@ -56,7 +56,12 @@ bool Game::initializeDevice()
 
 void Game::initializeScene()
 {
-    driver->setFog(video::SColor(0, 138, 125, 81), video::EFT_FOG_LINEAR, 1300, 1600, .003f, true, false);
+    const f32 planeRadius = 50;
+    const f32 cameraDistance = 550;
+    const f32 farValue = 1500;
+    const btScalar planeMass = 0;
+
+    driver->setFog(iridescentColor(timer->getTime()), video::EFT_FOG_LINEAR, 1300, 1600, .003f, true, false);
 
     // Bullet
     // add broadphase interface
@@ -69,31 +74,30 @@ void Game::initializeScene()
     solver = new btSequentialImpulseConstraintSolver;
     // create world
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-    dynamicsWorld->setGravity(btVector3(0, -100, 0));
+    dynamicsWorld->setGravity(btVector3(0, 0, 0));
 
-    scene::ISceneNode *planeNode = sceneManager->addSphereSceneNode(50, 16, 0, -1, core::vector3df(0, 0, 0));
+    planeNode = sceneManager->addSphereSceneNode(planeRadius, 16, 0, -1, core::vector3df(0, 0, 0));
     planeNode->setMaterialTexture(0, driver->getTexture("media/textures/lsd.png"));
 
     camera = sceneManager->addCameraSceneNode(planeNode);
-    camera->setPosition(core::vector3df(0, 0, -600));
-    scene::ISceneNodeAnimator *cameraAnimator = new SceneNodeAnimatorCameraPlayer(35.f, 15.f, 15.f, configuration.controls);
-    camera->setFarValue(1500);
-    camera->addAnimator(cameraAnimator);
-    cameraAnimator->drop();
+    camera->setPosition(core::vector3df(0, 0, -planeRadius - cameraDistance));
+    camera->setFarValue(farValue);
 
-    light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), video::SColor(0, getRandomf(0, 255), getRandomf(0, 255), getRandomf(0, 255)), 300);
+    light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -planeRadius - cameraDistance), video::SColor(0, getRandomf(0, 255), getRandomf(0, 255), getRandomf(0, 255)), 300);
     light->setLightType(video::ELT_DIRECTIONAL);
-    light->setVisible(true);
 
-    const btScalar planeMass = 0;
-
-    planeShape = new btSphereShape(50);
-    btMotionState *planeMotionState = new KinematicMotionState(btTransform(btQuaternion(0, 0, 0, 1),
+    planeShape = new btSphereShape(planeRadius);
+    KinematicMotionState *planeMotionState = new KinematicMotionState(btTransform(btQuaternion(0, 0, 0, 1),
         btVector3(0, 0, 0)), planeNode);
     btVector3 planeInertia(0, 0, 0);
     btRigidBody::btRigidBodyConstructionInfo planeCI(planeMass,  planeMotionState, planeShape, planeInertia);
     planeBody = new btRigidBody(planeCI);
     dynamicsWorld->addRigidBody(planeBody);
+
+    scene::ISceneNodeAnimator *planeAnimator = new SceneNodeAnimatorCameraPlayer(planeMotionState,
+        35.f, 15.f, 15.f, configuration.controls);
+    planeNode->addAnimator(planeAnimator);
+    planeAnimator->drop();
 
     obstacleGenerator = new ObstacleGenerator(device, dynamicsWorld, camera->getFarValue(), 500);
 }
@@ -399,8 +403,8 @@ void Game::run()
             device->getCursorControl()->setVisible(true);
         } else {
             {
-                core::stringw cameraPosition = _w("Camera position: (");
-                core::vector3df position = camera->getPosition();
+                core::stringw cameraPosition = _w("Plane position: (");
+                core::vector3df position = planeNode->getPosition();
                 cameraPosition += position.X;
                 cameraPosition += ", ";
                 cameraPosition += position.Y;
@@ -423,7 +427,7 @@ void Game::run()
             gui->textCubeCount->setVisible(true);
             device->getCursorControl()->setVisible(false);
 
-            obstacleGenerator->generate(((KinematicMotionState *) planeBody->getMotionState())->getNode()->getPosition());
+            obstacleGenerator->generate(planeNode->getPosition());
         }
 
         if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {

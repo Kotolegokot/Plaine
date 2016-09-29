@@ -2,8 +2,13 @@
 
 using namespace irr;
 
-SceneNodeAnimatorCameraPlayer::SceneNodeAnimatorCameraPlayer(f32 forwardMoveSpeed, f32 lateralMoveSpeed, f32 verticalMoveSpeed, const struct Controls &controls) :
-    forwardMoveSpeed(forwardMoveSpeed), lateralMoveSpeed(lateralMoveSpeed), verticalMoveSpeed(verticalMoveSpeed), controls(controls)
+SceneNodeAnimatorCameraPlayer::SceneNodeAnimatorCameraPlayer(KinematicMotionState *motionState, f32 forwardMoveSpeed,
+    f32 lateralMoveSpeed, f32 verticalMoveSpeed, const struct Controls &controls) :
+        motionState(motionState),
+        forwardMoveSpeed(forwardMoveSpeed),
+        lateralMoveSpeed(lateralMoveSpeed),
+        verticalMoveSpeed(verticalMoveSpeed),
+        controls(controls)
 {
     for (u32 i = 0; i < KEY_KEY_CODES_COUNT; i++)
         PressedKeys[i] = false;
@@ -39,6 +44,16 @@ void SceneNodeAnimatorCameraPlayer::setVerticalMoveSpeed(f32 moveSpeed)
     verticalMoveSpeed = moveSpeed;
 }
 
+KinematicMotionState *SceneNodeAnimatorCameraPlayer::getMotionState() const
+{
+    return motionState;
+}
+
+void SceneNodeAnimatorCameraPlayer::setMotionState(KinematicMotionState *motionState)
+{
+    this->motionState = motionState;
+}
+
 bool SceneNodeAnimatorCameraPlayer::OnEvent(const SEvent &event)
 {
     if (event.EventType == EET_KEY_INPUT_EVENT)
@@ -49,42 +64,34 @@ bool SceneNodeAnimatorCameraPlayer::OnEvent(const SEvent &event)
 
 void SceneNodeAnimatorCameraPlayer::animateNode(scene::ISceneNode *node, u32 timeMs)
 {
-return;
+    if (!node)
+        return;
+
     const f32 MAX_ACCELERATION = 4;
 
-    if (!node || node->getType() != scene::ESNT_CAMERA)
-		return;
-
-    scene::ICameraSceneNode *camera = static_cast<scene::ICameraSceneNode *>(node);
     if (firstUpdate) {
         lastAnimationTime = timeMs;
         firstUpdate = false;
     }
 
-    if (!camera->isInputReceiverEnabled()) {
+    /*if (!node->isInputReceiverEnabled()) {
         lastAnimationTime = timeMs;
         return;
-    }
+    }*/
 
-    scene::ISceneManager * smgr = camera->getSceneManager();
-	if(smgr && smgr->getActiveCamera() != camera)
-		return;
+    scene::ISceneManager * smgr = node->getSceneManager();
 
     f32 timeDiff = (f32) (timeMs - lastAnimationTime);
     lastAnimationTime = timeMs;
 
-    core::vector3df pos = camera->getPosition();
+    core::vector3df pos = node->getPosition();
 
-    core::vector3df dir = camera->getTarget() - camera->getAbsolutePosition();
-    dir.normalize();
+    core::vector3df dir(0, 0, 1);
     core::vector3df up(0, 1, 0);
-    core::vector3df left = dir;
-    f32 t = left.X;
-    left.X = -left.Z;
-    left.Z = t;
+    core::vector3df left(1, 0, 0);
 
     // lateral movement
-    if (PressedKeys[controls.left] && PressedKeys[controls.right]){
+    /*if (PressedKeys[controls.left] && PressedKeys[controls.right]){
         // nothing
     } else if (PressedKeys[controls.left]) {
         if (lateralAcceleration < MAX_ACCELERATION)
@@ -113,19 +120,20 @@ return;
     if (verticalAcceleration > 0)
         verticalAcceleration -= timeDiff * 0.01f * MAX_ACCELERATION / 10;
     else if (verticalAcceleration < 0)
-        verticalAcceleration += timeDiff * 0.01f * MAX_ACCELERATION / 10;
+        verticalAcceleration += timeDiff * 0.01f * MAX_ACCELERATION / 10;*/
 
     pos += dir * timeDiff * forwardMoveSpeed * 0.01f;
 
     // apply all the changes
-    camera->setTarget(pos + dir);
-    camera->setPosition(pos);
+    if (motionState)
+        motionState->setPosition(pos);
 }
 
 scene::ISceneNodeAnimator *SceneNodeAnimatorCameraPlayer::createClone(scene::ISceneNode *node,
 				scene::ISceneManager *newManager)
 {
-    SceneNodeAnimatorCameraPlayer *newAnimator = new SceneNodeAnimatorCameraPlayer(lateralMoveSpeed, verticalMoveSpeed);
+    SceneNodeAnimatorCameraPlayer *newAnimator = new SceneNodeAnimatorCameraPlayer(motionState,
+        forwardMoveSpeed, lateralMoveSpeed, verticalMoveSpeed, controls);
 
 	return newAnimator;
 }

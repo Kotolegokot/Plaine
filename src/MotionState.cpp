@@ -20,6 +20,19 @@ scene::ISceneNode *MotionState::getNode() const
     return node;
 }
 
+void MotionState::setPosition(const core::vector3df &position)
+{
+    transform.setOrigin(btVector3(position.X, position.Y, position.Z));
+    node->setPosition(position);
+}
+
+core::vector3df MotionState::getPosition() const
+{
+    btVector3 origin = transform.getOrigin();
+
+    return core::vector3df(origin.x(), origin.y(), origin.z());
+}
+
 void MotionState::getWorldTransform(btTransform &worldTrans) const
 {
     worldTrans = transform;

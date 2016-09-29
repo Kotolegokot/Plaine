@@ -52,6 +52,7 @@ private:
     scene::ILightSceneNode *light = nullptr;
     btCollisionShape *planeShape = nullptr;
     btRigidBody *planeBody = nullptr;
+    scene::ISceneNode *planeNode = nullptr;
     ObstacleGenerator *obstacleGenerator = nullptr;
 
     void error(const core::stringw &str) const;

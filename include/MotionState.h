@@ -19,6 +19,8 @@ public:
 	~MotionState();
 	void setNode(scene::ISceneNode *node);
 	scene::ISceneNode *getNode() const;
+	void setPosition(const core::vector3df &position);
+	core::vector3df getPosition() const;
 	virtual void getWorldTransform(btTransform &worldTrans) const;
 	virtual void setWorldTransform(const btTransform &worldTrans);
 };
