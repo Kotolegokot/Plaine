@@ -24,7 +24,7 @@ clean:
 	rm -rf obj/
 
 debug_run:
-	./start_debug.sh
+	bin/Debug/PlaneRunner
 
 release_run:
-	./start_release.sh
+	bin/Release/PlaneRunner
