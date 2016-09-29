@@ -1,9 +1,10 @@
 CXX=g++
 CFLAGS=-Wall -std=c++11
-SOURCE_DIR=src
-SOURCE=main.cpp $(SOURCE_DIR)/*.cpp
-LIBS=-lIrrlicht -lfreetype
-INCLUDE=-Iinclude/ -Ideps/include -Ideps/include/irrlicht -Ideps/include/freetype2 -I/usr/include/irrlicht -I/usr/include/freetype2
+SOURCE=main.cpp src/*.cpp
+LIB=-lfreetype -l:libPlaneRunnerIrrlicht.so.1.8 -lBulletDynamics -lBulletCollision -lLinearMath
+
+SOURCE_INCLUDE=-Iinclude/ -Ideps/include/planerunner_irrlicht/ -I/usr/include/freetype2/ -I/usr/include/bullet
+LIB_INCLUDE=-Ldeps/lib/ -Wl,-rpath,deps/lib/
 EXECUTABLE=PlaneRunner
 
 default: release
@@ -12,18 +13,18 @@ all: debug release
 
 debug:
 	mkdir bin/Debug -p
-	$(CXX) $(CFLAGS) -g $(LIBS) $(INCLUDE) $(SOURCE) -o bin/Debug/$(EXECUTABLE)
+	$(CXX) $(CFLAGS) -g $(LIB_INCLUDE) $(SOURCE_INCLUDE) $(SOURCE) $(LIB) -o bin/Debug/$(EXECUTABLE)
 
 release:
 	mkdir bin/Release -p
-	$(CXX) $(CFLAGS) $(LIBS) $(INCLUDE) $(SOURCE) -o bin/Release/$(EXECUTABLE)
+	$(CXX) $(CFLAGS) $(SOURCE_INCLUDE) $(LIB_INCLUDE) $(SOURCE) $(LIB) -o bin/Release/$(EXECUTABLE)
 
 clean:
 	rm -rf bin/
 	rm -rf obj/
 
-run_debug:
-	./bin/Debug/PlaneRunner
+debug_run:
+	./start_debug.sh
 
-run_release:
-	./bin/Release/PlaneRunner
+release_run:
+	./start_release.sh

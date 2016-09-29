@@ -15,7 +15,6 @@
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
 					<Add option="-g" />
-					<Add directory="include" />
 				</Compiler>
 			</Target>
 			<Target title="Linux-Release">
@@ -27,7 +26,6 @@
 					<Add option="-O2" />
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
-					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -43,7 +41,6 @@
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
 					<Add option="-g" />
-					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add library="intl" />
@@ -58,7 +55,6 @@
 				<Compiler>
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
-					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add library="intl" />
@@ -71,18 +67,17 @@
 			<Add directory="include" />
 			<Add directory="/usr/include/freetype2" />
 			<Add directory="deps/include/" />
-			<Add directory="deps/include/irrlicht" />
+			<Add directory="deps/include/planerunner_irrlicht" />
 			<Add directory="deps/include/freetype2" />
-			<Add directory="/usr/include/irrlicht" />
 			<Add directory="/usr/include/bullet" />
 			<Add directory="deps/include/bullet" />
 		</Compiler>
 		<Linker>
-			<Add library="Irrlicht" />
 			<Add library="freetype" />
 			<Add library="BulletDynamics" />
 			<Add library="BulletCollision" />
 			<Add library="LinearMath" />
+			<Add library=":libPlaneRunnerIrrlicht.so.1.8" />
 			<Add directory="deps/lib" />
 		</Linker>
 		<Unit filename="include/CGUITTFont.h" />
