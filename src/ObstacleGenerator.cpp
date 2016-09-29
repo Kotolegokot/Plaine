@@ -51,7 +51,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
 
 btRigidBody *ObstacleGenerator::createCube(const core::vector3df &position)
 {
-    const btScalar mass = 1;
+    const btScalar mass = 0.1;
 
     scene::ISceneNode *cubeNode = device->getSceneManager()->addCubeSceneNode(CUBE_SIDE, 0, -1, position);
     cubeNode->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));

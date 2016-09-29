@@ -57,9 +57,9 @@ bool Game::initializeDevice()
 void Game::initializeScene()
 {
     const f32 planeRadius = 50;
-    const f32 cameraDistance = 550;
+    const f32 cameraDistance = 200;
     const f32 farValue = 1500;
-    const btScalar planeMass = 0;
+    const btScalar planeMass = 1;
 
     driver->setFog(iridescentColor(timer->getTime()), video::EFT_FOG_LINEAR, 1300, 1600, .003f, true, false);
 
@@ -74,7 +74,7 @@ void Game::initializeScene()
     solver = new btSequentialImpulseConstraintSolver;
     // create world
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-    dynamicsWorld->setGravity(btVector3(0, 0, 0));
+    dynamicsWorld->setGravity(btVector3(0, 10, 0));
 
     planeNode = sceneManager->addSphereSceneNode(planeRadius, 16, 0, -1, core::vector3df(0, 0, 0));
     planeNode->setMaterialTexture(0, driver->getTexture("media/textures/lsd.png"));
@@ -87,17 +87,17 @@ void Game::initializeScene()
     light->setLightType(video::ELT_DIRECTIONAL);
 
     planeShape = new btSphereShape(planeRadius);
-    KinematicMotionState *planeMotionState = new KinematicMotionState(btTransform(btQuaternion(0, 0, 0, 1),
+    MotionState *planeMotionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1),
         btVector3(0, 0, 0)), planeNode);
     btVector3 planeInertia(0, 0, 0);
     btRigidBody::btRigidBodyConstructionInfo planeCI(planeMass,  planeMotionState, planeShape, planeInertia);
     planeBody = new btRigidBody(planeCI);
+    planeBody->applyForce(btVector3(0, 0, 100000), btVector3(0, 0, 0));
     dynamicsWorld->addRigidBody(planeBody);
-
-    scene::ISceneNodeAnimator *planeAnimator = new SceneNodeAnimatorCameraPlayer(planeMotionState,
+    /*scene::ISceneNodeAnimator *planeAnimator = new SceneNodeAnimatorCameraPlayer(planeMotionState,
         35.f, 15.f, 15.f, configuration.controls);
     planeNode->addAnimator(planeAnimator);
-    planeAnimator->drop();
+    planeAnimator->drop();*/
 
     obstacleGenerator = new ObstacleGenerator(device, dynamicsWorld, camera->getFarValue(), 500);
 }
@@ -395,8 +395,6 @@ void Game::run()
                 gui->resizeGUI();
             }
 
-            camera->setInputReceiverEnabled(false);
-
             gui->setVisible(true);
             gui->textCameraPos->setVisible(false);
             gui->textCubeCount->setVisible(false);
@@ -420,7 +418,7 @@ void Game::run()
                 gui->textCubeCount->setText(cubeCount.c_str());
             }
 
-            camera->setInputReceiverEnabled(true);
+            camera->setTarget(planeNode->getPosition());
 
             gui->setVisible(false);
             gui->textCameraPos->setVisible(true);

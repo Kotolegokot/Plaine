@@ -122,7 +122,7 @@ void SceneNodeAnimatorCameraPlayer::animateNode(scene::ISceneNode *node, u32 tim
     else if (verticalAcceleration < 0)
         verticalAcceleration += timeDiff * 0.01f * MAX_ACCELERATION / 10;*/
 
-    pos += dir * timeDiff * forwardMoveSpeed * 0.01f;
+    //pos += dir * timeDiff * forwardMoveSpeed * 0.01f;
 
     // apply all the changes
     if (motionState)
