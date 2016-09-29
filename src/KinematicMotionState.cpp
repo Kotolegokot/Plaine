@@ -12,13 +12,5 @@ void KinematicMotionState::setWorldTransform(const btTransform &worldTrans)
 
 void KinematicMotionState::setKinematicWorldTransform(const btTransform &worldTrans)
 {
-    transform = worldTrans;
-
-    if (node) {
-        btQuaternion quatRotation = worldTrans.getRotation();
-        btVector3 eulerRotation = quatToEuler(quatRotation);
-        node->setRotation(core::vector3df(eulerRotation.x(), eulerRotation.y(), eulerRotation.z()));
-        btVector3 pos = worldTrans.getOrigin();
-        node->setPosition(core::vector3df(pos.x(), pos.y(), pos.z()));
-    }
+    MotionState::setWorldTransform(worldTrans);
 }
