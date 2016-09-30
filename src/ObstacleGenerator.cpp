@@ -7,16 +7,20 @@ using namespace irr;
 class Cube : public IBody
 {
 public:
-    Cube(btDynamicsWorld *world, IrrlichtDevice *device, btCollisionShape *shape, const btVector3 &position) :
-        IBody(world, shape), device(device), position(position)
+    Cube(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, const f32 &side) :
+        IBody(world, shape), device(device), position(position), side(side)
     {
+        // create shape for cubes
+        shape = new btBoxShape(btVector3(side / 2, side / 2, side / 2));
+        //mass = side*side*side/16000000;
+        mass = 0.1f;
         createBody();
     }
 
 protected:
     virtual void createNode() override
     {
-        node = device->getSceneManager()->addCubeSceneNode(CUBE_SIDE, 0, -1,
+        node = device->getSceneManager()->addCubeSceneNode(side, 0, -1,
             core::vector3df(position.x(), position.y(), position.z()));
         node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
 
@@ -35,19 +39,19 @@ protected:
 
     virtual btScalar getMass() override
     {
-        return 0.1f;
+        return mass;
     }
 
 private:
     IrrlichtDevice *device = nullptr;
     btVector3 position;
+    f32 mass;
+    f32 side;
 };
 
 ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, btDynamicsWorld *world, f32 farValue, f32 buffer) :
     device(device), farValue(farValue), world(world), buffer(buffer)
 {
-    // create shape for cubes
-    cubeShape = new btBoxShape(btVector3(CUBE_SIDE / 2, CUBE_SIDE / 2, CUBE_SIDE / 2));
 }
 
 ObstacleGenerator::~ObstacleGenerator()
@@ -80,7 +84,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     f32 newZ = z + getRandomf(-100, 100);
 
                     // create the cube and add it to the deque
-                    Cube *cube = new Cube(world, device, cubeShape, btVector3(newX, newY, newZ));
+                    Cube *cube = new Cube(world, device, btVector3(newX, newY, newZ), getRandomf(299.0f, 300.0f));
                     cubes.push_back(cube);
                     cubeCount++;
                 }
