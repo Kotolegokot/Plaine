@@ -440,13 +440,18 @@ void Game::run()
             core::stringw fps = _w("FPS: ");
             fps += driver->getFPS();
             gui->textFPS->setText(fps.c_str());
+            // velocity counter
+            core::stringw velocity = _w("Linear velocity: ");
+            velocity += plane->getRigidBody()->getLinearVelocity().length();
+            velocity += _w(", angular velocity: ");
+            velocity += plane->getRigidBody()->getAngularVelocity().length();
+            gui->textVelocity->setText(velocity.c_str());
             //setting position and target to the camera
             camera->setPosition(plane->getNode()->getPosition() - core::vector3df(0, 0, SPHERE_RADIUS + CAMERA_DISTANCE));
             camera->setTarget(plane->getNode()->getPosition());
 
             device->getCursorControl()->setVisible(false);
-            //std::cout << plane->getRigidBody()->getLinearVelocity().length() << std::endl;
-            //std::cout << plane->getRigidBody()->getAngularVelocity().length() << std::endl;
+
             obstacleGenerator->generate(plane->getNode()->getPosition());
 
             // if need toggle gui

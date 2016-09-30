@@ -1,6 +1,7 @@
 #include "ObstacleGenerator.h"
 #include "util.h"
 
+#define MASS_COEFFICIENT 500000000
 
 using namespace irr;
 
