@@ -7,6 +7,13 @@
 
 using namespace irr;
 
+// this class is a contact place for Bullet and Irrlicht
+// it describes an Irrlicht node and a Bullet body at the same time
+// Bullet uses its (get|set)WorldTransform functions to
+//      change a body's orientation and position,
+//      and MotionState changes the orientation and
+//      position of the Irrlicht node
+// so that it syncs a Bullet body and its correspoindig Irrlicht node
 class MotionState : public btMotionState
 {
 protected:

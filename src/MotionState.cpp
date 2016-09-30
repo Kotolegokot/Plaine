@@ -33,22 +33,29 @@ core::vector3df MotionState::getPosition() const
     return core::vector3df(origin.x(), origin.y(), origin.z());
 }
 
+// gets the body's transformation
 void MotionState::getWorldTransform(btTransform &worldTrans) const
 {
     worldTrans = transform;
 }
 
+// sets the body's and node's transformation
+// to set the Irrlicht node's rotation it converts
+//      quaternion notation to Euler angles
 void MotionState::setWorldTransform(const btTransform &worldTrans)
 {
     transform = worldTrans;
 
     if (node) {
+        // rotation
         core::vector3df eulerRotation;
         const btQuaternion &quatRotation = worldTrans.getRotation();
         core::quaternion q(quatRotation.x(), quatRotation.y(), quatRotation.z(), quatRotation.w());
         q.toEuler(eulerRotation);
         eulerRotation *= core::RADTODEG;
         node->setRotation(eulerRotation);;
+
+        // position
         btVector3 pos = worldTrans.getOrigin();
         node->setPosition(core::vector3df(pos.x(), pos.y(), pos.z()));
     }
