@@ -25,6 +25,11 @@ public:
         return rigidBody;
     }
 
+    scene::ISceneNode *getNode()
+    {
+        return node;
+    }
+
 
 protected:
     virtual void createNode() = 0;

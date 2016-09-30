@@ -14,6 +14,7 @@
 #include "SceneNodeAnimatorCameraPlayer.h"
 #include "ObstacleGenerator.h"
 #include "KinematicMotionState.h"
+#include "Plane.h"
 
 using namespace irr;
 
@@ -48,12 +49,11 @@ private:
     btDiscreteDynamicsWorld *dynamicsWorld = nullptr;
 
     // Scene
-    scene::ICameraSceneNode *camera = nullptr;
     scene::ILightSceneNode *light = nullptr;
+    scene::ICameraSceneNode *camera = nullptr;
     btCollisionShape *planeShape = nullptr;
-    btRigidBody *planeBody = nullptr;
-    scene::ISceneNode *planeNode = nullptr;
     ObstacleGenerator *obstacleGenerator = nullptr;
+    Plane *plane = nullptr;
 
     void error(const core::stringw &str) const;
     bool initializeDevice();

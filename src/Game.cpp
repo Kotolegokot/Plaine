@@ -2,6 +2,7 @@
 
 using namespace irr;
 
+#define FAR_VALUE 2000
 
 Game::Game(const struct ConfigData &data)
 {
@@ -56,10 +57,6 @@ bool Game::initializeDevice()
 
 void Game::initializeScene()
 {
-    const f32 planeRadius = 50;
-    const f32 cameraDistance = 200;
-    const f32 farValue = 1500;
-    const btScalar planeMass = 1;
 
     driver->setFog(iridescentColor(timer->getTime()), video::EFT_FOG_LINEAR, 1300, 1600, .003f, true, false);
 
@@ -74,30 +71,17 @@ void Game::initializeScene()
     solver = new btSequentialImpulseConstraintSolver;
     // create world
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-    dynamicsWorld->setGravity(btVector3(0, 10, 0));
+    dynamicsWorld->setGravity(btVector3(0, 0, 0));
 
-    planeNode = sceneManager->addSphereSceneNode(planeRadius, 16, 0, -1, core::vector3df(0, 0, 0));
-    planeNode->setMaterialTexture(0, driver->getTexture("media/textures/lsd.png"));
-
-    camera = sceneManager->addCameraSceneNode(planeNode);
-    camera->setPosition(core::vector3df(0, 0, -planeRadius - cameraDistance));
-    camera->setFarValue(farValue);
-
-    light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -planeRadius - cameraDistance), video::SColor(0, getRandomf(0, 255), getRandomf(0, 255), getRandomf(0, 255)), 300);
+    light = sceneManager->addLightSceneNode(0, core::vector3df(0, 0, 1), video::SColor(0, getRandomf(0, 255), getRandomf(0, 255), getRandomf(0, 255)), 300);
     light->setLightType(video::ELT_DIRECTIONAL);
 
-    planeShape = new btSphereShape(planeRadius);
-    MotionState *planeMotionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1),
-        btVector3(0, 0, 0)), planeNode);
-    btVector3 planeInertia(0, 0, 0);
-    btRigidBody::btRigidBodyConstructionInfo planeCI(planeMass,  planeMotionState, planeShape, planeInertia);
-    planeBody = new btRigidBody(planeCI);
-    planeBody->applyForce(btVector3(0, 0, 100000), btVector3(0, 0, 0));
-    dynamicsWorld->addRigidBody(planeBody);
-    /*scene::ISceneNodeAnimator *planeAnimator = new SceneNodeAnimatorCameraPlayer(planeMotionState,
-        35.f, 15.f, 15.f, configuration.controls);
-    planeNode->addAnimator(planeAnimator);
-    planeAnimator->drop();*/
+    plane = new Plane(dynamicsWorld, device, btVector3(0, 0, 0));
+    plane->getRigidBody()->applyForce(btVector3(0, 0, 100000), btVector3(0, 0, 0));
+
+    camera = device->getSceneManager()->addCameraSceneNode(plane->getNode());
+    camera->setPosition(core::vector3df(0, 0, -SPHERE_RADIUS - CAMERA_DISTANCE));
+    camera->setFarValue(FAR_VALUE);
 
     obstacleGenerator = new ObstacleGenerator(device, dynamicsWorld, camera->getFarValue(), 500);
 }
@@ -119,9 +103,7 @@ void Game::terminateDevice()
 
 void Game::terminateScene()
 {
-    dynamicsWorld->removeRigidBody(planeBody);
-    delete planeBody->getMotionState();
-    delete planeBody;
+    delete plane;
     // IMPORTANT: obstacleGenerator must be deleted before dynamicsWorld and sceneManager
     delete obstacleGenerator;
     sceneManager->clear();
@@ -406,7 +388,7 @@ void Game::run()
         } else {
             {
                 core::stringw cameraPosition = _w("Plane position: (");
-                core::vector3df position = planeNode->getPosition();
+                core::vector3df position = plane->getNode()->getPosition();
                 cameraPosition += position.X;
                 cameraPosition += ", ";
                 cameraPosition += position.Y;
@@ -428,7 +410,7 @@ void Game::run()
                 gui->textFPS->setText(fps.c_str());
             }
 
-            camera->setTarget(planeNode->getPosition());
+            camera->setTarget(plane->getNode()->getPosition());
 
             gui->setVisible(false);
             gui->textCameraPos->setVisible(true);
@@ -436,7 +418,7 @@ void Game::run()
             gui->textFPS->setVisible(true);
             device->getCursorControl()->setVisible(false);
 
-            obstacleGenerator->generate(planeNode->getPosition());
+            obstacleGenerator->generate(plane->getNode()->getPosition());
         }
 
         if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
