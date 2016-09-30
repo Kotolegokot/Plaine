@@ -142,8 +142,9 @@ std::string wide_to_utf8(const std::wstring &input) {
 // returns a random float number
 f32 getRandomf(f32 min, f32 max)
 {
-    static std::default_random_engine engine(std::chrono::system_clock::now().time_since_epoch().count());
-    static std::uniform_real_distribution<> distribution(min, max);
+    static std::random_device rd;
+    static std::default_random_engine engine(rd());
+    std::uniform_real_distribution<f32> distribution(min, max);
 
     return distribution(engine);
 }
