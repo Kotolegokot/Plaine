@@ -1,7 +1,7 @@
 #include "Plane.h"
 
 Plane::Plane(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position) :
-    IBody(world, (shape = new btSphereShape(SPHERE_RADIUS))), device(device), position(position)
+    IBody(world), device(device), position(position)
 {
     createBody();
 }
@@ -15,6 +15,11 @@ void Plane::createNode()
 void Plane::createMotionState()
 {
     motionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1), position), node);
+}
+
+void Plane::createShape()
+{
+    shape = new btSphereShape(SPHERE_RADIUS);
 }
 
 btScalar Plane::getMass()

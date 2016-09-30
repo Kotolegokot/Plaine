@@ -7,8 +7,8 @@ using namespace irr;
 class Cube : public IBody
 {
 public:
-    Cube(btDynamicsWorld *world, IrrlichtDevice *device, btCollisionShape *shape, const btVector3 &position) :
-        IBody(world, shape), device(device), position(position)
+    Cube(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position) :
+        IBody(world), device(device), position(position)
     {
         createBody();
     }
@@ -33,6 +33,11 @@ protected:
         motionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1), position), node);
     }
 
+    virtual void createShape() override
+    {
+        shape = new btBoxShape(btVector3(CUBE_SIDE / 2, CUBE_SIDE / 2, CUBE_SIDE / 2));
+    }
+
     virtual btScalar getMass() override
     {
         return 0.1f;
@@ -44,11 +49,7 @@ private:
 };
 
 ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, btDynamicsWorld *world, f32 farValue, f32 buffer) :
-    device(device), farValue(farValue), buffer(buffer), world(world)
-{
-    // create shape for cubes
-    cubeShape = new btBoxShape(btVector3(CUBE_SIDE / 2, CUBE_SIDE / 2, CUBE_SIDE / 2));
-}
+    device(device), farValue(farValue), buffer(buffer), world(world) {}
 
 ObstacleGenerator::~ObstacleGenerator()
 {
@@ -80,7 +81,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     f32 newZ = z + getRandomf(-100, 100);
 
                     // create the cube and add it to the deque
-                    Cube *cube = new Cube(world, device, cubeShape, btVector3(newX, newY, newZ));
+                    Cube *cube = new Cube(world, device, btVector3(newX, newY, newZ));
                     cubes.push_back(cube);
                     cubeCount++;
                 }

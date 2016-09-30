@@ -22,6 +22,7 @@ public:
 protected:
     virtual void createNode() override;
     virtual void createMotionState() override;
+    virtual void createShape() override;
     virtual btScalar getMass() override;
 
 private:
