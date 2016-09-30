@@ -60,16 +60,3 @@ void MotionState::setWorldTransform(const btTransform &worldTrans)
         node->setPosition(core::vector3df(pos.x(), pos.y(), pos.z()));
     }
 }
-
-btVector3 MotionState::quatToEuler(const btQuaternion &quat)
-{
-    btVector3 result;
-    btScalar q0 = quat.w(), q1 = quat.x(),
-        q2 = quat.y(), q3 = quat.z();
-
-    result.setX(atan2(2*(q0*q1 + q2*q3), 1 - 2*(q1*q1 + q2*q2)));
-    result.setY(asin(2*(q0*q2 - q3*q1)));
-    result.setZ(atan2(2*(q0*q3 + q1*q2), 1 - 2*(q2*q2 + q3*q3)));
-
-    return result;
-}
