@@ -52,6 +52,10 @@ bool Game::initializeDevice()
     device->setResizable(configuration.resizable);
     timer->setTime(0);
     timer->start();
+    video::ECOLOR_FORMAT format = driver->getColorFormat();
+    if (format == video::ECF_A8R8G8B8)
+        std::cout << "asd";
+    std::cout << format << std::endl;
     return true;
 }
 
@@ -73,7 +77,7 @@ void Game::initializeScene()
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0, 0, 0));
 
-    light = sceneManager->addLightSceneNode(0, core::vector3df(0, 0, 1), video::SColor(0, getRandomf(0, 255), getRandomf(0, 255), getRandomf(0, 255)), 300);
+    light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), video::SColor(0, getRandomf(0, 255), getRandomf(0, 255), getRandomf(0, 255)), 300);
     light->setLightType(video::ELT_DIRECTIONAL);
 
     plane = new Plane(dynamicsWorld, device, btVector3(0, 0, 0));
@@ -291,6 +295,7 @@ void Game::menu()
                        if ((eventReceiver->lastKey != KEY_ESCAPE) &&
                            keyCodeName(eventReceiver->lastKey) != "")
                         {
+                            //if key is already occupied somewhere
                             if (eventReceiver->lastKey == configuration.controls.up)
                                 configuration.controls.up = KEY_KEY_CODES_COUNT;
                             else if (eventReceiver->lastKey == configuration.controls.left)
@@ -299,6 +304,7 @@ void Game::menu()
                                 configuration.controls.down = KEY_KEY_CODES_COUNT;
                             else if (eventReceiver->lastKey == configuration.controls.right)
                                 configuration.controls.right = KEY_KEY_CODES_COUNT;
+                            //if not
                             if (eventReceiver->changingControlUp)
                                 configuration.controls.up = eventReceiver->lastKey;
                             else if (eventReceiver->changingControlLeft)

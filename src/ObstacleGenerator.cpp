@@ -77,7 +77,6 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     cubeCount++;
                 }
             }
-
     generatedEdgeLeft = preciseEdge(playerPosition.X - farValueWithBuffer());
     generatedEdgeRight = preciseEdge(playerPosition.X + farValueWithBuffer());
     generatedEdgeBottom = preciseEdge(playerPosition.Y - farValueWithBuffer());

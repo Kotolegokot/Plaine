@@ -224,7 +224,7 @@ video::SColor iridescentColor(const u32 &currentTime)
 {
     static video::SColor color = video::SColor(0, getRandomf(0, 255), getRandomf(0, 255), getRandomf(0, 255));
     static video::SColor oldColor = color;
-    static f32 diff;
+    static f32 diff = 0;
     static u32 time = 0;
     if (int(time - currentTime) > COLOR_CHANGE_INTERVAL)
         time = currentTime + COLOR_CHANGE_INTERVAL;
