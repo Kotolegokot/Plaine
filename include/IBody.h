@@ -6,6 +6,8 @@
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "MotionState.h"
 
+// this class is a useful interface joining together
+// an Irrlicht node and a Bullet body
 class IBody
 {
 public:
@@ -37,6 +39,8 @@ protected:
     virtual btScalar getMass() = 0;
 
     // this method must be called in a derived class' constructor
+    // creates the node and the body
+    //      and add the body to the physics (Bullet) world
     void createBody()
     {
         createNode();
