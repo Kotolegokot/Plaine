@@ -53,8 +53,7 @@ private:
     // distance between obstacles
     const f32 STEP = 400;
 
-    // Bullet
-    btCollisionShape *cubeShape = nullptr;
+    // physics world
     btDynamicsWorld *world = nullptr;
 };
 

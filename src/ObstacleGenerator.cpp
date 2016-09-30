@@ -8,10 +8,8 @@ class Cube : public IBody
 {
 public:
     Cube(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, const f32 &side) :
-        IBody(world, shape), device(device), position(position), side(side)
+        IBody(world), device(device), position(position), side(side)
     {
-        // create shape for cubes
-        shape = new btBoxShape(btVector3(side / 2, side / 2, side / 2));
         //mass = side*side*side/16000000;
         mass = 0.1f;
         createBody();
@@ -37,6 +35,12 @@ protected:
         motionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1), position), node);
     }
 
+    virtual void createShape() override
+    {
+        // create shape for cubes
+        shape = new btBoxShape(btVector3(side / 2, side / 2, side / 2));
+    }
+
     virtual btScalar getMass() override
     {
         return mass;
@@ -50,9 +54,7 @@ private:
 };
 
 ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, btDynamicsWorld *world, f32 farValue, f32 buffer) :
-    device(device), farValue(farValue), world(world), buffer(buffer)
-{
-}
+    device(device), farValue(farValue), buffer(buffer), world(world) {}
 
 ObstacleGenerator::~ObstacleGenerator()
 {

@@ -11,14 +11,14 @@
 class IBody
 {
 public:
-    IBody(btDynamicsWorld *world, btCollisionShape *shape) :
-        world(world), shape(shape)
-    {}
+    IBody(btDynamicsWorld *world) :
+        world(world) {}
 
     virtual ~IBody()
     {
         world->removeRigidBody(rigidBody);
         delete motionState;
+        delete shape;
         delete rigidBody;
     }
 
@@ -36,6 +36,7 @@ public:
 protected:
     virtual void createNode() = 0;
     virtual void createMotionState() = 0;
+    virtual void createShape() = 0;
     virtual btScalar getMass() = 0;
 
     // this method must be called in a derived class' constructor
@@ -45,6 +46,7 @@ protected:
     {
         createNode();
         createMotionState();
+        createShape();
         btScalar mass = getMass();
 
         btVector3 inertia(0, 0, 0);
@@ -56,13 +58,12 @@ protected:
         world->addRigidBody(rigidBody);
     }
 
-    // got from outside, must not be deleted
     btDynamicsWorld *world = nullptr;
-    btCollisionShape *shape = nullptr;
 
     // created inside, must be deleted in desctructor
-    btMotionState *motionState = nullptr;
     scene::ISceneNode *node = nullptr;
+    btMotionState *motionState = nullptr;
+    btCollisionShape *shape = nullptr;
     btRigidBody *rigidBody = nullptr;
 
 };
