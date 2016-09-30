@@ -70,6 +70,8 @@ void GUI::initializeInGameGUI()
     textCameraPos->setBackgroundColor(video::SColor(120, 255, 255, 255));
     textCubeCount = guiEnvironment->addStaticText(L"CUBE_COUNT", core::rect<s32>(10, 10 + 24, 400, 30 + 24), false);
     textCubeCount->setBackgroundColor(video::SColor(120, 255, 255, 255));
+    textFPS = guiEnvironment->addStaticText(L"FPS", core::rect<s32>(10, 10 + 24 + 24, 400, 30 + 24 + 24), false);
+    textFPS->setBackgroundColor(video::SColor(120, 255, 255, 255));
     textScreenSize = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
     buttonResume = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 3*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 3*SPACE),
         0, ID_BUTTON_RESUME, _wp("Resume"), _wp("Resume Game"));
@@ -87,6 +89,7 @@ void GUI::terminateInGameGUI()
     buttonQuit->remove();
     textCameraPos->remove();
     textCubeCount->remove();
+    textFPS->remove();
     textScreenSize->remove();
 }
 

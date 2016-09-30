@@ -399,6 +399,7 @@ void Game::run()
             gui->setVisible(true);
             gui->textCameraPos->setVisible(false);
             gui->textCubeCount->setVisible(false);
+            gui->textFPS->setVisible(false);
             device->getCursorControl()->setVisible(true);
         } else {
             {
@@ -419,11 +420,18 @@ void Game::run()
                 gui->textCubeCount->setText(cubeCount.c_str());
             }
 
+            {
+                core::stringw fps = _w("FPS: ");
+                fps += driver->getFPS();
+                gui->textFPS->setText(fps.c_str());
+            }
+
             camera->setInputReceiverEnabled(true);
 
             gui->setVisible(false);
             gui->textCameraPos->setVisible(true);
             gui->textCubeCount->setVisible(true);
+            gui->textFPS->setVisible(true);
             device->getCursorControl()->setVisible(false);
 
             obstacleGenerator->generate(((KinematicMotionState *) planeBody->getMotionState())->getNode()->getPosition());
