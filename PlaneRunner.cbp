@@ -68,14 +68,14 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add option='-isystem&quot;/usr/include/freetype2&quot;' />
+			<Add option='-isystem&quot;deps/include/freetype2&quot;' />
+			<Add option='-isystem&quot;/usr/include/irrlicht&quot;' />
+			<Add option='-isystem&quot;deps/include/irrlicht&quot;' />
+			<Add option='-isystem&quot;/usr/include/bullet&quot;' />
+			<Add option='-isystem&quot;deps/include/bullet&quot;' />
 			<Add directory="include" />
-			<Add directory="/usr/include/freetype2" />
 			<Add directory="deps/include/" />
-			<Add directory="deps/include/irrlicht" />
-			<Add directory="deps/include/freetype2" />
-			<Add directory="/usr/include/bullet" />
-			<Add directory="deps/include/bullet" />
-			<Add directory="/usr/include/irrlicht" />
 		</Compiler>
 		<Linker>
 			<Add library="freetype" />
