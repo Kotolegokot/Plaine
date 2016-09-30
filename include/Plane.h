@@ -13,28 +13,12 @@
 class Plane : public IBody
 {
 public:
-    Plane(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position) :
-        IBody(world, (shape = new btSphereShape(SPHERE_RADIUS))), device(device), position(position)
-    {
-        createBody();
-    }
+    Plane(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position);
 
 protected:
-    virtual void createNode() override
-    {
-        node = device->getSceneManager()->addSphereSceneNode(SPHERE_RADIUS, 16, 0, -1, core::vector3df(0, 0, 0));
-        node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
-    }
-
-    virtual void createMotionState() override
-    {
-        motionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1), position), node);
-    }
-
-    virtual btScalar getMass() override
-    {
-        return 1;
-    }
+    virtual void createNode() override;
+    virtual void createMotionState() override;
+    virtual btScalar getMass() override;
 
 private:
     IrrlichtDevice *device = nullptr;
