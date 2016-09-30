@@ -417,10 +417,6 @@ void Game::run()
     btScalar planeScalarVelocity;
     while (device->run())
     {
-        planeVelosity = -plane->getRigidBody()->getLinearVelocity();
-        planeScalarVelocity = plane->getRigidBody()->getLinearVelocity().length();
-        planeVelosity *= 0.00000001f*planeScalarVelocity*planeScalarVelocity;
-        plane->getRigidBody()->applyForce(planeVelosity, btVector3(0, 0, 0));
         // if we exit to menu or quit from game -> stop
         if (eventReceiver->state == MENU || eventReceiver->quit) {
             break;
@@ -451,6 +447,11 @@ void Game::run()
                 eventReceiver->toggleGUI = false;
             }
         } else {
+            // air resistance simulation
+            planeVelosity = -plane->getRigidBody()->getLinearVelocity();
+            planeScalarVelocity = plane->getRigidBody()->getLinearVelocity().length();
+            planeVelosity *= 0.00000001f*planeScalarVelocity*planeScalarVelocity;
+            plane->getRigidBody()->applyForce(planeVelosity, btVector3(0, 0, 0));
             // setting fog color
             driver->setFog(color, video::EFT_FOG_LINEAR, 800.0f, 1500.0f, 0.01f, true, true);
             // setting light color
@@ -523,7 +524,11 @@ void Game::run()
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
-            pause = true;
+            if (!pause){
+                pause = true;
+                gui->terminate();
+                gui->initialize(INGAME_MENU);
+            }
             device->yield();
         }
     }
