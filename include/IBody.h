@@ -6,11 +6,13 @@
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "MotionState.h"
 
-virtual class IBody
+class IBody
 {
 public:
-    Body() = default;
-    virtual ~Body()
+    IBody(btDynamicsWorld *world, btCollisionShape *shape) :
+        world(world), shape(shape) {}
+
+    virtual ~IBody()
     {
         world->removeRigidBody(rigidBody);
         delete motionState;
@@ -18,10 +20,35 @@ public:
         node->remove();
     }
 
+    btRigidBody *getRigidBody()
+    {
+        return rigidBody;
+    }
+
+
 protected:
+    virtual void createNode() = 0;
+    virtual void createMotionState() = 0;
+    virtual btScalar getMass() = 0;
+
+    void createBody()
+    {
+        createNode();
+        createMotionState();
+        btScalar mass = getMass();
+
+        btVector3 inertia(0, 0, 0);
+        if (mass)
+            shape->calculateLocalInertia(mass, inertia);
+        btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, motionState, shape, inertia);
+
+        rigidBody = new btRigidBody(rigidBodyCI);
+        world->addRigidBody(rigidBody);
+    }
+
     // got from outside, must not be deleted
-    btShape *shape = nullptr;
-    btWorld *world = nullptr;
+    btDynamicsWorld *world = nullptr;
+    btCollisionShape *shape = nullptr;
 
     // created inside, must be deleted in desctructor
     btMotionState *motionState = nullptr;

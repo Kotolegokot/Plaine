@@ -1,6 +1,8 @@
 #include "ObstacleGenerator.h"
 #include "util.h"
 
+#include "IBody.h"
+
 using namespace irr;
 
 ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, btDynamicsWorld *world, f32 farValue, f32 buffer) :
