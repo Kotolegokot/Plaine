@@ -31,6 +31,7 @@ protected:
     virtual void createMotionState() = 0;
     virtual btScalar getMass() = 0;
 
+    // this method must be called in a derived class' constructor
     void createBody()
     {
         createNode();
