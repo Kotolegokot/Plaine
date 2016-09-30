@@ -57,4 +57,4 @@ protected:
 
 };
 
-#endif // IzBODY_H
+#endif // IBODY_H
