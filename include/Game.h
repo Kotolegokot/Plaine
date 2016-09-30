@@ -51,7 +51,6 @@ private:
     // Scene
     scene::ILightSceneNode *light = nullptr;
     scene::ICameraSceneNode *camera = nullptr;
-    btCollisionShape *planeShape = nullptr;
     ObstacleGenerator *obstacleGenerator = nullptr;
     Plane *plane = nullptr;
 
