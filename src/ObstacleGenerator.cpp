@@ -1,6 +1,7 @@
 #include "ObstacleGenerator.h"
 #include "util.h"
 
+
 using namespace irr;
 
 // a little class for cubes
@@ -41,7 +42,7 @@ protected:
 
     virtual btScalar getMass() override
     {
-        return side*side*side/150000000000;
+        return side*side*side/MASS_COEFFICIENT;
     }
 
 private:

@@ -4,7 +4,7 @@
 #include "Config.h"
 #include "util.h"
 
-enum GUIState { MENU, SETTINGS, INGAME_MENU, CONTROL_SETTINGS, TERMINATED };
+enum GUIState { MENU, INGAME_MENU, HUD, SETTINGS, CONTROL_SETTINGS, TERMINATED };
 
 class GUI
 {
@@ -59,11 +59,13 @@ private:
 
     void initializeMenuGUI();
     void initializeInGameGUI();
+    void initializeHUD();
     void initializeSettingsGUI();
     void initializeControlSettingsGUI();
 
     void terminateMenuGUI();
     void terminateSettingsGUI();
+    void terminateHUD();
     void terminateControlSettingsGUI();
     void terminateInGameGUI();
 };

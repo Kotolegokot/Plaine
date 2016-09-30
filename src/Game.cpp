@@ -191,14 +191,17 @@ void Game::menu()
             case(MENU):
                 gui->initialize(MENU);
                 break;
+            case(INGAME_MENU):
+                gui->initialize(INGAME_MENU);
+                break;
+            case(HUD):
+                gui->initialize(HUD);
+                break;
             case(SETTINGS):
                 gui->initialize(SETTINGS);
                 break;
             case(CONTROL_SETTINGS):
                 gui->initialize(CONTROL_SETTINGS);
-                break;
-            case(INGAME_MENU):
-                gui->initialize(INGAME_MENU);
                 break;
             case(TERMINATED):
                 break;
@@ -376,7 +379,7 @@ void Game::menu()
 // start the game itself
 void Game::run()
 {
-    gui->initialize(INGAME_MENU);
+    gui->initialize(HUD);
     initializeScene();
     configuration.resolution = driver->getScreenSize();
     video::SLight lightData;
@@ -388,67 +391,76 @@ void Game::run()
         }
         color = iridescentColor(timer->getTime());
         if (pause) {
+            // catch a resize of window
+            if (configuration.resolution != driver->getScreenSize())
+            {
+                configuration.resolution = driver->getScreenSize();
+                gui->resizeGUI();
+            }
+            // screen size
             core::stringw scrs = _w("Screen size: ");
             scrs += configuration.resolution.Width;
             scrs += "x";
             scrs += configuration.resolution.Height;
             gui->textScreenSize->setText(scrs.c_str());
 
-            if (configuration.resolution != driver->getScreenSize())
-            {
-                configuration.resolution = driver->getScreenSize();
-                gui->resizeGUI();
-            }
-
-            gui->setVisible(true);
-            gui->textCameraPos->setVisible(false);
-            gui->textCubeCount->setVisible(false);
-            gui->textFPS->setVisible(false);
             device->getCursorControl()->setVisible(true);
+
+            // if need toggle gui
+            if (eventReceiver->toggleGUI) {
+                pause = !pause;
+                gui->terminate();
+                gui->initialize(HUD);
+                eventReceiver->toggleGUI = false;
+            }
         } else {
-            {
-                driver->setFog(color, video::EFT_FOG_LINEAR, 800.0f, 1500.0f, 0.01f, true, true);
-                lightData = light->getLightData();
-                lightData.DiffuseColor = color;
-                lightData.AmbientColor = color;
-                light->setLightData(lightData);
-                core::stringw cameraPosition = _w("Plane position: (");
-                core::vector3df position = plane->getNode()->getPosition();
-                cameraPosition += position.X;
-                cameraPosition += ", ";
-                cameraPosition += position.Y;
-                cameraPosition += ", ";
-                cameraPosition += position.Z;
-                cameraPosition += ")";
-                gui->textCameraPos->setText(cameraPosition.c_str());
-            }
+            // setting fog color
+            driver->setFog(color, video::EFT_FOG_LINEAR, 800.0f, 1500.0f, 0.01f, true, true);
+            // setting light color
+            lightData = light->getLightData();
+            lightData.DiffuseColor = color;
+            lightData.AmbientColor = color;
+            light->setLightData(lightData);
 
-            {
-                core::stringw cubeCount = _w("Cubes: ");
-                cubeCount += obstacleGenerator->getCubeCount();
-                gui->textCubeCount->setText(cubeCount.c_str());
-            }
-
-            {
-                core::stringw fps = _w("FPS: ");
-                fps += driver->getFPS();
-                gui->textFPS->setText(fps.c_str());
-            }
-
+            // camera position
+            core::stringw cameraPosition = _w("Plane position: (");
+            core::vector3df position = plane->getNode()->getPosition();
+            cameraPosition += position.X;
+            cameraPosition += ", ";
+            cameraPosition += position.Y;
+            cameraPosition += ", ";
+            cameraPosition += position.Z;
+            cameraPosition += ")";
+            gui->textCameraPos->setText(cameraPosition.c_str());
+            // cube counter
+            core::stringw cubeCount = _w("Cubes: ");
+            cubeCount += obstacleGenerator->getCubeCount();
+            gui->textCubeCount->setText(cubeCount.c_str());
+            // fps counter
+            core::stringw fps = _w("FPS: ");
+            fps += driver->getFPS();
+            gui->textFPS->setText(fps.c_str());
+            //setting position and target to the camera
             camera->setPosition(plane->getNode()->getPosition() - core::vector3df(0, 0, SPHERE_RADIUS + CAMERA_DISTANCE));
             camera->setTarget(plane->getNode()->getPosition());
-            gui->setVisible(false);
-            gui->textCameraPos->setVisible(true);
-            gui->textCubeCount->setVisible(true);
-            gui->textFPS->setVisible(true);
-            device->getCursorControl()->setVisible(false);
 
+            device->getCursorControl()->setVisible(false);
+            //std::cout << plane->getRigidBody()->getLinearVelocity().length() << std::endl;
+            //std::cout << plane->getRigidBody()->getAngularVelocity().length() << std::endl;
             obstacleGenerator->generate(plane->getNode()->getPosition());
+
+            // if need toggle gui
+            if (eventReceiver->toggleGUI) {
+                pause = !pause;
+                gui->terminate();
+                gui->initialize(INGAME_MENU);
+                eventReceiver->toggleGUI = false;
+            }
         }
 
         if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
             if (!eventReceiver->escapePressed) {
-                pause = !pause;
+                eventReceiver->toggleGUI = true;
                 eventReceiver->escapePressed = true;
             }
         } else if (!eventReceiver->IsKeyDown(KEY_ESCAPE)) {

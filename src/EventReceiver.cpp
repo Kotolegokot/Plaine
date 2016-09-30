@@ -39,7 +39,8 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 return true;
             }
             else if (id == ID_BUTTON_RESUME) {
-                resume = true;
+                state = HUD;
+                toggleGUI = true;
                 return true;
             }
             else if (id == ID_BUTTON_QUIT) {

@@ -27,23 +27,23 @@ void GUI::initialize(GUIState stage)
     {
     case(MENU):
         initializeMenuGUI();
-        stage = TERMINATED;
         break;
     case(INGAME_MENU):
         initializeInGameGUI();
-        stage = TERMINATED;
+        break;
+    case(HUD):
+        initializeHUD();
         break;
     case(SETTINGS):
         initializeSettingsGUI();
-        stage = TERMINATED;
         break;
      case(CONTROL_SETTINGS):
         initializeControlSettingsGUI();
-        stage = TERMINATED;
         break;
     case(TERMINATED):
         break;
     }
+    this->stage = stage;
 }
 
 void GUI::initializeMenuGUI()
@@ -56,7 +56,6 @@ void GUI::initializeMenuGUI()
         0, ID_BUTTON_SETTINGS, _wp("Settings"), _wp("Game settings"));
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE),
         0, ID_BUTTON_QUIT, _wp("Quit"), _wp("Exit game"));
-    stage = MENU;
 }
 
 void GUI::terminateMenuGUI()
@@ -69,13 +68,6 @@ void GUI::terminateMenuGUI()
 
 void GUI::initializeInGameGUI()
 {
-    recalculateButtonProportions();
-    textCameraPos = guiEnvironment->addStaticText(L"CAMERA_POS", core::rect<s32>(10, 10, 400, 30), false);
-    textCameraPos->setBackgroundColor(video::SColor(120, 255, 255, 255));
-    textCubeCount = guiEnvironment->addStaticText(L"CUBE_COUNT", core::rect<s32>(10, 10 + 24, 400, 30 + 24), false);
-    textCubeCount->setBackgroundColor(video::SColor(120, 255, 255, 255));
-    textFPS = guiEnvironment->addStaticText(L"FPS", core::rect<s32>(10, 10 + 24 + 24, 400, 30 + 24 + 24), false);
-    textFPS->setBackgroundColor(video::SColor(120, 255, 255, 255));
     textScreenSize = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
     buttonResume = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 3*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 3*SPACE),
         0, ID_BUTTON_RESUME, _wp("Resume"), _wp("Resume Game"));
@@ -83,18 +75,32 @@ void GUI::initializeInGameGUI()
         0, ID_BUTTON_MENU, _wp("Menu"), _wp("Exit to Main menu"));
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE),
         0, ID_BUTTON_QUIT, _wp("Quit"), _wp("Exit game"));
-    stage = INGAME_MENU;
 }
 
 void GUI::terminateInGameGUI()
 {
+    textScreenSize->remove();
     buttonResume->remove();
     buttonMenu->remove();
     buttonQuit->remove();
+}
+
+void GUI::initializeHUD()
+{
+    recalculateButtonProportions();
+    textCameraPos = guiEnvironment->addStaticText(L"CAMERA_POS", core::rect<s32>(10, 10, 400, 30), false);
+    textCameraPos->setBackgroundColor(video::SColor(120, 255, 255, 255));
+    textCubeCount = guiEnvironment->addStaticText(L"CUBE_COUNT", core::rect<s32>(10, 10 + 24, 400, 30 + 24), false);
+    textCubeCount->setBackgroundColor(video::SColor(120, 255, 255, 255));
+    textFPS = guiEnvironment->addStaticText(L"FPS", core::rect<s32>(10, 10 + 24 + 24, 400, 30 + 24 + 24), false);
+    textFPS->setBackgroundColor(video::SColor(120, 255, 255, 255));
+}
+
+void GUI::terminateHUD()
+{
     textCameraPos->remove();
     textCubeCount->remove();
     textFPS->remove();
-    textScreenSize->remove();
 }
 
 void GUI::initializeSettingsGUI()
@@ -191,7 +197,6 @@ void GUI::initializeSettingsGUI()
         0, ID_BUTTON_MENU, _wp("Back"), _wp("Exit to Main menu"));
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE),
         0, ID_BUTTON_QUIT, _wp("Quit"), _wp("Exit game"));
-    stage = SETTINGS;
 }
 
 void GUI::terminateSettingsGUI()
@@ -257,32 +262,24 @@ void GUI::terminate()
     switch (stage)
     {
     case(MENU):
-        {
             terminateMenuGUI();
-            stage = TERMINATED;
             break;
-        }
     case(INGAME_MENU):
-        {
             terminateInGameGUI();
-            stage = TERMINATED;
             break;
-        }
+        case(HUD):
+            terminateHUD();
+            break;
     case(SETTINGS):
-        {
             terminateSettingsGUI();
-            stage = TERMINATED;
             break;
-        }
      case(CONTROL_SETTINGS):
-        {
             terminateControlSettingsGUI();
-            stage = TERMINATED;
             break;
-        }
     case(TERMINATED):
         break;
     }
+    this->stage = TERMINATED;
 }
 
 void GUI::setVisible(bool state)
@@ -303,6 +300,10 @@ void GUI::setVisible(bool state)
             buttonMenu->setVisible(state);
             buttonQuit->setVisible(state);
             textScreenSize->setVisible(state);
+            break;
+        }
+    case (HUD):
+        {
             break;
         }
     case (SETTINGS):
@@ -403,6 +404,8 @@ void GUI::resizeGUI()
             buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE));
             break;
         }
+    case (HUD):
+        break;
     case (TERMINATED):
         break;
     }
