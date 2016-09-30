@@ -11,9 +11,7 @@
 #include "util.h"
 #include "Config.h"
 #include "GUI.h"
-#include "SceneNodeAnimatorCameraPlayer.h"
 #include "ObstacleGenerator.h"
-#include "KinematicMotionState.h"
 #include "Plane.h"
 
 using namespace irr;
