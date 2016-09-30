@@ -3,7 +3,7 @@ CFLAGS=-Wall -std=c++11
 SOURCE=main.cpp src/*.cpp
 LIB=-lfreetype -lIrrlicht -lBulletDynamics -lBulletCollision -lLinearMath
 
-SOURCE_INCLUDE=-Iinclude/ -/usr/include/irrlicht/ -I/usr/include/freetype2/ -I/usr/include/bullet/
+SOURCE_INCLUDE=-Iinclude/ -I/usr/include/irrlicht/ -I/usr/include/freetype2/ -I/usr/include/bullet/
 LIB_INCLUDE=-Ldeps/lib/
 EXECUTABLE=PlaneRunner
 
