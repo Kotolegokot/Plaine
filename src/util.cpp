@@ -5,6 +5,7 @@ using namespace irr;
 
 #ifndef _WIN32
 
+// uses environment variable LANGUAGE to set language for gettext
 void setLanguage(std::string language, bool replace)
 {
     setenv("LANGUAGE", language.c_str(), replace);
@@ -16,6 +17,7 @@ void setLanguage(std::string language, bool replace)
     }
 }
 
+// converts a string from one encoding to another using iconv library
 size_t convert(const char *to, const char *from, char *outbuf, size_t outbuf_size, char *inbuf, size_t inbuf_size) {
 	iconv_t cd = iconv_open(to, from);
 
@@ -32,6 +34,7 @@ size_t convert(const char *to, const char *from, char *outbuf, size_t outbuf_siz
 	return 0;
 }
 
+// converts a utf8 string into a standard c++ utf16 string
 std::wstring utf8_to_wide(const std::string &input) {
 	size_t inbuf_size = input.length() + 1;
 	// maximum possible size, every character is sizeof(wchar_t) bytes
@@ -51,6 +54,7 @@ std::wstring utf8_to_wide(const std::string &input) {
 	return out;
 }
 
+// converts a utf8 string into a utf16 irrlicht string
 core::stringw utf8_to_irrwide(const std::string &input) {
 	size_t inbuf_size = input.length() + 1;
 	// maximum possible size, every character is sizeof(wchar_t) bytes
@@ -70,6 +74,7 @@ core::stringw utf8_to_irrwide(const std::string &input) {
 	return out;
 }
 
+// converts a utf16 c++ string into a utf8 string
 std::string wide_to_utf8(const std::wstring &input) {
 	size_t inbuf_size = (input.length() + 1) * sizeof(wchar_t);
 	// maximum possible size: utf-8 encodes codepoints using 1 up to 6 bytes
@@ -90,6 +95,7 @@ std::string wide_to_utf8(const std::wstring &input) {
 }
 #else
 
+// uses environment variable LANGUAGE to set language for gettext
 void setLanguage(std::string language, bool)
 {
         std::string str = "LANGUAGE=";
@@ -97,6 +103,7 @@ void setLanguage(std::string language, bool)
         _wputenv(utf8_to_wide(str).c_str());
 }
 
+// converts a utf8 string into a standard c++ utf16 string
 std::wstring utf8_to_wide(const std::string &input) {
 	size_t outbuf_size = input.size() + 1;
 	wchar_t *outbuf = new wchar_t[outbuf_size];
@@ -107,6 +114,7 @@ std::wstring utf8_to_wide(const std::string &input) {
 	return out;
 }
 
+// converts a utf8 string into a utf16 irrlicht string
 core::stringw utf8_to_irrwide(const std::string &input) {
 	size_t outbuf_size = input.size() + 1;
 	wchar_t *outbuf = new wchar_t[outbuf_size];
@@ -118,6 +126,7 @@ core::stringw utf8_to_irrwide(const std::string &input) {
 	return out;
 }
 
+// converts a utf16 c++ string into a utf8 string
 std::string wide_to_utf8(const std::wstring &input) {
 	size_t outbuf_size = (input.size() + 1) * 6;
 	char *outbuf = new char[outbuf_size];
@@ -129,6 +138,7 @@ std::string wide_to_utf8(const std::wstring &input) {
 }
 #endif // _WIN32
 
+// returns a random float number
 f32 getRandomf(f32 min, f32 max)
 {
     static std::default_random_engine engine;
@@ -137,6 +147,7 @@ f32 getRandomf(f32 min, f32 max)
     return distribution(engine);
 }
 
+// takes a key code and returns its name
 core::stringw keyCodeName(const EKEY_CODE &keyCode)
 {
     if ((keyCode >= 48 && keyCode<= 57) || (keyCode >= 65 && keyCode <= 90)) {

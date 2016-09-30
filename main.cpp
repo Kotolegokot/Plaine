@@ -12,21 +12,24 @@ using namespace irr;
 
 int main()
 {
-    //create structure for config data
+    // create structure for config
     ConfigData data;
-    //create object for config
+    // create config loader
     Config conf;
-    //load config into structure for configuration data (conf file lies in root directory of project)
+    // load config into the structure (conf file lies in the root directory of the project)
     data = conf.loadConfig("game.conf");
-    //setting language (platform dependent realization!)
+    // setting language (platform dependent realization!)
     setLanguage(data.language, false);
 
+    // some magic lines for gettext (no need to understand what they mean)
     setlocale(LC_ALL, "");
     bindtextdomain("planerunner", "media/locale/");
     bind_textdomain_codeset("planerunner", "utf-8");
     textdomain("planerunner");
-    //create an object with configuration data that loaded from config
+
+    // create instance of game class and give it configuration structure
     Game game(data);
+    // run menu
     game.menu();
 
     return 0;
