@@ -159,7 +159,7 @@ void Game::menu()
         if (eventReceiver->quit) {
             break;
         }
-        // esc key reactions in different GUI stages
+        // esc key reactions in different GUI states
         if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
             if (!eventReceiver->escapePressed)
             {
@@ -181,7 +181,7 @@ void Game::menu()
         else if (!eventReceiver->IsKeyDown(KEY_ESCAPE))
             eventReceiver->escapePressed = false;
         // if window need restart to implement new graphic settings
-        if (gui->getStage() == SETTINGS && eventReceiver->state == MENU && eventReceiver->needRestartInMenu)
+        if (gui->getState() == SETTINGS && eventReceiver->state == MENU && eventReceiver->needRestartInMenu)
             {
                 gui->terminate();
                 terminateDevice();

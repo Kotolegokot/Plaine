@@ -4,9 +4,9 @@ using namespace irr;
 
 GUI::GUI (struct ConfigData &data, gui::IGUIEnvironment *guiEnv) : configuration(data), guiEnvironment(guiEnv) {}
 
-GUIState GUI::getStage()
+GUIState GUI::getState()
 {
-    return stage;
+    return state;
 }
 
 void GUI::recalculateButtonProportions()
@@ -20,10 +20,10 @@ void GUI::recalculateButtonProportions()
     buttonHeight = buttonWidth * 1/8;
 }
 
-void GUI::initialize(GUIState stage)
+void GUI::initialize(GUIState state)
 {
     //choose specific method for initializing GUI
-    switch (stage)
+    switch (state)
     {
     case(MENU):
         initializeMenuGUI();
@@ -43,7 +43,7 @@ void GUI::initialize(GUIState stage)
     case(TERMINATED):
         break;
     }
-    this->stage = stage;
+    this->state = state;
 }
 
 void GUI::initializeMenuGUI()
@@ -240,7 +240,7 @@ void GUI::initializeControlSettingsGUI()
         0, ID_BUTTON_SETTINGS, _wp("Back"), _wp("Back to game settings"));
     buttonQuit = guiEnvironment->addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE),
         0, ID_BUTTON_QUIT, _wp("Quit"), _wp("Exit game"));
-    stage = CONTROL_SETTINGS;
+    state = CONTROL_SETTINGS;
 }
 
 void GUI::terminateControlSettingsGUI()
@@ -262,7 +262,7 @@ void GUI::terminateControlSettingsGUI()
 void GUI::terminate()
 {
     //choose specific method for terminating GUI
-    switch (stage)
+    switch (state)
     {
     case(MENU):
             terminateMenuGUI();
@@ -282,68 +282,68 @@ void GUI::terminate()
     case(TERMINATED):
         break;
     }
-    this->stage = TERMINATED;
+    this->state = TERMINATED;
 }
 
-void GUI::setVisible(bool state)
+void GUI::setVisible(bool visible)
 {
-    switch (stage)
+    switch (state)
     {
     case (MENU):
         {
-            textScreenSize->setVisible(state);
-            buttonStart->setVisible(state);
-            buttonSettings->setVisible(state);
-            buttonQuit->setVisible(state);
+            textScreenSize->setVisible(visible);
+            buttonStart->setVisible(visible);
+            buttonSettings->setVisible(visible);
+            buttonQuit->setVisible(visible);
             break;
         }
     case (INGAME_MENU):
         {
-            buttonResume->setVisible(state);
-            buttonMenu->setVisible(state);
-            buttonQuit->setVisible(state);
-            textScreenSize->setVisible(state);
+            buttonResume->setVisible(visible);
+            buttonMenu->setVisible(visible);
+            buttonQuit->setVisible(visible);
+            textScreenSize->setVisible(visible);
             break;
         }
     case (HUD):
         {
-            textCameraPos->setVisible(state);
-            textCubeCount->setVisible(state);
-            textFPS->setVisible(state);
-            textVelocity->setVisible(state);
+            textCameraPos->setVisible(visible);
+            textCubeCount->setVisible(visible);
+            textFPS->setVisible(visible);
+            textVelocity->setVisible(visible);
             break;
         }
     case (SETTINGS):
         {
-            textScreenSize->setVisible(state);
-            textLanguage->setVisible(state);
-            comboBoxLanguage->setVisible(state);
-            textResolution->setVisible(state);
-            comboBoxResolution->setVisible(state);
-            textColorDepth->setVisible(state);
-            comboBoxColorDepth->setVisible(state);
-            checkBoxVSync->setVisible(state);
-            checkBoxStencilBuffer->setVisible(state);
-            buttonToggleFullscreen->setVisible(state);
-            buttonControlSettings->setVisible(state);
-            buttonMenu->setVisible(state);
-            buttonQuit->setVisible(state);
+            textScreenSize->setVisible(visible);
+            textLanguage->setVisible(visible);
+            comboBoxLanguage->setVisible(visible);
+            textResolution->setVisible(visible);
+            comboBoxResolution->setVisible(visible);
+            textColorDepth->setVisible(visible);
+            comboBoxColorDepth->setVisible(visible);
+            checkBoxVSync->setVisible(visible);
+            checkBoxStencilBuffer->setVisible(visible);
+            buttonToggleFullscreen->setVisible(visible);
+            buttonControlSettings->setVisible(visible);
+            buttonMenu->setVisible(visible);
+            buttonQuit->setVisible(visible);
             break;
         }
     case (CONTROL_SETTINGS):
         {
-            textScreenSize->setVisible(state);
-            textControlUp->setVisible(state);
-            buttonControlUp->setVisible(state);
-            textControlLeft->setVisible(state);
-            buttonControlLeft->setVisible(state);
-            textControlDown->setVisible(state);
-            buttonControlDown->setVisible(state);
-            textControlRight->setVisible(state);
-            buttonControlRight->setVisible(state);
-            buttonDefultControls->setVisible(state);
-            buttonSettings->setVisible(state);
-            buttonQuit->setVisible(state);
+            textScreenSize->setVisible(visible);
+            textControlUp->setVisible(visible);
+            buttonControlUp->setVisible(visible);
+            textControlLeft->setVisible(visible);
+            buttonControlLeft->setVisible(visible);
+            textControlDown->setVisible(visible);
+            buttonControlDown->setVisible(visible);
+            textControlRight->setVisible(visible);
+            buttonControlRight->setVisible(visible);
+            buttonDefultControls->setVisible(visible);
+            buttonSettings->setVisible(visible);
+            buttonQuit->setVisible(visible);
             break;
         }
     case (TERMINATED):
@@ -355,7 +355,7 @@ void GUI::resizeGUI()
 {
     //changing gui position and size when window is resizing
     recalculateButtonProportions();
-    switch (stage)
+    switch (state)
     {
     case (MENU):
         {
