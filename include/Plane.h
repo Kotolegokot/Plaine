@@ -10,6 +10,10 @@
 #define CAMERA_DISTANCE 200
 #define PLANE_MASS 1
 
+// this class defines plane
+// currently it is just a sphere
+//
+// see IBody for more information
 class Plane : public IBody
 {
 public:
