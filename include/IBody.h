@@ -1,5 +1,5 @@
-#ifndef BODY_H
-#define BODY_H
+#ifndef IBODY_H
+#define IBODY_H
 
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
@@ -10,14 +10,14 @@ class IBody
 {
 public:
     IBody(btDynamicsWorld *world, btCollisionShape *shape) :
-        world(world), shape(shape) {}
+        world(world), shape(shape)
+    {}
 
     virtual ~IBody()
     {
         world->removeRigidBody(rigidBody);
         delete motionState;
         delete rigidBody;
-        node->remove();
     }
 
     btRigidBody *getRigidBody()
@@ -57,4 +57,4 @@ protected:
 
 };
 
-#endif // BODY_H
+#endif // IzBODY_H

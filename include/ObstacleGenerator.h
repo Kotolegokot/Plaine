@@ -6,8 +6,11 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "MotionState.h"
+#include "IBody.h"
 
 using namespace irr;
+
+#define CUBE_SIDE 250
 
 class ObstacleGenerator
 {
@@ -26,10 +29,9 @@ private:
     f32 preciseEdge(f32 edge) const;
     void removeLeftBehind(f32 playerZ);
     f32 farValueWithBuffer() const;
-    btRigidBody *createCube(const core::vector3df &position);
 
     IrrlichtDevice *device = nullptr;
-    std::deque<btRigidBody *> cubes;
+    std::deque<IBody *> cubes;
 
     u32 cubeCount = 0;
 
@@ -43,11 +45,9 @@ private:
     f32 generatedEdgeBottom = 0;
 
     const f32 STEP = 400;
-    const f32 CUBE_SIDE = 250;
 
     // Bullet
     btCollisionShape *cubeShape = nullptr;
-
     btDynamicsWorld *world = nullptr;
 };
 

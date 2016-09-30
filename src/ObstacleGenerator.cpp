@@ -1,9 +1,46 @@
 #include "ObstacleGenerator.h"
 #include "util.h"
 
-#include "IBody.h"
-
 using namespace irr;
+
+// a little class for cubes
+class Cube : public IBody
+{
+public:
+    Cube(btDynamicsWorld *world, IrrlichtDevice *device, btCollisionShape *shape, const btVector3 &position) :
+        IBody(world, shape), device(device), position(position)
+    {
+        createBody();
+    }
+
+protected:
+    virtual void createNode() override
+    {
+        node = device->getSceneManager()->addCubeSceneNode(CUBE_SIDE, 0, -1,
+            core::vector3df(position.x(), position.y(), position.z()));
+        node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
+        node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
+        node->setMaterialFlag(video::EMF_ANISOTROPIC_FILTER, true);
+        node->setMaterialFlag(video::EMF_TRILINEAR_FILTER, true);
+        node->setMaterialFlag(video::EMF_ANTI_ALIASING, true);
+        node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
+        node->setDebugDataVisible(true);
+    }
+
+    virtual void createMotionState() override
+    {
+        motionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1), position), node);
+    }
+
+    virtual btScalar getMass() override
+    {
+        return 0.1f;
+    }
+
+private:
+    IrrlichtDevice *device = nullptr;
+    btVector3 position;
+};
 
 ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, btDynamicsWorld *world, f32 farValue, f32 buffer) :
     device(device), world(world), farValue(farValue), buffer(buffer)
@@ -15,8 +52,6 @@ ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, btDynamicsWorld *wo
 ObstacleGenerator::~ObstacleGenerator()
 {
     while (!cubes.empty()) {
-        world->removeRigidBody(cubes.front());
-        delete cubes.front()->getMotionState();
         delete cubes.front();
         cubes.pop_front();
     }
@@ -37,7 +72,8 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     f32 newY = y + getRandomf(-100, 100);
                     f32 newZ = z + getRandomf(-100, 100);
 
-                    cubes.push_back(createCube(core::vector3df(newX, newY, newZ)));
+                    Cube *cube = new Cube(world, device, cubeShape, btVector3(newX, newY, newZ));
+                    cubes.push_back(cube);
                     cubeCount++;
                 }
             }
@@ -51,30 +87,6 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
     removeLeftBehind(playerPosition.Z);
 }
 
-btRigidBody *ObstacleGenerator::createCube(const core::vector3df &position)
-{
-    const btScalar mass = 0.1;
-
-    scene::ISceneNode *cubeNode = device->getSceneManager()->addCubeSceneNode(CUBE_SIDE, 0, -1, position);
-    cubeNode->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
-    cubeNode->setMaterialFlag(video::EMF_FOG_ENABLE, true);
-	cubeNode->setMaterialFlag(video::EMF_ANISOTROPIC_FILTER, true);
-	cubeNode->setMaterialFlag(video::EMF_TRILINEAR_FILTER, true);
-	cubeNode->setMaterialFlag(video::EMF_ANTI_ALIASING, true);
-	cubeNode->setMaterialFlag(video::EMF_FOG_ENABLE, true);
-	cubeNode->setDebugDataVisible(true);
-
-    btMotionState *motionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1),
-        btVector3(position.X, position.Y, position.Z)), cubeNode);
-    btVector3 cubeInertia(0, 0, 0);
-    cubeShape->calculateLocalInertia(mass, cubeInertia);
-    btRigidBody::btRigidBodyConstructionInfo cubeCI(mass,  motionState, cubeShape, cubeInertia);
-    btRigidBody *cubeBody = new btRigidBody(cubeCI);
-    world->addRigidBody(cubeBody);
-
-    return cubeBody;
-}
-
 f32 ObstacleGenerator::preciseEdge(f32 edge) const
 {
     return edge - (edge - floor(edge / STEP)*STEP);
@@ -84,10 +96,8 @@ void ObstacleGenerator::removeLeftBehind(f32 playerZ)
 {
     while (!cubes.empty()) {
         btTransform transform;
-        cubes.front()->getMotionState()->getWorldTransform(transform);
+        cubes.front()->getRigidBody()->getMotionState()->getWorldTransform(transform);
         if (transform.getOrigin().z() < playerZ - buffer) {
-            world->removeRigidBody(cubes.front());
-            delete cubes.front()->getMotionState();
             delete cubes.front();
             cubes.pop_front();
             cubeCount--;
