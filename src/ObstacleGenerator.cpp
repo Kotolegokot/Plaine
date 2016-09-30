@@ -10,8 +10,6 @@ public:
     Cube(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, const f32 &side) :
         IBody(world), device(device), position(position), side(side)
     {
-        //mass = side*side*side/16000000;
-        mass = 0.1f;
         createBody();
     }
 
@@ -38,18 +36,17 @@ protected:
     virtual void createShape() override
     {
         // create shape for cubes
-        shape = new btBoxShape(btVector3(side / 2, side / 2, side / 2));
+        shape = new btBoxShape(btVector3(side/2, side/2, side/2));
     }
 
     virtual btScalar getMass() override
     {
-        return mass;
+        return side*side*side/150000000000;
     }
 
 private:
     IrrlichtDevice *device = nullptr;
     btVector3 position;
-    f32 mass;
     f32 side;
 };
 
@@ -86,7 +83,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     f32 newZ = z + getRandomf(-100, 100);
 
                     // create the cube and add it to the deque
-                    Cube *cube = new Cube(world, device, btVector3(newX, newY, newZ), getRandomf(299.0f, 300.0f));
+                    Cube *cube = new Cube(world, device, btVector3(newX, newY, newZ), getRandomf(50.0f, 300.0f));
                     cubes.push_back(cube);
                     cubeCount++;
                 }
