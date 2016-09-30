@@ -518,7 +518,11 @@ void Game::run()
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
-            pause = true;
+            if (!pause){
+                pause = true;
+                gui->terminate();
+                gui->initialize(INGAME_MENU);
+            }
             device->yield();
         }
     }
