@@ -44,7 +44,7 @@ private:
 };
 
 ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, btDynamicsWorld *world, f32 farValue, f32 buffer) :
-    device(device), farValue(farValue), world(world), buffer(buffer)
+    device(device), farValue(farValue), buffer(buffer), world(world)
 {
     // create shape for cubes
     cubeShape = new btBoxShape(btVector3(CUBE_SIDE / 2, CUBE_SIDE / 2, CUBE_SIDE / 2));
