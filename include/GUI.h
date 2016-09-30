@@ -33,6 +33,7 @@ public:
     gui::IGUIComboBox *comboBoxLanguage = nullptr;
     gui::IGUIStaticText *textScreenSize = nullptr;
     gui::IGUIStaticText *textCubeCount = nullptr;
+    gui::IGUIStaticText *textFPS = nullptr;
     gui::IGUIStaticText *textResolution = nullptr;
     gui::IGUIStaticText *textColorDepth = nullptr;
     gui::IGUIStaticText *textLanguage = nullptr;

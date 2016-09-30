@@ -373,14 +373,17 @@ void Game::run()
     initializeScene();
     configuration.resolution = driver->getScreenSize();
     video::SLight lightData;
+    video::SColor color;
     while (device->run())
     {
         if (eventReceiver->stage == MENU || eventReceiver->quit){
             break;
         }
-        driver->setFog(iridescentColor(timer->getTime()), video::EFT_FOG_LINEAR, 800.0f, 1500.0f, 0.01f, true, true);
+        color = iridescentColor(timer->getTime());
+        driver->setFog(color, video::EFT_FOG_LINEAR, 800.0f, 1500.0f, 0.01f, true, true);
         lightData = light->getLightData();
-        lightData.DiffuseColor = iridescentColor(timer->getTime());
+        lightData.DiffuseColor = color;
+        lightData.AmbientColor = color;
         light->setLightData(lightData);
         if (pause) {
             core::stringw scrs = _w("Screen size: ");
@@ -398,6 +401,7 @@ void Game::run()
             gui->setVisible(true);
             gui->textCameraPos->setVisible(false);
             gui->textCubeCount->setVisible(false);
+            gui->textFPS->setVisible(false);
             device->getCursorControl()->setVisible(true);
         } else {
             {
@@ -418,11 +422,18 @@ void Game::run()
                 gui->textCubeCount->setText(cubeCount.c_str());
             }
 
+            {
+                core::stringw fps = _w("FPS: ");
+                fps += driver->getFPS();
+                gui->textFPS->setText(fps.c_str());
+            }
+
             camera->setTarget(planeNode->getPosition());
 
             gui->setVisible(false);
             gui->textCameraPos->setVisible(true);
             gui->textCubeCount->setVisible(true);
+            gui->textFPS->setVisible(true);
             device->getCursorControl()->setVisible(false);
 
             obstacleGenerator->generate(planeNode->getPosition());
@@ -444,7 +455,7 @@ void Game::run()
 
         if (device->isWindowActive()) {
             dynamicsWorld->stepSimulation(1 / 60.f);
-            driver->beginScene(true, true, iridescentColor(timer->getTime()));
+            driver->beginScene(true, true, color);
             if (!pause)
                 sceneManager->drawAll();
             guiEnvironment->drawAll();
