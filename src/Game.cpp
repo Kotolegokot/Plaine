@@ -123,7 +123,7 @@ void Game::menu()
     configuration.resolution = driver->getScreenSize();
     gui->initialize(MENU);
     while (device->run()) {
-        if (eventReceiver->stage == INGAME_MENU){
+        if (eventReceiver->state == INGAME_MENU) {
             gui->terminate();
             run();
         }
@@ -134,23 +134,23 @@ void Game::menu()
             if (!eventReceiver->escapePressed)
             {
                 eventReceiver->escapePressed = true;
-                if (eventReceiver->stage == MENU)
+                if (eventReceiver->state == MENU)
                     return;
-                else if (eventReceiver->stage == SETTINGS)
+                else if (eventReceiver->state == SETTINGS)
                     {
-                        eventReceiver->stage = MENU;
+                        eventReceiver->state = MENU;
                         eventReceiver->toggleGUI = true;
                     }
-                else if (eventReceiver->stage == CONTROL_SETTINGS)
+                else if (eventReceiver->state == CONTROL_SETTINGS)
                     {
-                        eventReceiver->stage = SETTINGS;
+                        eventReceiver->state = SETTINGS;
                         eventReceiver->toggleGUI = true;
                     }
             }
         }
         else if (!eventReceiver->IsKeyDown(KEY_ESCAPE))
             eventReceiver->escapePressed = false;
-        if (gui->getStage() == SETTINGS && eventReceiver->stage == MENU && eventReceiver->needRestartInMenu)
+        if (gui->getStage() == SETTINGS && eventReceiver->state == MENU && eventReceiver->needRestartInMenu)
             {
                 gui->terminate();
                 terminateDevice();
@@ -164,7 +164,7 @@ void Game::menu()
         if (eventReceiver->toggleGUI)
         {
             gui->terminate();
-            switch (eventReceiver->stage)
+            switch (eventReceiver->state)
             {
             case(MENU):
                 gui->initialize(MENU);
@@ -183,7 +183,7 @@ void Game::menu()
             }
             eventReceiver->toggleGUI = false;
         }
-        if (eventReceiver->stage == SETTINGS){
+        if (eventReceiver->state == SETTINGS) {
             if (eventReceiver->toggleFullscreen)
             {
                 configuration.fullscreen = !configuration.fullscreen;
@@ -195,7 +195,7 @@ void Game::menu()
                     return;
                 initializeGUI();
                 initialized = true;
-                eventReceiver->stage = SETTINGS;
+                eventReceiver->state = SETTINGS;
                 gui->initialize(SETTINGS);
                 eventReceiver->needRestartInMenu = false;
             }
@@ -221,7 +221,7 @@ void Game::menu()
                     return;
                 initializeGUI();
                 initialized = true;
-                eventReceiver->stage = SETTINGS;
+                eventReceiver->state = SETTINGS;
                 gui->initialize(SETTINGS);
                 eventReceiver->needRestartInMenu = false;
             }
@@ -269,7 +269,7 @@ void Game::menu()
                 gui->initialize(SETTINGS);
             }
         }
-        if (eventReceiver->stage == CONTROL_SETTINGS){
+        if (eventReceiver->state == CONTROL_SETTINGS) {
                 if (eventReceiver->defaultControls)
                 {
                     configuration.controls = Controls();
@@ -360,7 +360,7 @@ void Game::run()
     video::SColor color;
     while (device->run())
     {
-        if (eventReceiver->stage == MENU || eventReceiver->quit){
+        if (eventReceiver->state == MENU || eventReceiver->quit) {
             break;
         }
         color = iridescentColor(timer->getTime());

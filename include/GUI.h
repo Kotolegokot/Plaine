@@ -4,7 +4,7 @@
 #include "Config.h"
 #include "util.h"
 
-enum Stage { MENU, SETTINGS, INGAME_MENU, CONTROL_SETTINGS, TERMINATED };
+enum GUIState { MENU, SETTINGS, INGAME_MENU, CONTROL_SETTINGS, TERMINATED };
 
 class GUI
 {
@@ -48,13 +48,13 @@ public:
 
 
     void recalculateButtonProportions();
-    void initialize(Stage stage);
+    void initialize(GUIState stage);
     void terminate();
     void resizeGUI();
     void setVisible(bool state);
-    Stage getStage();
+    GUIState getStage();
 private:
-    Stage stage;
+    GUIState stage;
     const int SPACE = 10;
 
     void initializeMenuGUI();

@@ -4,7 +4,7 @@ using namespace irr;
 
 GUI::GUI (struct ConfigData &data, gui::IGUIEnvironment *guiEnv) : configuration(data), guiEnvironment(guiEnv) {}
 
-Stage GUI::getStage()
+GUIState GUI::getStage()
 {
     return stage;
 }
@@ -20,7 +20,7 @@ void GUI::recalculateButtonProportions()
     buttonHeight = buttonWidth * 1/8;
 }
 
-void GUI::initialize(Stage stage)
+void GUI::initialize(GUIState stage)
 {
     //choose specific method for initializing GUI
     switch (stage)
