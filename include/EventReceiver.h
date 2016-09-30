@@ -24,12 +24,11 @@ public:
     bool changingControlRight = false;
     bool defaultControls = false;
     bool toggleGUI = false;
-    bool toggleColorDepth = false;
+    bool toggleGraphicMode = false;
     bool toggleFullscreen = false;
     bool needRestartInMenu = false;
     bool toggleResolution = false;
     bool toggleLanguage = false;
-    bool resume = false;
     bool escapePressed = false;
 
     // states of GUI

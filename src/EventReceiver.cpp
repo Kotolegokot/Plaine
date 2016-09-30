@@ -26,7 +26,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
         switch (event.GUIEvent.EventType) {
         case gui::EGET_BUTTON_CLICKED:
             if (id == ID_BUTTON_START) {
-                state = INGAME_MENU;
+                state = HUD;
                 return true;
             }
             else if (id == ID_BUTTON_SETTINGS) {
@@ -103,12 +103,12 @@ bool EventReceiver::OnEvent(const SEvent &event)
             }
             else if (id == ID_COMBOBOX_COLORDEPTH)
             {
-                toggleColorDepth = true;
+                toggleGraphicMode = true;
                 return true;
             }
         case gui::EGET_CHECKBOX_CHANGED:
             {
-                toggleColorDepth = true;
+                toggleGraphicMode = true;
                 return true;
             }
         default:

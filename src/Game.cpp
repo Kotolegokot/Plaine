@@ -138,20 +138,28 @@ void Game::terminateScene()
 // show main menu
 void Game::menu()
 {
+    // if game is not initialized send error message and exit
     if (!initialized) {
         error(ERR_NOT_INITIALIZED);
         return;
     }
+    // set resolution to actual screen size
     configuration.resolution = driver->getScreenSize();
+    // initialize menu
     gui->initialize(MENU);
+    //sets cursor visible
+    device->getCursorControl()->setVisible(true);
     while (device->run()) {
-        if (eventReceiver->state == INGAME_MENU) {
+        // if start button is pressed then run the game
+        if (eventReceiver->state == HUD) {
             gui->terminate();
             run();
         }
+        // if quit button is pressed then exit the game
         if (eventReceiver->quit) {
             break;
         }
+        // esc key reactions in different GUI stages
         if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
             if (!eventReceiver->escapePressed)
             {
@@ -172,6 +180,7 @@ void Game::menu()
         }
         else if (!eventReceiver->IsKeyDown(KEY_ESCAPE))
             eventReceiver->escapePressed = false;
+        // if window need restart to implement new graphic settings
         if (gui->getStage() == SETTINGS && eventReceiver->state == MENU && eventReceiver->needRestartInMenu)
             {
                 gui->terminate();
@@ -183,6 +192,7 @@ void Game::menu()
                 gui->initialize(MENU);
                 eventReceiver->needRestartInMenu = false;
             }
+        // if need to toggle gui
         if (eventReceiver->toggleGUI)
         {
             gui->terminate();
@@ -208,12 +218,17 @@ void Game::menu()
             }
             eventReceiver->toggleGUI = false;
         }
+        // settings
         if (eventReceiver->state == SETTINGS) {
+                // toggles fullscreen
             if (eventReceiver->toggleFullscreen)
             {
                 configuration.fullscreen = !configuration.fullscreen;
+                // sets default resolution (ignores if fullscreen is on)
                 configuration.resolution = core::dimension2d<u32>(640, 480);
+                // toggles off resizable mode
                 configuration.resizable = false;
+                // restart window
                 gui->terminate();
                 terminateDevice();
                 if (!initializeDevice())
@@ -224,6 +239,7 @@ void Game::menu()
                 gui->initialize(SETTINGS);
                 eventReceiver->needRestartInMenu = false;
             }
+             // toggles resolution
             if (eventReceiver->toggleResolution)
             {
                 switch (gui->comboBoxResolution->getSelected())
@@ -240,6 +256,7 @@ void Game::menu()
                         configuration.resizable = true;
                         break;
                 }
+                // restart window
                 gui->terminate();
                 terminateDevice();
                 if (!initializeDevice())
@@ -250,7 +267,8 @@ void Game::menu()
                 gui->initialize(SETTINGS);
                 eventReceiver->needRestartInMenu = false;
             }
-            if(eventReceiver->toggleColorDepth)
+            // toggles color depth (probably not work), vsyc and stencil buffer
+            if(eventReceiver->toggleGraphicMode)
             {
                 switch (gui->comboBoxColorDepth->getSelected())
                 {
@@ -266,9 +284,10 @@ void Game::menu()
                 }
                 configuration.vsync = gui->checkBoxVSync->isChecked();
                 configuration.stencilBuffer = gui->checkBoxStencilBuffer->isChecked();
-                eventReceiver->toggleColorDepth = false;
+                eventReceiver->toggleGraphicMode = false;
                 eventReceiver->needRestartInMenu = true;
             }
+            // toggles language
             if (eventReceiver->toggleLanguage)
             {
                 switch (gui->comboBoxLanguage->getSelected())
@@ -294,7 +313,9 @@ void Game::menu()
                 gui->initialize(SETTINGS);
             }
         }
+        // control settings
         if (eventReceiver->state == CONTROL_SETTINGS) {
+                // if "default" button is pressed
                 if (eventReceiver->defaultControls)
                 {
                     configuration.controls = Controls();
@@ -307,12 +328,14 @@ void Game::menu()
                     gui->terminate();
                     gui->initialize(CONTROL_SETTINGS);
                 }
+                // if control key was chosen to replace
                 if((eventReceiver->changingControlUp || eventReceiver->changingControlLeft ||
                     eventReceiver->changingControlDown || eventReceiver->changingControlRight))
                 {
                     //if something pressed after choice of key that user want to replace
                    if (eventReceiver->lastKey != KEY_KEY_CODES_COUNT)
                    {
+                       // and if it's not an esc or another inappropriate key
                        if ((eventReceiver->lastKey != KEY_ESCAPE) &&
                            keyCodeName(eventReceiver->lastKey) != "")
                         {
@@ -353,17 +376,19 @@ void Game::menu()
                         gui->buttonControlRight->setText(_wp("Press a key"));
                 }
         }
+        // catch a resize of window
         if (configuration.resolution != driver->getScreenSize())
         {
             configuration.resolution = driver->getScreenSize();
             gui->resizeGUI();
         }
+        // screen size
         core::stringw scrs = _w("Screen size: ");
         scrs += configuration.resolution.Width;
         scrs += "x";
         scrs += configuration.resolution.Height;
         gui->textScreenSize->setText(scrs.c_str());
-        device->getCursorControl()->setVisible(true);
+
         if (device->isWindowActive()) {
             driver->beginScene(true, true, iridescentColor(timer->getTime()));
             guiEnvironment->drawAll();
@@ -379,16 +404,21 @@ void Game::menu()
 // start the game itself
 void Game::run()
 {
+    // initialize HUD
     gui->initialize(HUD);
+    //initialize scene
     initializeScene();
-    configuration.resolution = driver->getScreenSize();
+    // create structure for light data
     video::SLight lightData;
+    // create variable for color
     video::SColor color;
     while (device->run())
     {
+        // if we exit to menu or quit from game -> stop
         if (eventReceiver->state == MENU || eventReceiver->quit) {
             break;
         }
+        // set color
         color = iridescentColor(timer->getTime());
         if (pause) {
             // catch a resize of window
@@ -403,10 +433,10 @@ void Game::run()
             scrs += "x";
             scrs += configuration.resolution.Height;
             gui->textScreenSize->setText(scrs.c_str());
-
+            // set cursor visible
             device->getCursorControl()->setVisible(true);
 
-            // if need toggle gui
+            // if need to toggle gui
             if (eventReceiver->toggleGUI) {
                 pause = !pause;
                 gui->terminate();
@@ -442,19 +472,19 @@ void Game::run()
             gui->textFPS->setText(fps.c_str());
             // velocity counter
             core::stringw velocity = _w("Linear velocity: ");
-            velocity += plane->getRigidBody()->getLinearVelocity().length();
+            velocity += int(plane->getRigidBody()->getLinearVelocity().length());
             velocity += _w(", angular velocity: ");
             velocity += plane->getRigidBody()->getAngularVelocity().length();
             gui->textVelocity->setText(velocity.c_str());
             //setting position and target to the camera
             camera->setPosition(plane->getNode()->getPosition() - core::vector3df(0, 0, SPHERE_RADIUS + CAMERA_DISTANCE));
             camera->setTarget(plane->getNode()->getPosition());
-
+            //set cursor invisible
             device->getCursorControl()->setVisible(false);
-
+            // generate level
             obstacleGenerator->generate(plane->getNode()->getPosition());
 
-            // if need toggle gui
+            // if need to toggle gui
             if (eventReceiver->toggleGUI) {
                 pause = !pause;
                 gui->terminate();
@@ -462,7 +492,7 @@ void Game::run()
                 eventReceiver->toggleGUI = false;
             }
         }
-
+        // if esc is pressed
         if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
             if (!eventReceiver->escapePressed) {
                 eventReceiver->toggleGUI = true;
@@ -471,15 +501,10 @@ void Game::run()
         } else if (!eventReceiver->IsKeyDown(KEY_ESCAPE)) {
             eventReceiver->escapePressed = false;
         }
-        if (eventReceiver->resume)
-        {
-            eventReceiver->resume = false;
-            pause = false;
-        }
-
         if (device->isWindowActive()) {
             driver->beginScene(true, true, color);
             if (!pause) {
+                // physics simulation
                 dynamicsWorld->stepSimulation(1 / 60.f);
                 sceneManager->drawAll();
             }
