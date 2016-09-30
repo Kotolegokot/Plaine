@@ -49,13 +49,13 @@ public:
 
 
     void recalculateButtonProportions();
-    void initialize(GUIState stage);
+    void initialize(GUIState state);
     void terminate();
     void resizeGUI();
-    void setVisible(bool state);
-    GUIState getStage();
+    void setVisible(bool visible);
+    GUIState getState();
 private:
-    GUIState stage;
+    GUIState state;
     const int SPACE = 10;
 
     void initializeMenuGUI();
