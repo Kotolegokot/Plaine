@@ -18,6 +18,7 @@ struct Controls {
     EKEY_CODE right  =  KEY_KEY_D;
 };
 
+// structure containing all the configuration info
 struct ConfigData {
     bool fullscreen = false;
     core::dimension2d<u32> resolution = core::dimension2d<u32>(640, 480);;
@@ -29,6 +30,20 @@ struct ConfigData {
     Controls controls;
 };
 
+// this class helps save and load configuration files
+// usually it is ./game.conf
+//
+// its format is easy:
+//      var=expression
+//      ...
+// expression can be either a string ("bla-bla") or
+//      a boolean (on/off) or an integer or
+//      a float or a resolution (int,int)
+// also controls are set like this:
+//      controls:
+//          key1=keyCode
+//          key2=keyCode
+//          ...
 class Config
 {
 public:

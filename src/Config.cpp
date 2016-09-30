@@ -71,6 +71,8 @@ struct Item {
     void *data = nullptr;
 };
 
+// parses the file into items like string, numbers etc.
+// uses a simple deterministic finite automaton
 std::vector<Item> parse(const std::string &filename)
 {
     std::ifstream inputFile(filename);
@@ -174,6 +176,7 @@ void error(Item::ItemType expected, Item::ItemType found)
         Item::typeToString(found) + " found." << std::endl;
 }
 
+// throws an error if we encounter something we don't want
 #define \
 EXPECT(_expected) {\
     if ((*i).type != _expected) {\
@@ -183,13 +186,15 @@ EXPECT(_expected) {\
     }\
 }
 
+// loads configuration infotmation from file
+// uses another simple deterministic finit automaton
 ConfigData Config::loadConfig(const std::string &filename)
 {
     ConfigData data;
 
     std::vector<Item> items = parse(filename);
 
-    // print items
+    // print items (for debug purposes)
     /* for (const Item &item : items) {
         if (item.type == Item::INT)
             std::cout << "INT: " << (int) item.getInt() << std::endl;
@@ -430,6 +435,8 @@ ConfigData Config::loadConfig(const std::string &filename)
     return data;
 }
 
+// saves configuration to file
+// the algorithm is pretty much straightforward
 void Config::saveConfig(const std::string &filename, const ConfigData &data)
 {
     std::ofstream outputFile(filename);
