@@ -52,10 +52,6 @@ bool Game::initializeDevice()
     device->setResizable(configuration.resizable);
     timer->setTime(0);
     timer->start();
-    video::ECOLOR_FORMAT format = driver->getColorFormat();
-    if (format == video::ECF_A8R8G8B8)
-        std::cout << "asd";
-    std::cout << format << std::endl;
     return true;
 }
 
