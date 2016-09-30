@@ -99,8 +99,10 @@ void Game::initializeScene()
 
     // create camera
     if (!camera){
-        camera = sceneManager->addCameraSceneNode(0);// (plane->getNode());
-        camera->setPosition(core::vector3df(0, 0, -SPHERE_RADIUS - CAMERA_DISTANCE));
+        camera = sceneManager->addCameraSceneNode(0);
+        camera->setPosition(plane->getNode()->getPosition() +
+            core::vector3df(0, CAMERA_DISTANCE * 0.6, -SPHERE_RADIUS - CAMERA_DISTANCE));
+        camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
         camera->setFarValue(FAR_VALUE);
     }
 
@@ -476,15 +478,19 @@ void Game::run()
             velocity += _w(", angular velocity: ");
             velocity += plane->getRigidBody()->getAngularVelocity().length();
             gui->textVelocity->setText(velocity.c_str());
+
             //setting position and target to the camera
-            camera->setPosition(plane->getNode()->getPosition() - core::vector3df(0, 0, SPHERE_RADIUS + CAMERA_DISTANCE));
-            camera->setTarget(plane->getNode()->getPosition());
+            camera->setPosition(plane->getNode()->getPosition() +
+                core::vector3df(0, CAMERA_DISTANCE * 0.6, -SPHERE_RADIUS - CAMERA_DISTANCE));
+            camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
+
             //set cursor invisible
             device->getCursorControl()->setVisible(false);
+
             // generate level
             obstacleGenerator->generate(plane->getNode()->getPosition());
 
-            // if need to toggle gui
+            // if toggling gui is needed
             if (eventReceiver->toggleGUI) {
                 pause = !pause;
                 gui->terminate();
@@ -492,7 +498,7 @@ void Game::run()
                 eventReceiver->toggleGUI = false;
             }
         }
-        // if esc is pressed
+        // if escape is pressed
         if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
             if (!eventReceiver->escapePressed) {
                 eventReceiver->toggleGUI = true;
@@ -506,6 +512,7 @@ void Game::run()
             if (!pause) {
                 // physics simulation
                 dynamicsWorld->stepSimulation(1 / 60.f);
+                // draw scene
                 sceneManager->drawAll();
             }
             guiEnvironment->drawAll();
