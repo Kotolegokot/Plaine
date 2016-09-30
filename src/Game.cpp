@@ -79,7 +79,7 @@ void Game::initializeScene()
     plane = new Plane(dynamicsWorld, device, btVector3(0, 0, 0));
     plane->getRigidBody()->applyForce(btVector3(0, 0, 100000), btVector3(0, 0, 0));
 
-    camera = device->getSceneManager()->addCameraSceneNode(plane->getNode());
+    camera = device->getSceneManager()->addCameraSceneNode(0);// (plane->getNode());
     camera->setPosition(core::vector3df(0, 0, -SPHERE_RADIUS - CAMERA_DISTANCE));
     camera->setFarValue(FAR_VALUE);
 
@@ -410,8 +410,8 @@ void Game::run()
                 gui->textFPS->setText(fps.c_str());
             }
 
+            camera->setPosition(plane->getNode()->getPosition() - core::vector3df(0, 0, SPHERE_RADIUS + CAMERA_DISTANCE));
             camera->setTarget(plane->getNode()->getPosition());
-
             gui->setVisible(false);
             gui->textCameraPos->setVisible(true);
             gui->textCubeCount->setVisible(true);
