@@ -95,7 +95,7 @@ void Game::initializeScene()
 
      // create plane and apply a force to it to make it fly forward
     plane = new Plane(dynamicsWorld, device, btVector3(0, 0, 0));
-    plane->getRigidBody()->applyForce(btVector3(0, 0, 1000000), btVector3(0, 0, 0));
+    plane->getRigidBody()->applyForce(btVector3(0, 0, 100000), btVector3(0, 0, 0));
 
     // create camera
     if (!camera){
@@ -417,7 +417,7 @@ void Game::run()
     {
         planeVelosity = -plane->getRigidBody()->getLinearVelocity();
         planeScalarVelocity = plane->getRigidBody()->getLinearVelocity().length();
-        planeVelosity *= 0.0000001f*planeScalarVelocity*planeScalarVelocity;
+        planeVelosity *= 0.00000001f*planeScalarVelocity*planeScalarVelocity;
         plane->getRigidBody()->applyForce(planeVelosity, btVector3(0, 0, 0));
         // if we exit to menu or quit from game -> stop
         if (eventReceiver->state == MENU || eventReceiver->quit) {

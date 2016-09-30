@@ -51,7 +51,7 @@ private:
     f32 generatedEdgeBottom = 0;
 
     // distance between obstacles
-    const f32 STEP = 4000;
+    const f32 STEP = 400;
 
     // physics world
     btDynamicsWorld *world = nullptr;
