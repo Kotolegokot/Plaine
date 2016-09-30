@@ -16,6 +16,8 @@
 
 using namespace irr;
 
+// this class describes the whole game from main menu
+// to plane controlling
 class Game
 {
 public:
@@ -56,6 +58,7 @@ private:
     void error(const core::stringw &str) const;
     bool initializeDevice();
     void initializeGUI();
+    void initializeBullet();
     void initializeScene();
     void terminateScene();
     void terminateDevice();

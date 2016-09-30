@@ -1,4 +1,3 @@
-#include <iostream>
 #include <clocale>
 #include <cstdlib>
 #include <random>
@@ -12,6 +11,7 @@ using namespace irr;
 
 int main()
 {
+
     // create structure for config
     ConfigData data;
     // create config loader

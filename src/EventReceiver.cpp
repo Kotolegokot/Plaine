@@ -10,6 +10,7 @@ EventReceiver::EventReceiver()
 
 bool EventReceiver::OnEvent(const SEvent &event)
 {
+    // if the event is related to keys
     if (event.EventType == EET_KEY_INPUT_EVENT) {
         if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight)) {
             PressedKeys[event.KeyInput.Key] = event.KeyInput.PressedDown;
@@ -17,16 +18,19 @@ bool EventReceiver::OnEvent(const SEvent &event)
         } else {
             lastKey = event.KeyInput.Key;
             }
-    } else if (event.EventType == EET_GUI_EVENT) {
+    }
+
+    // if the event is related to GUI
+    else if (event.EventType == EET_GUI_EVENT) {
         s32 id = event.GUIEvent.Caller->getID();
         switch (event.GUIEvent.EventType) {
         case gui::EGET_BUTTON_CLICKED:
             if (id == ID_BUTTON_START) {
-                stage = INGAME_MENU;
+                state = INGAME_MENU;
                 return true;
             }
             else if (id == ID_BUTTON_SETTINGS) {
-                stage = SETTINGS;
+                state = SETTINGS;
                 toggleGUI = true;
                 changingControlUp = false;
                 changingControlDown = false;
@@ -43,7 +47,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 return true;
             }
             else if (id == ID_BUTTON_MENU) {
-                stage = MENU;
+                state = MENU;
                 toggleGUI = true;
                 return true;
             }
@@ -52,7 +56,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 return true;
             }
             else if (id == ID_BUTTON_CONTROL_SETTINGS) {
-                stage = CONTROL_SETTINGS;
+                state = CONTROL_SETTINGS;
                 toggleGUI = true;
                 return true;
             }
@@ -115,6 +119,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
     return false;
 }
 
+// returns true if keyCode is pressed
 bool EventReceiver::IsKeyDown(EKEY_CODE keyCode) const
 {
     return PressedKeys[keyCode];

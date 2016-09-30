@@ -6,6 +6,7 @@ using namespace irr;
 
 Game::Game(const struct ConfigData &data)
 {
+    // load configuration, initialize device and GUI
     configuration = data;
     if (!initializeDevice())
         return;
@@ -29,18 +30,25 @@ void Game::initializeGUI()
 
 bool Game::initializeDevice()
 {
+    // if fullscreen is enabled, create an empty device
+    //      to get screen resolution
     if (configuration.fullscreen)
     {
         IrrlichtDevice *nulldevice = createDevice(video::EDT_NULL);
         configuration.resolution = nulldevice->getVideoModeList()->getDesktopResolution();
         nulldevice -> drop();
     }
+
+    // create device (which is simply a window in which the
+    //      whole world is rendered)
     device = createDevice(video::EDT_OPENGL, configuration.resolution, configuration.colordepth, configuration.fullscreen, configuration.stencilBuffer, configuration.vsync);
     if (!device) {
         error("Couldn't create a device :(\n");
         return false;
     }
     device->setWindowCaption(L"PlaneTest");
+
+    // get a lot of useful pointers from device
     timer=device->getTimer();
     driver = device->getVideoDriver();
     sceneManager = device->getSceneManager();
@@ -50,17 +58,16 @@ bool Game::initializeDevice()
     eventReceiver = new EventReceiver();
     device->setEventReceiver(eventReceiver);
     device->setResizable(configuration.resizable);
+
     timer->setTime(0);
     timer->start();
+
     return true;
 }
 
-void Game::initializeScene()
+// initializes bullet world
+void Game::initializeBullet()
 {
-
-    driver->setFog(iridescentColor(timer->getTime()), video::EFT_FOG_LINEAR, 1300, 1600, .003f, true, false);
-
-    // Bullet
     // add broadphase interface
     broadphase = new btDbvtBroadphase();
     // configurate collision
@@ -72,19 +79,32 @@ void Game::initializeScene()
     // create world
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0, 0, 0));
+}
 
+void Game::initializeScene()
+{
+    driver->setFog(iridescentColor(timer->getTime()), video::EFT_FOG_LINEAR, 1300, 1600, .003f, true, false);
+
+    initializeBullet();
+
+    // add some light
     if (!light){
         light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), iridescentColor(timer->getTime()), 300);
         light->setLightType(video::ELT_DIRECTIONAL);
     }
+
+     // create plane and apply a force to it to make it fly forward
     plane = new Plane(dynamicsWorld, device, btVector3(0, 0, 0));
     plane->getRigidBody()->applyForce(btVector3(0, 0, 100000), btVector3(0, 0, 0));
+
+    // create camera
     if (!camera){
         camera = sceneManager->addCameraSceneNode(0);// (plane->getNode());
         camera->setPosition(core::vector3df(0, 0, -SPHERE_RADIUS - CAMERA_DISTANCE));
         camera->setFarValue(FAR_VALUE);
     }
 
+    // create obstacle generator
     obstacleGenerator = new ObstacleGenerator(device, dynamicsWorld, camera->getFarValue(), 500);
 }
 
@@ -115,6 +135,7 @@ void Game::terminateScene()
     delete broadphase;
 }
 
+// show main menu
 void Game::menu()
 {
     if (!initialized) {
@@ -124,7 +145,7 @@ void Game::menu()
     configuration.resolution = driver->getScreenSize();
     gui->initialize(MENU);
     while (device->run()) {
-        if (eventReceiver->stage == INGAME_MENU){
+        if (eventReceiver->state == INGAME_MENU) {
             gui->terminate();
             run();
         }
@@ -135,23 +156,23 @@ void Game::menu()
             if (!eventReceiver->escapePressed)
             {
                 eventReceiver->escapePressed = true;
-                if (eventReceiver->stage == MENU)
+                if (eventReceiver->state == MENU)
                     return;
-                else if (eventReceiver->stage == SETTINGS)
+                else if (eventReceiver->state == SETTINGS)
                     {
-                        eventReceiver->stage = MENU;
+                        eventReceiver->state = MENU;
                         eventReceiver->toggleGUI = true;
                     }
-                else if (eventReceiver->stage == CONTROL_SETTINGS)
+                else if (eventReceiver->state == CONTROL_SETTINGS)
                     {
-                        eventReceiver->stage = SETTINGS;
+                        eventReceiver->state = SETTINGS;
                         eventReceiver->toggleGUI = true;
                     }
             }
         }
         else if (!eventReceiver->IsKeyDown(KEY_ESCAPE))
             eventReceiver->escapePressed = false;
-        if (gui->getStage() == SETTINGS && eventReceiver->stage == MENU && eventReceiver->needRestartInMenu)
+        if (gui->getStage() == SETTINGS && eventReceiver->state == MENU && eventReceiver->needRestartInMenu)
             {
                 gui->terminate();
                 terminateDevice();
@@ -165,7 +186,7 @@ void Game::menu()
         if (eventReceiver->toggleGUI)
         {
             gui->terminate();
-            switch (eventReceiver->stage)
+            switch (eventReceiver->state)
             {
             case(MENU):
                 gui->initialize(MENU);
@@ -184,7 +205,7 @@ void Game::menu()
             }
             eventReceiver->toggleGUI = false;
         }
-        if (eventReceiver->stage == SETTINGS){
+        if (eventReceiver->state == SETTINGS) {
             if (eventReceiver->toggleFullscreen)
             {
                 configuration.fullscreen = !configuration.fullscreen;
@@ -196,7 +217,7 @@ void Game::menu()
                     return;
                 initializeGUI();
                 initialized = true;
-                eventReceiver->stage = SETTINGS;
+                eventReceiver->state = SETTINGS;
                 gui->initialize(SETTINGS);
                 eventReceiver->needRestartInMenu = false;
             }
@@ -222,7 +243,7 @@ void Game::menu()
                     return;
                 initializeGUI();
                 initialized = true;
-                eventReceiver->stage = SETTINGS;
+                eventReceiver->state = SETTINGS;
                 gui->initialize(SETTINGS);
                 eventReceiver->needRestartInMenu = false;
             }
@@ -270,7 +291,7 @@ void Game::menu()
                 gui->initialize(SETTINGS);
             }
         }
-        if (eventReceiver->stage == CONTROL_SETTINGS){
+        if (eventReceiver->state == CONTROL_SETTINGS) {
                 if (eventReceiver->defaultControls)
                 {
                     configuration.controls = Controls();
@@ -352,6 +373,7 @@ void Game::menu()
     gui->terminate();
 }
 
+// start the game itself
 void Game::run()
 {
     gui->initialize(INGAME_MENU);
@@ -361,7 +383,7 @@ void Game::run()
     video::SColor color;
     while (device->run())
     {
-        if (eventReceiver->stage == MENU || eventReceiver->quit){
+        if (eventReceiver->state == MENU || eventReceiver->quit) {
             break;
         }
         color = iridescentColor(timer->getTime());
