@@ -73,15 +73,17 @@ void Game::initializeScene()
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0, 0, 0));
 
-    light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), video::SColor(0, getRandomf(0, 255), getRandomf(0, 255), getRandomf(0, 255)), 300);
-    light->setLightType(video::ELT_DIRECTIONAL);
-
+    if (!light){
+        light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), iridescentColor(timer->getTime()), 300);
+        light->setLightType(video::ELT_DIRECTIONAL);
+    }
     plane = new Plane(dynamicsWorld, device, btVector3(0, 0, 0));
     plane->getRigidBody()->applyForce(btVector3(0, 0, 100000), btVector3(0, 0, 0));
-
-    camera = device->getSceneManager()->addCameraSceneNode(0);// (plane->getNode());
-    camera->setPosition(core::vector3df(0, 0, -SPHERE_RADIUS - CAMERA_DISTANCE));
-    camera->setFarValue(FAR_VALUE);
+    if (!camera){
+        camera = sceneManager->addCameraSceneNode(0);// (plane->getNode());
+        camera->setPosition(core::vector3df(0, 0, -SPHERE_RADIUS - CAMERA_DISTANCE));
+        camera->setFarValue(FAR_VALUE);
+    }
 
     obstacleGenerator = new ObstacleGenerator(device, dynamicsWorld, camera->getFarValue(), 500);
 }
@@ -106,7 +108,6 @@ void Game::terminateScene()
     delete plane;
     // IMPORTANT: obstacleGenerator must be deleted before dynamicsWorld and sceneManager
     delete obstacleGenerator;
-    sceneManager->clear();
     delete dynamicsWorld;
     delete solver;
     delete dispatcher;
@@ -364,11 +365,6 @@ void Game::run()
             break;
         }
         color = iridescentColor(timer->getTime());
-        driver->setFog(color, video::EFT_FOG_LINEAR, 800.0f, 1500.0f, 0.01f, true, true);
-        lightData = light->getLightData();
-        lightData.DiffuseColor = color;
-        lightData.AmbientColor = color;
-        light->setLightData(lightData);
         if (pause) {
             core::stringw scrs = _w("Screen size: ");
             scrs += configuration.resolution.Width;
@@ -389,6 +385,11 @@ void Game::run()
             device->getCursorControl()->setVisible(true);
         } else {
             {
+                driver->setFog(color, video::EFT_FOG_LINEAR, 800.0f, 1500.0f, 0.01f, true, true);
+                lightData = light->getLightData();
+                lightData.DiffuseColor = color;
+                lightData.AmbientColor = color;
+                light->setLightData(lightData);
                 core::stringw cameraPosition = _w("Plane position: (");
                 core::vector3df position = plane->getNode()->getPosition();
                 cameraPosition += position.X;
@@ -438,10 +439,11 @@ void Game::run()
         }
 
         if (device->isWindowActive()) {
-            dynamicsWorld->stepSimulation(1 / 60.f);
             driver->beginScene(true, true, color);
-            if (!pause)
+            if (!pause) {
+                dynamicsWorld->stepSimulation(1 / 60.f);
                 sceneManager->drawAll();
+            }
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
