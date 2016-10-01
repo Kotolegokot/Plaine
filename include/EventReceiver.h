@@ -39,7 +39,7 @@ public:
     EKEY_CODE lastKey = KEY_KEY_CODES_COUNT;
 private:
     // this array shows which keys are pressed and which are not
-    bool PressedKeys[KEY_KEY_CODES_COUNT];
+    bool pressedKeys[KEY_KEY_CODES_COUNT];
 };
 
 #endif // EVENTRECEIVER_H

@@ -5,7 +5,7 @@ using namespace irr;
 EventReceiver::EventReceiver()
 {
     for (u32 i = 0; i < KEY_KEY_CODES_COUNT; i++)
-        PressedKeys[i] = false;
+        pressedKeys[i] = false;
 }
 
 bool EventReceiver::OnEvent(const SEvent &event)
@@ -13,7 +13,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
     // if the event is related to keys
     if (event.EventType == EET_KEY_INPUT_EVENT) {
         if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight)) {
-            PressedKeys[event.KeyInput.Key] = event.KeyInput.PressedDown;
+            pressedKeys[event.KeyInput.Key] = event.KeyInput.PressedDown;
             return escapePressed;
         } else {
             lastKey = event.KeyInput.Key;
@@ -123,5 +123,5 @@ bool EventReceiver::OnEvent(const SEvent &event)
 // returns true if keyCode is pressed
 bool EventReceiver::IsKeyDown(EKEY_CODE keyCode) const
 {
-    return PressedKeys[keyCode];
+    return pressedKeys[keyCode];
 }

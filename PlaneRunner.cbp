@@ -106,6 +106,7 @@
 		<Unit filename="include/MotionState.h" />
 		<Unit filename="include/ObstacleGenerator.h" />
 		<Unit filename="include/Plane.h" />
+		<Unit filename="include/PlaneControl.h" />
 		<Unit filename="include/util.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/CGUITTFont.cpp" />
@@ -116,6 +117,7 @@
 		<Unit filename="src/MotionState.cpp" />
 		<Unit filename="src/ObstacleGenerator.cpp" />
 		<Unit filename="src/Plane.cpp" />
+		<Unit filename="src/PlaneControl.cpp" />
 		<Unit filename="src/util.cpp" />
 		<Extensions>
 			<code_completion />
