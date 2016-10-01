@@ -100,7 +100,7 @@ void Game::initializeScene()
     if (!camera){
         camera = sceneManager->addCameraSceneNode(0);
         camera->setPosition(plane->getNode()->getPosition() +
-            core::vector3df(0, CAMERA_DISTANCE * 0.6, -SPHERE_RADIUS - CAMERA_DISTANCE));
+            core::vector3df(0, 0, -SPHERE_RADIUS - CAMERA_DISTANCE));
         camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
         camera->setFarValue(FAR_VALUE);
     }
@@ -501,7 +501,7 @@ void Game::run()
 
             //setting position and target to the camera
             camera->setPosition(plane->getNode()->getPosition() +
-                core::vector3df(0, CAMERA_DISTANCE * 0.6, -SPHERE_RADIUS - CAMERA_DISTANCE));
+                core::vector3df(0, 0, -SPHERE_RADIUS - CAMERA_DISTANCE));
             camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
 
             //set cursor invisible
