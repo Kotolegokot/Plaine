@@ -87,23 +87,19 @@ void Game::initializeScene()
 
     initializeBullet();
 
-    // add some light
-    if (!light){
-        light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), iridescentColor(timer->getTime()), 300);
-        light->setLightType(video::ELT_DIRECTIONAL);
-    }
-
      // create plane and apply a force to it to make it fly forward
     plane = new Plane(dynamicsWorld, device, btVector3(0, 0, 0));
 
     // create camera
-    if (!camera){
         camera = sceneManager->addCameraSceneNode(0);
         camera->setPosition(plane->getNode()->getPosition() +
             core::vector3df(0, CAMERA_DISTANCE * 0.6, -SPHERE_RADIUS - CAMERA_DISTANCE));
         camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
         camera->setFarValue(FAR_VALUE);
-    }
+
+    // add some light
+        light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), iridescentColor(timer->getTime()), 300);
+        light->setLightType(video::ELT_DIRECTIONAL);
 
     // create obstacle generator
     obstacleGenerator = new ObstacleGenerator(device, dynamicsWorld, camera->getFarValue(), 500);
@@ -501,7 +497,7 @@ void Game::run()
 
             //setting position and target to the camera
             camera->setPosition(plane->getNode()->getPosition() +
-                core::vector3df(0, CAMERA_DISTANCE * 0.6, -SPHERE_RADIUS - CAMERA_DISTANCE));
+            core::vector3df(0, CAMERA_DISTANCE * 0.6, -SPHERE_RADIUS - CAMERA_DISTANCE));
             camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
 
             //set cursor invisible
