@@ -42,7 +42,7 @@ bool Game::initializeDevice()
 
     // create device (which is simply a window in which the
     //      whole world is rendered)
-    device = createDevice(video::EDT_OPENGL, configuration.resolution, configuration.colordepth, configuration.fullscreen, configuration.stencilBuffer, configuration.vsync);
+    device = createDevice(video::EDT_OPENGL, configuration.resolution, 32, configuration.fullscreen, configuration.stencilBuffer, configuration.vsync);
     if (!device) {
         error("Couldn't create a device :(\n");
         return false;
@@ -267,18 +267,6 @@ void Game::menu()
             // toggles color depth (probably not work), vsyc and stencil buffer
             if(eventReceiver->toggleGraphicMode)
             {
-                switch (gui->comboBoxColorDepth->getSelected())
-                {
-                case 0:
-                    configuration.colordepth = 8;
-                    break;
-                case 1:
-                    configuration.colordepth = 16;
-                    break;
-                case 2:
-                    configuration.colordepth = 32;
-                    break;
-                }
                 configuration.vsync = gui->checkBoxVSync->isChecked();
                 configuration.stencilBuffer = gui->checkBoxStencilBuffer->isChecked();
                 eventReceiver->toggleGraphicMode = false;

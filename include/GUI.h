@@ -29,7 +29,6 @@ public:
     gui::IGUIButton *buttonMenu = nullptr;
     gui::IGUIButton *buttonQuit = nullptr;
     gui::IGUIComboBox *comboBoxResolution = nullptr;
-    gui::IGUIComboBox *comboBoxColorDepth = nullptr;
     gui::IGUIComboBox *comboBoxLanguage = nullptr;
     gui::IGUIStaticText *textScreenSize = nullptr;
     gui::IGUIStaticText *textCubeCount = nullptr;

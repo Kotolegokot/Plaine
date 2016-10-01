@@ -173,16 +173,6 @@ void GUI::initializeSettingsGUI()
         }
     }
     textColorDepth = guiEnvironment->addStaticText(_wp("Color Depth:"), core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 7*buttonHeight - 7*SPACE, configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 6*buttonHeight - 7*SPACE), false);
-    comboBoxColorDepth = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 7*buttonHeight - 7*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 6*buttonHeight - 7*SPACE), 0, ID_COMBOBOX_COLORDEPTH);
-    comboBoxColorDepth->addItem(L"8", 0);
-    comboBoxColorDepth->addItem(L"16", 1);
-    comboBoxColorDepth->addItem(L"32", 2);
-    if (configuration.colordepth == 8)
-        comboBoxColorDepth->setSelected(0);
-    else if (configuration.colordepth == 16)
-        comboBoxColorDepth->setSelected(1);
-    else if (configuration.colordepth == 32)
-        comboBoxColorDepth->setSelected(2);
     checkBoxVSync = guiEnvironment->addCheckBox(configuration.vsync, core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 6*buttonHeight - 6*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 5*buttonHeight - 6*SPACE),
         0, ID_CHECKBOX_VSYNC, _wp("VSync"));
     checkBoxStencilBuffer = guiEnvironment->addCheckBox(configuration.stencilBuffer, core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 5*buttonHeight - 5*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 4*buttonHeight - 5*SPACE),
@@ -210,7 +200,6 @@ void GUI::terminateSettingsGUI()
     textResolution->remove();
     comboBoxResolution->remove();
     textColorDepth->remove();
-    comboBoxColorDepth->remove();
     checkBoxVSync->remove();
     checkBoxStencilBuffer->remove();
     buttonToggleFullscreen->remove();
@@ -321,7 +310,6 @@ void GUI::setVisible(bool visible)
             textResolution->setVisible(visible);
             comboBoxResolution->setVisible(visible);
             textColorDepth->setVisible(visible);
-            comboBoxColorDepth->setVisible(visible);
             checkBoxVSync->setVisible(visible);
             checkBoxStencilBuffer->setVisible(visible);
             buttonToggleFullscreen->setVisible(visible);
@@ -378,7 +366,6 @@ void GUI::resizeGUI()
             textResolution->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 8*SPACE, configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 7*buttonHeight - 8*SPACE));
             comboBoxResolution->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 8*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 7*buttonHeight - 8*SPACE));
             textColorDepth->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 7*buttonHeight - 7*SPACE, configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 6*buttonHeight - 7*SPACE));
-            comboBoxColorDepth->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 7*buttonHeight - 7*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 6*buttonHeight - 7*SPACE));
             checkBoxVSync->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 6*buttonHeight - 6*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 5*buttonHeight - 6*SPACE));
             checkBoxStencilBuffer->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 5*buttonHeight - 5*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 4*buttonHeight - 5*SPACE));
             buttonToggleFullscreen->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 4*buttonHeight - 4*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 4*SPACE));
