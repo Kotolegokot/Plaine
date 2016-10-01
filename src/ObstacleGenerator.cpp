@@ -27,7 +27,6 @@ protected:
         node->setMaterialFlag(video::EMF_ANISOTROPIC_FILTER, true);
         node->setMaterialFlag(video::EMF_TRILINEAR_FILTER, true);
         node->setMaterialFlag(video::EMF_ANTI_ALIASING, true);
-        node->setDebugDataVisible(true);
     }
 
     virtual void createMotionState() override
