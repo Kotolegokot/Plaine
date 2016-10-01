@@ -95,7 +95,6 @@ void Game::initializeScene()
 
      // create plane and apply a force to it to make it fly forward
     plane = new Plane(dynamicsWorld, device, btVector3(0, 0, 0));
-    plane->getRigidBody()->applyForce(btVector3(0, 0, 100000), btVector3(0, 0, 0));
 
     // create camera
     if (!camera){
@@ -399,7 +398,6 @@ void Game::menu()
             device->yield();
         }
     }
-
     gui->terminate();
 }
 
@@ -414,6 +412,8 @@ void Game::run()
     video::SLight lightData;
     // create variable for color
     video::SColor color;
+    btVector3 planeVelosity;
+    btScalar planeScalarVelocity;
     while (device->run())
     {
         // if we exit to menu or quit from game -> stop
@@ -446,8 +446,17 @@ void Game::run()
                 eventReceiver->toggleGUI = false;
             }
         } else {
+            // air resistance simulation
+            planeVelosity = -plane->getRigidBody()->getLinearVelocity();
+            planeScalarVelocity = plane->getRigidBody()->getLinearVelocity().length();
+            planeVelosity *= 0.000001f*planeScalarVelocity*planeScalarVelocity;
+            plane->getRigidBody()->applyForce(planeVelosity, btVector3(0, 0, 0));
+
+            plane->getRigidBody()->applyForce(btVector3(0, 0, 300), btVector3(0, 0, 0));
+
             // setting fog color
             driver->setFog(color, video::EFT_FOG_LINEAR, 800.0f, 1500.0f, 0.01f, true, true);
+
             // setting light color
             lightData = light->getLightData();
             lightData.DiffuseColor = color;
@@ -455,29 +464,40 @@ void Game::run()
             light->setLightData(lightData);
 
             // camera position
-            core::stringw cameraPosition = _w("Plane position: (");
-            core::vector3df position = plane->getNode()->getPosition();
-            cameraPosition += position.X;
-            cameraPosition += ", ";
-            cameraPosition += position.Y;
-            cameraPosition += ", ";
-            cameraPosition += position.Z;
-            cameraPosition += ")";
-            gui->textCameraPos->setText(cameraPosition.c_str());
+            {
+                core::stringw cameraPosition = _w("Plane position: (");
+                core::vector3df position = plane->getNode()->getPosition();
+                cameraPosition += position.X;
+                cameraPosition += ", ";
+                cameraPosition += position.Y;
+                cameraPosition += ", ";
+                cameraPosition += position.Z;
+                cameraPosition += ")";
+                gui->textCameraPos->setText(cameraPosition.c_str());
+            }
+
             // cube counter
-            core::stringw cubeCount = _w("Cubes: ");
-            cubeCount += obstacleGenerator->getCubeCount();
-            gui->textCubeCount->setText(cubeCount.c_str());
+            {
+                core::stringw cubeCount = _w("Cubes: ");
+                cubeCount += obstacleGenerator->getCubeCount();
+                gui->textCubeCount->setText(cubeCount.c_str());
+            }
+
             // fps counter
-            core::stringw fps = _w("FPS: ");
-            fps += driver->getFPS();
-            gui->textFPS->setText(fps.c_str());
+            {
+                core::stringw fps = _w("FPS: ");
+                fps += driver->getFPS();
+                gui->textFPS->setText(fps.c_str());
+            }
+
             // velocity counter
-            core::stringw velocity = _w("Linear velocity: ");
-            velocity += int(plane->getRigidBody()->getLinearVelocity().length());
-            velocity += _w(", angular velocity: ");
-            velocity += plane->getRigidBody()->getAngularVelocity().length();
-            gui->textVelocity->setText(velocity.c_str());
+            {
+                core::stringw velocity = _w("Linear velocity: ");
+                velocity += (int) plane->getRigidBody()->getLinearVelocity().length();
+                velocity += _w(", angular velocity: ");
+                velocity += plane->getRigidBody()->getAngularVelocity().length();
+                gui->textVelocity->setText(velocity.c_str());
+            }
 
             //setting position and target to the camera
             camera->setPosition(plane->getNode()->getPosition() +
@@ -518,7 +538,7 @@ void Game::run()
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
-            if (!pause){
+            if (!pause) {
                 pause = true;
                 gui->terminate();
                 gui->initialize(INGAME_MENU);
