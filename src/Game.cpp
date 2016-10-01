@@ -21,6 +21,7 @@ Game::~Game()
 
 void Game::initializeGUI()
 {
+    // load font
     gui::IGUIFont *font = gui::CGUITTFont::createTTFont(driver, fileSystem, io::path("media/fonts/font.ttf"), 13, true, true);
     if (font)
         skin->setFont(font);
@@ -49,7 +50,7 @@ bool Game::initializeDevice()
     device->setWindowCaption(L"PlaneTest");
 
     // get a lot of useful pointers from device
-    timer=device->getTimer();
+    timer = device->getTimer();
     driver = device->getVideoDriver();
     sceneManager = device->getSceneManager();
     guiEnvironment = device->getGUIEnvironment();
@@ -87,7 +88,6 @@ void Game::initializeScene()
 
     initializeBullet();
 
-     // create plane and apply a force to it to make it fly forward
     plane = new Plane(dynamicsWorld, device, btVector3(0, 0, 0));
 
     // create camera
@@ -497,11 +497,7 @@ void Game::run()
 
             //setting position and target to the camera
             camera->setPosition(plane->getNode()->getPosition() +
-<<<<<<< HEAD
-            core::vector3df(0, CAMERA_DISTANCE * 0.6, -SPHERE_RADIUS - CAMERA_DISTANCE));
-=======
                 core::vector3df(0, 0, -SPHERE_RADIUS - CAMERA_DISTANCE));
->>>>>>> origin/master
             camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
 
             //set cursor invisible
