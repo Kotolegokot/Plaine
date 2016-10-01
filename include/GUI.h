@@ -35,7 +35,7 @@ public:
     gui::IGUIStaticText *textFPS = nullptr;
     gui::IGUIStaticText *textVelocity = nullptr;
     gui::IGUIStaticText *textResolution = nullptr;
-    gui::IGUIStaticText *textColorDepth = nullptr;
+    gui::IGUIStaticText *textRenderDistance = nullptr;
     gui::IGUIStaticText *textLanguage = nullptr;
     gui::IGUIStaticText *textCameraPos = nullptr;
     gui::IGUIStaticText *textControlUp = nullptr;
@@ -45,6 +45,7 @@ public:
     gui::IGUICheckBox *checkBoxVSync = nullptr;
     gui::IGUICheckBox *checkBoxStencilBuffer = nullptr;
     gui::IGUIWindow *settingsMessageBox = nullptr;
+    gui::IGUISpinBox *spinBoxRenderDistance = nullptr;
 
 
     void recalculateButtonProportions();
