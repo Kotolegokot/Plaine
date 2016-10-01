@@ -21,6 +21,7 @@ Game::~Game()
 
 void Game::initializeGUI()
 {
+    // load font
     gui::IGUIFont *font = gui::CGUITTFont::createTTFont(driver, fileSystem, io::path("media/fonts/font.ttf"), 13, true, true);
     if (font)
         skin->setFont(font);
@@ -49,7 +50,7 @@ bool Game::initializeDevice()
     device->setWindowCaption(L"PlaneTest");
 
     // get a lot of useful pointers from device
-    timer=device->getTimer();
+    timer = device->getTimer();
     driver = device->getVideoDriver();
     sceneManager = device->getSceneManager();
     guiEnvironment = device->getGUIEnvironment();
@@ -93,7 +94,7 @@ void Game::initializeScene()
         light->setLightType(video::ELT_DIRECTIONAL);
     }
 
-     // create plane and apply a force to it to make it fly forward
+     // creates plane
     plane = new Plane(dynamicsWorld, device, btVector3(0, 0, 0));
 
     // create camera
