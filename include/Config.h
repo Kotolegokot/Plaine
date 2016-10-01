@@ -21,7 +21,7 @@ struct Controls {
 // structure containing all the configuration info
 struct ConfigData {
     bool fullscreen = false;
-    core::dimension2d<u32> resolution = core::dimension2d<u32>(640, 480);;
+    core::dimension2d<u32> resolution = core::dimension2d<u32>(640, 480);
     u32 colordepth = 32;
     std::string language = "c";
     bool resizable = false;
