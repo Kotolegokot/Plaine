@@ -4,29 +4,31 @@ PlaneControl::PlaneControl(Plane *plane, const Controls &controls) :
     plane(plane), controls(controls) {}
 
 // move the plane according to keys pressed
-void PlaneControl::handle(bool pressedKeys[])
+void PlaneControl::handle(EventReceiver *eventReceiver)
 {
     // up and down
-    if (!(pressedKeys[controls.up] && pressedKeys[controls.down])) { // if not both are pressed
+    if (!(eventReceiver->IsKeyDown(controls.up) &&
+        eventReceiver->IsKeyDown(controls.down))) { // if not both are pressed
         // up
-        if (pressedKeys[controls.up]) {
-
+        if (eventReceiver->IsKeyDown(controls.up)) {
+            plane->getRigidBody()->applyForce(btVector3(0, 1000, 0), btVector3(0, 0, 0));
         }
         // down
-        else {
-
+        else if (eventReceiver->IsKeyDown(controls.down)) {
+            plane->getRigidBody()->applyForce(btVector3(0, -1000, 0), btVector3(0, 0, 0));
         }
     }
 
     // left and right
-    if (!(pressedKeys[controls.left] && pressedKeys[controls.right])) { // if not both are pressed
+    if (!(eventReceiver->IsKeyDown(controls.left) &&
+        eventReceiver->IsKeyDown(controls.right))) { // if not both are pressed
         // left
-        if (pressedKeys[controls.left]) {
-
+        if (eventReceiver->IsKeyDown(controls.left)) {
+            plane->getRigidBody()->applyForce(btVector3(-1000, 0, 0), btVector3(0, 0, 0));
         }
         // right
-        else {
-
+        else if (eventReceiver->IsKeyDown(controls.right)) {
+            plane->getRigidBody()->applyForce(btVector3(1000, 0, 0), btVector3(0, 0, 0));
         }
     }
 }

@@ -13,6 +13,7 @@
 #include "GUI.h"
 #include "ObstacleGenerator.h"
 #include "Plane.h"
+#include "PlaneControl.h"
 
 using namespace irr;
 
@@ -53,6 +54,7 @@ private:
     scene::ICameraSceneNode *camera = nullptr;
     ObstacleGenerator *obstacleGenerator = nullptr;
     Plane *plane = nullptr;
+    PlaneControl *planeControl = nullptr;
 
     void error(const core::stringw &str) const;
     bool initializeDevice();

@@ -95,6 +95,7 @@ void Game::initializeScene()
 
      // create plane and apply a force to it to make it fly forward
     plane = new Plane(dynamicsWorld, device, btVector3(0, 0, 0));
+    planeControl = new PlaneControl(plane, configuration.controls);
 
     // create camera
     if (!camera){
@@ -530,6 +531,8 @@ void Game::run()
         if (device->isWindowActive()) {
             driver->beginScene(true, true, color);
             if (!pause) {
+                // handle plane controls
+                planeControl->handle(eventReceiver);
                 // physics simulation
                 dynamicsWorld->stepSimulation(1 / 60.f);
                 // draw scene

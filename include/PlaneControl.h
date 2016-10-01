@@ -1,6 +1,7 @@
 #ifndef PLANECONTROL_H
 #define PLANECONTROL_H
 
+#include "EventReceiver.h"
 #include "Config.h"
 #include "Plane.h"
 
@@ -8,7 +9,7 @@ class PlaneControl
 {
 public:
     PlaneControl(Plane *plane, const Controls &controls = Controls());
-    void handle(bool pressedKeys[]);
+    void handle(EventReceiver *eventReceiver);
     void setPlane(Plane *plane);
     Plane *getPlane();
 
