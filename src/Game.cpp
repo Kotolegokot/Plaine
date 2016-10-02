@@ -86,6 +86,7 @@ void Game::initializeScene()
 
     initializeBullet();
 
+    // create plane
     plane = new Plane(dynamicsWorld, device, btVector3(0, 0, 0));
     planeControl = new PlaneControl(plane, configuration.controls);
 
@@ -396,7 +397,6 @@ void Game::run()
     video::SLight lightData;
     // create variable for color
     video::SColor color;
-    btVector3 planeVelosity;
     btScalar planeScalarVelocity;
     while (device->run())
     {
@@ -430,14 +430,6 @@ void Game::run()
                 eventReceiver->toggleGUI = false;
             }
         } else {
-            // air resistance simulation
-            planeVelosity = -plane->getRigidBody()->getLinearVelocity();
-            planeScalarVelocity = plane->getRigidBody()->getLinearVelocity().length();
-            planeVelosity *= 0.000001f*planeScalarVelocity*planeScalarVelocity;
-            plane->getRigidBody()->applyForce(planeVelosity, btVector3(0, 0, 0));
-
-            plane->getRigidBody()->applyForce(btVector3(0, 0, 300), btVector3(0, 0, 0));
-
             // setting fog color
             driver->setFog(color, video::EFT_FOG_LINEAR, 800.0f, 1500.0f, 0.01f, true, true);
 
