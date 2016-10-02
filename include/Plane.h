@@ -6,7 +6,7 @@
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "IBody.h"
 
-#define SPHERE_RADIUS 50
+#define SPHERE_RADIUS 25
 #define CAMERA_DISTANCE 200
 #define PLANE_MASS 1
 

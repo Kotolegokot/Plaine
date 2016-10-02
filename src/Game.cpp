@@ -82,7 +82,6 @@ void Game::initializeBullet()
 
 void Game::initializeScene()
 {
-    driver->setFog(iridescentColor(timer->getTime()), video::EFT_FOG_LINEAR, 1300, 1600, .003f, true, false);
 
     initializeBullet();
 
@@ -431,7 +430,7 @@ void Game::run()
             }
         } else {
             // setting fog color
-            driver->setFog(color, video::EFT_FOG_LINEAR, 800.0f, 1500.0f, 0.01f, true, true);
+            driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300, configuration.renderDistance, 0.01f, true, true);
 
             // setting light color
             lightData = light->getLightData();
@@ -509,7 +508,7 @@ void Game::run()
                 // handle plane controls
                 planeControl->handle(eventReceiver);
                 // physics simulation
-                dynamicsWorld->stepSimulation(1 / 60.f);
+                dynamicsWorld->stepSimulation(1 / 60.0f);
                 // draw scene
                 sceneManager->drawAll();
             }
