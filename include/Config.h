@@ -22,11 +22,11 @@ struct Controls {
 struct ConfigData {
     bool fullscreen = false;
     core::dimension2d<u32> resolution = core::dimension2d<u32>(640, 480);
-    u32 colordepth = 32;
     std::string language = "c";
     bool resizable = false;
     bool vsync = true;
     bool stencilBuffer = true;
+    u32 renderDistance = 2000;
     Controls controls;
 };
 

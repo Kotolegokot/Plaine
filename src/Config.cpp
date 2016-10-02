@@ -213,7 +213,7 @@ ConfigData Config::loadConfig(const std::string &filename)
     } */
 
     bool goToNextNEWLINE = false;
-    enum { NONE, RESOLUTION, FULLSCREEN, COLORDEPTH, LANGUAGE, RESIZABLE, VSYNC, STENCILBUFFER, CONTROLS, CONTROL_UP, CONTROL_LEFT, CONTROL_DOWN, CONTROL_RIGHT } state = NONE;
+    enum { NONE, RESOLUTION, FULLSCREEN, LANGUAGE, RESIZABLE, VSYNC, STENCILBUFFER, RENDER_DISTANCE, CONTROLS, CONTROL_UP, CONTROL_LEFT, CONTROL_DOWN, CONTROL_RIGHT } state = NONE;
 
     for (std::vector<Item>::const_iterator i = items.cbegin(); i != items.cend(); ++i) {
         if (goToNextNEWLINE) {
@@ -227,8 +227,6 @@ ConfigData Config::loadConfig(const std::string &filename)
                         state = RESOLUTION;
                     else if ((*i).getString() == "fullscreen")
                         state = FULLSCREEN;
-                    else if ((*i).getString() == "colordepth")
-                        state = COLORDEPTH;
                     else if ((*i).getString() == "language")
                         state = LANGUAGE;
                     else if ((*i).getString() == "resizable")
@@ -237,6 +235,8 @@ ConfigData Config::loadConfig(const std::string &filename)
                         state = VSYNC;
                     else if ((*i).getString() == "stencilbuffer")
                         state = STENCILBUFFER;
+                    else if ((*i).getString() == "renderdistance")
+                        state = RENDER_DISTANCE;
                     else if ((*i).getString() == "controls")
                         state = CONTROLS;
                     else if ((*i).getString() == "up")
@@ -282,23 +282,6 @@ ConfigData Config::loadConfig(const std::string &filename)
                     break;
                 }
                 data.fullscreen = (*i).getString() == "on";
-                ++i;
-                EXPECT(Item::NEWLINE);
-
-                state = NONE;
-                break;
-            }
-            case COLORDEPTH: {
-                EXPECT(Item::OP_EQUAL);
-                ++i;
-
-                EXPECT(Item::INT);
-                if ((*i).getInt() != 8 && (*i).getInt() != 16 && (*i).getInt() != 32) {
-                    std::cerr << "Error: 8, 16 or 32 expected, but " << Item::typeToString((*i).type) << " found." << std::endl;
-                    goToNextNEWLINE = true;
-                    break;
-                }
-                data.colordepth = (*i).getInt();
                 ++i;
                 EXPECT(Item::NEWLINE);
 
@@ -367,6 +350,19 @@ ConfigData Config::loadConfig(const std::string &filename)
                 }
                 data.stencilBuffer = (*i).getString() == "on";
                 ++i;
+                EXPECT(Item::NEWLINE);
+
+                state = NONE;
+                break;
+            }
+            case RENDER_DISTANCE: {
+                EXPECT(Item::OP_EQUAL);
+                ++i;
+
+                EXPECT(Item::INT);
+                data.renderDistance = (*i).getInt();
+                ++i;
+
                 EXPECT(Item::NEWLINE);
 
                 state = NONE;
@@ -447,11 +443,11 @@ void Config::saveConfig(const std::string &filename, const ConfigData &data)
 
     outputFile << "resolution=" << data.resolution.Width << "," << data.resolution.Height << std::endl;
     outputFile << "fullscreen=" << (data.fullscreen ? "on" : "off") << std::endl;
-    outputFile << "colordepth=" << data.colordepth << std::endl;
     outputFile << "language=" << "\"" << std::string(data.language.c_str()) << "\"" << std::endl;
     outputFile << "resizable=" << (data.resizable ? "on" : "off") << std::endl;
     outputFile << "vsync=" << (data.vsync ? "on" : "off") << std::endl;
     outputFile << "stencilbuffer=" << (data.stencilBuffer ? "on" : "off") << std::endl;
+    outputFile << "renderdistance=" << data.renderDistance << std::endl;
     outputFile << "controls:" << std::endl;
     outputFile << "    up=" << data.controls.up << std::endl;
     outputFile << "    left=" << data.controls.left << std::endl;

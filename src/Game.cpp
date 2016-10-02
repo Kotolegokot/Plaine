@@ -2,8 +2,6 @@
 
 using namespace irr;
 
-#define FAR_VALUE 2000
-
 Game::Game(const struct ConfigData &data)
 {
     // load configuration, initialize device and GUI
@@ -21,6 +19,7 @@ Game::~Game()
 
 void Game::initializeGUI()
 {
+    // load font
     gui::IGUIFont *font = gui::CGUITTFont::createTTFont(driver, fileSystem, io::path("media/fonts/font.ttf"), 13, true, true);
     if (font)
         skin->setFont(font);
@@ -41,7 +40,7 @@ bool Game::initializeDevice()
 
     // create device (which is simply a window in which the
     //      whole world is rendered)
-    device = createDevice(video::EDT_OPENGL, configuration.resolution, configuration.colordepth, configuration.fullscreen, configuration.stencilBuffer, configuration.vsync);
+    device = createDevice(video::EDT_OPENGL, configuration.resolution, 32, configuration.fullscreen, configuration.stencilBuffer, configuration.vsync);
     if (!device) {
         error("Couldn't create a device :(\n");
         return false;
@@ -49,7 +48,7 @@ bool Game::initializeDevice()
     device->setWindowCaption(L"PlaneTest");
 
     // get a lot of useful pointers from device
-    timer=device->getTimer();
+    timer = device->getTimer();
     driver = device->getVideoDriver();
     sceneManager = device->getSceneManager();
     guiEnvironment = device->getGUIEnvironment();
@@ -87,24 +86,19 @@ void Game::initializeScene()
 
     initializeBullet();
 
-    // add some light
-    if (!light){
-        light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), iridescentColor(timer->getTime()), 300);
-        light->setLightType(video::ELT_DIRECTIONAL);
-    }
-
-     // create plane and apply a force to it to make it fly forward
     plane = new Plane(dynamicsWorld, device, btVector3(0, 0, 0));
     planeControl = new PlaneControl(plane, configuration.controls);
 
     // create camera
-    if (!camera){
         camera = sceneManager->addCameraSceneNode(0);
         camera->setPosition(plane->getNode()->getPosition() +
             core::vector3df(0, 0, -SPHERE_RADIUS - CAMERA_DISTANCE));
         camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
-        camera->setFarValue(FAR_VALUE);
-    }
+        camera->setFarValue(configuration.renderDistance);
+
+    // add some light
+        light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), iridescentColor(timer->getTime()), 300);
+        light->setLightType(video::ELT_DIRECTIONAL);
 
     // create obstacle generator
     obstacleGenerator = new ObstacleGenerator(device, dynamicsWorld, camera->getFarValue(), 500);
@@ -269,21 +263,10 @@ void Game::menu()
                 gui->initialize(SETTINGS);
                 eventReceiver->needRestartInMenu = false;
             }
-            // toggles color depth (probably not work), vsyc and stencil buffer
+            // toggle render distance, vsync and stencil buffer
             if(eventReceiver->toggleGraphicMode)
             {
-                switch (gui->comboBoxColorDepth->getSelected())
-                {
-                case 0:
-                    configuration.colordepth = 8;
-                    break;
-                case 1:
-                    configuration.colordepth = 16;
-                    break;
-                case 2:
-                    configuration.colordepth = 32;
-                    break;
-                }
+                configuration.renderDistance = gui->spinBoxRenderDistance->getValue();
                 configuration.vsync = gui->checkBoxVSync->isChecked();
                 configuration.stencilBuffer = gui->checkBoxStencilBuffer->isChecked();
                 eventReceiver->toggleGraphicMode = false;

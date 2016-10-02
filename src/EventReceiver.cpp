@@ -101,12 +101,12 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 toggleResolution = true;
                 return true;
             }
-            else if (id == ID_COMBOBOX_COLORDEPTH)
+        case gui::EGET_CHECKBOX_CHANGED:
             {
                 toggleGraphicMode = true;
                 return true;
             }
-        case gui::EGET_CHECKBOX_CHANGED:
+        case gui::EGET_SPINBOX_CHANGED:
             {
                 toggleGraphicMode = true;
                 return true;
