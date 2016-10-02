@@ -106,6 +106,11 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 toggleGraphicMode = true;
                 return true;
             }
+        case gui::EGET_SPINBOX_CHANGED:
+            {
+                toggleGraphicMode = true;
+                return true;
+            }
         default:
             {
                 break;

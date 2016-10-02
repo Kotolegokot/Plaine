@@ -178,7 +178,7 @@ void GUI::initializeSettingsGUI()
                                                                                                 configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 6*buttonHeight - 7*SPACE), true, 0, ID_SPINBOX_RENDER_DISTANCE);
     spinBoxRenderDistance->setRange(500, 5000);
     spinBoxRenderDistance->setStepSize(100);
-    spinBoxRenderDistance->setValue((int)2000);
+    spinBoxRenderDistance->setValue(configuration.renderDistance);
     checkBoxVSync = guiEnvironment->addCheckBox(configuration.vsync, core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 6*buttonHeight - 6*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 5*buttonHeight - 6*SPACE),
         0, ID_CHECKBOX_VSYNC, _wp("VSync"));
     checkBoxStencilBuffer = guiEnvironment->addCheckBox(configuration.stencilBuffer, core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 5*buttonHeight - 5*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 4*buttonHeight - 5*SPACE),

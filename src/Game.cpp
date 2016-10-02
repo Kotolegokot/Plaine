@@ -2,8 +2,6 @@
 
 using namespace irr;
 
-#define FAR_VALUE 2000
-
 Game::Game(const struct ConfigData &data)
 {
     // load configuration, initialize device and GUI
@@ -95,7 +93,7 @@ void Game::initializeScene()
         camera->setPosition(plane->getNode()->getPosition() +
             core::vector3df(0, 0, -SPHERE_RADIUS - CAMERA_DISTANCE));
         camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
-        camera->setFarValue(FAR_VALUE);
+        camera->setFarValue(configuration.renderDistance);
 
     // add some light
         light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), iridescentColor(timer->getTime()), 300);
@@ -264,9 +262,10 @@ void Game::menu()
                 gui->initialize(SETTINGS);
                 eventReceiver->needRestartInMenu = false;
             }
-            // toggles color depth (probably not work), vsyc and stencil buffer
+            // toggle render distance, vsync and stencil buffer
             if(eventReceiver->toggleGraphicMode)
             {
+                configuration.renderDistance = gui->spinBoxRenderDistance->getValue();
                 configuration.vsync = gui->checkBoxVSync->isChecked();
                 configuration.stencilBuffer = gui->checkBoxStencilBuffer->isChecked();
                 eventReceiver->toggleGraphicMode = false;

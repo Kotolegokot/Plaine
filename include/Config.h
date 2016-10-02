@@ -26,6 +26,7 @@ struct ConfigData {
     bool resizable = false;
     bool vsync = true;
     bool stencilBuffer = true;
+    u32 renderDistance = 2000;
     Controls controls;
 };
 

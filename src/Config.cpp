@@ -213,7 +213,7 @@ ConfigData Config::loadConfig(const std::string &filename)
     } */
 
     bool goToNextNEWLINE = false;
-    enum { NONE, RESOLUTION, FULLSCREEN, LANGUAGE, RESIZABLE, VSYNC, STENCILBUFFER, CONTROLS, CONTROL_UP, CONTROL_LEFT, CONTROL_DOWN, CONTROL_RIGHT } state = NONE;
+    enum { NONE, RESOLUTION, FULLSCREEN, LANGUAGE, RESIZABLE, VSYNC, STENCILBUFFER, RENDER_DISTANCE, CONTROLS, CONTROL_UP, CONTROL_LEFT, CONTROL_DOWN, CONTROL_RIGHT } state = NONE;
 
     for (std::vector<Item>::const_iterator i = items.cbegin(); i != items.cend(); ++i) {
         if (goToNextNEWLINE) {
@@ -235,6 +235,8 @@ ConfigData Config::loadConfig(const std::string &filename)
                         state = VSYNC;
                     else if ((*i).getString() == "stencilbuffer")
                         state = STENCILBUFFER;
+                    else if ((*i).getString() == "renderdistance")
+                        state = RENDER_DISTANCE;
                     else if ((*i).getString() == "controls")
                         state = CONTROLS;
                     else if ((*i).getString() == "up")
@@ -353,6 +355,19 @@ ConfigData Config::loadConfig(const std::string &filename)
                 state = NONE;
                 break;
             }
+            case RENDER_DISTANCE: {
+                EXPECT(Item::OP_EQUAL);
+                ++i;
+
+                EXPECT(Item::INT);
+                data.renderDistance = (*i).getInt();
+                ++i;
+
+                EXPECT(Item::NEWLINE);
+
+                state = NONE;
+                break;
+            }
             case CONTROLS: {
                 EXPECT(Item::OP_COLON);
                 ++i;
@@ -432,6 +447,7 @@ void Config::saveConfig(const std::string &filename, const ConfigData &data)
     outputFile << "resizable=" << (data.resizable ? "on" : "off") << std::endl;
     outputFile << "vsync=" << (data.vsync ? "on" : "off") << std::endl;
     outputFile << "stencilbuffer=" << (data.stencilBuffer ? "on" : "off") << std::endl;
+    outputFile << "renderdistance=" << data.renderDistance << std::endl;
     outputFile << "controls:" << std::endl;
     outputFile << "    up=" << data.controls.up << std::endl;
     outputFile << "    left=" << data.controls.left << std::endl;
