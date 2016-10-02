@@ -82,6 +82,7 @@ void Game::initializeBullet()
 
 void Game::initializeScene()
 {
+    driver->setFog(iridescentColor(timer->getTime()), video::EFT_FOG_LINEAR, configuration.renderDistance - 300, configuration.renderDistance, .003f, true, false);
 
     initializeBullet();
 
