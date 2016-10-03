@@ -6,12 +6,10 @@
 #include "Game.h"
 #include "Config.h"
 #include "util.h"
-
 using namespace irr;
 
 int main()
 {
-
     // create structure for config
     ConfigData data;
     // create config loader

@@ -8,9 +8,8 @@ Plane::Plane(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &po
 
 void Plane::createNode()
 {
-    planeMesh = device->getSceneManager()->getMesh("media/models/plane.obj");
+    planeMesh = device->getSceneManager()->getMesh(PLANE_MODEL);
     node = device->getSceneManager()->addMeshSceneNode(planeMesh);
-    node->setScale(core::vector3df(15, 15, 15));
     node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/plane.png"));
 }
 
@@ -21,7 +20,11 @@ void Plane::createMotionState()
 
 void Plane::createShape()
 {
-    shape = new btSphereShape(SPHERE_RADIUS);
+    ObjMesh objMesh;
+    objMesh.loadMesh(PLANE_MODEL);
+
+    shape = new btConvexHullShape();
+    objMesh.putToShape((btConvexHullShape *) shape);
 }
 
 btScalar Plane::getMass()

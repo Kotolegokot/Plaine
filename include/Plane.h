@@ -6,8 +6,9 @@
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "IBody.h"
 #include "PlaneMotionState.h"
+#include "ObjMesh.h"
 
-#define SPHERE_RADIUS 25
+#define PLANE_MODEL "media/models/plane.obj"
 #define CAMERA_DISTANCE 200
 #define PLANE_MASS 1
 
