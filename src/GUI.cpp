@@ -112,18 +112,23 @@ void GUI::initializeSettingsGUI()
     textScreenSize = guiEnvironment->addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
     textLanguage = guiEnvironment->addStaticText(_wp("Language:"), core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 9*buttonHeight - 9*SPACE, configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 9*SPACE), false);
     comboBoxLanguage = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 9*buttonHeight - 9*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 9*SPACE), 0, ID_COMBOBOX_LANGUAGE);
-    comboBoxLanguage->addItem(L"English", 0);
-    comboBoxLanguage->addItem(L"Русский", 1);
-    comboBoxLanguage->addItem(L"Qırımtatarca", 2);
-    comboBoxLanguage->addItem(L"Къырымтатарджа", 3);
-    if (configuration.language == "en")
+
+    comboBoxLanguage->addItem(_wp("System language"), 0);
+    comboBoxLanguage->addItem(L"English", 1);
+    comboBoxLanguage->addItem(L"Русский", 2);
+    comboBoxLanguage->addItem(L"Qırımtatarca", 3);
+    comboBoxLanguage->addItem(L"Къырымтатарджа", 4);
+
+    if (configuration.language == "")
         comboBoxLanguage->setSelected(0);
-    else if (configuration.language == "ru")
+    else if (configuration.language == "en")
         comboBoxLanguage->setSelected(1);
-    else if (configuration.language == "crh")
+    else if (configuration.language == "ru")
         comboBoxLanguage->setSelected(2);
-    else if (configuration.language == "crh@cyrillic")
+    else if (configuration.language == "crh")
         comboBoxLanguage->setSelected(3);
+    else if (configuration.language == "crh@cyrillic")
+        comboBoxLanguage->setSelected(4);
     textResolution = guiEnvironment->addStaticText(_wp("Resolution:"), core::rect<s32>(configuration.resolution.Width - 3*buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 8*SPACE, configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 7*buttonHeight - 8*SPACE), false);
     comboBoxResolution = guiEnvironment->addComboBox(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 8*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 7*buttonHeight - 8*SPACE), 0, ID_COMBOBOX_RESOLUTION);
     if (configuration.fullscreen)

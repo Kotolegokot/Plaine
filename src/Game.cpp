@@ -279,15 +279,18 @@ void Game::menu()
                 switch (gui->comboBoxLanguage->getSelected())
                 {
                 case 0:
-                    configuration.language = "en";
+                    configuration.language = "";
                     break;
                 case 1:
-                    configuration.language = "ru";
+                    configuration.language = "en";
                     break;
                 case 2:
-                    configuration.language = "crh";
+                    configuration.language = "ru";
                     break;
                 case 3:
+                    configuration.language = "crh";
+                    break;
+                case 4:
                     configuration.language = "crh@cyrillic";
                     break;
                 default:
