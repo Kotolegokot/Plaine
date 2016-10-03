@@ -10,8 +10,8 @@ void Plane::createNode()
 {
     planeMesh = device->getSceneManager()->getMesh("media/models/plane.obj");
     node = device->getSceneManager()->addMeshSceneNode(planeMesh);
-    node->setScale(core::vector3df(30, 30, 30));
-    node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
+    node->setScale(core::vector3df(15, 15, 15));
+    node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/plane.png"));
 }
 
 void Plane::createMotionState()
