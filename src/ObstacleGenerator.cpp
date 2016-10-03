@@ -1,7 +1,7 @@
 #include "ObstacleGenerator.h"
 #include "util.h"
 
-#define MASS_COEFFICIENT 500000
+#define MASS_COEFFICIENT 0.000002
 
 using namespace irr;
 
@@ -13,6 +13,11 @@ public:
         IBody(world), device(device), position(position), side(side)
     {
         createBody();
+    }
+
+    virtual btScalar getMass() override
+    {
+        return side*side*side*MASS_COEFFICIENT;
     }
 
 protected:
@@ -38,11 +43,6 @@ protected:
     {
         // create shape for cubes
         shape = new btBoxShape(btVector3(side/2, side/2, side/2));
-    }
-
-    virtual btScalar getMass() override
-    {
-        return side*side*side/MASS_COEFFICIENT;
     }
 
 private:
@@ -84,7 +84,11 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     f32 newZ = z + getRandomf(-100, 100);
 
                     // create the cube and add it to the deque
-                    Cube *cube = new Cube(world, device, btVector3(newX, newY, newZ), getRandomf(50.0f, 300.0f));
+                    Cube *cube = new Cube(world, device, btVector3(newX, newY, newZ), getRandomf(50.0f, 250.0f));
+                    if (int(getRandomf(1, 8)) == 1)
+                        cube->getRigidBody()->applyTorqueImpulse(btVector3(getRandomf(-10000, 10000), getRandomf(-10000, 10000), getRandomf(-10000, 10000))*cube->getMass());
+                    if (int(getRandomf(1, 8)) == 1)
+                        cube->getRigidBody()->applyCentralImpulse(btVector3(getRandomf(-100, 100), getRandomf(-100, 100), getRandomf(-100, 100))*cube->getMass());
                     cubes.push_back(cube);
                     cubeCount++;
                 }
@@ -111,15 +115,13 @@ f32 ObstacleGenerator::preciseEdge(f32 edge) const
 void ObstacleGenerator::removeLeftBehind(f32 playerZ)
 {
     while (!cubes.empty()) {
-        btTransform transform;
-        cubes.front()->getRigidBody()->getMotionState()->getWorldTransform(transform);
-        if (transform.getOrigin().z() < playerZ - buffer) {
+        if (cubes.front()->getNode()->getPosition().Z < playerZ - buffer)
+        {
             delete cubes.front();
             cubes.pop_front();
             cubeCount--;
-        } else {
+        } else
             break;
-        }
     }
 }
 
