@@ -16,7 +16,7 @@ void ObjMesh::loadMesh(const std::string &filename)
 
         char c;
         iss >> c;
-        if (c != 'v')
+        if (!(line[0] == 'v' && line[1] == ' '))
             continue;
 
         btScalar x, y, z;
