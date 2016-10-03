@@ -23,7 +23,7 @@ protected:
 
 public:
 	MotionState(const btTransform &startTransform = btTransform::getIdentity(), scene::ISceneNode *node = nullptr);
-	~MotionState();
+	virtual ~MotionState();
 	void setNode(scene::ISceneNode *node);
 	scene::ISceneNode *getNode() const;
 	void setPosition(const core::vector3df &position);

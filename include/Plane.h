@@ -5,6 +5,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "IBody.h"
+#include "PlaneMotionState.h"
 
 #define SPHERE_RADIUS 25
 #define CAMERA_DISTANCE 200
@@ -28,6 +29,7 @@ protected:
 private:
     IrrlichtDevice *device = nullptr;
     btVector3 position;
+    scene::IMesh *planeMesh = nullptr;
 };
 
 #endif // PLANE_H
