@@ -23,8 +23,7 @@ void Plane::createShape()
     ObjMesh objMesh;
     objMesh.loadMesh(PLANE_MODEL);
 
-    shape = new btConvexHullShape();
-    objMesh.putToShape((btConvexHullShape *) shape);
+    shape = new btConvexTriangleMeshShape(objMesh.getTriangleMesh());
 }
 
 btScalar Plane::getMass()

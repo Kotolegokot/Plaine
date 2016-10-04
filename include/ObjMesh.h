@@ -14,10 +14,11 @@ class ObjMesh
 public:
     ObjMesh() = default;
     void loadMesh(const std::string &filename);
-    void putToShape(btConvexHullShape *convexHullShape);
+    btTriangleMesh *getTriangleMesh();
 
 private:
-    std::vector<btVector3> points;
+    std::vector<btVector3> vertices;
+    std::vector<btVector3> triangles;
 };
 
 #endif // OBJMESH_H
