@@ -10,11 +10,9 @@
 
 using namespace irr;
 
-#define CUBE_SIDE 250
-
 // this class is responsible for generating obstacles on the fly
 //
-// don't forget that this class is jsut a sample
+// don't forget that this class is just a sample
 class ObstacleGenerator
 {
 public:
@@ -50,7 +48,7 @@ private:
     f32 generatedEdgeTop = 0;
     f32 generatedEdgeBottom = 0;
 
-    // distance between obstacles
+    // average distance between obstacles
     const f32 STEP = 400;
 
     // physics world

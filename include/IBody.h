@@ -32,7 +32,6 @@ public:
         return node;
     }
 
-
 protected:
     virtual void createNode() = 0;
     virtual void createMotionState() = 0;

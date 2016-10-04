@@ -400,7 +400,6 @@ void Game::run()
     video::SLight lightData;
     // create variable for color
     video::SColor color;
-    btScalar planeScalarVelocity;
     while (device->run())
     {
         // if we exit to menu or quit from game -> stop
