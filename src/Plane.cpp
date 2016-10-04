@@ -4,6 +4,7 @@ Plane::Plane(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &po
     IBody(world), device(device), position(position)
 {
     createBody();
+    rigidBody->setAngularFactor(btVector3(0, 0, 0));
 }
 
 void Plane::createNode()
@@ -15,7 +16,7 @@ void Plane::createNode()
 
 void Plane::createMotionState()
 {
-    motionState = new PlaneMotionState(btTransform(btQuaternion(0, 0, 0, 1), position), node);
+    motionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1), position), node);
 }
 
 void Plane::createShape()
