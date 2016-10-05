@@ -319,7 +319,8 @@ void Game::menu()
                 }
                 // if control key was chosen to replace
                 if((eventReceiver->changingControlUp || eventReceiver->changingControlLeft ||
-                    eventReceiver->changingControlDown || eventReceiver->changingControlRight))
+                    eventReceiver->changingControlDown || eventReceiver->changingControlRight ||
+                    eventReceiver->changingControlCwRoll || eventReceiver->changingControlCcwRoll))
                 {
                     //if something pressed after choice of key that user want to replace
                    if (eventReceiver->lastKey != KEY_KEY_CODES_COUNT)
@@ -337,6 +338,10 @@ void Game::menu()
                                 configuration.controls.down = KEY_KEY_CODES_COUNT;
                             else if (eventReceiver->lastKey == configuration.controls.right)
                                 configuration.controls.right = KEY_KEY_CODES_COUNT;
+                            else if (eventReceiver->lastKey == configuration.controls.cwRoll)
+                                configuration.controls.cwRoll = KEY_KEY_CODES_COUNT;
+                            else if (eventReceiver->lastKey == configuration.controls.ccwRoll)
+                                configuration.controls.ccwRoll = KEY_KEY_CODES_COUNT;
                             //if not
                             if (eventReceiver->changingControlUp)
                                 configuration.controls.up = eventReceiver->lastKey;
@@ -346,11 +351,17 @@ void Game::menu()
                                 configuration.controls.down = eventReceiver->lastKey;
                             else if (eventReceiver->changingControlRight)
                                 configuration.controls.right = eventReceiver->lastKey;
+                            else if (eventReceiver->changingControlCwRoll)
+                                configuration.controls.cwRoll = eventReceiver->lastKey;
+                            else if (eventReceiver->changingControlCcwRoll)
+                                configuration.controls.ccwRoll = eventReceiver->lastKey;
                         }
                         eventReceiver->changingControlUp = false;
                         eventReceiver->changingControlLeft = false;
                         eventReceiver->changingControlDown = false;
                         eventReceiver->changingControlRight = false;
+                        eventReceiver->changingControlCwRoll = false;
+                        eventReceiver->changingControlCcwRoll = false;
                         eventReceiver->lastKey = KEY_KEY_CODES_COUNT;
                         gui->terminate();
                         gui->initialize(CONTROL_SETTINGS);
@@ -363,6 +374,10 @@ void Game::menu()
                         gui->buttonControlDown->setText(_wp("Press a key"));
                     else if (eventReceiver->changingControlRight)
                         gui->buttonControlRight->setText(_wp("Press a key"));
+                    else if (eventReceiver->changingControlCwRoll)
+                        gui->buttonControlCwRoll->setText(_wp("Press a key"));
+                    else if (eventReceiver->changingControlCcwRoll)
+                        gui->buttonControlCcwRoll->setText(_wp("Press a key"));
                 }
         }
         // catch a resize of window

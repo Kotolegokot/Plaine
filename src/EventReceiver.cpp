@@ -12,7 +12,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
 {
     // if the event is related to keys
     if (event.EventType == EET_KEY_INPUT_EVENT) {
-        if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight)) {
+        if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
             pressedKeys[event.KeyInput.Key] = event.KeyInput.PressedDown;
             return escapePressed;
         } else {
@@ -36,6 +36,8 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 changingControlDown = false;
                 changingControlLeft = false;
                 changingControlRight = false;
+                changingControlCwRoll = false;
+                changingControlCcwRoll = false;
                 return true;
             }
             else if (id == ID_BUTTON_RESUME) {
@@ -62,26 +64,38 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 return true;
             }
             else if (id == ID_BUTTON_CONTROL_UP) {
-                if(!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight)) {
+                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
                     changingControlUp = true;
                 }
                 return true;
             }
             else if (id == ID_BUTTON_CONTROL_DOWN) {
-                if(!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight)) {
+                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
                     changingControlDown = true;
                 }
                 return true;
             }
             else if (id == ID_BUTTON_CONTROL_LEFT) {
-                if(!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight)) {
+                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
                     changingControlLeft = true;
                 }
                 return true;
             }
             else if (id == ID_BUTTON_CONTROL_RIGHT) {
-                if(!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight)) {
+                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
                     changingControlRight = true;
+                }
+                return true;
+            }
+            else if (id == ID_BUTTON_CONTROL_CW_ROLL) {
+                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
+                    changingControlCwRoll = true;
+                }
+                return true;
+            }
+            else if (id == ID_BUTTON_CONTROL_CCW_ROLL) {
+                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
+                    changingControlCcwRoll = true;
                 }
                 return true;
             }

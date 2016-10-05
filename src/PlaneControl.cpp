@@ -10,24 +10,37 @@ void PlaneControl::handle(EventReceiver *eventReceiver)
     btScalar angle;
     plane->getAxisAngleRotation(axis, angle);
 
-    btVector3 turnForce(0, 0, 1);
+    btVector3 turnImpulse(0, 0, 0);
+    btVector3 rotateImpulse(0, 0, 0);
 
     // up
     if (eventReceiver->IsKeyDown(controls.up)) {
-        turnForce += btVector3(0, 50, 0);
+        turnImpulse += btVector3(0, 1, 0);
     }
-    // down
+        // down
     if (eventReceiver->IsKeyDown(controls.down)) {
-        turnForce += btVector3(0, -50, 0);
+        turnImpulse += btVector3(0, -1, 0);
+    }
+        // left
+    if (eventReceiver->IsKeyDown(controls.left)) {
+        turnImpulse += btVector3(-1, 0, 0);
+    }
+        // right
+    if (eventReceiver->IsKeyDown(controls.right)) {
+        turnImpulse += btVector3(1, 0, 0);
     }
 
-    // left
-    if (eventReceiver->IsKeyDown(controls.left)) {
-        turnForce += btVector3(-50, 0, 0);
-    }
-    // right
-    if (eventReceiver->IsKeyDown(controls.right)) {
-        turnForce += btVector3(50, 0, 0);
+    // rotation
+    if (!(eventReceiver->IsKeyDown(controls.ccwRoll) &&
+        eventReceiver->IsKeyDown(controls.cwRoll))) { // if not both are pressed
+        // counterclockwise roll
+        if (eventReceiver->IsKeyDown(controls.ccwRoll)) {
+            rotateImpulse = btVector3(0, 0, 1);
+        }
+        // clockwise roll
+        else if (eventReceiver->IsKeyDown(controls.cwRoll)) {
+            rotateImpulse = btVector3(0, 0, -1);
+        }
     }
 
     // air resistance simulation
@@ -37,11 +50,12 @@ void PlaneControl::handle(EventReceiver *eventReceiver)
     planeVelosity *= 0.001f*planeVelocityLength*planeVelocityLength;
     plane->getRigidBody()->applyForce(planeVelosity, btVector3(0, 0, 0));
 
-    turnForce.normalize();
-    turnForce *= 1000;
-    turnForce = turnForce.rotate(axis, angle);
-    plane->getRigidBody()->applyForce(turnForce, btVector3(0, 0, 0));
-    plane->getRigidBody()->applyForce(btVector3(0, 0, 300), btVector3(0, 0, 0));
+   //turnImpulse = turnImpulse.rotate(axis, angle);
+    turnImpulse *= 25;
+    rotateImpulse *= 150;
+    plane->getRigidBody()->applyCentralImpulse(turnImpulse);
+    plane->getRigidBody()->applyTorqueImpulse(rotateImpulse);
+    plane->getRigidBody()->applyForce(btVector3(0, 0, 600), btVector3(0, 0, 0));
 }
 
 void PlaneControl::setPlane(Plane *plane)
