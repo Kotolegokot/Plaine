@@ -99,7 +99,7 @@ void Game::initializeScene()
         core::vector3df upVector(0, 1, 0);
         upVector.rotateXYBy(plane->getEulerRotation().z() * core::RADTODEG64);
 
-        camera->setPosition(plane->getNode()->getPosition() + upVector * 0.6f * CAMERA_DISTANCE
+        camera->setPosition(plane->getNode()->getPosition() + upVector * 0.3f * CAMERA_DISTANCE
                 - core::vector3df(0, 0, CAMERA_DISTANCE));
         camera->setUpVector(upVector);
 
@@ -492,7 +492,7 @@ void Game::run()
                 core::vector3df upVector(0, 1, 0);
                 upVector.rotateXYBy(plane->getEulerRotation().z() * core::RADTODEG64);
 
-                camera->setPosition(plane->getNode()->getPosition() + upVector * 0.6f * CAMERA_DISTANCE
+                camera->setPosition(plane->getNode()->getPosition() + upVector * 0.3f * CAMERA_DISTANCE
                     - core::vector3df(0, 0, CAMERA_DISTANCE));
                 camera->setUpVector(upVector);
 
