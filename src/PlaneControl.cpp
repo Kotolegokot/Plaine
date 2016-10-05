@@ -43,12 +43,14 @@ void PlaneControl::handle(EventReceiver *eventReceiver)
     }
 
     // rotation
-    if (!(eventReceiver->IsKeyDown(KEY_KEY_Q) &&
-        eventReceiver->IsKeyDown(KEY_KEY_E))) { // if not both are pressed
-        if (eventReceiver->IsKeyDown(KEY_KEY_Q)) {
+    if (!(eventReceiver->IsKeyDown(controls.ccwRoll) &&
+        eventReceiver->IsKeyDown(controls.cwRoll))) { // if not both are pressed
+        // counterclockwise roll
+        if (eventReceiver->IsKeyDown(controls.ccwRoll)) {
             rotateImpulse = btVector3(0, 0, 1);
         }
-        else if (eventReceiver->IsKeyDown(KEY_KEY_E)) {
+        // clockwise roll
+        else if (eventReceiver->IsKeyDown(controls.cwRoll)) {
             rotateImpulse = btVector3(0, 0, -1);
         }
     }
