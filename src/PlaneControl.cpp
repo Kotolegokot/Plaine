@@ -15,31 +15,21 @@ void PlaneControl::handle(EventReceiver *eventReceiver)
     btVector3 turnImpulse(0, 0, 0);
     btVector3 rotateImpulse(0, 0, 0);
 
-    // up and down
-    if (!(eventReceiver->IsKeyDown(controls.up) &&
-        eventReceiver->IsKeyDown(controls.down))) { // if not both are pressed
-        // up
-        if (eventReceiver->IsKeyDown(controls.up)) {
-            turnImpulse = btVector3(0, 1, 0);
-
-        }
-        // down
-        else if (eventReceiver->IsKeyDown(controls.down)) {
-            turnImpulse = btVector3(0, -1, 0);
-        }
+    // up
+    if (eventReceiver->IsKeyDown(controls.up)) {
+        turnImpulse += btVector3(0, 1, 0);
     }
-
-    // left and right
-    if (!(eventReceiver->IsKeyDown(controls.left) &&
-        eventReceiver->IsKeyDown(controls.right))) { // if not both are pressed
+        // down
+    if (eventReceiver->IsKeyDown(controls.down)) {
+        turnImpulse += btVector3(0, -1, 0);
+    }
         // left
-        if (eventReceiver->IsKeyDown(controls.left)) {
-            turnImpulse = btVector3(-1, 0, 0);
-        }
+    if (eventReceiver->IsKeyDown(controls.left)) {
+        turnImpulse += btVector3(-1, 0, 0);
+    }
         // right
-        else if (eventReceiver->IsKeyDown(controls.right)) {
-            turnImpulse = btVector3(1, 0, 0);
-        }
+    if (eventReceiver->IsKeyDown(controls.right)) {
+        turnImpulse += btVector3(1, 0, 0);
     }
 
     // rotation
@@ -64,7 +54,7 @@ void PlaneControl::handle(EventReceiver *eventReceiver)
 
    //turnImpulse = turnImpulse.rotate(axis, angle);
     turnImpulse *= 25;
-    rotateImpulse *= 100;
+    rotateImpulse *= 150;
     plane->getRigidBody()->applyCentralImpulse(turnImpulse);
     plane->getRigidBody()->applyTorqueImpulse(rotateImpulse);
     plane->getRigidBody()->applyForce(btVector3(0, 0, 600), btVector3(0, 0, 0));
