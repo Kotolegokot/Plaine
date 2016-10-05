@@ -487,7 +487,7 @@ void Game::run()
                 gui->textVelocity->setText(velocity.c_str());
             }
 
-            //setting position and target to the camera
+            // set camera position, target, and rotation
             {
                 core::vector3df upVector(0, 1, 0);
                 upVector.rotateXYBy(plane->getEulerRotation().z() * core::RADTODEG64);

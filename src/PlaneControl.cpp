@@ -50,7 +50,7 @@ void PlaneControl::handle(EventReceiver *eventReceiver)
     planeVelosity *= 0.001f*planeVelocityLength*planeVelocityLength;
     plane->getRigidBody()->applyForce(planeVelosity, btVector3(0, 0, 0));
 
-   //turnImpulse = turnImpulse.rotate(axis, angle);
+    turnImpulse = turnImpulse.rotate(axis, angle);
     turnImpulse *= 25;
     rotateImpulse *= 150;
     plane->getRigidBody()->applyCentralImpulse(turnImpulse);
