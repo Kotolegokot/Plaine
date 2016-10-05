@@ -214,7 +214,7 @@ ConfigData Config::loadConfig(const std::string &filename)
 
     bool goToNextNEWLINE = false;
     enum { NONE, RESOLUTION, FULLSCREEN, LANGUAGE, RESIZABLE, VSYNC, STENCILBUFFER, RENDER_DISTANCE, CONTROLS,
-    CONTROL_UP, CONTROL_LEFT, CONTROL_DOWN, CONTROL_RIGHT, CONTROL_CLOCKWISE_ROLL, CONTROL_COUNTERCLOCKWISE_ROLL} state = NONE;
+    CONTROL_UP, CONTROL_LEFT, CONTROL_DOWN, CONTROL_RIGHT, CONTROL_CW_ROLL, CONTROL_CCW_ROLL} state = NONE;
 
     for (std::vector<Item>::const_iterator i = items.cbegin(); i != items.cend(); ++i) {
         if (goToNextNEWLINE) {
@@ -249,9 +249,9 @@ ConfigData Config::loadConfig(const std::string &filename)
                     else if ((*i).getString() == "right")
                         state = CONTROL_RIGHT;
                     else if ((*i).getString() == "clockwiseroll")
-                        state = CONTROL_CLOCKWISE_ROLL;
+                        state = CONTROL_CW_ROLL;
                     else if ((*i).getString() == "counterclockwiseroll")
-                        state = CONTROL_COUNTERCLOCKWISE_ROLL;
+                        state = CONTROL_CCW_ROLL;
                 } else {
                     error(Item::KEYWORD, (*i).type);
                     goToNextNEWLINE = true;
@@ -429,7 +429,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                 state = NONE;
                 break;
             }
-            case CONTROL_CLOCKWISE_ROLL: {
+            case CONTROL_CW_ROLL: {
                 EXPECT(Item::OP_EQUAL);
                 ++i;
 
@@ -441,7 +441,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                 state = NONE;
                 break;
             }
-            case CONTROL_COUNTERCLOCKWISE_ROLL: {
+            case CONTROL_CCW_ROLL: {
                 EXPECT(Item::OP_EQUAL);
                 ++i;
 
