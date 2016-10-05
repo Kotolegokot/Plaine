@@ -91,15 +91,25 @@ void Game::initializeScene()
     planeControl = new PlaneControl(plane, configuration.controls);
 
     // create camera
+    {
         camera = sceneManager->addCameraSceneNode(0);
-        camera->setPosition(plane->getNode()->getPosition() +
-            core::vector3df(0, 0.3f * CAMERA_DISTANCE, -CAMERA_DISTANCE));
-        camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
         camera->setFarValue(configuration.renderDistance);
 
+        // set camera position and rotation
+        core::vector3df upVector(0, 1, 0);
+        upVector.rotateXYBy(plane->getEulerRotation().z() * core::RADTODEG64);
+
+        camera->setPosition(plane->getNode()->getPosition() + upVector * 0.3f * CAMERA_DISTANCE
+                - core::vector3df(0, 0, CAMERA_DISTANCE));
+        camera->setUpVector(upVector);
+
+        camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
+    }
+
+
     // add some light
-        light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), iridescentColor(timer->getTime()), 300);
-        light->setLightType(video::ELT_DIRECTIONAL);
+    light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), iridescentColor(timer->getTime()), 300);
+    light->setLightType(video::ELT_DIRECTIONAL);
 
     // create obstacle generator
     obstacleGenerator = new ObstacleGenerator(device, dynamicsWorld, camera->getFarValue(), 500);
@@ -492,10 +502,17 @@ void Game::run()
                 gui->textVelocity->setText(velocity.c_str());
             }
 
-            //setting position and target to the camera
-            camera->setPosition(plane->getNode()->getPosition() +
-                core::vector3df(0, 0.3f * CAMERA_DISTANCE, -CAMERA_DISTANCE));
-            camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
+            // set camera position, target, and rotation
+            {
+                core::vector3df upVector(0, 1, 0);
+                upVector.rotateXYBy(plane->getEulerRotation().z() * core::RADTODEG64);
+
+                camera->setPosition(plane->getNode()->getPosition() + upVector * 0.3f * CAMERA_DISTANCE
+                    - core::vector3df(0, 0, CAMERA_DISTANCE));
+                camera->setUpVector(upVector);
+
+                camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
+            }
 
             //set cursor invisible
             device->getCursorControl()->setVisible(false);
