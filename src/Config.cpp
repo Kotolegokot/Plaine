@@ -67,6 +67,24 @@ struct Item {
         }
     }
 
+    void free()
+    {
+        switch (type) {
+        case INT:
+            delete (int *) data;
+            break;
+        case FLOAT:
+            delete (float *) data;
+            break;
+        case STRING:
+        case KEYWORD:
+            delete (std::string *) data;
+            break;
+        default:
+            break;
+        }
+    }
+
     ItemType type;
     void *data = nullptr;
 };
@@ -456,6 +474,9 @@ ConfigData Config::loadConfig(const std::string &filename)
             }
         }
     }
+
+    for (Item &item : items)
+        item.free();
 
     return data;
 }
