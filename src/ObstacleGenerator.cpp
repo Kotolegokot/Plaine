@@ -84,6 +84,8 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     f32 newZ = z + getRandomf(-100, 100);
 
                     // create the cube and add it to the deque
+                    if(abs(newX) > 400)
+                    {
                     Cube *cube = new Cube(world, device, btVector3(newX, newY, newZ), getRandomf(50.0f, 250.0f));
                     if (int(getRandomf(1, 8)) == 1)
                         cube->getRigidBody()->applyTorqueImpulse(btVector3(getRandomf(-10000, 10000), getRandomf(-10000, 10000), getRandomf(-10000, 10000))*cube->getMass());
@@ -91,6 +93,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                         cube->getRigidBody()->applyCentralImpulse(btVector3(getRandomf(-100, 100), getRandomf(-100, 100), getRandomf(-100, 100))*cube->getMass());
                     cubes.push_back(cube);
                     cubeCount++;
+                    }
                 }
             }
 

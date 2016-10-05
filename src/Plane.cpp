@@ -16,10 +16,10 @@ Plane::Plane(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &po
             if (aVLength > 0) {
                 aV.safeNormalize();
 
-                if (aVLength < 0.01f)
+                if (aVLength < 0.03f)
                     aV *= 0;
                 else
-                    aV *= aVLength - 0.01f;
+                    aV *= aVLength - 0.03f;
 
                 plane->getRigidBody()->setAngularVelocity(aV);
             }
