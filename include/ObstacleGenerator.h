@@ -7,6 +7,7 @@
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "MotionState.h"
 #include "IBody.h"
+#include "obstacles/Cube.h"
 
 #define REMOVE_CENTER
 

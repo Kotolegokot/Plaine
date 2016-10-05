@@ -108,6 +108,7 @@
 		<Unit filename="include/ObstacleGenerator.h" />
 		<Unit filename="include/Plane.h" />
 		<Unit filename="include/PlaneControl.h" />
+		<Unit filename="include/obstacles/Cube.h" />
 		<Unit filename="include/util.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/CGUITTFont.cpp" />
