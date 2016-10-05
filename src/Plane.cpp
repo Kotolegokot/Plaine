@@ -6,8 +6,6 @@ Plane::Plane(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &po
     createBody();
     rigidBody->setAngularFactor(btVector3(0, 0, 1));
 
-    btRigidBody *body = rigidBody;
-
     world->setInternalTickCallback(
         [](btDynamicsWorld *world, btScalar timeStep)
         {

@@ -8,10 +8,11 @@ void PlaneControl::handle(EventReceiver *eventReceiver)
 {
     btTransform transform;
     plane->getRigidBody()->getMotionState()->getWorldTransform(transform);
-    btVector3 rotation = quatToEuler(transform.getRotation());
+    btQuaternion rotation = transform.getRotation();
+    btVector3 axis = rotation.getAxis();
+    btScalar angle = rotation.getAngle();
 
     btVector3 turnForce(0, 0, 1);
-
 
     // up
     if (eventReceiver->IsKeyDown(controls.up)) {
@@ -40,7 +41,7 @@ void PlaneControl::handle(EventReceiver *eventReceiver)
 
     turnForce.normalize();
     turnForce *= 1000;
-    turnForce = turnForce.rotate(btVector3(0, 0, 1), rotation.z());
+    turnForce = turnForce.rotate(axis, angle);
     plane->getRigidBody()->applyForce(turnForce, btVector3(0, 0, 0));
     plane->getRigidBody()->applyForce(btVector3(0, 0, 300), btVector3(0, 0, 0));
 }
