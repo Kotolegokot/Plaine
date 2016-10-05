@@ -22,6 +22,8 @@ public:
     bool changingControlDown = false;
     bool changingControlLeft = false;
     bool changingControlRight = false;
+    bool changingControlCwRoll = false;
+    bool changingControlCcwRoll = false;
     bool defaultControls = false;
     bool toggleGUI = false;
     bool toggleGraphicMode = false;
