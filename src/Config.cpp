@@ -2,96 +2,9 @@
 
 using namespace irr;
 
-struct Item {
-    enum ItemType { INT, FLOAT, STRING, KEYWORD, OP_EQUAL, OP_COMMA, OP_COLON, NEWLINE };
-
-    Item(ItemType type) :
-        type(type) {}
-
-    Item(ItemType type, const std::string &text) :
-        type(type), data((void *) new std::string(text)) {}
-
-    Item(ItemType type, f32 floatNumber) :
-        type(type), data((void *) new f32)
-    {
-        *(f32 *) data = floatNumber;
-    }
-
-    Item(ItemType type, s32 intNumber) :
-        type(type), data((void *) new s32)
-    {
-        *(s32 *) data = intNumber;
-    }
-
-    std::string getString()
-    {
-        return *(std::string *) data;
-    }
-
-    const std::string &getString() const
-    {
-        return *(std::string *) data;
-    }
-
-    f32 getFloat() const
-    {
-        return *(f32 *) data;
-    }
-
-    s32 getInt() const
-    {
-        return *(s32 *) data;
-    }
-
-    static std::string typeToString(ItemType type)
-    {
-        switch (type) {
-        case INT:
-            return "integer";
-        case FLOAT:
-            return "float";
-        case STRING:
-            return "string";
-        case KEYWORD:
-            return "keyword";
-        case OP_EQUAL:
-            return "'='";
-        case OP_COMMA:
-            return "comma";
-        case OP_COLON:
-            return ":";
-        case NEWLINE:
-            return "new line or end of file";
-        default:
-            return "";
-        }
-    }
-
-    void free()
-    {
-        switch (type) {
-        case INT:
-            delete (int *) data;
-            break;
-        case FLOAT:
-            delete (float *) data;
-            break;
-        case STRING:
-        case KEYWORD:
-            delete (std::string *) data;
-            break;
-        default:
-            break;
-        }
-    }
-
-    ItemType type;
-    void *data = nullptr;
-};
-
 // parses the file into items like string, numbers etc.
 // uses a simple deterministic finite automaton
-std::vector<Item> parse(const std::string &filename)
+std::vector<Config::Item> Config::parse(const std::string &filename)
 {
     std::ifstream inputFile(filename);
     if (!inputFile.is_open()) {
@@ -131,6 +44,8 @@ std::vector<Item> parse(const std::string &filename)
                 break;
             } else {
                 std::cerr << "Error: config \"" << filename << "\" is invalid." << std::endl;
+                for (Item &item : items)
+                    item.free();
                 return std::vector<Item>();
             }
             break;
@@ -188,7 +103,7 @@ std::vector<Item> parse(const std::string &filename)
     return items;
 }
 
-void error(Item::ItemType expected, Item::ItemType found)
+void Config::error(Item::ItemType expected, Item::ItemType found)
 {
     std::cout << "Error: " + Item::typeToString(expected) + " expected, but " +
         Item::typeToString(found) + " found." << std::endl;

@@ -52,6 +52,97 @@ public:
     Config() = default;
     ConfigData loadConfig(const std::string &filename);
     void saveConfig(const std::string &filename, const ConfigData &data);
+
+private:
+    struct Item {
+        enum ItemType { INT, FLOAT, STRING, KEYWORD, OP_EQUAL, OP_COMMA, OP_COLON, NEWLINE };
+
+        Item(ItemType type) :
+            type(type) {}
+
+        Item(ItemType type, const std::string &text) :
+            type(type), data((void *) new std::string(text)) {}
+
+        Item(ItemType type, f32 floatNumber) :
+            type(type), data((void *) new f32)
+        {
+            *(f32 *) data = floatNumber;
+        }
+
+        Item(ItemType type, s32 intNumber) :
+            type(type), data((void *) new s32)
+        {
+            *(s32 *) data = intNumber;
+        }
+
+        std::string getString()
+        {
+            return *(std::string *) data;
+        }
+
+        const std::string &getString() const
+        {
+            return *(std::string *) data;
+        }
+
+        f32 getFloat() const
+        {
+            return *(f32 *) data;
+        }
+
+        s32 getInt() const
+        {
+            return *(s32 *) data;
+        }
+
+        static std::string typeToString(ItemType type)
+        {
+            switch (type) {
+            case INT:
+                return "integer";
+            case FLOAT:
+                return "float";
+            case STRING:
+                return "string";
+            case KEYWORD:
+                return "keyword";
+            case OP_EQUAL:
+                return "'='";
+            case OP_COMMA:
+                return "comma";
+            case OP_COLON:
+                return ":";
+            case NEWLINE:
+                return "new line or end of file";
+            default:
+                return "";
+            }
+        }
+
+        void free()
+        {
+            switch (type) {
+            case INT:
+                delete (int *) data;
+                break;
+            case FLOAT:
+                delete (float *) data;
+                break;
+            case STRING:
+            case KEYWORD:
+                delete (std::string *) data;
+                break;
+            default:
+                break;
+            }
+        }
+
+        ItemType type;
+        void *data = nullptr;
+    };
+
+    static std::vector<Item> parse(const std::string &filename);
+    void error(Item::ItemType expected, Item::ItemType found);
 };
 
 #endif // CONFIG_H
