@@ -8,6 +8,8 @@
 #include "MotionState.h"
 #include "IBody.h"
 
+#define REMOVE_CENTER
+
 using namespace irr;
 
 // this class is responsible for generating obstacles on the fly

@@ -76,8 +76,13 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                 insideY = y >= generatedEdgeBottom && y <= generatedEdgeTop;
                 insideZ = z <= generatedEdgeZ;
 
+                bool inside = insideX && insideY && insideZ;
+#ifdef REMOVE_CENTER
+                inside = inside || (x >= -500 && x <= 500);
+#endif
+
                 // if it's not, we create a new cube
-                if (!(insideX && insideY && insideZ)) {
+                if (!inside) {
                     // add some randomness to its position (for fun ofc)
                     f32 newX = x + getRandomf(-100, 100);
                     f32 newY = y + getRandomf(-100, 100);
