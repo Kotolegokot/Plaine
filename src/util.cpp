@@ -252,12 +252,3 @@ video::SColor iridescentColor(const u32 &currentTime)
                                     color.getGreen() + int(oldColor.getGreen() - color.getGreen())*diff,
                                     color.getBlue() + int(oldColor.getBlue() - color.getBlue())*diff);
 }
-
-btVector3 quatToEuler(const btQuaternion &q)
-{
-    core::quaternion irrQ(q.x(), q.y(), q.z(), q.w());
-    core::vector3df euler;
-    irrQ.toEuler(euler);
-
-    return btVector3(euler.X, euler.Y, euler.Z);
-}

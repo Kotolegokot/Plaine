@@ -20,6 +20,33 @@ class Plane : public IBody
 public:
     Plane(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position);
 
+    // some convenient
+    const btVector3 &getLinearVelocity() const;
+    void setLinearVelocity(const btVector3 &linearVelocity);
+
+    btScalar getScalarLinearVelocity() const;
+    void setScalarLinearVelocity(btScalar length);
+
+    const btVector3 &getAngularVelocity() const;
+    void setAngularVelocity(const btVector3 &angularVelocity);
+
+    btScalar getScalarAngularVelocity() const;
+    void setScalarAngularVelocity(btScalar length);
+
+    btQuaternion getRotation() const;
+    void setRotation(const btQuaternion &rotation);
+
+    btVector3 getEulerRotation() const;
+    void setEulerRotation(const btVector3 &rotation);
+
+    void getAxisAngleRotation(btVector3 &axis, btScalar &angle) const;
+    void setAxisAngleRotation(const btVector3 &axis, btScalar angle);
+
+    const btVector3 &getPosition() const;
+    void setPosition(const btVector3 &position);
+
+
+
 protected:
     virtual void createNode() override;
     virtual void createMotionState() override;

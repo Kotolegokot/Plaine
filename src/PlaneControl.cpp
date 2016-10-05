@@ -6,11 +6,9 @@ PlaneControl::PlaneControl(Plane *plane, const Controls &controls) :
 // move the plane according to keys pressed
 void PlaneControl::handle(EventReceiver *eventReceiver)
 {
-    btTransform transform;
-    plane->getRigidBody()->getMotionState()->getWorldTransform(transform);
-    btQuaternion rotation = transform.getRotation();
-    btVector3 axis = rotation.getAxis();
-    btScalar angle = rotation.getAngle();
+    btVector3 axis;
+    btScalar angle;
+    plane->getAxisAngleRotation(axis, angle);
 
     btVector3 turnForce(0, 0, 1);
 
