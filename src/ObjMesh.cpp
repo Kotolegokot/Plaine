@@ -12,7 +12,7 @@ std::vector<ObjMesh::Item> ObjMesh::parse(const std::string &filename)
     std::string str;
     int back = 0;
 
-    enum { NONE, INT, FLOAT, KEYWORD, STRING, SPACE_BEFORE_STRING, COMMENT } state = NONE;
+    enum { NONE, INT, FLOAT, KEYWORD, STRING, SPACE_BEFORE_STRING, COMMENT, SPACE_BEFORE_COMMENT } state = NONE;
     while (inputFile) {
         int c = back ? back : inputFile.get();
         back = 0;
@@ -31,7 +31,7 @@ std::vector<ObjMesh::Item> ObjMesh::parse(const std::string &filename)
                 str.push_back(c);
                 state = KEYWORD;
             } else if (c == '#') {
-                state = COMMENT;
+                state = SPACE_BEFORE_COMMENT;
             } else if (c == EOF) {
                 break;
             } else {
@@ -97,8 +97,15 @@ std::vector<ObjMesh::Item> ObjMesh::parse(const std::string &filename)
             }
             break;
 
+        case SPACE_BEFORE_COMMENT:
+            if (!isspace(c)) {
+                back = c;
+                state = COMMENT;
+            }
+            break;
+
         case COMMENT:
-            if (c == '\n') {
+            if (c == '\n' || c == EOF) {
                 back = c;
                 items.push_back(Item(Item::COMMENT, str));
                 str.clear();
@@ -117,7 +124,7 @@ std::vector<ObjMesh::Item> ObjMesh::parse(const std::string &filename)
 
 void ObjMesh::loadMesh(const std::string &filename)
 {
-    std::vector<Item> items = parse(filename);
+    /*std::vector<Item> items = parse(filename);
     for (const Item &item : items) {
         if (item.type == Item::SLASH)
             std::cout << "SLASH" << std::endl;
@@ -127,11 +134,13 @@ void ObjMesh::loadMesh(const std::string &filename)
             std::cout << "FLOAT: " << (float) item.getFloat() << std::endl;
         else if (item.type == Item::STRING)
             std::cout << "STRING: '" << item.getString() << "'" << std::endl;
+        else if (item.type == Item::COMMENT)
+            std::cout << "COMMENT: '" << item.getString() << "'" << std::endl;
         else if (item.type == Item::KEYWORD)
             std::cout << "KEYWORD: " << item.getString() << std::endl;
         else if (item.type == Item::NEWLINE)
             std::cout << "NEWLINE" << std::endl;
-    }
+    }*/
 
     vertices.clear();
     triangles.clear();
