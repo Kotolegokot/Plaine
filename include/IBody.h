@@ -32,11 +32,12 @@ public:
         return node;
     }
 
+    virtual btScalar getMass() = 0;
+
 protected:
     virtual void createNode() = 0;
     virtual void createMotionState() = 0;
     virtual void createShape() = 0;
-    virtual btScalar getMass() = 0;
 
     // this method must be called in a derived class' constructor
     // creates the node and the body

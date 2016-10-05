@@ -10,7 +10,7 @@ using namespace irr;
 class Cube : public IBody
 {
 public:
-    Cube(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, const f32 &side) :
+    Cube(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, f32 side) :
         IBody(world), device(device), position(position), side(side)
     {
         createBody();
@@ -51,4 +51,5 @@ private:
     btVector3 position;
     f32 side;
 };
+
 #endif // CUBE_H

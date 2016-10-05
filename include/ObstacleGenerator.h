@@ -8,6 +8,7 @@
 #include "MotionState.h"
 #include "IBody.h"
 #include "obstacles/Cube.h"
+#include "obstacles/Torus.h"
 
 #define REMOVE_CENTER
 
