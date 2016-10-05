@@ -40,7 +40,7 @@ std::vector<Config::Item> Config::parse(const std::string &filename)
             } else if (isdigit(c)) {
                 str.push_back(c);
                 state = INT;
-            } else if (c == -1) {
+            } else if (c == EOF) {
                 break;
             } else {
                 std::cerr << "Error: config \"" << filename << "\" is invalid." << std::endl;
