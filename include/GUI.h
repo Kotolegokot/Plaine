@@ -24,7 +24,9 @@ public:
     gui::IGUIButton *buttonControlDown = nullptr;
     gui::IGUIButton *buttonControlLeft = nullptr;
     gui::IGUIButton *buttonControlRight = nullptr;
-    gui::IGUIButton *buttonDefultControls = nullptr;
+    gui::IGUIButton *buttonControlCwRoll = nullptr;
+    gui::IGUIButton *buttonControlCcwRoll = nullptr;
+    gui::IGUIButton *buttonDefaultControls = nullptr;
     gui::IGUIButton *buttonResume = nullptr;
     gui::IGUIButton *buttonMenu = nullptr;
     gui::IGUIButton *buttonQuit = nullptr;
@@ -42,6 +44,8 @@ public:
     gui::IGUIStaticText *textControlDown = nullptr;
     gui::IGUIStaticText *textControlLeft = nullptr;
     gui::IGUIStaticText *textControlRight = nullptr;
+    gui::IGUIStaticText *textControlCwRoll = nullptr;
+    gui::IGUIStaticText *textControlCcwRoll = nullptr;
     gui::IGUICheckBox *checkBoxVSync = nullptr;
     gui::IGUICheckBox *checkBoxStencilBuffer = nullptr;
     gui::IGUIWindow *settingsMessageBox = nullptr;

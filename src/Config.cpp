@@ -213,7 +213,8 @@ ConfigData Config::loadConfig(const std::string &filename)
     } */
 
     bool goToNextNEWLINE = false;
-    enum { NONE, RESOLUTION, FULLSCREEN, LANGUAGE, RESIZABLE, VSYNC, STENCILBUFFER, RENDER_DISTANCE, CONTROLS, CONTROL_UP, CONTROL_LEFT, CONTROL_DOWN, CONTROL_RIGHT } state = NONE;
+    enum { NONE, RESOLUTION, FULLSCREEN, LANGUAGE, RESIZABLE, VSYNC, STENCILBUFFER, RENDER_DISTANCE, CONTROLS,
+    CONTROL_UP, CONTROL_LEFT, CONTROL_DOWN, CONTROL_RIGHT, CONTROL_CW_ROLL, CONTROL_CCW_ROLL} state = NONE;
 
     for (std::vector<Item>::const_iterator i = items.cbegin(); i != items.cend(); ++i) {
         if (goToNextNEWLINE) {
@@ -247,6 +248,10 @@ ConfigData Config::loadConfig(const std::string &filename)
                         state = CONTROL_DOWN;
                     else if ((*i).getString() == "right")
                         state = CONTROL_RIGHT;
+                    else if ((*i).getString() == "clockwiseroll")
+                        state = CONTROL_CW_ROLL;
+                    else if ((*i).getString() == "counterclockwiseroll")
+                        state = CONTROL_CCW_ROLL;
                 } else {
                     error(Item::KEYWORD, (*i).type);
                     goToNextNEWLINE = true;
@@ -424,6 +429,30 @@ ConfigData Config::loadConfig(const std::string &filename)
                 state = NONE;
                 break;
             }
+            case CONTROL_CW_ROLL: {
+                EXPECT(Item::OP_EQUAL);
+                ++i;
+
+                EXPECT(Item::INT);
+                data.controls.cwRoll = (EKEY_CODE)(*i).getInt();
+                ++i;
+                EXPECT(Item::NEWLINE);
+
+                state = NONE;
+                break;
+            }
+            case CONTROL_CCW_ROLL: {
+                EXPECT(Item::OP_EQUAL);
+                ++i;
+
+                EXPECT(Item::INT);
+                data.controls.ccwRoll = (EKEY_CODE)(*i).getInt();
+                ++i;
+                EXPECT(Item::NEWLINE);
+
+                state = NONE;
+                break;
+            }
             }
         }
     }
@@ -453,4 +482,6 @@ void Config::saveConfig(const std::string &filename, const ConfigData &data)
     outputFile << "    left=" << data.controls.left << std::endl;
     outputFile << "    down=" << data.controls.down << std::endl;
     outputFile << "    right=" << data.controls.right << std::endl;
+    outputFile << "    clockwiseroll=" << data.controls.cwRoll << std::endl;
+    outputFile << "    counterclockwiseroll=" << data.controls.ccwRoll << std::endl;
 }
