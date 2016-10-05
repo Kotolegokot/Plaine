@@ -1,6 +1,5 @@
 #include "util.h"
-#include <random>
-#include <chrono>
+
 
 using namespace irr;
 
@@ -252,4 +251,13 @@ video::SColor iridescentColor(const u32 &currentTime)
     return video::SColor(0, color.getRed() + int((oldColor.getRed()) - (color.getRed()))*diff,
                                     color.getGreen() + int(oldColor.getGreen() - color.getGreen())*diff,
                                     color.getBlue() + int(oldColor.getBlue() - color.getBlue())*diff);
+}
+
+btVector3 quatToEuler(const btQuaternion &q)
+{
+    core::quaternion irrQ(q.x(), q.y(), q.z(), q.w());
+    core::vector3df euler;
+    irrQ.toEuler(euler);
+
+    return btVector3(euler.X, euler.Y, euler.Z);
 }

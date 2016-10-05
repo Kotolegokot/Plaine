@@ -5,6 +5,9 @@
 #include <cstdlib>
 #include <irrlicht.h>
 #include <libintl.h>
+#include <random>
+#include <btBulletDynamicsCommon.h>
+#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 
 #ifndef _WIN32
 #include <iconv.h>
@@ -26,6 +29,7 @@ core::stringw keyCodeName(const EKEY_CODE &keyCode);
 void setLanguage(std::string language, bool replace);
 f32 getRandomf(f32 min = 0, f32 max = 1);
 video::SColor iridescentColor(const u32 &currentTime);
+btVector3 quatToEuler(const btQuaternion &q);
 
 // GUI IDs
 enum { ID_BUTTON_QUIT,
