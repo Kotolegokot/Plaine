@@ -83,6 +83,8 @@ void PlaneControl::handle(EventReceiver *eventReceiver)
         pitchImpulse = btVector3(1, 0, 0);
         pitchImpulse *= fabs(plane->getEulerRotation().getX())*fabs(plane->getEulerRotation().getX())*2000;
     }
+    if (plane->getAngularVelocity().length() < 0.05f)
+        plane->setAngularVelocity(btVector3(0, 0, 0));
     turnImpulse = turnImpulse.rotate(axis, angle);
     yawImpulse = yawImpulse.rotate(axis, angle);
     pitchImpulse = pitchImpulse.rotate(axis, angle);
