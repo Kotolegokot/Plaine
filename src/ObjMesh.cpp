@@ -260,15 +260,23 @@ void ObjMesh::loadMesh(const std::string &filename)
         }
     }
 
-    for (std::vector<btVector3>::const_iterator i = vertices.cbegin(); i != vertices.cend(); i++)
+    /*for (std::vector<btVector3>::const_iterator i = vertices.cbegin(); i != vertices.cend(); i++)
         std::cout << "v " << i->x() << " " << i->y() << " " << i->z() << std::endl;
+
+    for (std::vector<std::vector<size_t>>::const_iterator i = polygons.cbegin(); i != polygons.cend(); i++) {
+        std::cout << "f ";
+        for (std::vector<size_t>::const_iterator j = i->cbegin(); j != i->cend(); j++)
+            std::cout << *j << " ";
+        std::cout << std::endl;
+    }*/
 }
 
 btTriangleMesh *ObjMesh::getTriangleMesh()
 {
     btTriangleMesh *triangleMesh = new btTriangleMesh();
-    /*for (const btVector3 &triangle : triangles)
-        triangleMesh->addTriangle(vertices[triangle.x()], vertices[triangle.y()], vertices[triangle.z()]); TODO*/
+    for (const std::vector<size_t> &polygon : polygons)
+        for (size_t i = 1; i < polygon.size() - 1; i++)
+            triangleMesh->addTriangle(vertices[polygon[0]], vertices[polygon[i]], vertices[polygon[i + 1]]);
 
     return triangleMesh;
 }
