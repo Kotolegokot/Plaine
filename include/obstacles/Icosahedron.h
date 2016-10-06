@@ -1,5 +1,5 @@
-#ifndef TORUS_H
-#define TORUS_H
+#ifndef ICOSAHEDRON_H
+#define ICOSAHEDRON_H
 
 #include "ObjMesh.h"
 #include "IBody.h"
@@ -7,18 +7,18 @@
 using namespace irr;
 
 #define MASS_COEFFICIENT 0.000002
-#define TORUS_MODEL "media/models/torus.obj"
+#define ICOSAHEDRON_MODEL "media/models/icosahedron.obj"
 
-class Torus : public IBody
+class Icosahedron : public IBody
 {
 public:
-    Torus(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, f32 radius) :
+    Icosahedron(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, f32 radius) :
         IBody(world), device(device), position(position), radius(radius)
     {
         createBody();
     }
 
-    virtual ~Torus()
+    virtual ~Icosahedron()
     {
         // so that commonShape is not deleted thousand times within IBody::~IBody
         shape = nullptr;
@@ -32,7 +32,7 @@ public:
 protected:
     virtual void createNode()
     {
-        mesh = device->getSceneManager()->getMesh(TORUS_MODEL);
+        mesh = device->getSceneManager()->getMesh(ICOSAHEDRON_MODEL);
         node = device->getSceneManager()->addMeshSceneNode(mesh);
         node->setScale(core::vector3df(200, 200, 200));
         node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
@@ -51,7 +51,7 @@ protected:
     virtual void createShape()
     {
         if (!commonShape) {
-            commonShape = new btConvexTriangleMeshShape(ObjMesh(TORUS_MODEL).getTriangleMesh());
+            commonShape = new btConvexTriangleMeshShape(ObjMesh(ICOSAHEDRON_MODEL).getTriangleMesh());
             commonShape->setLocalScaling(btVector3(200, 200, 200));
         }
 
@@ -68,4 +68,4 @@ private:
     static btCollisionShape *commonShape;
 };
 
-#endif // TORUS_H
+#endif // ICOSAHEDRON_H

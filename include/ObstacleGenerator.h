@@ -9,8 +9,11 @@
 #include "IBody.h"
 #include "obstacles/Cube.h"
 #include "obstacles/Torus.h"
+#include "obstacles/Icosahedron.h"
 
 #define REMOVE_CENTER
+// average distance between obstacles
+#define STEP 800
 
 using namespace irr;
 
@@ -51,9 +54,6 @@ private:
     f32 generatedEdgeRight = 0;
     f32 generatedEdgeTop = 0;
     f32 generatedEdgeBottom = 0;
-
-    // average distance between obstacles
-    const f32 STEP = 400;
 
     // physics world
     btDynamicsWorld *world = nullptr;

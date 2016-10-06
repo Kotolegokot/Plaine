@@ -44,11 +44,12 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     if(std::abs(newX) > 400) {
                         IBody *body = nullptr;
                         //body = new Cube(world, device, btVector3(newX, newY, newZ), getRandomf(50.0f, 250.0f));
-                        body = new Torus(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
+                        //body = new Torus(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
+                        body = new Icosahedron(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
 
-                        if (int(getRandomf(1, 8)) == 1)
+                        if (int(getRandomf(1, 1)) == 1)
                             body->getRigidBody()->applyTorqueImpulse(btVector3(getRandomf(-10000, 10000), getRandomf(-10000, 10000), getRandomf(-10000, 10000))*body->getMass());
-                        if (int(getRandomf(1, 8)) == 1)
+                        if (int(getRandomf(1, 1)) == 1)
                             body->getRigidBody()->applyCentralImpulse(btVector3(getRandomf(-100, 100), getRandomf(-100, 100), getRandomf(-100, 100))*body->getMass());
                         cubes.push_back(body);
                         cubeCount++;
