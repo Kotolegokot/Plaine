@@ -96,7 +96,7 @@ void PlaneControl::handle(EventReceiver *eventReceiver)
         plane->getRigidBody()->applyTorqueImpulse(pitchImpulse);
     //if (yawImpulse.length() > 0.05f)
         plane->getRigidBody()->applyTorqueImpulse(yawImpulse);
-    plane->getRigidBody()->applyForce(btVector3(0, 0, 600), btVector3(0, 0, 0));
+    plane->getRigidBody()->applyForce(btVector3(0, 0, 900), btVector3(0, 0, 0));
 }
 
 void PlaneControl::setPlane(Plane *plane)
