@@ -38,8 +38,7 @@ protected:
 
     virtual void createShape()
     {
-        ObjMesh objMesh;
-        objMesh.loadMesh(TORUS_MODEL);
+        ObjMesh objMesh(TORUS_MODEL);
 
         shape = new btConvexTriangleMeshShape(objMesh.getTriangleMesh());
         shape->setLocalScaling(btVector3(radius, radius, radius));

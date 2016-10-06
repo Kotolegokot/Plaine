@@ -41,15 +41,14 @@ void Plane::createMotionState()
 
 void Plane::createShape()
 {
-    ObjMesh objMesh;
-    objMesh.loadMesh(PLANE_MODEL);
+    ObjMesh objMesh(PLANE_MODEL);
 
     shape = new btConvexTriangleMeshShape(objMesh.getTriangleMesh());
 }
 
 btScalar Plane::getMass()
 {
-        return 1;
+    return 1;
 }
 
 const btVector3 &Plane::getLinearVelocity() const

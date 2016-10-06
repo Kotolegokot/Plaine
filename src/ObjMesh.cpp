@@ -1,5 +1,10 @@
 #include "ObjMesh.h"
 
+ObjMesh::ObjMesh(const std::string &filename)
+{
+    loadMesh(filename);
+}
+
 std::vector<ObjMesh::Item> ObjMesh::parse(const std::string &filename)
 {
     std::ifstream inputFile(filename);
@@ -122,10 +127,30 @@ std::vector<ObjMesh::Item> ObjMesh::parse(const std::string &filename)
     return items;
 }
 
+void ObjMesh::error(Item::ItemType expected, Item::ItemType found)
+{
+    std::cout << "Error: " + Item::typeToString(expected) + " expected, but " +
+        Item::typeToString(found) + " found." << std::endl;
+}
+
+#define \
+EXPECT(_expected) {\
+    if ((*i).type != _expected) {\
+        error(_expected, (*i).type);\
+        goToNextNEWLINE = true;\
+        state = NONE;\
+        break;\
+    }\
+}
+
 void ObjMesh::loadMesh(const std::string &filename)
 {
-    /*std::vector<Item> items = parse(filename);
-    for (const Item &item : items) {
+    vertices.clear();
+    polygons.clear();
+
+    std::vector<Item> items = parse(filename);
+
+    /*for (const Item &item : items) {
         if (item.type == Item::SLASH)
             std::cout << "SLASH" << std::endl;
         else if (item.type == Item::INT)
@@ -142,52 +167,108 @@ void ObjMesh::loadMesh(const std::string &filename)
             std::cout << "NEWLINE" << std::endl;
     }*/
 
-    vertices.clear();
-    triangles.clear();
+    bool goToNextNEWLINE = false;
+    enum { NONE, VERTEX, FACE } state = NONE;
 
-    std::ifstream inputFile(filename);
-    if (!inputFile.is_open()) {
-        std::cerr << "Error: unable to open file\"" << filename << "\" for reading" << std::endl;
-        return;
-    }
+    for (std::vector<Item>::const_iterator i = items.cbegin(); i != items.cend(); ++i) {
+        if (goToNextNEWLINE) {
+            if (i->type == Item::NEWLINE)
+                goToNextNEWLINE = false;
+        } else {
+            switch (state) {
+            case NONE:
+                if (i->type == Item::COMMENT) {
+                    goToNextNEWLINE = true;
+                    break;
+                }
+                EXPECT(Item::KEYWORD);
 
-    std::string line;
-    while (std::getline(inputFile, line)) {
-        std::istringstream iss(line);
+                if (i->getString() == "v") {
+                    state = VERTEX;
+                } else if (i->getString() == "f") {
+                    state = FACE;
+                } else {
+                    goToNextNEWLINE = true;
+                }
+                break;
 
-        char c;
-        iss >> c;
+            case VERTEX:
+                {
+                    btVector3 vertex;
 
-        if (line[0] == 'v' && line[1] == ' ') {
-            btScalar x, y, z;
-            iss >> x >> y >> z;
-            btVector3 point(x, y, z);
+                    EXPECT(Item::FLOAT);
+                    vertex.setX(i->getFloat());
+                    ++i;
 
-            vertices.push_back(point);
-        } else if (line[0] == 'f' && line[1] == ' ') {
-            std::string s1, s2, s3;
-            iss >> s1 >> s2 >> s3;
+                    EXPECT(Item::FLOAT);
+                    vertex.setY(i->getFloat());
+                    ++i;
 
-            s1 = s1.substr(0, s1.find('/'));
-            s2 = s2.substr(0, s2.find('/'));
-            s3 = s3.substr(0, s3.find('/'));
+                    EXPECT(Item::FLOAT);
+                    vertex.setZ(i->getFloat());
+                    ++i;
 
-            btScalar t1, t2, t3;
-            t1 = std::stof(s1) - 1;
-            t2 = std::stof(s2) - 1;
-            t3 = std::stof(s3) - 1;
-            btVector3 triangle(t1, t2, t3);
+                    if (i->type == Item::FLOAT)
+                        ++i;
+                    EXPECT(Item::NEWLINE);
 
-            triangles.push_back(triangle);
+                    vertices.push_back(vertex);
+
+                    state = NONE;
+                }
+                break;
+
+            case FACE:
+                {
+                    std::vector<size_t> polygon;
+
+                    while (i->type != Item::NEWLINE) {
+                        EXPECT(Item::INT);
+                        polygon.push_back(i->getInt());
+                        ++i;
+
+                        if (i->type == Item::SLASH) {
+                            ++i;
+                            if (i->type == Item::SLASH) {
+                                ++i;
+                                EXPECT(Item::INT);
+                                ++i;
+                            } else if (i->type == Item::INT) {
+                                ++i;
+                                if (i->type == Item::SLASH) {
+                                    ++i;
+                                    EXPECT(Item::INT);
+                                    ++i;
+                                }
+                            } else {
+                                std::cout << "Error: " + Item::typeToString(Item::SLASH) + " or " +
+                                    Item::typeToString(Item::INT) + " expected, but " +
+                                    Item::typeToString(i->type) + " found." << std::endl;
+                                state = NONE;
+                                goToNextNEWLINE = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    polygons.push_back(polygon);
+
+                    state = NONE;
+                }
+                break;
+            }
         }
     }
+
+    for (std::vector<btVector3>::const_iterator i = vertices.cbegin(); i != vertices.cend(); i++)
+        std::cout << "v " << i->x() << " " << i->y() << " " << i->z() << std::endl;
 }
 
 btTriangleMesh *ObjMesh::getTriangleMesh()
 {
     btTriangleMesh *triangleMesh = new btTriangleMesh();
-    for (const btVector3 &triangle : triangles)
-        triangleMesh->addTriangle(vertices[triangle.x()], vertices[triangle.y()], vertices[triangle.z()]);
+    /*for (const btVector3 &triangle : triangles)
+        triangleMesh->addTriangle(vertices[triangle.x()], vertices[triangle.y()], vertices[triangle.z()]); TODO*/
 
     return triangleMesh;
 }

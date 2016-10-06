@@ -13,12 +13,13 @@ class ObjMesh
 {
 public:
     ObjMesh() = default;
+    ObjMesh(const std::string &filename);
     void loadMesh(const std::string &filename);
     btTriangleMesh *getTriangleMesh();
 
 private:
     std::vector<btVector3> vertices;
-    std::vector<btVector3> triangles;
+    std::vector<std::vector<size_t>> polygons;
 
     struct Item {
         enum ItemType { SLASH, INT, FLOAT, KEYWORD, STRING, COMMENT, NEWLINE };
@@ -100,6 +101,7 @@ private:
         void *data = nullptr;
     };
     static std::vector<Item> parse(const std::string &filename);
+    void error(Item::ItemType expected, Item::ItemType found);
 };
 
 #endif // OBJMESH_H

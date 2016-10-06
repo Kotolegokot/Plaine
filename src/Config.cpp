@@ -115,6 +115,7 @@ EXPECT(_expected) {\
     if (i->type != _expected) {\
         error(_expected, i->type);\
         goToNextNEWLINE = true;\
+        state = NONE;\
         break;\
     }\
 }
