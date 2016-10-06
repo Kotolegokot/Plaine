@@ -113,6 +113,7 @@
 		<Unit filename="include/Plane.h" />
 		<Unit filename="include/PlaneControl.h" />
 		<Unit filename="include/obstacles/Cube.h" />
+		<Unit filename="include/obstacles/Icosahedron.h" />
 		<Unit filename="include/obstacles/Torus.h" />
 		<Unit filename="include/util.h" />
 		<Unit filename="main.cpp" />
@@ -126,6 +127,7 @@
 		<Unit filename="src/ObstacleGenerator.cpp" />
 		<Unit filename="src/Plane.cpp" />
 		<Unit filename="src/PlaneControl.cpp" />
+		<Unit filename="src/obstacles/Icosahedron.cpp" />
 		<Unit filename="src/obstacles/Torus.cpp" />
 		<Unit filename="src/util.cpp" />
 		<Extensions>
