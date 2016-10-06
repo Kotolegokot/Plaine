@@ -6,6 +6,7 @@
 
 using namespace irr;
 
+#define MASS_COEFFICIENT 0.000002
 #define TORUS_MODEL "media/models/torus.obj"
 
 class Torus : public IBody
@@ -15,6 +16,12 @@ public:
         IBody(world), device(device), position(position), radius(radius)
     {
         createBody();
+    }
+
+    virtual ~Torus()
+    {
+        // so that commonShape is not deleted thousand times within IBody::~IBody
+        shape = nullptr;
     }
 
     virtual btScalar getMass()
@@ -27,7 +34,7 @@ protected:
     {
         mesh = device->getSceneManager()->getMesh(TORUS_MODEL);
         node = device->getSceneManager()->addMeshSceneNode(mesh);
-        node->setScale(core::vector3df(radius, radius, radius));
+        node->setScale(core::vector3df(200, 200, 200));
         node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
     }
 
@@ -38,18 +45,22 @@ protected:
 
     virtual void createShape()
     {
-        ObjMesh objMesh(TORUS_MODEL);
+        if (!commonShape) {
+            commonShape = new btConvexTriangleMeshShape(ObjMesh(TORUS_MODEL).getTriangleMesh());
+            commonShape->setLocalScaling(btVector3(200, 200, 200));
+        }
 
-        shape = new btConvexTriangleMeshShape(objMesh.getTriangleMesh());
-        shape->setLocalScaling(btVector3(radius, radius, radius));
+        shape = commonShape;
     }
 
 
 private:
     IrrlichtDevice *device = nullptr;
+    scene::IMesh *mesh = nullptr;
     btVector3 position;
     f32 radius;
-    scene::IMesh *mesh = nullptr;
+
+    static btCollisionShape *commonShape;
 };
 
 #endif // TORUS_H
