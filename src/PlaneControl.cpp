@@ -56,18 +56,18 @@ void PlaneControl::handle(EventReceiver *eventReceiver)
     rollImpulse *= 150;
     std::cout << "X:" << plane->getEulerRotation().getX() << " Y:" << plane->getEulerRotation().getY() << " Z:" << plane->getEulerRotation().getZ() << std::endl;
     if ((yawImpulse.getY() == 1) && (plane->getEulerRotation().getY() < 0.15f))
-        yawImpulse *= 200;
+        yawImpulse *= 300;
     else if ((yawImpulse.getY() == -1) && (plane->getEulerRotation().getY() > -0.15f))
-        yawImpulse *= 200;
+        yawImpulse *= 300;
     else if ((yawImpulse.getY() == 0) && (plane->getEulerRotation().getY() > 0.0f))
     {
         yawImpulse = btVector3(0, -1, 0);
-        yawImpulse *= fabs(plane->getEulerRotation().getY())*fabs(plane->getEulerRotation().getY())*2750;
+        yawImpulse *= fabs(plane->getEulerRotation().getY())*fabs(plane->getEulerRotation().getY())*2000;
     }
     else if ((yawImpulse.getY() == 0) && (plane->getEulerRotation().getY() < 0.0f))
     {
         yawImpulse += btVector3(0, 1, 0);
-        yawImpulse *= fabs(plane->getEulerRotation().getY())*fabs(plane->getEulerRotation().getY())*2750;
+        yawImpulse *= fabs(plane->getEulerRotation().getY())*fabs(plane->getEulerRotation().getY())*2000;
     }
     if ((pitchImpulse.getX() == 1) && (plane->getEulerRotation().getX() < 0.15f))
         pitchImpulse *= 100;
@@ -76,20 +76,24 @@ void PlaneControl::handle(EventReceiver *eventReceiver)
     else if ((pitchImpulse.getX() == 0) && (plane->getEulerRotation().getX() > 0.0f))
     {
         pitchImpulse = btVector3(-1, 0, 0);
-        pitchImpulse *= fabs(plane->getEulerRotation().getX())*fabs(plane->getEulerRotation().getX())*2750;
+        pitchImpulse *= fabs(plane->getEulerRotation().getX())*fabs(plane->getEulerRotation().getX())*2000;
     }
     else if ((pitchImpulse.getX() == 0) && (plane->getEulerRotation().getX() < 0.0f))
     {
         pitchImpulse = btVector3(1, 0, 0);
-        pitchImpulse *= fabs(plane->getEulerRotation().getX())*fabs(plane->getEulerRotation().getX())*2750;
+        pitchImpulse *= fabs(plane->getEulerRotation().getX())*fabs(plane->getEulerRotation().getX())*2000;
     }
     turnImpulse = turnImpulse.rotate(axis, angle);
     yawImpulse = yawImpulse.rotate(axis, angle);
     pitchImpulse = pitchImpulse.rotate(axis, angle);
+    turnImpulse.setZ(0);
     plane->getRigidBody()->applyCentralImpulse(turnImpulse);
-    plane->getRigidBody()->applyTorqueImpulse(rollImpulse);
-    plane->getRigidBody()->applyTorqueImpulse(pitchImpulse);
-    plane->getRigidBody()->applyTorqueImpulse(yawImpulse);
+   // if (rollImpulse.length() > 0.1f)
+        plane->getRigidBody()->applyTorqueImpulse(rollImpulse);
+    //if (pitchImpulse.length() > 0.05f)
+        plane->getRigidBody()->applyTorqueImpulse(pitchImpulse);
+    //if (yawImpulse.length() > 0.05f)
+        plane->getRigidBody()->applyTorqueImpulse(yawImpulse);
     plane->getRigidBody()->applyForce(btVector3(0, 0, 600), btVector3(0, 0, 0));
 }
 
