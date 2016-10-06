@@ -112,8 +112,8 @@ void Config::error(Item::ItemType expected, Item::ItemType found)
 // throws an error if we encounter something we don't want
 #define \
 EXPECT(_expected) {\
-    if ((*i).type != _expected) {\
-        error(_expected, (*i).type);\
+    if (i->type != _expected) {\
+        error(_expected, i->type);\
         goToNextNEWLINE = true;\
         break;\
     }\
@@ -151,44 +151,41 @@ ConfigData Config::loadConfig(const std::string &filename)
 
     for (std::vector<Item>::const_iterator i = items.cbegin(); i != items.cend(); ++i) {
         if (goToNextNEWLINE) {
-            if ((*i).type == Item::NEWLINE)
+            if (i->type == Item::NEWLINE)
                 goToNextNEWLINE = false;
         } else {
             switch (state) {
             case NONE:
-                if ((*i).type == Item::KEYWORD) {
-                    if ((*i).getString() == "resolution")
-                        state = RESOLUTION;
-                    else if ((*i).getString() == "fullscreen")
-                        state = FULLSCREEN;
-                    else if ((*i).getString() == "language")
-                        state = LANGUAGE;
-                    else if ((*i).getString() == "resizable")
-                        state = RESIZABLE;
-                    else if ((*i).getString() == "vsync")
-                        state = VSYNC;
-                    else if ((*i).getString() == "stencilbuffer")
-                        state = STENCILBUFFER;
-                    else if ((*i).getString() == "renderdistance")
-                        state = RENDER_DISTANCE;
-                    else if ((*i).getString() == "controls")
-                        state = CONTROLS;
-                    else if ((*i).getString() == "up")
-                        state = CONTROL_UP;
-                    else if ((*i).getString() == "left")
-                        state = CONTROL_LEFT;
-                    else if ((*i).getString() == "down")
-                        state = CONTROL_DOWN;
-                    else if ((*i).getString() == "right")
-                        state = CONTROL_RIGHT;
-                    else if ((*i).getString() == "clockwiseroll")
-                        state = CONTROL_CW_ROLL;
-                    else if ((*i).getString() == "counterclockwiseroll")
-                        state = CONTROL_CCW_ROLL;
-                } else {
-                    error(Item::KEYWORD, (*i).type);
-                    goToNextNEWLINE = true;
-                }
+                EXPECT(Item::KEYWORD);
+
+                if (i->getString() == "resolution")
+                    state = RESOLUTION;
+                else if (i->getString() == "fullscreen")
+                    state = FULLSCREEN;
+                else if (i->getString() == "language")
+                    state = LANGUAGE;
+                else if (i->getString() == "resizable")
+                    state = RESIZABLE;
+                else if (i->getString() == "vsync")
+                    state = VSYNC;
+                else if (i->getString() == "stencilbuffer")
+                    state = STENCILBUFFER;
+                else if (i->getString() == "renderdistance")
+                    state = RENDER_DISTANCE;
+                else if (i->getString() == "controls")
+                    state = CONTROLS;
+                else if (i->getString() == "up")
+                    state = CONTROL_UP;
+                else if (i->getString() == "left")
+                    state = CONTROL_LEFT;
+                else if (i->getString() == "down")
+                    state = CONTROL_DOWN;
+                else if (i->getString() == "right")
+                    state = CONTROL_RIGHT;
+                else if (i->getString() == "clockwiseroll")
+                    state = CONTROL_CW_ROLL;
+                else if (i->getString() == "counterclockwiseroll")
+                    state = CONTROL_CCW_ROLL;
                 break;
             case RESOLUTION: {
                 core::dimension2d<u32> resolution;
@@ -196,12 +193,12 @@ ConfigData Config::loadConfig(const std::string &filename)
                 EXPECT(Item::OP_EQUAL);
                 ++i;
                 EXPECT(Item::INT);
-                resolution.Width = (*i).getInt();
+                resolution.Width = i->getInt();
                 ++i;
                 EXPECT(Item::OP_COMMA);
                 ++i;
                 EXPECT(Item::INT);
-                resolution.Height = (*i).getInt();
+                resolution.Height = i->getInt();
                 data.resolution = resolution;
                 ++i;
                 EXPECT(Item::NEWLINE);
@@ -214,12 +211,12 @@ ConfigData Config::loadConfig(const std::string &filename)
                 ++i;
 
                 EXPECT(Item::KEYWORD);
-                if ((*i).getString() != "on" && (*i).getString() != "off") {
-                    std::cerr << "Error: on or off expected, but " << Item::typeToString((*i).type) << " found." << std::endl;
+                if (i->getString() != "on" && i->getString() != "off") {
+                    std::cerr << "Error: on or off expected, but " << Item::typeToString(i->type) << " found." << std::endl;
                     goToNextNEWLINE = true;
                     break;
                 }
-                data.fullscreen = (*i).getString() == "on";
+                data.fullscreen = i->getString() == "on";
                 ++i;
                 EXPECT(Item::NEWLINE);
 
@@ -232,7 +229,7 @@ ConfigData Config::loadConfig(const std::string &filename)
 
                 EXPECT(Item::STRING);
                 data.language = "";
-                std::string str = (*i).getString();
+                std::string str = i->getString();
                 for (std::string::const_iterator si = str.cbegin(); si != str.cend(); ++si)
                     data.language.push_back(*si);
 
@@ -247,12 +244,12 @@ ConfigData Config::loadConfig(const std::string &filename)
                 ++i;
 
                 EXPECT(Item::KEYWORD);
-                if ((*i).getString() != "on" && (*i).getString() != "off") {
-                    std::cerr << "Error: on or off expected, but " << Item::typeToString((*i).type) << " found." << std::endl;
+                if (i->getString() != "on" && i->getString() != "off") {
+                    std::cerr << "Error: on or off expected, but " << Item::typeToString(i->type) << " found." << std::endl;
                     goToNextNEWLINE = true;
                     break;
                 }
-                data.resizable = (*i).getString() == "on";
+                data.resizable = i->getString() == "on";
                 ++i;
                 EXPECT(Item::NEWLINE);
 
@@ -264,12 +261,12 @@ ConfigData Config::loadConfig(const std::string &filename)
                 ++i;
 
                 EXPECT(Item::KEYWORD);
-                if ((*i).getString() != "on" && (*i).getString() != "off") {
-                    std::cerr << "Error: on or off expected, but " << Item::typeToString((*i).type) << " found." << std::endl;
+                if (i->getString() != "on" && i->getString() != "off") {
+                    std::cerr << "Error: on or off expected, but " << Item::typeToString(i->type) << " found." << std::endl;
                     goToNextNEWLINE = true;
                     break;
                 }
-                data.vsync = (*i).getString() == "on";
+                data.vsync = i->getString() == "on";
                 ++i;
                 EXPECT(Item::NEWLINE);
 
@@ -281,12 +278,12 @@ ConfigData Config::loadConfig(const std::string &filename)
                 ++i;
 
                 EXPECT(Item::KEYWORD);
-                if ((*i).getString() != "on" && (*i).getString() != "off") {
-                    std::cerr << "Error: on or off expected, but " << Item::typeToString((*i).type) << " found." << std::endl;
+                if (i->getString() != "on" && i->getString() != "off") {
+                    std::cerr << "Error: on or off expected, but " << Item::typeToString(i->type) << " found." << std::endl;
                     goToNextNEWLINE = true;
                     break;
                 }
-                data.stencilBuffer = (*i).getString() == "on";
+                data.stencilBuffer = i->getString() == "on";
                 ++i;
                 EXPECT(Item::NEWLINE);
 
@@ -298,7 +295,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                 ++i;
 
                 EXPECT(Item::INT);
-                data.renderDistance = (*i).getInt();
+                data.renderDistance = i->getInt();
                 ++i;
 
                 EXPECT(Item::NEWLINE);
@@ -319,7 +316,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                 ++i;
 
                 EXPECT(Item::INT);
-                data.controls.up = (EKEY_CODE)(*i).getInt();
+                data.controls.up = (EKEY_CODE)i->getInt();
                 ++i;
                 EXPECT(Item::NEWLINE);
 
@@ -331,7 +328,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                 ++i;
 
                 EXPECT(Item::INT);
-                data.controls.left = (EKEY_CODE)(*i).getInt();
+                data.controls.left = (EKEY_CODE)i->getInt();
                 ++i;
                 EXPECT(Item::NEWLINE);
 
@@ -343,7 +340,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                 ++i;
 
                 EXPECT(Item::INT);
-                data.controls.down = (EKEY_CODE)(*i).getInt();
+                data.controls.down = (EKEY_CODE)i->getInt();
                 ++i;
                 EXPECT(Item::NEWLINE);
 
@@ -355,7 +352,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                 ++i;
 
                 EXPECT(Item::INT);
-                data.controls.right = (EKEY_CODE)(*i).getInt();
+                data.controls.right = (EKEY_CODE)i->getInt();
                 ++i;
                 EXPECT(Item::NEWLINE);
 
@@ -367,7 +364,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                 ++i;
 
                 EXPECT(Item::INT);
-                data.controls.cwRoll = (EKEY_CODE)(*i).getInt();
+                data.controls.cwRoll = (EKEY_CODE)i->getInt();
                 ++i;
                 EXPECT(Item::NEWLINE);
 
@@ -379,7 +376,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                 ++i;
 
                 EXPECT(Item::INT);
-                data.controls.ccwRoll = (EKEY_CODE)(*i).getInt();
+                data.controls.ccwRoll = (EKEY_CODE)i->getInt();
                 ++i;
                 EXPECT(Item::NEWLINE);
 
