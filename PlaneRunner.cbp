@@ -126,6 +126,7 @@
 		<Unit filename="src/ObstacleGenerator.cpp" />
 		<Unit filename="src/Plane.cpp" />
 		<Unit filename="src/PlaneControl.cpp" />
+		<Unit filename="src/obstacles/Torus.cpp" />
 		<Unit filename="src/util.cpp" />
 		<Extensions>
 			<code_completion />
