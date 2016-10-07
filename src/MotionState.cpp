@@ -53,7 +53,7 @@ void MotionState::setWorldTransform(const btTransform &worldTrans)
         core::quaternion q(quatRotation.x(), quatRotation.y(), quatRotation.z(), quatRotation.w());
         q.toEuler(eulerRotation);
         eulerRotation *= core::RADTODEG;
-        node->setRotation(eulerRotation);;
+        node->setRotation(eulerRotation);
 
         // position
         btVector3 pos = worldTrans.getOrigin();

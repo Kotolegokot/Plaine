@@ -224,7 +224,7 @@ void ObjMesh::loadMesh(const std::string &filename)
 
                     while (i->type != Item::NEWLINE) {
                         EXPECT(Item::INT);
-                        polygon.push_back(i->getInt());
+                        polygon.push_back(i->getInt() - 1);
                         ++i;
 
                         if (i->type == Item::SLASH) {

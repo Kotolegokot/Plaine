@@ -103,6 +103,7 @@
 		</Linker>
 		<Unit filename="include/CGUITTFont.h" />
 		<Unit filename="include/Config.h" />
+		<Unit filename="include/DebugDrawer.h" />
 		<Unit filename="include/EventReceiver.h" />
 		<Unit filename="include/GUI.h" />
 		<Unit filename="include/Game.h" />
@@ -123,6 +124,7 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="src/CGUITTFont.cpp" />
 		<Unit filename="src/Config.cpp" />
+		<Unit filename="src/DebugDrawer.cpp" />
 		<Unit filename="src/EventReceiver.cpp" />
 		<Unit filename="src/GUI.cpp" />
 		<Unit filename="src/Game.cpp" />
