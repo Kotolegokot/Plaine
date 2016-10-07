@@ -1,3 +1,3 @@
 #include "Icosahedron.h"
 
-btCollisionShape *Icosahedron::commonShape = nullptr;
+btConvexHullShape *Icosahedron::commonShape = nullptr;

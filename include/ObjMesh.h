@@ -16,6 +16,7 @@ public:
     ObjMesh(const std::string &filename);
     void loadMesh(const std::string &filename);
     btTriangleMesh *getTriangleMesh();
+    void setPoints(btConvexHullShape *shape);
 
 private:
     std::vector<btVector3> vertices;

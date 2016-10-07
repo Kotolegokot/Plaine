@@ -51,8 +51,11 @@ protected:
     virtual void createShape()
     {
         if (!commonShape) {
-            commonShape = new btConvexTriangleMeshShape(ObjMesh(ICOSAHEDRON_MODEL).getTriangleMesh());
-            commonShape->setLocalScaling(btVector3(200, 200, 200));
+            ObjMesh objMesh(ICOSAHEDRON_MODEL);
+
+            commonShape = new btConvexHullShape();
+            objMesh.setPoints(commonShape);
+            commonShape->setLocalScaling(btVector3(200, 200 ,200));
         }
 
         shape = commonShape;
@@ -65,7 +68,7 @@ private:
     btVector3 position;
     f32 radius;
 
-    static btCollisionShape *commonShape;
+    static btConvexHullShape *commonShape;
 };
 
 #endif // ICOSAHEDRON_H
