@@ -529,9 +529,9 @@ void Game::run()
                     gui->selectPreviousElement();
                 eventReceiver->upPressed = false;
             }
-            if (eventReceiver->rightPressed)
+            if (eventReceiver->IsKeyDown(KEY_RIGHT))
             {
-                if (guiEnvironment->getFocus() != nullptr)
+                if ((!eventReceiver->rightPressed) && (guiEnvironment->getFocus() != nullptr))
                 {
                     SEvent event;
                     event.EventType = EET_GUI_EVENT;
@@ -539,9 +539,10 @@ void Game::run()
                     event.GUIEvent.Element = guiEnvironment->getFocus();
                     event.GUIEvent.EventType = gui::EGET_BUTTON_CLICKED;
                     device->postEventFromUser(event);
+                    eventReceiver->rightPressed = true;
                 }
+            } else
                 eventReceiver->rightPressed = false;
-            }
             if (eventReceiver->leftPressed)
             {
                 eventReceiver->state = MENU;
