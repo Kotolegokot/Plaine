@@ -272,6 +272,37 @@ void GUI::terminateControlSettingsGUI()
     textScreenSize->remove();
 }
 
+void GUI::updateSelection()
+{
+    std::cout << guiEnvironment->getFocus()->getTypeName() << std::endl;
+    std::cout << guiEnvironment->getFocus()->getText() << std::endl;
+    switch (state)
+    {
+    case(MENU):
+        {
+            buttonStart->setText(_wp("Start"));
+            buttonSettings->setText(_wp("Settings"));
+            buttonQuit->setText(_wp("Quit"));
+            std::cout << "!!!" << std::endl;
+            core::stringw str = ">";
+            str += guiEnvironment->getFocus()->getText();
+            str += "<";
+            guiEnvironment->getFocus()->setText(str.c_str());
+            break;
+        }
+    case(INGAME_MENU):
+            break;
+        case(HUD):
+            break;
+    case(SETTINGS):
+            break;
+     case(CONTROL_SETTINGS):
+            break;
+    case(TERMINATED):
+        break;
+    }
+}
+
 void GUI::terminate()
 {
     //choose specific method for terminating GUI

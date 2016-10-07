@@ -14,6 +14,8 @@ bool EventReceiver::OnEvent(const SEvent &event)
     if (event.EventType == EET_KEY_INPUT_EVENT) {
         if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
             pressedKeys[event.KeyInput.Key] = event.KeyInput.PressedDown;
+            if (pressedKeys[KEY_TAB])
+                tabPressed = true;
             return escapePressed;
         } else {
             lastKey = event.KeyInput.Key;

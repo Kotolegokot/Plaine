@@ -57,6 +57,7 @@ public:
     void terminate();
     void resizeGUI();
     void setVisible(bool visible);
+    void updateSelection();
     GUIState getState();
 private:
     GUIState state;

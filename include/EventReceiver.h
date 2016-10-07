@@ -32,6 +32,7 @@ public:
     bool toggleResolution = false;
     bool toggleLanguage = false;
     bool escapePressed = false;
+    bool tabPressed = false;
 
     // states of GUI
     //

@@ -312,6 +312,11 @@ void Game::menu()
                 gui->initialize(SETTINGS);
             }
         }
+        if ((guiEnvironment->getFocus() != nullptr) && (eventReceiver->tabPressed))
+        {
+            gui->updateSelection();
+            eventReceiver->tabPressed = false;
+        }
         // control settings
         if (eventReceiver->state == CONTROL_SETTINGS) {
                 // if "default" button is pressed
