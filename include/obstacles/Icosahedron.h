@@ -13,7 +13,7 @@ class Icosahedron : public IBody
 {
 public:
     Icosahedron(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, f32 radius) :
-        IBody(world), device(device), position(position), radius(radius)
+        IBody(world, device, position), radius(radius)
     {
         createBody();
     }
@@ -63,9 +63,7 @@ protected:
 
 
 private:
-    IrrlichtDevice *device = nullptr;
     scene::IMesh *mesh = nullptr;
-    btVector3 position;
     f32 radius;
 
     static btConvexHullShape *commonShape;

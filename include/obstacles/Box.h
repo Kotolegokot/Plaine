@@ -11,7 +11,7 @@ class Box : public IBody
 {
 public:
     Box(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, const btVector3 &halfExtents) :
-        IBody(world), device(device), position(position), halfExtents(halfExtents)
+        IBody(world, device, position), halfExtents(halfExtents)
     {
         createBody();
     }
@@ -48,8 +48,6 @@ protected:
     }
 
 private:
-    IrrlichtDevice *device = nullptr;
-    btVector3 position;
     btVector3 halfExtents;
 };
 

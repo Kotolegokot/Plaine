@@ -107,14 +107,16 @@
 		<Unit filename="include/GUI.h" />
 		<Unit filename="include/Game.h" />
 		<Unit filename="include/IBody.h" />
+		<Unit filename="include/IObstacle.h" />
 		<Unit filename="include/MotionState.h" />
 		<Unit filename="include/ObjMesh.h" />
 		<Unit filename="include/ObstacleGenerator.h" />
 		<Unit filename="include/Plane.h" />
 		<Unit filename="include/PlaneControl.h" />
-		<Unit filename="include/obstacles/Cube.h" />
+		<Unit filename="include/obstacles/Box.h" />
 		<Unit filename="include/obstacles/Icosahedron.h" />
 		<Unit filename="include/obstacles/Torus.h" />
+		<Unit filename="include/obstacles/Tunnel.h" />
 		<Unit filename="include/util.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/CGUITTFont.cpp" />

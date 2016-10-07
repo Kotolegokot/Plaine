@@ -5,6 +5,8 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 
+using namespace irr;
+
 class IObstacle
 {
 public:
@@ -25,7 +27,6 @@ public:
 protected:
     btDynamicsWorld *world = nullptr;
     IrrlichtDevice *device = nullptr;
-
     btVector3 position;
 };
 

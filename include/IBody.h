@@ -4,15 +4,16 @@
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
+#include "IObstacle.h"
 #include "MotionState.h"
 
 // this class is a useful interface joining together
 // an Irrlicht node and a Bullet body
-class IBody
+class IBody : public IObstacle
 {
 public:
-    IBody(btDynamicsWorld *world) :
-        world(world) {}
+    IBody(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position) :
+        IObstacle(world, device, position) {}
 
     virtual ~IBody()
     {
@@ -57,8 +58,6 @@ protected:
         rigidBody = new btRigidBody(rigidBodyCI);
         world->addRigidBody(rigidBody);
     }
-
-    btDynamicsWorld *world = nullptr;
 
     // created inside, must be deleted in desctructor
     scene::ISceneNode *node = nullptr;

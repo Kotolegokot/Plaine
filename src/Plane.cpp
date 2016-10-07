@@ -1,7 +1,9 @@
 #include "Plane.h"
 
+using namespace irr;
+
 Plane::Plane(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position) :
-    IBody(world), device(device), position(position)
+    IBody(world, device, position)
 {
     createBody();
     //rigidBody->setAngularFactor(btVector3(0, 0, 1));

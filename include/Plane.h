@@ -54,8 +54,6 @@ protected:
     virtual btScalar getMass() override;
 
 private:
-    IrrlichtDevice *device = nullptr;
-    btVector3 position;
     scene::IMesh *planeMesh = nullptr;
 };
 

@@ -6,11 +6,11 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "MotionState.h"
-#include "IBody.h"
-//#include "obstacles/Box.h"
-//#include "obstacles/Torus.h"
-//#include "obstacles/Icosahedron.h"
 #include "IObstacle.h"
+#include "IBody.h"
+#include "obstacles/Box.h"
+#include "obstacles/Torus.h"
+#include "obstacles/Icosahedron.h"
 #include "obstacles/Tunnel.h"
 
 #define REMOVE_CENTER
