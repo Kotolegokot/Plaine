@@ -16,8 +16,8 @@ struct Controls {
     EKEY_CODE down  =  KEY_KEY_S;
     EKEY_CODE left  =  KEY_KEY_A;
     EKEY_CODE right  =  KEY_KEY_D;
-    EKEY_CODE cwRoll = KEY_KEY_E;
     EKEY_CODE ccwRoll = KEY_KEY_Q;
+    EKEY_CODE cwRoll = KEY_KEY_E;
 };
 
 // structure containing all the configuration info

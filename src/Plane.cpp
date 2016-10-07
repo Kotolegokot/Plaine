@@ -4,22 +4,18 @@ Plane::Plane(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &po
     IBody(world), device(device), position(position)
 {
     createBody();
-    rigidBody->setAngularFactor(btVector3(0, 0, 1));
+    //rigidBody->setAngularFactor(btVector3(0, 0, 1));
 
     world->setInternalTickCallback(
         [](btDynamicsWorld *world, btScalar timeStep)
         {
             Plane *plane = static_cast<Plane *>(world->getWorldUserInfo());
-
             btVector3 aV = plane->getRigidBody()->getAngularVelocity();
             btScalar aVLength = aV.length();
             if (aVLength > 0) {
                 aV.safeNormalize();
 
-                if (aVLength < 0.04f)
-                    aV *= 0;
-                else
-                    aV *= aVLength - 0.04f;
+                aV *= aVLength - 0.1f*aVLength*aVLength;
 
                 plane->getRigidBody()->setAngularVelocity(aV);
             }
