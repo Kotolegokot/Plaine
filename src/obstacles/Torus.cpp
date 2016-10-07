@@ -1,3 +1,3 @@
-#include "Torus.h"
+#include "obstacles/Torus.h"
 
 btCollisionShape *Torus::commonShape = nullptr;

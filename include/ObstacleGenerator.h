@@ -11,6 +11,7 @@
 #include "obstacles/Box.h"
 #include "obstacles/Torus.h"
 #include "obstacles/Icosahedron.h"
+#include "obstacles/Icosphere2.h"
 #include "obstacles/Tunnel.h"
 
 #define REMOVE_CENTER
