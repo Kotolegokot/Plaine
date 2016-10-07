@@ -1,5 +1,5 @@
-#ifndef CUBE_H
-#define CUBE_H
+#ifndef BOX_H
+#define BOX_H
 
 #include "IBody.h"
 
@@ -7,25 +7,26 @@
 
 using namespace irr;
 
-class Cube : public IBody
+class Box : public IBody
 {
 public:
-    Cube(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, f32 side) :
-        IBody(world), device(device), position(position), side(side)
+    Box(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, const btVector3 &halfExtents) :
+        IBody(world), device(device), position(position), halfExtents(halfExtents)
     {
         createBody();
     }
 
     virtual btScalar getMass() override
     {
-        return side*side*side*MASS_COEFFICIENT;
+        return halfExtents.x()*halfExtents.y()*halfExtents.z()*MASS_COEFFICIENT;
     }
 
 protected:
     virtual void createNode() override
     {
-        node = device->getSceneManager()->addCubeSceneNode(side, 0, -1,
+        node = device->getSceneManager()->addCubeSceneNode(1, 0, -1,
             core::vector3df(position.x(), position.y(), position.z()));
+        node->setScale(core::vector3df(halfExtents.x() * 2, halfExtents.y() * 2, halfExtents.z() * 2));
         node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
 
         // just for cubes' beauty
@@ -43,13 +44,13 @@ protected:
     virtual void createShape() override
     {
         // create shape for cubes
-        shape = new btBoxShape(btVector3(side/2, side/2, side/2));
+        shape = new btBoxShape(halfExtents);
     }
 
 private:
     IrrlichtDevice *device = nullptr;
     btVector3 position;
-    f32 side;
+    btVector3 halfExtents;
 };
 
-#endif // CUBE_H
+#endif // BOX_H

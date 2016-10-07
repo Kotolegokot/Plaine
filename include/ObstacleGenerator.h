@@ -7,7 +7,7 @@
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "MotionState.h"
 #include "IBody.h"
-#include "obstacles/Cube.h"
+#include "obstacles/Box.h"
 #include "obstacles/Torus.h"
 #include "obstacles/Icosahedron.h"
 
