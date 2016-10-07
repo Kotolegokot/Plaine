@@ -9,9 +9,9 @@ ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, btDynamicsWorld *wo
 ObstacleGenerator::~ObstacleGenerator()
 {
     // remove all stored cubes
-    while (!cubes.empty()) {
-        delete cubes.front();
-        cubes.pop_front();
+    while (!obstacles.empty()) {
+        delete obstacles.front();
+        obstacles.pop_front();
     }
 }
 
@@ -42,18 +42,20 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
 
                     // create the cube and add it to the deque
                     if(std::abs(newX) > 400) {
-                        IBody *body = nullptr;
+                        /*IBody *body = nullptr;
                         body = new Box(world, device, btVector3(newX, newY, newZ),
                             btVector3(getRandomf(50.0f, 250.0f), getRandomf(50.f, 250.f), getRandomf(50.f, 250.f)));
                         //body = new Torus(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
-                        //body = new Icosahedron(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
+                        //body = new Icosahedron(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));*/
+                        IObstacle *obstacle = nullptr;
+                        obstacle = new Tunnel(world, device, btVector3(newX, newY, newZ), getRandomf(100, 200), getRandomf(300, 600));
 
-                        if (int(getRandomf(1, 1)) == 1)
-                            body->getRigidBody()->applyTorqueImpulse(btVector3(getRandomf(-10000, 10000), getRandomf(-10000, 10000), getRandomf(-10000, 10000))*body->getMass());
-                        if (int(getRandomf(1, 1)) == 1)
-                            body->getRigidBody()->applyCentralImpulse(btVector3(getRandomf(-100, 100), getRandomf(-100, 100), getRandomf(-100, 100))*body->getMass());
-                        cubes.push_back(body);
-                        cubeCount++;
+                        //if (int(getRandomf(1, 1)) == 1)
+                        //    body->getRigidBody()->applyTorqueImpulse(btVector3(getRandomf(-10000, 10000), getRandomf(-10000, 10000), getRandomf(-10000, 10000))*body->getMass());
+                        //if (int(getRandomf(1, 1)) == 1)
+                        //    body->getRigidBody()->applyCentralImpulse(btVector3(getRandomf(-100, 100), getRandomf(-100, 100), getRandomf(-100, 100))*body->getMass());
+                        obstacles.push_back(obstacle);
+                        obstacleCount++;
                     }
                 }
             }
@@ -78,12 +80,12 @@ f32 ObstacleGenerator::preciseEdge(f32 edge) const
 // removes obstacles behind the player
 void ObstacleGenerator::removeLeftBehind(f32 playerZ)
 {
-    while (!cubes.empty()) {
-        if (cubes.front()->getNode()->getPosition().Z < playerZ - buffer)
+    while (!obstacles.empty()) {
+        if (obstacles.front()->getPosition().z() < playerZ - buffer)
         {
-            delete cubes.front();
-            cubes.pop_front();
-            cubeCount--;
+            delete obstacles.front();
+            obstacles.pop_front();
+            obstacleCount--;
         } else
             break;
     }
@@ -91,7 +93,7 @@ void ObstacleGenerator::removeLeftBehind(f32 playerZ)
 
 u32 ObstacleGenerator::getCubeCount() const
 {
-    return cubeCount;
+    return obstacleCount;
 }
 
 f32 ObstacleGenerator::farValueWithBuffer() const

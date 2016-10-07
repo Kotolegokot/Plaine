@@ -7,9 +7,11 @@
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "MotionState.h"
 #include "IBody.h"
-#include "obstacles/Box.h"
-#include "obstacles/Torus.h"
-#include "obstacles/Icosahedron.h"
+//#include "obstacles/Box.h"
+//#include "obstacles/Torus.h"
+//#include "obstacles/Icosahedron.h"
+#include "IObstacle.h"
+#include "obstacles/Tunnel.h"
 
 #define REMOVE_CENTER
 // average distance between obstacles
@@ -39,9 +41,9 @@ private:
     f32 farValueWithBuffer() const;
 
     IrrlichtDevice *device = nullptr;
-    std::deque<IBody *> cubes;
+    std::deque<IObstacle *> obstacles;
 
-    u32 cubeCount = 0;
+    u32 obstacleCount = 0;
 
     f32 farValue = 0;
     // buffer is used to generate obstacles a bit farther than
