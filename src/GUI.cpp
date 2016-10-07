@@ -274,32 +274,51 @@ void GUI::terminateControlSettingsGUI()
 
 void GUI::updateSelection()
 {
-    std::cout << guiEnvironment->getFocus()->getTypeName() << std::endl;
-    std::cout << guiEnvironment->getFocus()->getText() << std::endl;
     switch (state)
     {
     case(MENU):
-        {
             buttonStart->setText(_wp("Start"));
             buttonSettings->setText(_wp("Settings"));
             buttonQuit->setText(_wp("Quit"));
-            std::cout << "!!!" << std::endl;
-            core::stringw str = ">";
-            str += guiEnvironment->getFocus()->getText();
-            str += "<";
-            guiEnvironment->getFocus()->setText(str.c_str());
             break;
-        }
     case(INGAME_MENU):
+            buttonResume->setText(_wp("Resume"));
+            buttonMenu->setText(_wp("Menu"));
+            buttonQuit->setText(_wp("Quit"));
             break;
         case(HUD):
             break;
     case(SETTINGS):
+            checkBoxVSync->setText(_wp("VSync"));
+            checkBoxStencilBuffer->setText(_wp("Stencil Buffer"));
+            if (!configuration.fullscreen)
+                buttonToggleFullscreen->setText(_wp("Fullscreen"));
+            else
+                buttonToggleFullscreen->setText(_wp("Windowed"));
+            buttonControlSettings->setText(_wp("Controls"));
+            buttonMenu->setText(_wp("Back"));
+            buttonQuit->setText(_wp("Quit"));
             break;
      case(CONTROL_SETTINGS):
+            buttonControlUp->setText(keyCodeName(configuration.controls.up).c_str());
+            buttonControlLeft->setText(keyCodeName(configuration.controls.left).c_str());
+            buttonControlDown->setText(keyCodeName(configuration.controls.down).c_str());
+            buttonControlRight->setText(keyCodeName(configuration.controls.right).c_str());
+            buttonControlCcwRoll->setText(keyCodeName(configuration.controls.ccwRoll).c_str());
+            buttonControlCwRoll->setText(keyCodeName(configuration.controls.cwRoll).c_str());
+            buttonDefaultControls->setText(_wp("Default"));
+            buttonSettings->setText(_wp("Settings"));
+            buttonQuit->setText(_wp("Quit"));
             break;
     case(TERMINATED):
         break;
+    }
+    if (!guiEnvironment->getFocus()->hasType(gui::EGUIET_EDIT_BOX))
+    {
+        core::stringw str = ">";
+        str += guiEnvironment->getFocus()->getText();
+        str += "<";
+        guiEnvironment->getFocus()->setText(str.c_str());
     }
 }
 

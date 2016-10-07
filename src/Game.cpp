@@ -461,6 +461,11 @@ void Game::run()
                 gui->initialize(HUD);
                 eventReceiver->toggleGUI = false;
             }
+            if ((guiEnvironment->getFocus() != nullptr) && (eventReceiver->tabPressed))
+            {
+                gui->updateSelection();
+                eventReceiver->tabPressed = false;
+            }
         } else {
             // setting fog color
             driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300, configuration.renderDistance, 0.01f, true, true);
