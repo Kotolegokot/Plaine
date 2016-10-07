@@ -16,10 +16,16 @@ bool EventReceiver::OnEvent(const SEvent &event)
             pressedKeys[event.KeyInput.Key] = event.KeyInput.PressedDown;
             if (pressedKeys[KEY_TAB])
                 tabPressed = true;
+            if (pressedKeys[KEY_UP])
+                upPressed = true;
+            if (pressedKeys[KEY_LEFT])
+                leftPressed = true;
+            if (pressedKeys[KEY_DOWN])
+                downPressed = true;
             return escapePressed;
-        } else {
+        } else
             lastKey = event.KeyInput.Key;
-            }
+
     }
 
     // if the event is related to GUI

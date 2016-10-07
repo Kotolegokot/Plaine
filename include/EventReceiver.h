@@ -33,6 +33,10 @@ public:
     bool toggleLanguage = false;
     bool escapePressed = false;
     bool tabPressed = false;
+    bool upPressed = false;
+    bool leftPressed = false;
+    bool downPressed = false;
+    bool rightPressed = false;
 
     // states of GUI
     //
