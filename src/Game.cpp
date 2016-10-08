@@ -166,7 +166,7 @@ void Game::menu()
         if (eventReceiver->quit) {
             break;
         }
-        // esc key reactions in different GUI states
+        // escape key reactions in different GUI states
         if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
             if (!eventReceiver->escapePressed)
             {
@@ -332,10 +332,10 @@ void Game::menu()
                     eventReceiver->changingControlDown || eventReceiver->changingControlRight ||
                     eventReceiver->changingControlCwRoll || eventReceiver->changingControlCcwRoll))
                 {
-                    //if something pressed after choice of key that user want to replace
+                    //if something has been pressed after choice of key that user want to replace
                    if (eventReceiver->lastKey != KEY_KEY_CODES_COUNT)
                    {
-                       // and if it's not an esc or another inappropriate key
+                       // and if it's not escape or another inappropriate key
                        if ((eventReceiver->lastKey != KEY_ESCAPE) &&
                            (keyCodeName(eventReceiver->lastKey) != ""))
                         {

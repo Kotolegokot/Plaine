@@ -23,9 +23,10 @@ public:
 protected:
     virtual void createNode() override
     {
+        // 0(parent) - root node: -1- ID;
         node = device->getSceneManager()->addCubeSceneNode(side, 0, -1,
             core::vector3df(position.x(), position.y(), position.z()));
-        node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
+        node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png")); // 0 - texture layer
 
         // just for cubes' beauty
         node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
@@ -36,6 +37,7 @@ protected:
 
     virtual void createMotionState() override
     {
+        // quaternion(0,0,0,1) means no rotation
         motionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1), position), node);
     }
 
@@ -116,7 +118,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
 
 f32 ObstacleGenerator::preciseEdge(f32 edge) const
 {
-    return edge - (edge - floor(edge / STEP)*STEP);
+    return floor(edge / STEP)*STEP;
 }
 
 // removes obstacles behind the player
