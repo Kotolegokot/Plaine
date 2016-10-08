@@ -1,6 +1,7 @@
 #ifndef DEBUGDRAWER_H
 #define DEBUGDRAWER_H
 
+#include <iostream>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>

@@ -22,7 +22,7 @@ void DebugDrawer::drawContactPoint(const btVector3 &PointOnB, const btVector3 &n
 
 void DebugDrawer::reportErrorWarning(const char *warningString)
 {
-
+    std::cerr << "Error: " << warningString << std::endl;
 }
 
 void DebugDrawer::draw3dText(const btVector3 &location, const char *textString)
