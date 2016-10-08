@@ -29,7 +29,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                 insideZ = z <= generatedEdgeZ;
 
                 bool inside = insideX && insideY && insideZ;
-#ifdef REMOVE_CENTER
+#ifdef DEBUG
                 inside = inside || (x >= -500 && x <= 500);
 #endif
 

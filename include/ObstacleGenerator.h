@@ -15,7 +15,6 @@
 #include "obstacles/Icosphere2.h"
 #include "obstacles/Tunnel.h"
 
-#define REMOVE_CENTER
 // average distance between obstacles
 #define STEP 800
 
