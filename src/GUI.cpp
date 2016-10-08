@@ -102,7 +102,7 @@ void GUI::initializeHUD()
     textFPS->setBackgroundColor(video::SColor(120, 255, 255, 255));
     textVelocity = guiEnvironment->addStaticText(L"Velocity", core::rect<s32>(10, 10 + 24 + 24 + 24, 400, 30 + 24 + 24 + 24), false);
     textVelocity->setBackgroundColor(video::SColor(120, 255, 255, 255));
-    textPoints = guiEnvironment->addStaticText(L"Points", core::rect<s32>(10, 10 + 24 + 24 + 24+24, 400, 30 + 24 + 24 + 24+24), false);
+    textPoints = guiEnvironment->addStaticText(L"Points", core::rect<s32>(10, 10 + 24 + 24 + 24 + 24, 400, 30 + 24 + 24 + 24 + 24), false);
     textPoints->setBackgroundColor(video::SColor(120, 255, 255, 255));
 }
 
