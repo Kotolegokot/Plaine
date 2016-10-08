@@ -75,7 +75,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
 
 f32 ObstacleGenerator::preciseEdge(f32 edge) const
 {
-    return edge - (edge - floor(edge / STEP)*STEP);
+    return floor(edge / STEP)*STEP;
 }
 
 // removes obstacles behind the player

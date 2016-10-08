@@ -170,7 +170,7 @@ void Game::menu()
         if (eventReceiver->quit) {
             break;
         }
-        // esc key reactions in different GUI states
+        // escape key reactions in different GUI states
         if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
             if (!eventReceiver->escapePressed)
             {
@@ -336,12 +336,12 @@ void Game::menu()
                     eventReceiver->changingControlDown || eventReceiver->changingControlRight ||
                     eventReceiver->changingControlCwRoll || eventReceiver->changingControlCcwRoll))
                 {
-                    //if something pressed after choice of key that user want to replace
+                    //if something has been pressed after choice of key that user want to replace
                    if (eventReceiver->lastKey != KEY_KEY_CODES_COUNT)
                    {
-                       // and if it's not an esc or another inappropriate key
+                       // and if it's not escape or another inappropriate key
                        if ((eventReceiver->lastKey != KEY_ESCAPE) &&
-                           keyCodeName(eventReceiver->lastKey) != "")
+                           (keyCodeName(eventReceiver->lastKey) != ""))
                         {
                             //if key is already occupied somewhere
                             if (eventReceiver->lastKey == configuration.controls.up)
@@ -406,7 +406,59 @@ void Game::menu()
         scrs += "x";
         scrs += configuration.resolution.Height;
         gui->textScreenSize->setText(scrs.c_str());
-
+        if ((guiEnvironment->getFocus() != nullptr) && (eventReceiver->tabPressed))
+        {
+            gui->updateSelection();
+            eventReceiver->tabPressed = false;
+        }
+        if (eventReceiver->downPressed)
+        {
+            if (guiEnvironment->getFocus() == nullptr)
+                gui->selectElement(0);
+            else
+            {
+                gui->selectNextElement();
+            }
+            eventReceiver->downPressed = false;
+        }
+        if (eventReceiver->upPressed)
+        {
+            if (guiEnvironment->getFocus() == nullptr)
+                gui->selectElement(0);
+            else
+            {
+                gui->selectPreviousElement();
+            }
+            eventReceiver->upPressed = false;
+        }
+        if (eventReceiver->IsKeyDown(KEY_RIGHT))
+        {
+            if ((!eventReceiver->rightPressed) && (guiEnvironment->getFocus()->getType() == gui::EGUIET_BUTTON) && (guiEnvironment->getFocus() != nullptr))
+            {
+                    SEvent event;
+                    event.EventType = EET_GUI_EVENT;
+                    event.GUIEvent.Caller = guiEnvironment->getFocus();
+                    event.GUIEvent.Element = guiEnvironment->getFocus();
+                    event.GUIEvent.EventType = gui::EGET_BUTTON_CLICKED;
+                    device->postEventFromUser(event);
+                    eventReceiver->rightPressed = true;
+            }
+        } else
+                eventReceiver->rightPressed = false;
+        if (eventReceiver->leftPressed)
+        {
+            if (eventReceiver->state == SETTINGS)
+            {
+                eventReceiver->state = MENU;
+                eventReceiver->toggleGUI = true;
+            }
+            else if (eventReceiver->state == CONTROL_SETTINGS)
+            {
+                eventReceiver->state = SETTINGS;
+                eventReceiver->toggleGUI = true;
+            }
+            eventReceiver->leftPressed = false;
+        }
         if (device->isWindowActive()) {
             driver->beginScene(true, true, iridescentColor(timer->getTime()));
             guiEnvironment->drawAll();
@@ -459,6 +511,48 @@ void Game::run()
                 gui->terminate();
                 gui->initialize(HUD);
                 eventReceiver->toggleGUI = false;
+            }
+            if ((guiEnvironment->getFocus() != nullptr) && (eventReceiver->tabPressed))
+            {
+                gui->updateSelection();
+                eventReceiver->tabPressed = false;
+            }
+            if (eventReceiver->downPressed)
+            {
+                if (guiEnvironment->getFocus() == nullptr)
+                    gui->selectElement(0);
+                else
+                    gui->selectNextElement();
+                eventReceiver->downPressed = false;
+            }
+            if (eventReceiver->upPressed)
+            {
+                if (guiEnvironment->getFocus() == nullptr)
+                    gui->selectElement(0);
+                else
+                    gui->selectPreviousElement();
+                eventReceiver->upPressed = false;
+            }
+            if (eventReceiver->IsKeyDown(KEY_RIGHT))
+            {
+                if ((!eventReceiver->rightPressed) && (guiEnvironment->getFocus() != nullptr))
+                {
+                    SEvent event;
+                    event.EventType = EET_GUI_EVENT;
+                    event.GUIEvent.Caller = guiEnvironment->getFocus();
+                    event.GUIEvent.Element = guiEnvironment->getFocus();
+                    event.GUIEvent.EventType = gui::EGET_BUTTON_CLICKED;
+                    device->postEventFromUser(event);
+                    eventReceiver->rightPressed = true;
+                }
+            } else
+                eventReceiver->rightPressed = false;
+            if (eventReceiver->leftPressed)
+            {
+                eventReceiver->state = MENU;
+                eventReceiver->toggleGUI = true;
+                eventReceiver->leftPressed = false;
+                break;
             }
         } else {
             // setting fog color
@@ -516,6 +610,13 @@ void Game::run()
                 camera->setUpVector(upVector);
 
                 camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
+            }
+
+            //set points counter
+            {
+                 core::stringw points = _w("Points: ");
+                 points += (int) (plane ->getNode()->getPosition().Z *0.01);
+                 gui->textPoints->setText(points.c_str());
             }
 
             //set cursor invisible

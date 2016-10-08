@@ -3,6 +3,7 @@
 
 #include "Config.h"
 #include "util.h"
+#include <vector>
 
 enum GUIState { MENU, INGAME_MENU, HUD, SETTINGS, CONTROL_SETTINGS, TERMINATED };
 
@@ -36,6 +37,7 @@ public:
     gui::IGUIStaticText *textCubeCount = nullptr;
     gui::IGUIStaticText *textFPS = nullptr;
     gui::IGUIStaticText *textVelocity = nullptr;
+    gui::IGUIStaticText *textPoints = nullptr;
     gui::IGUIStaticText *textResolution = nullptr;
     gui::IGUIStaticText *textRenderDistance = nullptr;
     gui::IGUIStaticText *textLanguage = nullptr;
@@ -48,18 +50,22 @@ public:
     gui::IGUIStaticText *textControlCcwRoll = nullptr;
     gui::IGUICheckBox *checkBoxVSync = nullptr;
     gui::IGUICheckBox *checkBoxStencilBuffer = nullptr;
-    gui::IGUIWindow *settingsMessageBox = nullptr;
     gui::IGUISpinBox *spinBoxRenderDistance = nullptr;
-
 
     void recalculateButtonProportions();
     void initialize(GUIState state);
     void terminate();
     void resizeGUI();
     void setVisible(bool visible);
+    void selectElement(int num);
+    void selectNextElement();
+    void selectPreviousElement();
+    void updateSelection();
     GUIState getState();
 private:
     GUIState state;
+    std::vector<gui::IGUIElement*> selectibleElements;
+    int selectedElement;
     const int SPACE = 10;
 
     void initializeMenuGUI();
