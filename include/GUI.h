@@ -37,6 +37,7 @@ public:
     gui::IGUIStaticText *textCubeCount = nullptr;
     gui::IGUIStaticText *textFPS = nullptr;
     gui::IGUIStaticText *textVelocity = nullptr;
+    gui::IGUIStaticText *textPoints = nullptr;
     gui::IGUIStaticText *textResolution = nullptr;
     gui::IGUIStaticText *textRenderDistance = nullptr;
     gui::IGUIStaticText *textLanguage = nullptr;

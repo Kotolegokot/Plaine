@@ -608,6 +608,13 @@ void Game::run()
                 camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
             }
 
+            //set points counter
+            {
+                 core::stringw points = _w("Points: ");
+                 points += (int) (plane ->getNode()->getPosition().Z *0.01);
+                 gui->textPoints->setText(points.c_str());
+            }
+
             //set cursor invisible
             device->getCursorControl()->setVisible(false);
 
