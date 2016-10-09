@@ -21,6 +21,7 @@
 					<Add option='-isystem&quot;deps/include/irrlicht&quot;' />
 					<Add option='-isystem&quot;/usr/include/bullet&quot;' />
 					<Add option='-isystem&quot;deps/include/bullet&quot;' />
+					<Add option="-DDEBUG" />
 					<Add directory="include" />
 					<Add directory="include/obstacles" />
 				</Compiler>
@@ -60,6 +61,7 @@
 					<Add option='-isystem&quot;deps\include\freetype2&quot;' />
 					<Add option='-isystem&quot;deps\include\irrlicht&quot;' />
 					<Add option='-isystem&quot;deps\include\bullet&quot;' />
+					<Add option="-DDEBUG" />
 					<Add directory="include" />
 					<Add directory="include/obstacles" />
 				</Compiler>
