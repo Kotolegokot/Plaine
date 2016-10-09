@@ -49,8 +49,9 @@ void MotionState::setWorldTransform(const btTransform &worldTrans)
     if (node) {
         // rotation
         core::vector3df eulerRotation;
-        const btQuaternion &quatRotation = worldTrans.getRotation();
-        core::quaternion q(quatRotation.x(), quatRotation.y(), quatRotation.z(), quatRotation.w());
+        btQuaternion quatRotation;
+        worldTrans.getBasis().getRotation(quatRotation);
+        core::quaternion q(quatRotation.getX(), quatRotation.getY(), quatRotation.getZ(), quatRotation.getW());
         q.toEuler(eulerRotation);
         eulerRotation *= core::RADTODEG;
         node->setRotation(eulerRotation);

@@ -92,7 +92,7 @@ void Game::initializeScene()
 
     debugDrawer = new DebugDrawer(device, plane);
 #ifdef DEBUG
-    debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+    //debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 #endif
     dynamicsWorld->setDebugDrawer(debugDrawer);
 
