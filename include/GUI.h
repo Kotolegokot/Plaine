@@ -60,13 +60,15 @@ public:
     void selectElement(int num);
     void selectNextElement();
     void selectPreviousElement();
-    void updateSelection();
+    void selectWithTab();
     GUIState getState();
 private:
     GUIState state;
     std::vector<gui::IGUIElement*> selectibleElements;
     int selectedElement;
     const int SPACE = 10;
+
+    void updateSelection();
 
     void initializeMenuGUI();
     void initializeInGameGUI();

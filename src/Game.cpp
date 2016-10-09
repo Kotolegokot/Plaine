@@ -404,7 +404,7 @@ void Game::menu()
         gui->textScreenSize->setText(scrs.c_str());
         if ((guiEnvironment->getFocus() != nullptr) && (eventReceiver->tabPressed))
         {
-            gui->updateSelection();
+            gui->selectWithTab();
             eventReceiver->tabPressed = false;
         }
         if (eventReceiver->downPressed)
@@ -510,7 +510,7 @@ void Game::run()
             }
             if ((guiEnvironment->getFocus() != nullptr) && (eventReceiver->tabPressed))
             {
-                gui->updateSelection();
+                gui->selectWithTab();
                 eventReceiver->tabPressed = false;
             }
             if (eventReceiver->downPressed)

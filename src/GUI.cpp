@@ -346,6 +346,14 @@ void GUI::updateSelection()
     }
 }
 
+
+void GUI::selectWithTab()
+{
+    for (std::vector<gui::IGUIElement*>::iterator it = selectibleElements.begin(); it != selectibleElements.end(); ++it)
+        if (guiEnvironment->getFocus() == *it)
+            selectedElement = it - selectibleElements.begin();
+    updateSelection();
+}
 void GUI::selectElement(int num)
 {
     guiEnvironment->setFocus(selectibleElements.at(num));
