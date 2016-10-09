@@ -91,7 +91,9 @@ void Game::initializeScene()
     planeControl = new PlaneControl(plane, configuration.controls);
 
     debugDrawer = new DebugDrawer(device, plane);
+#ifdef DEBUG
     debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+#endif
     dynamicsWorld->setDebugDrawer(debugDrawer);
 
     // create camera
@@ -652,6 +654,9 @@ void Game::run()
                 dynamicsWorld->debugDrawWorld();
                 // draw scene
                 sceneManager->drawAll();
+#ifdef DEBUG
+                std::cout << "=== STEP_SIMULATION ===" << std::endl;
+#endif
             }
             guiEnvironment->drawAll();
             driver->endScene();

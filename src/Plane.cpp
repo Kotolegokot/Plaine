@@ -49,7 +49,7 @@ btScalar Plane::getMass()
     return 1;
 }
 
-const btVector3 &Plane::getLinearVelocity() const
+btVector3 Plane::getLinearVelocity() const
 {
     return rigidBody->getLinearVelocity();
 }
@@ -72,7 +72,7 @@ void Plane::setScalarLinearVelocity(btScalar length)
     rigidBody->setLinearVelocity(linearVelocity * length);
 }
 
-const btVector3 &Plane::getAngularVelocity() const
+btVector3 Plane::getAngularVelocity() const
 {
     return rigidBody->getAngularVelocity();
 }
@@ -156,7 +156,7 @@ void Plane::setAxisAngleRotation(const btVector3 &axis, btScalar angle)
     rigidBody->getMotionState()->setWorldTransform(transform);
 }
 
-const btVector3 &Plane::getPosition() const
+btVector3 Plane::getPosition() const
 {
     btTransform transform;
     rigidBody->getMotionState()->getWorldTransform(transform);

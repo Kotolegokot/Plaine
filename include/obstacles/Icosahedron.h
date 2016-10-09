@@ -21,7 +21,7 @@ public:
     virtual ~Icosahedron()
     {
         // so that commonShape is not deleted thousand times within IBody::~IBody
-        shape = nullptr;
+        //shape = nullptr;
     }
 
     virtual btScalar getMass()
@@ -50,7 +50,7 @@ protected:
 
     virtual void createShape()
     {
-        if (!commonShape) {
+        /*if (!commonShape) {
             ObjMesh objMesh(ICOSAHEDRON_MODEL);
 
             commonShape = new btConvexHullShape();
@@ -58,7 +58,10 @@ protected:
             commonShape->setLocalScaling(btVector3(200, 200 ,200));
         }
 
-        shape = commonShape;
+        shape = commonShape;*/
+
+        shape = new btConvexTriangleMeshShape(ObjMesh(ICOSAHEDRON_MODEL).getTriangleMesh());
+        shape->setLocalScaling(btVector3(200, 200, 200));
     }
 
 

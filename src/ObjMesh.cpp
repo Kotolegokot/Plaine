@@ -260,14 +260,15 @@ void ObjMesh::loadMesh(const std::string &filename)
         }
     }
 
-    /*for (std::vector<btVector3>::const_iterator i = vertices.cbegin(); i != vertices.cend(); i++)
-        std::cout << "v " << i->x() << " " << i->y() << " " << i->z() << std::endl;
+    /*std::ofstream out(filename + "_");;
+    for (std::vector<btVector3>::const_iterator i = vertices.cbegin(); i != vertices.cend(); i++)
+        out << "v " << i->x() << " " << i->y() << " " << i->z() << std::endl;
 
     for (std::vector<std::vector<size_t>>::const_iterator i = polygons.cbegin(); i != polygons.cend(); i++) {
-        std::cout << "f ";
+        out << "f ";
         for (std::vector<size_t>::const_iterator j = i->cbegin(); j != i->cend(); j++)
-            std::cout << *j << " ";
-        std::cout << std::endl;
+            out << *j << " ";
+        out << std::endl;
     }*/
 }
 
