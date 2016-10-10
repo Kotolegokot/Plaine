@@ -1,3 +1,3 @@
 #include "obstacles/Cone.h"
 
-btConvexHullShape *Cone::commonShape = nullptr;
+ObjMesh *Cone::objMesh = nullptr;

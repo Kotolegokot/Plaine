@@ -1,6 +1,7 @@
 #ifndef TETRAHEDRON_H
 #define TETRAHEDRON_H
 
+#include <cmath>
 #include "ObjMesh.h"
 #include "IBody.h"
 
@@ -12,21 +13,16 @@ using namespace irr;
 class Tetrahedron : public IBody
 {
 public:
-    Tetrahedron(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, btScalar radius) :
-        IBody(world, device, position), radius(radius)
+    Tetrahedron(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, btScalar edge) :
+        IBody(world, device, position), edge(edge)
     {
         createBody();
     }
 
-    virtual ~Tetrahedron()
-    {
-        // so that commonShape is not deleted thousand times within IBody::~IBody
-        shape = nullptr;
-    }
-
     virtual btScalar getMass()
     {
-        return radius*radius*radius*MASS_COEFFICIENT;
+        constexpr btScalar k = 1 / 6 / std::sqrt(2);
+        return edge * edge * edge * k * MASS_COEFFICIENT;
     }
 
 protected:
@@ -34,7 +30,7 @@ protected:
     {
         mesh = device->getSceneManager()->getMesh(TETRAHEDRON_MODEL);
         node = device->getSceneManager()->addMeshSceneNode(mesh);
-        node->setScale(core::vector3df(200, 200, 200));
+        node->setScale(core::vector3df(edge, edge, edge));
         node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
 
         node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
@@ -50,21 +46,19 @@ protected:
 
     virtual void createShape()
     {
-        if (!commonShape) {
-            commonShape = new btConvexHullShape();
-            ObjMesh(TETRAHEDRON_MODEL).setPoints(commonShape);
-            commonShape->setLocalScaling(btVector3(200, 200 ,200));
-        }
+        if (!objMesh)
+            objMesh = new ObjMesh(TETRAHEDRON_MODEL);
 
-        shape = commonShape;
+        shape = new btConvexHullShape();
+        objMesh->setPoints((btConvexHullShape *) shape);
+        shape->setLocalScaling(btVector3(edge, edge, edge));
     }
-
 
 private:
     scene::IMesh *mesh = nullptr;
-    btScalar radius;
+    btScalar edge;
 
-    static btConvexHullShape *commonShape;
+    static ObjMesh *objMesh;
 };
 
 #endif // TETRAHEDRON_H

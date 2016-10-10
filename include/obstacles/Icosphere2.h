@@ -18,15 +18,10 @@ public:
         createBody();
     }
 
-    virtual ~Icosphere2()
-    {
-        // so that commonShape is not deleted thousand times within IBody::~IBody
-        shape = nullptr;
-    }
-
     virtual btScalar getMass()
     {
-        return radius*radius*radius*MASS_COEFFICIENT;
+        constexpr btScalar k = 4 / 3 * M_PI;
+        return radius*radius*radius*k*MASS_COEFFICIENT;
     }
 
 protected:
@@ -34,7 +29,7 @@ protected:
     {
         mesh = device->getSceneManager()->getMesh(ICOSPHERE2_MODEL);
         node = device->getSceneManager()->addMeshSceneNode(mesh);
-        node->setScale(core::vector3df(200, 200, 200));
+        node->setScale(core::vector3df(radius, radius, radius) * 2);
         node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
 
         node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
@@ -50,13 +45,12 @@ protected:
 
     virtual void createShape()
     {
-        if (!commonShape) {
-            commonShape = new btConvexHullShape();
-            ObjMesh(ICOSPHERE2_MODEL).setPoints(commonShape);
-            commonShape->setLocalScaling(btVector3(200, 200 ,200));
-        }
+        if (!objMesh)
+            objMesh = new ObjMesh(ICOSPHERE2_MODEL);
 
-        shape = commonShape;
+        shape = new btConvexHullShape();
+        objMesh->setPoints((btConvexHullShape *) shape);
+        shape->setLocalScaling(btVector3(radius, radius, radius) * 2);
     }
 
 
@@ -64,7 +58,7 @@ private:
     scene::IMesh *mesh = nullptr;
     btScalar radius;
 
-    static btConvexHullShape *commonShape;
+    static ObjMesh *objMesh;
 };
 
 #endif // ICOSPHERE2_H

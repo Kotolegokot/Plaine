@@ -12,21 +12,16 @@ using namespace irr;
 class Cone : public IBody
 {
 public:
-    Cone(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, btScalar radius, btScalar length) :
-        IBody(world, device, position), radius(radius)
+    Cone(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, btScalar radius, btScalar height) :
+        IBody(world, device, position), radius(radius), height(height)
     {
         createBody();
     }
 
-    virtual ~Cone()
-    {
-        // so that commonShape is not deleted thousand times within IBody::~IBody
-        shape = nullptr;
-    }
-
     virtual btScalar getMass()
     {
-        return radius*radius*radius*MASS_COEFFICIENT;
+        constexpr btScalar k = M_PI / 3;
+        return height*radius*radius*k*MASS_COEFFICIENT;
     }
 
 protected:
@@ -34,7 +29,7 @@ protected:
     {
         mesh = device->getSceneManager()->getMesh(CONE_MODEL);
         node = device->getSceneManager()->addMeshSceneNode(mesh);
-        node->setScale(core::vector3df(200, 200, 200));
+        node->setScale(core::vector3df(radius * 2, height, radius * 2));
         node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
 
         node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
@@ -50,22 +45,21 @@ protected:
 
     virtual void createShape()
     {
-        if (!commonShape) {
-            commonShape = new btConvexHullShape();
-            ObjMesh(CONE_MODEL).setPoints(commonShape);
-            commonShape->setLocalScaling(btVector3(200, 200 ,200));
-        }
+        if (!objMesh)
+            objMesh = new ObjMesh(CONE_MODEL);
 
-        shape = commonShape;
+        shape = new btConvexHullShape();
+        objMesh->setPoints((btConvexHullShape *) shape);
+        shape->setLocalScaling(btVector3(radius * 2, height, radius * 2));
     }
 
 
 private:
     scene::IMesh *mesh = nullptr;
     btScalar radius;
-    btScalar length;
+    btScalar height;
 
-    static btConvexHullShape *commonShape;
+    static ObjMesh *objMesh;
 };
 
 #endif // TETRAHEDRON_H

@@ -1,3 +1,3 @@
 #include "obstacles/Tetrahedron.h"
 
-btConvexHullShape *Tetrahedron::commonShape = nullptr;
+ObjMesh *Tetrahedron::objMesh = nullptr;

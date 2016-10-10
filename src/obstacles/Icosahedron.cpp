@@ -1,3 +1,3 @@
 #include "obstacles/Icosahedron.h"
 
-btConvexHullShape *Icosahedron::commonShape = nullptr;
+ObjMesh *Icosahedron::objMesh = nullptr;
