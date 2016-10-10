@@ -113,6 +113,7 @@
 		<Unit filename="include/Game.h" />
 		<Unit filename="include/IBody.h" />
 		<Unit filename="include/IObstacle.h" />
+		<Unit filename="include/IObstaclePattern.h" />
 		<Unit filename="include/MotionState.h" />
 		<Unit filename="include/ObjMesh.h" />
 		<Unit filename="include/ObstacleGenerator.h" />
