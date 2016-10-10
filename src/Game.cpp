@@ -90,7 +90,7 @@ void Game::initializeScene()
     plane = new Plane(dynamicsWorld, device, btVector3(0, 0, 0));
     planeControl = new PlaneControl(plane, configuration.controls);
 
-    debugDrawer = new DebugDrawer(device, plane);
+    debugDrawer = new DebugDrawer(device);
 //#define DEBUG_DRAWER
 #ifdef DEBUG
 #ifdef DEBUG_DRAWER
