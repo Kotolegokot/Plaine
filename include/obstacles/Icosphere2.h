@@ -20,7 +20,7 @@ public:
 
     virtual btScalar getMass()
     {
-        constexpr btScalar k = 4 / 3 * M_PI;
+        btScalar k = 4 / 3 * M_PI;
         return radius*radius*radius*k*MASS_COEFFICIENT;
     }
 

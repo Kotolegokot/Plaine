@@ -21,7 +21,7 @@ public:
 
     virtual btScalar getMass()
     {
-        constexpr btScalar k = 1 / 6 / std::sqrt(2);
+        btScalar k = 1 / 6 / std::sqrt(2);
         return edge * edge * edge * k * MASS_COEFFICIENT;
     }
 
