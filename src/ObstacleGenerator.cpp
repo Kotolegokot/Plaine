@@ -46,7 +46,6 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                         //obstacle = new Tunnel(world, device, btVector3(newX, newY, newZ), getRandomf(100, 200), getRandomf(300, 600));
                         //obstacle = new Box(world, device, btVector3(newX, newY, newZ),
                         //    btVector3(getRandomf(50.0f, 250.0f), getRandomf(50.f, 250.f), getRandomf(50.f, 250.f)));
-                        //obstacle = new Torus(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
                         //obstacle = new Icosahedron(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
                         //obstacle = new Icosphere2(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
                         //obstacle = new Tetrahedron(world, device, btVector3(newX, newY, newZ), 200);

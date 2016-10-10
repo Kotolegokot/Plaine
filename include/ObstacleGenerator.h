@@ -9,7 +9,6 @@
 #include "IObstacle.h"
 #include "IBody.h"
 #include "obstacles/Box.h"
-#include "obstacles/Torus.h"
 #include "obstacles/Tetrahedron.h"
 #include "obstacles/Icosahedron.h"
 #include "obstacles/Icosphere2.h"
