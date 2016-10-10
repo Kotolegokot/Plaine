@@ -14,10 +14,7 @@ public:
         world(world), device(device), position(position) {}
     virtual ~IObstacle() {}
 
-    btVector3 getPosition() const
-    {
-        return position;
-    }
+    virtual btVector3 getPosition() const = 0;
 
     void setPosition(const btVector3 &position)
     {
