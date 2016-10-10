@@ -17,7 +17,7 @@ debug:
 
 release:
 	mkdir bin/Release -p
-	$(CXX) $(CFLAGS) $(SOURCE_INCLUDE) $(LIB_INCLUDE) $(SOURCE) $(LIB) -o bin/Release/$(EXECUTABLE)
+	$(CXX) $(CFLAGS) -O3 $(SOURCE_INCLUDE) $(LIB_INCLUDE) $(SOURCE) $(LIB) -o bin/Release/$(EXECUTABLE)
 
 clean:
 	rm -rf bin/
