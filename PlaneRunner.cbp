@@ -120,6 +120,7 @@
 		<Unit filename="include/PlaneControl.h" />
 		<Unit filename="include/obstacles/Box.h" />
 		<Unit filename="include/obstacles/Cone.h" />
+		<Unit filename="include/obstacles/Crystal.h" />
 		<Unit filename="include/obstacles/Icosahedron.h" />
 		<Unit filename="include/obstacles/Icosphere2.h" />
 		<Unit filename="include/obstacles/Tetrahedron.h" />

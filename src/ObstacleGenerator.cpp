@@ -50,7 +50,9 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                         //obstacle = new Icosahedron(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
                         //obstacle = new Icosphere2(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
                         //obstacle = new Tetrahedron(world, device, btVector3(newX, newY, newZ), 200);
-                        obstacle = new Cone(world, device, btVector3(newX, newY, newZ), 200);
+                        //obstacle = new Cone(world, device, btVector3(newX, newY, newZ), 200);
+                        obstacle = new Crystal(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f),
+                            getRandomf(50.f, 250.f));
 
                         //if (int(getRandomf(1, 1)) == 1)
                         //    body->getRigidBody()->applyTorqueImpulse(btVector3(getRandomf(-10000, 10000), getRandomf(-10000, 10000), getRandomf(-10000, 10000))*body->getMass());

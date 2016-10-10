@@ -12,7 +12,7 @@ using namespace irr;
 class Icosphere2 : public IBody
 {
 public:
-    Icosphere2(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, f32 radius) :
+    Icosphere2(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, btScalar radius) :
         IBody(world, device, position), radius(radius)
     {
         createBody();
@@ -62,7 +62,7 @@ protected:
 
 private:
     scene::IMesh *mesh = nullptr;
-    f32 radius;
+    btScalar radius;
 
     static btConvexHullShape *commonShape;
 };

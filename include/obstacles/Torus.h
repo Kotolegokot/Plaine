@@ -12,7 +12,7 @@ using namespace irr;
 class Torus : public IBody
 {
 public:
-    Torus(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, f32 radius) :
+    Torus(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, btScalar radius) :
         IBody(world, device, position), radius(radius)
     {
         createBody();
@@ -61,7 +61,7 @@ protected:
 
 private:
     scene::IMesh *mesh = nullptr;
-    f32 radius;
+    btScalar radius;
 
     static btCollisionShape *commonShape;
 };

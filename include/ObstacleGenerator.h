@@ -15,6 +15,7 @@
 #include "obstacles/Icosphere2.h"
 #include "obstacles/Tunnel.h"
 #include "obstacles/Cone.h"
+#include "obstacles/Crystal.h"
 
 // average distance between obstacles
 #define STEP 800

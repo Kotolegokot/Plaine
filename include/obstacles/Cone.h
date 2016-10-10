@@ -12,7 +12,7 @@ using namespace irr;
 class Cone : public IBody
 {
 public:
-    Cone(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, f32 radius) :
+    Cone(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, btScalar radius, btScalar length) :
         IBody(world, device, position), radius(radius)
     {
         createBody();
@@ -62,7 +62,8 @@ protected:
 
 private:
     scene::IMesh *mesh = nullptr;
-    f32 radius;
+    btScalar radius;
+    btScalar length;
 
     static btConvexHullShape *commonShape;
 };

@@ -12,7 +12,7 @@ using namespace irr;
 class Tetrahedron : public IBody
 {
 public:
-    Tetrahedron(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, f32 radius) :
+    Tetrahedron(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, btScalar radius) :
         IBody(world, device, position), radius(radius)
     {
         createBody();
@@ -62,7 +62,7 @@ protected:
 
 private:
     scene::IMesh *mesh = nullptr;
-    f32 radius;
+    btScalar radius;
 
     static btConvexHullShape *commonShape;
 };
