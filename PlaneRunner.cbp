@@ -32,7 +32,7 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-O2" />
+					<Add option="-O3" />
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
 					<Add option='-isystem&quot;/usr/include/freetype2&quot;' />
@@ -76,6 +76,7 @@
 				<Option compiler="gcc" />
 				<Option use_console_runner="0" />
 				<Compiler>
+					<Add option="-O3" />
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
 					<Add option='-isystem&quot;deps\include\freetype2&quot;' />
@@ -85,6 +86,7 @@
 					<Add directory="include/obstacles" />
 				</Compiler>
 				<Linker>
+					<Add option="-s" />
 					<Add library="intl" />
 				</Linker>
 			</Target>
