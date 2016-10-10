@@ -43,13 +43,14 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     // create the cube and add it to the deque
                     if(std::abs(newX) > 400) {
                         IObstacle *obstacle = nullptr;
-                        obstacle = new Tunnel(world, device, btVector3(newX, newY, newZ), getRandomf(100, 200), getRandomf(300, 600));
+                        //obstacle = new Tunnel(world, device, btVector3(newX, newY, newZ), getRandomf(100, 200), getRandomf(300, 600));
                         //obstacle = new Box(world, device, btVector3(newX, newY, newZ),
                         //    btVector3(getRandomf(50.0f, 250.0f), getRandomf(50.f, 250.f), getRandomf(50.f, 250.f)));
                         //obstacle = new Torus(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
                         //obstacle = new Icosahedron(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
                         //obstacle = new Icosphere2(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
                         //obstacle = new Tetrahedron(world, device, btVector3(newX, newY, newZ), 200);
+                        obstacle = new Cone(world, device, btVector3(newX, newY, newZ), 200);
 
                         //if (int(getRandomf(1, 1)) == 1)
                         //    body->getRigidBody()->applyTorqueImpulse(btVector3(getRandomf(-10000, 10000), getRandomf(-10000, 10000), getRandomf(-10000, 10000))*body->getMass());
