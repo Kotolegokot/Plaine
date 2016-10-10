@@ -3,6 +3,7 @@
 
 #include "ObjMesh.h"
 #include "IBody.h"
+#include <cmath>
 
 using namespace irr;
 
@@ -20,7 +21,7 @@ public:
 
     virtual btScalar getMass()
     {
-        btScalar k = 4 / 3 * M_PI;
+        btScalar k = 4 / 3 * core::PI;
         return radius*radius*radius*k*MASS_COEFFICIENT;
     }
 

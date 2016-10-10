@@ -20,7 +20,7 @@ public:
 
     virtual btScalar getMass()
     {
-        btScalar k = M_PI / 3;
+        btScalar k = core::PI / 3;
         return height*radius*radius*k*MASS_COEFFICIENT;
     }
 
