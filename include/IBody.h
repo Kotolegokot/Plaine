@@ -33,6 +33,23 @@ public:
         return node;
     }
 
+    btVector3 getPosition() const override
+    {
+        btTransform transform;
+        rigidBody->getMotionState()->getWorldTransform(transform);
+
+        return transform.getOrigin();
+    }
+
+    void setPosition(const btVector3 &position) override
+    {
+        btTransform transform;
+        rigidBody->getMotionState()->getWorldTransform(transform);
+        transform.setOrigin(position);
+
+        rigidBody->setCenterOfMassTransform(transform);
+    }
+
     virtual btScalar getMass() = 0;
 
 protected:

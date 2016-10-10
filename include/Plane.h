@@ -42,11 +42,6 @@ public:
     void getAxisAngleRotation(btVector3 &axis, btScalar &angle) const;
     void setAxisAngleRotation(const btVector3 &axis, btScalar angle);
 
-    btVector3 getPosition() const;
-    void setPosition(const btVector3 &position);
-
-
-
 protected:
     virtual void createNode() override;
     virtual void createMotionState() override;

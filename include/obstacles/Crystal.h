@@ -22,6 +22,17 @@ public:
         cone2->getRigidBody()->setCenterOfMassTransform(transform);
     }
 
+    btVector3 getPosition() const override
+    {
+        return cone1->getPosition();
+    }
+
+    void setPosition(const btVector3 &position) override
+    {
+        cone1->setPosition(position);
+        cone2->setPosition(position);
+    }
+
     virtual ~Crystal()
     {
         delete cone1;

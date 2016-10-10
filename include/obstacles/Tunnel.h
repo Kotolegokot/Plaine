@@ -17,6 +17,19 @@ public:
         box4 = new Box(world, device, position + btVector3(0, -radius, 0), btVector3(radius, radius / 10, length / 2));
     }
 
+    btVector3 getPosition() const override
+    {
+        return box1->getPosition() - btVector3(radius, 0, 0);
+    }
+
+    void setPosition(const btVector3 &position) override
+    {
+        box1->setPosition(position + btVector3(radius, 0, 0));
+        box2->setPosition(position + btVector3(-radius, 0, 0));
+        box3->setPosition(position + btVector3(0, radius, 0));
+        box4->setPosition(position + btVector3(0, -radius, 0));
+    }
+
     virtual ~Tunnel()
     {
         delete box1;

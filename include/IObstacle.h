@@ -15,11 +15,7 @@ public:
     virtual ~IObstacle() {}
 
     virtual btVector3 getPosition() const = 0;
-
-    void setPosition(const btVector3 &position)
-    {
-        this->position = position;
-    }
+    virtual void setPosition(const btVector3 &position) = 0;
 
 protected:
     btDynamicsWorld *world = nullptr;

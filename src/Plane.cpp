@@ -155,20 +155,3 @@ void Plane::setAxisAngleRotation(const btVector3 &axis, btScalar angle)
 
     rigidBody->getMotionState()->setWorldTransform(transform);
 }
-
-btVector3 Plane::getPosition() const
-{
-    btTransform transform;
-    rigidBody->getMotionState()->getWorldTransform(transform);
-
-    return transform.getOrigin();
-}
-
-void Plane::setPosition(const btVector3 &position)
-{
-    btTransform transform;
-    rigidBody->getMotionState()->getWorldTransform(transform);
-    transform.setOrigin(position);
-
-    rigidBody->getMotionState()->setWorldTransform(transform);
-}
