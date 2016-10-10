@@ -14,8 +14,10 @@ class IObstaclePattern
 public:
     IObstaclePattern(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position) :
         world(world), device(device), position(position) {}
+    virtual ~IObstaclePattern() {}
 
     virtual void addObstaclesToDeque(std::deque<IObstacle *> &deque) = 0;
+    virtual size_t getObstacleCount() const = 0;
 
 protected:
     btDynamicsWorld *world = nullptr;

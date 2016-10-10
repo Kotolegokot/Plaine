@@ -3,13 +3,14 @@
 
 #include "obstacles/Cone.h"
 #include "IObstacle.h"
+#include "IObstaclePattern.h"
 
-class Crystal : public IObstacle
+class Crystal : public IObstaclePattern
 {
 public:
     Crystal(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, btScalar radius,
         btScalar length) :
-        IObstacle(world, device, position), radius(radius), length(length)
+        IObstaclePattern(world, device, position), radius(radius), length(length)
     {
         cone1 = new Cone(world, device, position, radius, length / 2.0f);
         cone2 = new Cone(world, device, position, radius, length / 2.0f);
@@ -22,21 +23,15 @@ public:
         cone2->getRigidBody()->setCenterOfMassTransform(transform);
     }
 
-    btVector3 getPosition() const override
+    void addObstaclesToDeque(std::deque<IObstacle *> &deque) override
     {
-        return cone1->getPosition();
+        deque.push_back(cone1);
+        deque.push_back(cone2);
     }
 
-    void setPosition(const btVector3 &position) override
+    size_t getObstacleCount() const override
     {
-        cone1->setPosition(position);
-        cone2->setPosition(position);
-    }
-
-    virtual ~Crystal()
-    {
-        delete cone1;
-        delete cone2;
+        return 2;
     }
 
 protected:

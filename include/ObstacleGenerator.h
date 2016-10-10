@@ -12,9 +12,9 @@
 #include "obstacles/Tetrahedron.h"
 #include "obstacles/Icosahedron.h"
 #include "obstacles/Icosphere2.h"
-#include "obstacles/Tunnel.h"
 #include "obstacles/Cone.h"
-#include "obstacles/Crystal.h"
+#include "patterns/Crystal.h"
+#include "patterns/Tunnel.h"
 
 // average distance between obstacles
 #define STEP 800

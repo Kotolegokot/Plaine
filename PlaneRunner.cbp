@@ -121,11 +121,11 @@
 		<Unit filename="include/PlaneControl.h" />
 		<Unit filename="include/obstacles/Box.h" />
 		<Unit filename="include/obstacles/Cone.h" />
-		<Unit filename="include/obstacles/Crystal.h" />
 		<Unit filename="include/obstacles/Icosahedron.h" />
 		<Unit filename="include/obstacles/Icosphere2.h" />
 		<Unit filename="include/obstacles/Tetrahedron.h" />
-		<Unit filename="include/obstacles/Tunnel.h" />
+		<Unit filename="include/patterns/Crystal.h" />
+		<Unit filename="include/patterns/Tunnel.h" />
 		<Unit filename="include/util.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/CGUITTFont.cpp" />
