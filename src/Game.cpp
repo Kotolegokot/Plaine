@@ -91,8 +91,11 @@ void Game::initializeScene()
     planeControl = new PlaneControl(plane, configuration.controls);
 
     debugDrawer = new DebugDrawer(device, plane);
+//#define DEBUG_DRAWER
 #ifdef DEBUG
-    //debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+#ifdef DEBUG_DRAWER
+    debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+#endif
 #endif
     dynamicsWorld->setDebugDrawer(debugDrawer);
 

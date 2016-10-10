@@ -51,10 +51,8 @@ protected:
     virtual void createShape()
     {
         if (!commonShape) {
-            ObjMesh objMesh(ICOSPHERE2_MODEL);
-
             commonShape = new btConvexHullShape();
-            objMesh.setPoints(commonShape);
+            ObjMesh(ICOSPHERE2_MODEL).setPoints(commonShape);
             commonShape->setLocalScaling(btVector3(200, 200 ,200));
         }
 

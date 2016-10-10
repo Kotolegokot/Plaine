@@ -7,7 +7,7 @@
 using namespace irr;
 
 #define MASS_COEFFICIENT 0.000002
-#define ICOSAHEDRON_MODEL "media/models/plane.obj"
+#define ICOSAHEDRON_MODEL "media/models/icosahedron.obj"
 
 class Icosahedron : public IBody
 {
@@ -34,7 +34,7 @@ protected:
     {
         mesh = device->getSceneManager()->getMesh(ICOSAHEDRON_MODEL);
         node = device->getSceneManager()->addMeshSceneNode(mesh);
-        node->setScale(core::vector3df(5, 5, 5));
+        node->setScale(core::vector3df(200, 200, 200));
         node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
 
         node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
@@ -51,8 +51,9 @@ protected:
     virtual void createShape()
     {
         if (!commonShape) {
-            commonShape = new btConvexTriangleMeshShape(ObjMesh(ICOSAHEDRON_MODEL).getTriangleMesh());
-            commonShape->setLocalScaling(btVector3(5, 5 ,5));
+            commonShape = new btConvexHullShape();
+            ObjMesh(ICOSAHEDRON_MODEL).setPoints(commonShape);
+            commonShape->setLocalScaling(btVector3(200, 200, 200));
         }
 
         shape = commonShape;
@@ -63,7 +64,7 @@ private:
     scene::IMesh *mesh = nullptr;
     f32 radius;
 
-    static btConvexTriangleMeshShape *commonShape;
+    static btConvexHullShape *commonShape;
 };
 
 #endif // ICOSAHEDRON_H

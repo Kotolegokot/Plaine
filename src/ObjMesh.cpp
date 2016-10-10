@@ -197,7 +197,7 @@ void ObjMesh::loadMesh(const std::string &filename)
                     btVector3 vertex;
 
                     EXPECT(Item::FLOAT);
-                    vertex.setX(i->getFloat());
+                    vertex.setX(-i->getFloat());
                     ++i;
 
                     EXPECT(Item::FLOAT);
