@@ -22,6 +22,12 @@ public:
         cone2->getRigidBody()->setCenterOfMassTransform(transform);
     }
 
+    virtual ~Crystal()
+    {
+        delete cone1;
+        delete cone2;
+    }
+
 protected:
     btScalar radius = 0;
     btScalar length = 0;
