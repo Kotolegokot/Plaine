@@ -98,7 +98,8 @@ void Game::initializeBullet()
 
 void Game::initializeScene()
 {
-    driver->setFog(iridescentColor(timer->getTime()), video::EFT_FOG_LINEAR, configuration.renderDistance - 300, configuration.renderDistance, .003f, true, false);
+    if (FOG_ENABLED)
+        driver->setFog(DEFAULT_COLOR, video::EFT_FOG_LINEAR, configuration.renderDistance - 300, configuration.renderDistance, .003f, true, false);
 
     initializeBullet();
 
@@ -107,12 +108,8 @@ void Game::initializeScene()
     planeControl = new PlaneControl(plane, configuration.controls);
 
     debugDrawer = new DebugDrawer(device);
-//#define DEBUG_DRAWER
-#ifdef DEBUG
-#ifdef DEBUG_DRAWER
-    debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-#endif
-#endif
+    if (DEBUG_DRAWER_ENABLED)
+        debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
     dynamicsWorld->setDebugDrawer(debugDrawer);
 
     // create camera
@@ -133,8 +130,13 @@ void Game::initializeScene()
 
 
     // add some light
-    light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), iridescentColor(timer->getTime()), 300);
+    light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), DEFAULT_LIGHT_COLOR, 300);
     light->setLightType(video::ELT_DIRECTIONAL);
+    video::SLight lightData;
+    lightData = light->getLightData();
+    lightData.DiffuseColor = DEFAULT_LIGHT_COLOR;
+    lightData.AmbientColor = DEFAULT_LIGHT_COLOR;
+    light->setLightData(lightData);
 
     // create obstacle generator
     obstacleGenerator = new ObstacleGenerator(device, dynamicsWorld, camera->getFarValue(), 500);
@@ -481,7 +483,10 @@ void Game::menu()
             eventReceiver->leftPressed = false;
         }
         if (device->isWindowActive()) {
-            driver->beginScene(true, true, iridescentColor(timer->getTime()));
+            if (IRIDESCENT_BACKGROUND)
+                driver->beginScene(true, true, iridescentColor(timer->getTime()));
+            else
+                driver->beginScene(true, true, DEFAULT_COLOR);
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
@@ -577,13 +582,17 @@ void Game::run()
             }
         } else {
             // setting fog color
-            driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300, configuration.renderDistance, 0.01f, true, true);
+            if (FOG_ENABLED && IRIDESCENT_FOG)
+                driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300, configuration.renderDistance, 0.01f, true, true);
 
             // setting light color
-            lightData = light->getLightData();
-            lightData.DiffuseColor = color;
-            lightData.AmbientColor = color;
-            light->setLightData(lightData);
+            if (IRIDESCENT_LIGHT)
+            {
+                lightData = light->getLightData();
+                lightData.DiffuseColor = color;
+                lightData.AmbientColor = color;
+                light->setLightData(lightData);
+            }
 
             // camera position
             {
@@ -664,7 +673,10 @@ void Game::run()
             eventReceiver->escapePressed = false;
         }
         if (device->isWindowActive()) {
-            driver->beginScene(true, true, color);
+            if (IRIDESCENT_BACKGROUND)
+                driver->beginScene(true, true, color);
+            else
+                driver->beginScene(true, true, DEFAULT_COLOR);
             if (!pause) {
                 // handle plane controls
                 planeControl->handle(eventReceiver);

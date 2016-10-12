@@ -44,9 +44,10 @@ protected:
             core::vector3df(position.x(), position.y(), position.z()));
         node->setScale(core::vector3df(halfExtents.x() * 2, halfExtents.y() * 2, halfExtents.z() * 2));
         node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
-
+        node->setVisible(TEXTURES_ENABLED);
         // just for cubes' beauty
-        node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
+        if (FOG_ENABLED)
+            node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
         node->setMaterialFlag(video::EMF_ANISOTROPIC_FILTER, true);
         node->setMaterialFlag(video::EMF_TRILINEAR_FILTER, true);
         node->setMaterialFlag(video::EMF_ANTI_ALIASING, true);

@@ -48,8 +48,9 @@ protected:
         node = device->getSceneManager()->addMeshSceneNode(mesh);
         node->setScale(core::vector3df(edge, edge, edge));
         node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
-
-        node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
+        node->setVisible(TEXTURES_ENABLED);
+        if (FOG_ENABLED)
+            node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
         node->setMaterialFlag(video::EMF_ANISOTROPIC_FILTER, true);
         node->setMaterialFlag(video::EMF_TRILINEAR_FILTER, true);
         node->setMaterialFlag(video::EMF_ANTI_ALIASING, true);
