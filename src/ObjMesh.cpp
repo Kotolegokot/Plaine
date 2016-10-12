@@ -19,7 +19,7 @@ std::vector<ObjMesh::Item> ObjMesh::parse(const std::string &filename)
 
     enum { NONE, INT, FLOAT, KEYWORD, STRING, SPACE_BEFORE_STRING, COMMENT, SPACE_BEFORE_COMMENT } state = NONE;
     while (inputFile) {
-        int c = back ? back : inputFile.get();
+        int c = (back ? back : inputFile.get());
         back = 0;
         switch (state) {
         case NONE:

@@ -22,6 +22,7 @@ int main()
 
     // some magic lines for gettext (no need to understand what they mean)
     setlocale(LC_ALL, "");
+    setlocale(LC_NUMERIC, "C");
     bindtextdomain("planerunner", "media/locale/");
     bind_textdomain_codeset("planerunner", "utf-8");
     textdomain("planerunner");
