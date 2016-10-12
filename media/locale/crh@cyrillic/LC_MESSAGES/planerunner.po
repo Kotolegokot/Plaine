@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-28 02:47+0300\n"
+"POT-Creation-Date: 2016-10-12 17:38+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,170 +17,205 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/Game.cpp:294 src/Game.cpp:296 src/Game.cpp:298 src/Game.cpp:300
-msgid "Press a key"
-msgstr ""
-
-#: src/Game.cpp:308 src/Game.cpp:338
-msgid "Screen size: "
-msgstr ""
-
-#: src/Game.cpp:358
-msgid "Camera position: ("
-msgstr ""
-
-#: src/Game.cpp:370
-msgid "Cubes: "
-msgstr ""
-
-#: src/GUI.cpp:50
-msgid "Start"
-msgstr "Къырымтатарджа"
-
-#: src/GUI.cpp:50
-msgid "Start game"
-msgstr ""
-
-#: src/GUI.cpp:52
-msgid "Settings"
-msgstr ""
-
-#: src/GUI.cpp:52
-msgid "Game settings"
-msgstr ""
-
-#: src/GUI.cpp:54 src/GUI.cpp:79 src/GUI.cpp:186 src/GUI.cpp:227
-msgid "Quit"
-msgstr ""
-
-#: src/GUI.cpp:54 src/GUI.cpp:79 src/GUI.cpp:186 src/GUI.cpp:227
-msgid "Exit game"
-msgstr ""
-
-#: src/GUI.cpp:75
-msgid "Resume"
-msgstr ""
-
-#: src/GUI.cpp:75
-msgid "Resume Game"
-msgstr ""
-
-#: src/GUI.cpp:77
-msgid "Menu"
-msgstr ""
-
-#: src/GUI.cpp:77 src/GUI.cpp:184
-msgid "Exit to Main menu"
-msgstr ""
-
-#: src/GUI.cpp:97
-msgid "Language:"
-msgstr ""
-
-#: src/GUI.cpp:111
-msgid "Resolution:"
-msgstr ""
-
-#: src/GUI.cpp:119
-msgid " (Fullscreen)"
-msgstr ""
-
-#: src/GUI.cpp:134 src/GUI.cpp:154 src/GUI.cpp:376
-msgid " (Custom)"
-msgstr ""
-
-#: src/GUI.cpp:141 src/GUI.cpp:146
-msgid "Custom Resolution"
-msgstr ""
-
-#: src/GUI.cpp:159
-msgid "Color Depth:"
-msgstr ""
-
-#: src/GUI.cpp:171
-msgid "VSync"
-msgstr ""
-
-#: src/GUI.cpp:173
-msgid "Stencil Buffer"
-msgstr ""
-
-#: src/GUI.cpp:177
-msgid "Windowed"
-msgstr ""
-
-#: src/GUI.cpp:177
-msgid "To Windowed Mode"
-msgstr ""
-
-#: src/GUI.cpp:180
-msgid "Fullscreen"
-msgstr ""
-
-#: src/GUI.cpp:180
-msgid "To Fullscreen Mode"
-msgstr ""
-
-#: src/GUI.cpp:182
-msgid "Controls"
-msgstr ""
-
-#: src/GUI.cpp:182
-msgid "Edit control settings"
-msgstr ""
-
-#: src/GUI.cpp:184 src/GUI.cpp:225
-msgid "Back"
-msgstr ""
-
-#: src/GUI.cpp:210
-msgid "Up: "
-msgstr ""
-
-#: src/GUI.cpp:212 src/GUI.cpp:215 src/GUI.cpp:218 src/GUI.cpp:221
-msgid "Click to change"
-msgstr ""
-
-#: src/GUI.cpp:213
-msgid "Left: "
-msgstr ""
-
-#: src/GUI.cpp:216
-msgid "Down: "
-msgstr ""
-
-#: src/GUI.cpp:219
-msgid "Right: "
-msgstr ""
-
-#: src/GUI.cpp:223
-msgid "Default"
-msgstr ""
-
-#: src/GUI.cpp:223
-msgid "Default control settings"
-msgstr ""
-
-#: src/GUI.cpp:225
-msgid "Back to game settings"
-msgstr ""
-
-#: src/util.cpp:150
+#: src/util.cpp:162
 msgid "Up Arrow"
 msgstr ""
 
-#: src/util.cpp:153
+#: src/util.cpp:165
 msgid "Left Arrow"
 msgstr ""
 
-#: src/util.cpp:156
+#: src/util.cpp:168
 msgid "Down Arrow"
 msgstr ""
 
-#: src/util.cpp:159
+#: src/util.cpp:171
 msgid "Right Arrow"
 msgstr ""
 
-#: src/util.cpp:198
+#: src/util.cpp:210
 msgid "Space"
+msgstr ""
+
+#: src/Game.cpp:389 src/Game.cpp:391 src/Game.cpp:393 src/Game.cpp:395
+#: src/Game.cpp:397 src/Game.cpp:399
+msgid "Press a key"
+msgstr ""
+
+#: src/Game.cpp:409 src/Game.cpp:505
+msgid "Screen size: "
+msgstr ""
+
+#: src/Game.cpp:574
+msgid "Plane position: ("
+msgstr ""
+
+#: src/Game.cpp:587
+msgid "Cubes: "
+msgstr ""
+
+#: src/Game.cpp:594
+msgid "FPS: "
+msgstr ""
+
+#: src/Game.cpp:601
+msgid "Linear velocity: "
+msgstr ""
+
+#: src/Game.cpp:603
+msgid ", angular velocity: "
+msgstr ""
+
+#: src/Game.cpp:622
+msgid "Points: "
+msgstr ""
+
+#: src/GUI.cpp:54 src/GUI.cpp:304
+msgid "Start"
+msgstr "Къырымтатарджа"
+
+#: src/GUI.cpp:54
+msgid "Start game"
+msgstr ""
+
+#: src/GUI.cpp:56 src/GUI.cpp:305
+msgid "Settings"
+msgstr ""
+
+#: src/GUI.cpp:56
+msgid "Game settings"
+msgstr ""
+
+#: src/GUI.cpp:58 src/GUI.cpp:80 src/GUI.cpp:212 src/GUI.cpp:266
+#: src/GUI.cpp:306 src/GUI.cpp:311 src/GUI.cpp:324 src/GUI.cpp:335
+msgid "Quit"
+msgstr ""
+
+#: src/GUI.cpp:58 src/GUI.cpp:80 src/GUI.cpp:212 src/GUI.cpp:266
+msgid "Exit game"
+msgstr ""
+
+#: src/GUI.cpp:76 src/GUI.cpp:309
+msgid "Resume"
+msgstr ""
+
+#: src/GUI.cpp:76
+msgid "Resume Game"
+msgstr ""
+
+#: src/GUI.cpp:78 src/GUI.cpp:310
+msgid "Menu"
+msgstr ""
+
+#: src/GUI.cpp:78 src/GUI.cpp:210
+msgid "Exit to Main menu"
+msgstr ""
+
+#: src/GUI.cpp:122
+msgid "Language:"
+msgstr ""
+
+#: src/GUI.cpp:125
+msgid "System language"
+msgstr ""
+
+#: src/GUI.cpp:141
+msgid "Resolution:"
+msgstr ""
+
+#: src/GUI.cpp:149
+msgid " (Fullscreen)"
+msgstr ""
+
+#: src/GUI.cpp:164 src/GUI.cpp:184 src/GUI.cpp:534
+msgid " (Custom)"
+msgstr ""
+
+#: src/GUI.cpp:171 src/GUI.cpp:176
+msgid "Custom Resolution"
+msgstr ""
+
+#: src/GUI.cpp:189
+msgid "Render distance:"
+msgstr ""
+
+#: src/GUI.cpp:191
+msgid "Render distance"
+msgstr ""
+
+#: src/GUI.cpp:197 src/GUI.cpp:316
+msgid "VSync"
+msgstr ""
+
+#: src/GUI.cpp:199 src/GUI.cpp:317
+msgid "Stencil Buffer"
+msgstr ""
+
+#: src/GUI.cpp:203 src/GUI.cpp:321
+msgid "Windowed"
+msgstr ""
+
+#: src/GUI.cpp:203
+msgid "To Windowed Mode"
+msgstr ""
+
+#: src/GUI.cpp:206 src/GUI.cpp:319
+msgid "Fullscreen"
+msgstr ""
+
+#: src/GUI.cpp:206
+msgid "To Fullscreen Mode"
+msgstr ""
+
+#: src/GUI.cpp:208 src/GUI.cpp:322
+msgid "Controls"
+msgstr ""
+
+#: src/GUI.cpp:208
+msgid "Edit control settings"
+msgstr ""
+
+#: src/GUI.cpp:210 src/GUI.cpp:264 src/GUI.cpp:323 src/GUI.cpp:334
+msgid "Back"
+msgstr ""
+
+#: src/GUI.cpp:241
+msgid "Up: "
+msgstr ""
+
+#: src/GUI.cpp:243 src/GUI.cpp:246 src/GUI.cpp:249 src/GUI.cpp:252
+#: src/GUI.cpp:256 src/GUI.cpp:260
+msgid "Click to change"
+msgstr ""
+
+#: src/GUI.cpp:244
+msgid "Left: "
+msgstr ""
+
+#: src/GUI.cpp:247
+msgid "Down: "
+msgstr ""
+
+#: src/GUI.cpp:250
+msgid "Right: "
+msgstr ""
+
+#: src/GUI.cpp:253
+msgid "CCW roll: "
+msgstr ""
+
+#: src/GUI.cpp:257
+msgid "CW roll: "
+msgstr ""
+
+#: src/GUI.cpp:262 src/GUI.cpp:333
+msgid "Default"
+msgstr ""
+
+#: src/GUI.cpp:262
+msgid "Default control settings"
+msgstr ""
+
+#: src/GUI.cpp:264
+msgid "Back to game settings"
 msgstr ""
