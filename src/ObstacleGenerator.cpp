@@ -59,6 +59,8 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                         {
                             IObstaclePattern *pattern = nullptr;
                             pattern = new Tunnel(world, device, btVector3(newX, newY, newZ), getRandomf(100, 200), getRandomf(300, 600));
+                            pattern->addObstaclesToDeque(obstacles);
+                            obstacleCount += pattern->getObstacleCount();
                             delete pattern;
                             break;
                         }
