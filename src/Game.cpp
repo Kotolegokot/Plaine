@@ -685,9 +685,6 @@ void Game::run()
                 dynamicsWorld->debugDrawWorld();
                 // draw scene
                 sceneManager->drawAll();
-#ifdef DEBUG
-                std::cout << "=== STEP_SIMULATION ===" << std::endl;
-#endif
             }
             guiEnvironment->drawAll();
             driver->endScene();
