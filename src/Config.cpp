@@ -54,7 +54,7 @@ std::vector<Config::Item> Config::parse(const std::string &filename)
             if (isdigit(c)) {
                 str.push_back(c);
             } else if (c == '.') {
-                str.push_back(c);
+                str.append(localeconv()->decimal_point);
                 state = FLOAT;
             } else {
                 back = c;
