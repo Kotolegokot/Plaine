@@ -167,6 +167,7 @@ void Game::terminateScene()
     delete dispatcher;
     delete collisionConfiguration;
     delete broadphase;
+    sceneManager->clear();
 }
 
 // show main menu
