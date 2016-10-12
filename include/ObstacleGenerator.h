@@ -6,9 +6,18 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "MotionState.h"
+#include "IObstacle.h"
 #include "IBody.h"
+#include "obstacles/Box.h"
+#include "obstacles/Tetrahedron.h"
+#include "obstacles/Icosahedron.h"
+#include "obstacles/Icosphere2.h"
+#include "obstacles/Cone.h"
+#include "patterns/Crystal.h"
+#include "patterns/Tunnel.h"
 
-#define REMOVE_CENTER
+// average distance between obstacles
+#define STEP 800
 
 using namespace irr;
 
@@ -34,9 +43,9 @@ private:
     f32 farValueWithBuffer() const;
 
     IrrlichtDevice *device = nullptr;
-    std::deque<IBody *> cubes;
+    std::deque<IObstacle *> obstacles;
 
-    u32 cubeCount = 0;
+    u32 obstacleCount = 0;
 
     f32 farValue = 0;
     // buffer is used to generate obstacles a bit farther than
@@ -49,9 +58,6 @@ private:
     f32 generatedEdgeRight = 0;
     f32 generatedEdgeTop = 0;
     f32 generatedEdgeBottom = 0;
-
-    // average distance between obstacles
-    const f32 STEP = 400;
 
     // physics world
     btDynamicsWorld *world = nullptr;

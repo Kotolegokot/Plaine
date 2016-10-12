@@ -1,7 +1,9 @@
 #include "Plane.h"
 
+using namespace irr;
+
 Plane::Plane(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position) :
-    IBody(world), device(device), position(position)
+    IBody(world, device, position)
 {
     createBody();
     //rigidBody->setAngularFactor(btVector3(0, 0, 1));
@@ -37,18 +39,17 @@ void Plane::createMotionState()
 
 void Plane::createShape()
 {
-    ObjMesh objMesh;
-    objMesh.loadMesh(PLANE_MODEL);
+    ObjMesh objMesh(PLANE_MODEL);
 
     shape = new btConvexTriangleMeshShape(objMesh.getTriangleMesh());
 }
 
 btScalar Plane::getMass()
 {
-        return 1;
+    return 1;
 }
 
-const btVector3 &Plane::getLinearVelocity() const
+btVector3 Plane::getLinearVelocity() const
 {
     return rigidBody->getLinearVelocity();
 }
@@ -71,7 +72,7 @@ void Plane::setScalarLinearVelocity(btScalar length)
     rigidBody->setLinearVelocity(linearVelocity * length);
 }
 
-const btVector3 &Plane::getAngularVelocity() const
+btVector3 Plane::getAngularVelocity() const
 {
     return rigidBody->getAngularVelocity();
 }
@@ -151,23 +152,6 @@ void Plane::setAxisAngleRotation(const btVector3 &axis, btScalar angle)
     rigidBody->getMotionState()->getWorldTransform(transform);
     btQuaternion rotation(axis, angle);
     transform.setRotation(rotation);
-
-    rigidBody->getMotionState()->setWorldTransform(transform);
-}
-
-const btVector3 &Plane::getPosition() const
-{
-    btTransform transform;
-    rigidBody->getMotionState()->getWorldTransform(transform);
-
-    return transform.getOrigin();
-}
-
-void Plane::setPosition(const btVector3 &position)
-{
-    btTransform transform;
-    rigidBody->getMotionState()->getWorldTransform(transform);
-    transform.setOrigin(position);
 
     rigidBody->getMotionState()->setWorldTransform(transform);
 }

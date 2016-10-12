@@ -4,15 +4,16 @@
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
+#include "IObstacle.h"
 #include "MotionState.h"
 
 // this class is a useful interface joining together
 // an Irrlicht node and a Bullet body
-class IBody
+class IBody : public IObstacle
 {
 public:
-    IBody(btDynamicsWorld *world) :
-        world(world) {}
+    IBody(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position) :
+        IObstacle(world, device, position) {}
 
     virtual ~IBody()
     {
@@ -32,11 +33,29 @@ public:
         return node;
     }
 
+    btVector3 getPosition() const override
+    {
+        btTransform transform;
+        rigidBody->getMotionState()->getWorldTransform(transform);
+
+        return transform.getOrigin();
+    }
+
+    void setPosition(const btVector3 &position) override
+    {
+        btTransform transform;
+        rigidBody->getMotionState()->getWorldTransform(transform);
+        transform.setOrigin(position);
+
+        rigidBody->setCenterOfMassTransform(transform);
+    }
+
+    virtual btScalar getMass() = 0;
+
 protected:
     virtual void createNode() = 0;
     virtual void createMotionState() = 0;
     virtual void createShape() = 0;
-    virtual btScalar getMass() = 0;
 
     // this method must be called in a derived class' constructor
     // creates the node and the body
@@ -56,8 +75,6 @@ protected:
         rigidBody = new btRigidBody(rigidBodyCI);
         world->addRigidBody(rigidBody);
     }
-
-    btDynamicsWorld *world = nullptr;
 
     // created inside, must be deleted in desctructor
     scene::ISceneNode *node = nullptr;

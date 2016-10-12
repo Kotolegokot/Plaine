@@ -14,6 +14,7 @@
 #include "ObstacleGenerator.h"
 #include "Plane.h"
 #include "PlaneControl.h"
+#include "DebugDrawer.h"
 
 using namespace irr;
 
@@ -48,6 +49,7 @@ private:
     btCollisionDispatcher *dispatcher = nullptr;
     btSequentialImpulseConstraintSolver *solver = nullptr;
     btDiscreteDynamicsWorld *dynamicsWorld = nullptr;
+    btIDebugDraw *debugDrawer = nullptr;
 
     // Scene
     scene::ILightSceneNode *light = nullptr;

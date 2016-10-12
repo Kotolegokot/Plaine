@@ -90,6 +90,15 @@ void Game::initializeScene()
     plane = new Plane(dynamicsWorld, device, btVector3(0, 0, 0));
     planeControl = new PlaneControl(plane, configuration.controls);
 
+    debugDrawer = new DebugDrawer(device);
+//#define DEBUG_DRAWER
+#ifdef DEBUG
+#ifdef DEBUG_DRAWER
+    debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+#endif
+#endif
+    dynamicsWorld->setDebugDrawer(debugDrawer);
+
     // create camera
     {
         camera = sceneManager->addCameraSceneNode(0);
@@ -645,8 +654,12 @@ void Game::run()
                 planeControl->handle(eventReceiver);
                 // physics simulation
                 dynamicsWorld->stepSimulation(1 / 60.0f);
+                dynamicsWorld->debugDrawWorld();
                 // draw scene
                 sceneManager->drawAll();
+#ifdef DEBUG
+                std::cout << "=== STEP_SIMULATION ===" << std::endl;
+#endif
             }
             guiEnvironment->drawAll();
             driver->endScene();

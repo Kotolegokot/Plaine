@@ -21,13 +21,13 @@ public:
     Plane(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position);
 
     // some convenient
-    const btVector3 &getLinearVelocity() const;
+    btVector3 getLinearVelocity() const;
     void setLinearVelocity(const btVector3 &linearVelocity);
 
     btScalar getScalarLinearVelocity() const;
     void setScalarLinearVelocity(btScalar length);
 
-    const btVector3 &getAngularVelocity() const;
+    btVector3 getAngularVelocity() const;
     void setAngularVelocity(const btVector3 &angularVelocity);
 
     btScalar getScalarAngularVelocity() const;
@@ -42,11 +42,6 @@ public:
     void getAxisAngleRotation(btVector3 &axis, btScalar &angle) const;
     void setAxisAngleRotation(const btVector3 &axis, btScalar angle);
 
-    const btVector3 &getPosition() const;
-    void setPosition(const btVector3 &position);
-
-
-
 protected:
     virtual void createNode() override;
     virtual void createMotionState() override;
@@ -54,8 +49,6 @@ protected:
     virtual btScalar getMass() override;
 
 private:
-    IrrlichtDevice *device = nullptr;
-    btVector3 position;
     scene::IMesh *planeMesh = nullptr;
 };
 

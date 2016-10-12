@@ -1,57 +1,7 @@
 #include "ObstacleGenerator.h"
 #include "util.h"
 
-#define MASS_COEFFICIENT 0.000002
-
 using namespace irr;
-
-// a little class for cubes
-class Cube : public IBody
-{
-public:
-    Cube(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, const f32 &side) :
-        IBody(world), device(device), position(position), side(side)
-    {
-        createBody();
-    }
-
-    virtual btScalar getMass() override
-    {
-        return side*side*side*MASS_COEFFICIENT;
-    }
-
-protected:
-    virtual void createNode() override
-    {
-        // 0(parent) - root node: -1- ID;
-        node = device->getSceneManager()->addCubeSceneNode(side, 0, -1,
-            core::vector3df(position.x(), position.y(), position.z()));
-        node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png")); // 0 - texture layer
-
-        // just for cubes' beauty
-        node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
-        node->setMaterialFlag(video::EMF_ANISOTROPIC_FILTER, true);
-        node->setMaterialFlag(video::EMF_TRILINEAR_FILTER, true);
-        node->setMaterialFlag(video::EMF_ANTI_ALIASING, true);
-    }
-
-    virtual void createMotionState() override
-    {
-        // quaternion(0,0,0,1) means no rotation
-        motionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1), position), node);
-    }
-
-    virtual void createShape() override
-    {
-        // create shape for cubes
-        shape = new btBoxShape(btVector3(side/2, side/2, side/2));
-    }
-
-private:
-    IrrlichtDevice *device = nullptr;
-    btVector3 position;
-    f32 side;
-};
 
 ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, btDynamicsWorld *world, f32 farValue, f32 buffer) :
     device(device), farValue(farValue), buffer(buffer), world(world) {}
@@ -59,9 +9,9 @@ ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, btDynamicsWorld *wo
 ObstacleGenerator::~ObstacleGenerator()
 {
     // remove all stored cubes
-    while (!cubes.empty()) {
-        delete cubes.front();
-        cubes.pop_front();
+    while (!obstacles.empty()) {
+        delete obstacles.front();
+        obstacles.pop_front();
     }
 }
 
@@ -79,7 +29,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                 insideZ = z <= generatedEdgeZ;
 
                 bool inside = insideX && insideY && insideZ;
-#ifdef REMOVE_CENTER
+#ifdef DEBUG
                 inside = inside || (x >= -500 && x <= 500);
 #endif
 
@@ -90,17 +40,29 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     f32 newY = y + getRandomf(-100, 100);
                     f32 newZ = z + getRandomf(-100, 100);
 
-                    // create the cube and add it to the deque
-                    if(abs(newX) > 400)
-                    {
-                    Cube *cube = new Cube(world, device, btVector3(newX, newY, newZ), getRandomf(50.0f, 250.0f));
-                    if (int(getRandomf(1, 8)) == 1)
-                        cube->getRigidBody()->applyTorqueImpulse(btVector3(getRandomf(-10000, 10000), getRandomf(-10000, 10000), getRandomf(-10000, 10000))*cube->getMass());
-                    if (int(getRandomf(1, 8)) == 1)
-                        cube->getRigidBody()->applyCentralImpulse(btVector3(getRandomf(-100, 100), getRandomf(-100, 100), getRandomf(-100, 100))*cube->getMass());
-                    cubes.push_back(cube);
-                    cubeCount++;
-                    }
+                    // create obstacles and add them to the deque
+#if 1
+                    IObstaclePattern *pattern = nullptr;
+                    pattern = new Tunnel(world, device, btVector3(newX, newY, newZ), getRandomf(100, 200), getRandomf(300, 600));
+                    //pattern = new Crystal(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f), getRandomf(300.f, 600.f));
+                    pattern->addObstaclesToDeque(obstacles);
+                    obstacleCount += pattern->getObstacleCount();
+                    delete pattern;
+#else
+                    IObstacle *obstacle = nullptr;
+                    //obstacle = new Box(world, device, btVector3(newX, newY, newZ),
+                    //    btVector3(getRandomf(50.0f, 250.0f), getRandomf(50.f, 250.f), getRandomf(50.f, 250.f)));
+                    //obstacle = new Icosahedron(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
+                    obstacle = new Icosphere2(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 200.f));
+                    //obstacle = new Tetrahedron(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
+                    //obstacle = new Cone(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 200.f), getRandomf(50.f, 200.f));
+                    obstacles.push_back(obstacle);
+                    obstacleCount++;
+#endif
+                    //if (int(getRandomf(1, 1)) == 1)
+                    //    body->getRigidBody()->applyTorqueImpulse(btVector3(getRandomf(-10000, 10000), getRandomf(-10000, 10000), getRandomf(-10000, 10000))*body->getMass());
+                    //if (int(getRandomf(1, 1)) == 1)
+                    //    body->getRigidBody()->applyCentralImpulse(btVector3(getRandomf(-100, 100), getRandomf(-100, 100), getRandomf(-100, 100))*body->getMass());
                 }
             }
 
@@ -124,12 +86,12 @@ f32 ObstacleGenerator::preciseEdge(f32 edge) const
 // removes obstacles behind the player
 void ObstacleGenerator::removeLeftBehind(f32 playerZ)
 {
-    while (!cubes.empty()) {
-        if (cubes.front()->getNode()->getPosition().Z < playerZ - buffer)
+    while (!obstacles.empty()) {
+        if (obstacles.front()->getPosition().z() < playerZ - buffer)
         {
-            delete cubes.front();
-            cubes.pop_front();
-            cubeCount--;
+            delete obstacles.front();
+            obstacles.pop_front();
+            obstacleCount--;
         } else
             break;
     }
@@ -137,7 +99,7 @@ void ObstacleGenerator::removeLeftBehind(f32 playerZ)
 
 u32 ObstacleGenerator::getCubeCount() const
 {
-    return cubeCount;
+    return obstacleCount;
 }
 
 f32 ObstacleGenerator::farValueWithBuffer() const
