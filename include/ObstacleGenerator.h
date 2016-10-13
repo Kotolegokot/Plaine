@@ -18,6 +18,7 @@
 #define OBSTACLEGENERATOR_H
 
 #include <deque>
+#include <memory>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
@@ -59,7 +60,7 @@ private:
     f32 farValueWithBuffer() const;
 
     IrrlichtDevice *device = nullptr;
-    std::deque<IObstacle *> obstacles;
+    std::deque<std::unique_ptr<IObstacle>> obstacles;
 
     u32 obstacleCount = 0;
 

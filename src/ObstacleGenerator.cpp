@@ -25,10 +25,8 @@ ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, btDynamicsWorld *wo
 ObstacleGenerator::~ObstacleGenerator()
 {
     // remove all stored cubes
-    while (!obstacles.empty()) {
-        delete obstacles.front();
+    while (!obstacles.empty())
         obstacles.pop_front();
-    }
 }
 
 void ObstacleGenerator::generate(const core::vector3df &playerPosition)
@@ -75,42 +73,42 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                         }
                     case 2:
                         {
-                            IObstacle *obstacle = nullptr;
-                            obstacle = new Box(world, device, btVector3(newX, newY, newZ),
-                            btVector3(getRandomf(50.0f, 250.0f), getRandomf(50.f, 250.f), getRandomf(50.f, 250.f)));
-                            obstacles.push_back(obstacle);
+                            std::unique_ptr<IObstacle> obstacle =
+                                std::make_unique<Box>(world, device, btVector3(newX, newY, newZ),
+                                    btVector3(getRandomf(50.0f, 250.0f), getRandomf(50.f, 250.f), getRandomf(50.f, 250.f)));
+                            obstacles.push_back(std::move(obstacle));
                             obstacleCount++;
                             break;
                         }
                         case 3:
                         {
-                            IObstacle *obstacle = nullptr;
-                            obstacle = new Icosahedron(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
-                            obstacles.push_back(obstacle);
+                            std::unique_ptr<IObstacle> obstacle =
+                                std::make_unique<Icosahedron>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
+                            obstacles.push_back(std::move(obstacle));
                             obstacleCount++;
                             break;
                         }
                     case 4:
                         {
-                            IObstacle *obstacle = nullptr;
-                            obstacle = new Icosphere2(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 200.f));
-                            obstacles.push_back(obstacle);
+                            std::unique_ptr<IObstacle> obstacle =
+                                std::make_unique<Icosphere2>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 200.f));
+                            obstacles.push_back(std::move(obstacle));
                             obstacleCount++;
                             break;
                         }
                     case 5:
                         {
-                            IObstacle *obstacle = nullptr;
-                            obstacle = new Tetrahedron(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
-                            obstacles.push_back(obstacle);
+                            std::unique_ptr<IObstacle> obstacle =
+                                std::make_unique<Tetrahedron>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
+                            obstacles.push_back(std::move(obstacle));
                             obstacleCount++;
                             break;
                         }
                     case 6:
                         {
-                            IObstacle *obstacle = nullptr;
-                            obstacle = new Cone(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 200.f), getRandomf(50.f, 200.f));
-                            obstacles.push_back(obstacle);
+                            std::unique_ptr<IObstacle> obstacle =
+                                std::make_unique<Cone>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 200.f), getRandomf(50.f, 200.f));
+                            obstacles.push_back(std::move(obstacle));
                             obstacleCount++;
                             break;
                         }
@@ -146,7 +144,6 @@ void ObstacleGenerator::removeLeftBehind(f32 playerZ)
     while (!obstacles.empty()) {
         if (obstacles.front()->getPosition().z() < playerZ - buffer)
         {
-            delete obstacles.front();
             obstacles.pop_front();
             obstacleCount--;
         } else

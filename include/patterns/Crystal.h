@@ -28,8 +28,8 @@ public:
         btScalar length) :
         IObstaclePattern(world, device, position), radius(radius), length(length)
     {
-        cone1 = new Cone(world, device, position, radius, length / 2.0f);
-        cone2 = new Cone(world, device, position, radius, length / 2.0f);
+        cone1 = std::make_unique<Cone>(world, device, position, radius, length / 2.0f);
+        cone2 = std::make_unique<Cone>(world, device, position, radius, length / 2.0f);
 
         // turn cone2 upside down
         btTransform transform;
@@ -39,10 +39,10 @@ public:
         cone2->getRigidBody()->setCenterOfMassTransform(transform);
     }
 
-    void addObstaclesToDeque(std::deque<IObstacle *> &deque) override
+    void addObstaclesToDeque(std::deque<std::unique_ptr<IObstacle>> &deque) override
     {
-        deque.push_back(cone1);
-        deque.push_back(cone2);
+        deque.push_back(std::move(cone1));
+        deque.push_back(std::move(cone2));
     }
 
     size_t getObstacleCount() const override
@@ -54,8 +54,7 @@ protected:
     btScalar radius = 0;
     btScalar length = 0;
 
-    Cone *cone1 = nullptr;
-    Cone *cone2 = nullptr;
+    std::unique_ptr<Cone> cone1, cone2;
 };
 
 #endif // CRYSTAL_H
