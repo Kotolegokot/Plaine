@@ -57,8 +57,6 @@ std::vector<ObjMesh::Item> ObjMesh::parse(const std::string &filename)
                 break;
             } else {
                 std::cerr << "Error: config \"" << filename << "\" is invalid." << std::endl;
-                for (Item &item : items)
-                    item.free();
                 return std::vector<Item>();
             }
             break;

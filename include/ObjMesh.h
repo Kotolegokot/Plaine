@@ -53,6 +53,31 @@ private:
         Item(ItemType type, int intNumber) :
             type(type), data((void *) new int(intNumber)) {}
 
+        Item(Item &&item) :
+            type(item.type), data(item.data)
+        {
+            item.data = nullptr;
+        }
+
+        ~Item()
+        {
+            switch (type) {
+            case INT:
+                delete (int *) data;
+                break;
+            case FLOAT:
+                delete (float *) data;
+                break;
+            case STRING:
+            case KEYWORD:
+            case COMMENT:
+                delete (std::string *) data;
+                break;
+            default:
+                break;
+            }
+        }
+
         std::string getString()
         {
             return *(std::string *) data;
@@ -92,25 +117,6 @@ private:
                 return "comment";
             default:
                 return "";
-            }
-        }
-
-        void free()
-        {
-            switch (type) {
-            case INT:
-                delete (int *) data;
-                break;
-            case FLOAT:
-                delete (float *) data;
-                break;
-            case STRING:
-            case KEYWORD:
-            case COMMENT:
-                delete (std::string *) data;
-                break;
-            default:
-                break;
             }
         }
 

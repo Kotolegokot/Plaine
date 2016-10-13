@@ -91,6 +91,30 @@ private:
             *(s32 *) data = intNumber;
         }
 
+        Item(Item &&item) noexcept :
+            type(item.type), data(item.data)
+        {
+            item.data = nullptr;
+        }
+
+        ~Item()
+        {
+            switch (type) {
+            case INT:
+                delete (int *) data;
+                break;
+            case FLOAT:
+                delete (float *) data;
+                break;
+            case STRING:
+            case KEYWORD:
+                delete (std::string *) data;
+                break;
+            default:
+                break;
+            }
+        }
+
         std::string getString()
         {
             return *(std::string *) data;
@@ -132,24 +156,6 @@ private:
                 return "new line or end of file";
             default:
                 return "";
-            }
-        }
-
-        void free()
-        {
-            switch (type) {
-            case INT:
-                delete (int *) data;
-                break;
-            case FLOAT:
-                delete (float *) data;
-                break;
-            case STRING:
-            case KEYWORD:
-                delete (std::string *) data;
-                break;
-            default:
-                break;
             }
         }
 
