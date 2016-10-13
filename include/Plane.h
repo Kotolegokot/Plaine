@@ -59,13 +59,10 @@ public:
     void setAxisAngleRotation(const btVector3 &axis, btScalar angle);
 
 protected:
-    virtual void createNode() override;
-    virtual void createMotionState() override;
+    virtual std::unique_ptr<scene::ISceneNode> createNode() override;
+    virtual void createMotionState(std::unique_ptr<scene::ISceneNode> node) override;
     virtual void createShape() override;
     virtual btScalar getMass() override;
-
-private:
-    scene::IMesh *planeMesh = nullptr;
 };
 
 #endif // PLANE_H

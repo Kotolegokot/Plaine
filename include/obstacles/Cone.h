@@ -34,17 +34,18 @@ public:
         createBody();
     }
 
-    virtual btScalar getMass()
+    virtual btScalar getMass() override
     {
         btScalar k = core::PI / 3;
         return height*radius*radius*k*MASS_COEFFICIENT;
     }
 
 protected:
-    virtual void createNode()
+    virtual std::unique_ptr<scene::ISceneNode> createNode() override
     {
-        mesh = device->getSceneManager()->getMesh(CONE_MODEL);
-        node = device->getSceneManager()->addMeshSceneNode(mesh);
+        std::unique_ptr<scene::IMesh> mesh(device->getSceneManager()->getMesh(CONE_MODEL));
+
+        std::unique_ptr<scene::ISceneNode> node(device->getSceneManager()->addMeshSceneNode(mesh.release()));
         node->setScale(core::vector3df(radius * 2, height, radius * 2));
         node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
         node->setVisible(TEXTURES_ENABLED);
@@ -53,26 +54,27 @@ protected:
         node->setMaterialFlag(video::EMF_ANISOTROPIC_FILTER, true);
         node->setMaterialFlag(video::EMF_TRILINEAR_FILTER, true);
         node->setMaterialFlag(video::EMF_ANTI_ALIASING, true);
+
+        return node;
     }
 
-    virtual void createMotionState()
+    virtual void createMotionState(std::unique_ptr<scene::ISceneNode> node) override
     {
-        motionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1), position), node);
+        motionState = std::make_unique<MotionState>(btTransform(btQuaternion(0, 0, 0, 1), position), node.release());
     }
 
-    virtual void createShape()
+    virtual void createShape() override
     {
         if (!objMesh)
             objMesh = new ObjMesh(CONE_MODEL);
 
-        shape = new btConvexHullShape();
-        objMesh->setPoints((btConvexHullShape *) shape);
+        shape = std::make_unique<btConvexHullShape>();
+        objMesh->setPoints((btConvexHullShape &) *shape);
         shape->setLocalScaling(btVector3(radius * 2, height, radius * 2));
     }
 
 
 private:
-    scene::IMesh *mesh = nullptr;
     btScalar radius;
     btScalar height;
 

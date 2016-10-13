@@ -296,8 +296,8 @@ btTriangleMesh *ObjMesh::getTriangleMesh()
     return triangleMesh;
 }
 
-void ObjMesh::setPoints(btConvexHullShape *shape)
+void ObjMesh::setPoints(btConvexHullShape &shape)
 {
     for (const btVector3 &vertex : vertices)
-        shape->addPoint(vertex);
+        shape.addPoint(vertex);
 }

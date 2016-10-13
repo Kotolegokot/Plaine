@@ -35,17 +35,18 @@ public:
         createBody();
     }
 
-    virtual btScalar getMass()
+    virtual btScalar getMass() override
     {
         btScalar k = 1 / 6 / std::sqrt(2);
         return edge * edge * edge * k * MASS_COEFFICIENT;
     }
 
 protected:
-    virtual void createNode()
+    virtual std::unique_ptr<scene::ISceneNode> createNode() override
     {
-        mesh = device->getSceneManager()->getMesh(TETRAHEDRON_MODEL);
-        node = device->getSceneManager()->addMeshSceneNode(mesh);
+        std::unique_ptr<scene::IMesh> mesh(device->getSceneManager()->getMesh(TETRAHEDRON_MODEL));
+
+        std::unique_ptr<scene::ISceneNode> node(device->getSceneManager()->addMeshSceneNode(mesh.release()));
         node->setScale(core::vector3df(edge, edge, edge));
         node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
         node->setVisible(TEXTURES_ENABLED);
@@ -54,25 +55,26 @@ protected:
         node->setMaterialFlag(video::EMF_ANISOTROPIC_FILTER, true);
         node->setMaterialFlag(video::EMF_TRILINEAR_FILTER, true);
         node->setMaterialFlag(video::EMF_ANTI_ALIASING, true);
+
+        return node;
     }
 
-    virtual void createMotionState()
+    virtual void createMotionState(std::unique_ptr<scene::ISceneNode> node) override
     {
-        motionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1), position), node);
+        motionState = std::make_unique<MotionState>(btTransform(btQuaternion(0, 0, 0, 1), position), node.release());
     }
 
-    virtual void createShape()
+    virtual void createShape() override
     {
         if (!objMesh)
             objMesh = new ObjMesh(TETRAHEDRON_MODEL);
 
-        shape = new btConvexHullShape();
-        objMesh->setPoints((btConvexHullShape *) shape);
+        shape = std::make_unique<btConvexHullShape>();
+        objMesh->setPoints((btConvexHullShape &) *shape);
         shape->setLocalScaling(btVector3(edge, edge, edge));
     }
 
 private:
-    scene::IMesh *mesh = nullptr;
     btScalar edge;
 
     static ObjMesh *objMesh;

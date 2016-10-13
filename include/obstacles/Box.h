@@ -38,10 +38,10 @@ public:
     }
 
 protected:
-    virtual void createNode() override
+    virtual std::unique_ptr<scene::ISceneNode> createNode() override
     {
-        node = device->getSceneManager()->addCubeSceneNode(1, 0, -1,
-            core::vector3df(position.x(), position.y(), position.z()));
+        std::unique_ptr<scene::ISceneNode> node(device->getSceneManager()->addCubeSceneNode(1, 0, -1,
+            core::vector3df(position.x(), position.y(), position.z())));
         node->setScale(core::vector3df(halfExtents.x() * 2, halfExtents.y() * 2, halfExtents.z() * 2));
         node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
         node->setVisible(TEXTURES_ENABLED);
@@ -51,17 +51,19 @@ protected:
         node->setMaterialFlag(video::EMF_ANISOTROPIC_FILTER, true);
         node->setMaterialFlag(video::EMF_TRILINEAR_FILTER, true);
         node->setMaterialFlag(video::EMF_ANTI_ALIASING, true);
+
+        return node;
     }
 
-    virtual void createMotionState() override
+    virtual void createMotionState(std::unique_ptr<scene::ISceneNode> node) override
     {
-        motionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1), position), node);
+        motionState = std::make_unique<MotionState>(btTransform(btQuaternion(0, 0, 0, 1), position), node.release());
     }
 
     virtual void createShape() override
     {
         // create shape for cubes
-        shape = new btBoxShape(halfExtents);
+        shape = std::make_unique<btBoxShape>(halfExtents);
     }
 
 private:

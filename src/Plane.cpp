@@ -28,36 +28,39 @@ Plane::Plane(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &po
         [](btDynamicsWorld *world, btScalar timeStep)
         {
             Plane *plane = static_cast<Plane *>(world->getWorldUserInfo());
-            btVector3 aV = plane->getRigidBody()->getAngularVelocity();
+            btVector3 aV = plane->getRigidBody().getAngularVelocity();
             btScalar aVLength = aV.length();
             if (aVLength > 0) {
                 aV.safeNormalize();
 
                 aV *= aVLength - 0.1f*aVLength*aVLength;
 
-                plane->getRigidBody()->setAngularVelocity(aV);
+                plane->getRigidBody().setAngularVelocity(aV);
             }
 
         }, static_cast<void *>(this));
 }
 
-void Plane::createNode()
+std::unique_ptr<scene::ISceneNode> Plane::createNode()
 {
-    planeMesh = device->getSceneManager()->getMesh(PLANE_MODEL);
-    node = device->getSceneManager()->addMeshSceneNode(planeMesh);
+    std::unique_ptr<scene::IMesh> mesh(device->getSceneManager()->getMesh(PLANE_MODEL));
+
+    std::unique_ptr<scene::ISceneNode> node(device->getSceneManager()->addMeshSceneNode(mesh.release()));
     node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/plane.png"));
+
+    return node;
 }
 
-void Plane::createMotionState()
+void Plane::createMotionState(std::unique_ptr<scene::ISceneNode> node)
 {
-    motionState = new MotionState(btTransform(btQuaternion(0, 0, 0, 1), position), node);
+    motionState = std::make_unique<MotionState>(btTransform(btQuaternion(0, 0, 0, 1), position), node.release());
 }
 
 void Plane::createShape()
 {
     ObjMesh objMesh(PLANE_MODEL);
 
-    shape = new btConvexTriangleMeshShape(objMesh.getTriangleMesh());
+    shape = std::make_unique<btConvexTriangleMeshShape>(objMesh.getTriangleMesh());
 }
 
 btScalar Plane::getMass()

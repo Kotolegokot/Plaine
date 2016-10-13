@@ -121,7 +121,7 @@ void Game::initializeScene()
         core::vector3df upVector(0, 1, 0);
         upVector.rotateXYBy(plane->getEulerRotation().z() * core::RADTODEG64);
 
-        camera->setPosition(plane->getNode()->getPosition() + upVector * 0.3f * CAMERA_DISTANCE
+        camera->setPosition(plane->getNode().getPosition() + upVector * 0.3f * CAMERA_DISTANCE
                 - core::vector3df(0, 0, CAMERA_DISTANCE));
         camera->setUpVector(upVector);
 
@@ -598,7 +598,7 @@ void Game::run()
             // camera position
             {
                 core::stringw cameraPosition = _w("Plane position: (");
-                core::vector3df position = plane->getNode()->getPosition();
+                core::vector3df position = plane->getNode().getPosition();
                 cameraPosition += position.X;
                 cameraPosition += ", ";
                 cameraPosition += position.Y;
@@ -625,9 +625,9 @@ void Game::run()
             // velocity counter
             {
                 core::stringw velocity = _w("Linear velocity: ");
-                velocity += (int) plane->getRigidBody()->getLinearVelocity().length();
+                velocity += (int) plane->getRigidBody().getLinearVelocity().length();
                 velocity += _w(", angular velocity: ");
-                velocity += plane->getRigidBody()->getAngularVelocity().length();
+                velocity += plane->getRigidBody().getAngularVelocity().length();
                 gui->textVelocity->setText(velocity.c_str());
             }
 
@@ -636,7 +636,7 @@ void Game::run()
                 core::vector3df upVector(0, 1, 0);
                 upVector.rotateXYBy(plane->getEulerRotation().z() * core::RADTODEG64);
 
-                camera->setPosition(plane->getNode()->getPosition() + upVector * 0.3f * CAMERA_DISTANCE
+                camera->setPosition(plane->getNode().getPosition() + upVector * 0.3f * CAMERA_DISTANCE
                     - core::vector3df(0, 0, CAMERA_DISTANCE));
                 camera->setUpVector(upVector);
 
@@ -646,7 +646,7 @@ void Game::run()
             //set points counter
             {
                  core::stringw points = _w("Points: ");
-                 points += (int) (plane ->getNode()->getPosition().Z *0.01);
+                 points += (int) (plane ->getNode().getPosition().Z *0.01);
                  gui->textPoints->setText(points.c_str());
             }
 
@@ -654,7 +654,7 @@ void Game::run()
             device->getCursorControl()->setVisible(false);
 
             // generate level
-            obstacleGenerator->generate(plane->getNode()->getPosition());
+            obstacleGenerator->generate(plane->getNode().getPosition());
 
             // if toggling gui is needed
             if (eventReceiver->toggleGUI) {

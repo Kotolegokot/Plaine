@@ -17,6 +17,7 @@
 #ifndef IBODY_H
 #define IBODY_H
 
+#include <memory>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
@@ -33,20 +34,17 @@ public:
 
     virtual ~IBody()
     {
-        world->removeRigidBody(rigidBody);
-        delete motionState;
-        delete shape;
-        delete rigidBody;
+        world->removeRigidBody(rigidBody.get());
     }
 
-    btRigidBody *getRigidBody()
+    btRigidBody &getRigidBody()
     {
-        return rigidBody;
+        return *rigidBody;
     }
 
-    scene::ISceneNode *getNode()
+    scene::ISceneNode &getNode()
     {
-        return node;
+        return *((MotionState *) rigidBody->getMotionState())->getNode();
     }
 
     btVector3 getPosition() const override
@@ -69,8 +67,8 @@ public:
     virtual btScalar getMass() = 0;
 
 protected:
-    virtual void createNode() = 0;
-    virtual void createMotionState() = 0;
+    virtual std::unique_ptr<scene::ISceneNode> createNode() = 0;
+    virtual void createMotionState(std::unique_ptr<scene::ISceneNode> node) = 0;
     virtual void createShape() = 0;
 
     // this method must be called in a derived class' constructor
@@ -78,26 +76,24 @@ protected:
     //      and add the body to the physics (Bullet) world
     void createBody()
     {
-        createNode();
-        createMotionState();
+        std::unique_ptr<scene::ISceneNode> node = createNode();
+        createMotionState(std::move(node));
         createShape();
         btScalar mass = getMass();
 
         btVector3 inertia(0, 0, 0);
         if (mass)
             shape->calculateLocalInertia(mass, inertia);
-        btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, motionState, shape, inertia);
+        btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, motionState.get(), shape.get(), inertia);
 
-        rigidBody = new btRigidBody(rigidBodyCI);
-        world->addRigidBody(rigidBody);
+        rigidBody = std::make_unique<btRigidBody>(rigidBodyCI);
+        world->addRigidBody(rigidBody.get());
     }
 
     // created inside, must be deleted in desctructor
-    scene::ISceneNode *node = nullptr;
-    btMotionState *motionState = nullptr;
-    btCollisionShape *shape = nullptr;
-    btRigidBody *rigidBody = nullptr;
-
+    std::unique_ptr<MotionState> motionState;
+    std::unique_ptr<btCollisionShape> shape;
+    std::unique_ptr<btRigidBody> rigidBody;
 };
 
 #endif // IBODY_H

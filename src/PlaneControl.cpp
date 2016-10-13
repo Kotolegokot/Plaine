@@ -63,11 +63,11 @@ void PlaneControl::handle(EventReceiver *eventReceiver)
     }
 
     // air resistance simulation
-    btVector3 planeVelosity = -plane->getRigidBody()->getLinearVelocity();
+    btVector3 planeVelosity = -plane->getRigidBody().getLinearVelocity();
     btScalar planeVelocityLength = planeVelosity.length();
     planeVelosity.safeNormalize();
     planeVelosity *= 0.001f*planeVelocityLength*planeVelocityLength;
-    plane->getRigidBody()->applyForce(planeVelosity, btVector3(0, 0, 0));
+    plane->getRigidBody().applyForce(planeVelosity, btVector3(0, 0, 0));
 
     turnImpulse *= 25;
     rollImpulse *= 150;
@@ -106,11 +106,11 @@ void PlaneControl::handle(EventReceiver *eventReceiver)
     yawImpulse = yawImpulse.rotate(axis, angle);
     pitchImpulse = pitchImpulse.rotate(axis, angle);
     turnImpulse.setZ(0);
-    plane->getRigidBody()->applyCentralImpulse(turnImpulse);
-    plane->getRigidBody()->applyTorqueImpulse(rollImpulse);
-    plane->getRigidBody()->applyTorqueImpulse(pitchImpulse);
-    plane->getRigidBody()->applyTorqueImpulse(yawImpulse);
-    plane->getRigidBody()->applyForce(btVector3(0, 0, 900), btVector3(0, 0, 0));
+    plane->getRigidBody().applyCentralImpulse(turnImpulse);
+    plane->getRigidBody().applyTorqueImpulse(rollImpulse);
+    plane->getRigidBody().applyTorqueImpulse(pitchImpulse);
+    plane->getRigidBody().applyTorqueImpulse(yawImpulse);
+    plane->getRigidBody().applyForce(btVector3(0, 0, 900), btVector3(0, 0, 0));
 }
 
 void PlaneControl::setPlane(Plane *plane)

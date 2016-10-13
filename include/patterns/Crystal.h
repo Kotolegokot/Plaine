@@ -33,10 +33,10 @@ public:
 
         // turn cone2 upside down
         btTransform transform;
-        cone2->getRigidBody()->getMotionState()->getWorldTransform(transform);
+        cone2->getRigidBody().getMotionState()->getWorldTransform(transform);
         btQuaternion rotation(0, 0, core::PI);
         transform.setRotation(rotation);
-        cone2->getRigidBody()->setCenterOfMassTransform(transform);
+        cone2->getRigidBody().setCenterOfMassTransform(transform);
     }
 
     void addObstaclesToDeque(std::deque<std::unique_ptr<IObstacle>> &deque) override
