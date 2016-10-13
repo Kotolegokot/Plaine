@@ -1,4 +1,4 @@
-﻿language:
+language:
   - cpp
 
 os: 
@@ -11,11 +11,11 @@ compiler:
 addons:
   apt:
     packages:
-	  - clang
-	  - gcc
-	  - libirrlicht-dev
-	  - libbullet-dev
-	  - libfreetype6-dev
+      - clang
+      - gcc
+      - libirrlicht-dev
+      - libbullet-dev
+      - libfreetype6-dev
 
 script:
   - make debug
