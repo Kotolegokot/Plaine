@@ -24,9 +24,3 @@ before_script:
 
 script:
   - make
-  
-deploy:
-  - skip_cleanup: true  
-
-after_deploy:
-  - make clean
