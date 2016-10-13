@@ -31,7 +31,7 @@
 #include "Plane.h"
 #include "PlaneControl.h"
 #include "DebugDrawer.h"
-#include "features.h"
+#include "options.h"
 
 using namespace irr;
 
