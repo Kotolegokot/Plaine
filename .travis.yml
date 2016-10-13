@@ -1,6 +1,9 @@
 language:
   - cpp
   
+sudo: required
+dist: trusty
+  
 compiler: 
  - gcc
  - clang
@@ -16,8 +19,3 @@ addons:
 
 script:
   - make
-
-matrix:
-  include:
-    - os: linux
-      dist: trusty
