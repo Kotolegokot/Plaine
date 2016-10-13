@@ -379,7 +379,7 @@ void GUI::selectElement(int num)
 
 void GUI::selectNextElement()
 {
-    if (selectedElement < selectibleElements.size() - 1)
+    if ((unsigned int)selectedElement < selectibleElements.size() - 1)
         selectedElement++;
     else
         selectedElement = 0;
