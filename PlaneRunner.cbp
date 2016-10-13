@@ -119,12 +119,12 @@
 		<Unit filename="include/ObstacleGenerator.h" />
 		<Unit filename="include/Plane.h" />
 		<Unit filename="include/PlaneControl.h" />
-		<Unit filename="include/features.h" />
 		<Unit filename="include/obstacles/Box.h" />
 		<Unit filename="include/obstacles/Cone.h" />
 		<Unit filename="include/obstacles/Icosahedron.h" />
 		<Unit filename="include/obstacles/Icosphere2.h" />
 		<Unit filename="include/obstacles/Tetrahedron.h" />
+		<Unit filename="include/options.h" />
 		<Unit filename="include/patterns/Crystal.h" />
 		<Unit filename="include/patterns/Tunnel.h" />
 		<Unit filename="include/util.h" />
