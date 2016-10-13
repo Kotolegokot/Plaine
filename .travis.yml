@@ -10,9 +10,12 @@ compiler:
 
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
       - clang
-      - gcc
+      - gcc-5
+      - g++-5
       - libirrlicht-dev
       - libbullet-dev
       - libfreetype6-dev
