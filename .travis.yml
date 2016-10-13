@@ -5,9 +5,7 @@ compiler:
  - gcc
 install: apt-get install irrlicht-devel bullet-devel freetype-devel
 script:
-  - mkdir build
-  - cd build
-  - cmake .. && make
+  - make debug
 env:
   global:
 - LANG="en_US.UTF-8"
