@@ -4,8 +4,7 @@ os:
 compiler: 
  - gcc
 install: apt-get install irrlicht-devel bullet-devel freetype-devel
-script:
-  - make
+build: make
 env:
   global:
 - LANG="en_US.UTF-8"
