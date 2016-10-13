@@ -105,7 +105,7 @@ void Game::initializeScene()
 
     // create plane
     plane = new Plane(*dynamicsWorld, *device, btVector3(0, 0, 0));
-    planeControl = new PlaneControl(plane, configuration.controls);
+    planeControl = new PlaneControl(*plane, configuration.controls);
 
     debugDrawer = new DebugDrawer(device);
     if (DEBUG_DRAWER_ENABLED)
@@ -680,7 +680,7 @@ void Game::run()
                 driver->beginScene(true, true, DEFAULT_COLOR);
             if (!pause) {
                 // handle plane controls
-                planeControl->handle(eventReceiver);
+                planeControl->handle(*eventReceiver);
                 // physics simulation
                 dynamicsWorld->stepSimulation(1 / 60.0f);
                 dynamicsWorld->debugDrawWorld();

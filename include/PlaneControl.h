@@ -25,13 +25,11 @@
 class PlaneControl
 {
 public:
-    PlaneControl(Plane *plane, const Controls &controls = Controls());
-    void handle(EventReceiver *eventReceiver);
-    void setPlane(Plane *plane);
-    Plane *getPlane();
+    PlaneControl(Plane &plane, const Controls &controls = Controls());
+    void handle(EventReceiver &eventReceiver);
 
 private:
-    Plane *plane = nullptr;
+    Plane &plane;
     const Controls &controls;
 };
 
