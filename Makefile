@@ -1,4 +1,3 @@
-CXX=g++
 CFLAGS=-Wall -std=c++14
 SOURCE=main.cpp src/*.cpp src/obstacles/*.cpp
 LIB=-lfreetype -lIrrlicht -lBulletDynamics -lBulletCollision -lLinearMath
