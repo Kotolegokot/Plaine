@@ -1,11 +1,21 @@
-﻿language: cpp
+﻿language:
+  - cpp
+
 os: 
  - linux
+
 compiler: 
  - gcc
-install: apt-get install irrlicht-devel bullet-devel freetype-devel
+ - clang
+
+addons:
+  apt:
+    packages:
+	  - clang
+	  - gcc
+	  - libirrlicht-dev
+	  - libbullet-dev
+	  - libfreetype6-dev
+
 script:
   - make debug
-env:
-  global:
-- LANG="en_US.UTF-8"
