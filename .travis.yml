@@ -19,3 +19,8 @@ addons:
 
 script:
   - make
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
