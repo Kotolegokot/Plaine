@@ -13,7 +13,6 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-Wall" />
-					<Add option="-std=c++11" />
 					<Add option="-g" />
 					<Add option='-isystem&quot;/usr/include/freetype2&quot;' />
 					<Add option='-isystem&quot;deps/include/freetype2&quot;' />
@@ -34,7 +33,6 @@
 				<Compiler>
 					<Add option="-O3" />
 					<Add option="-Wall" />
-					<Add option="-std=c++11" />
 					<Add option='-isystem&quot;/usr/include/freetype2&quot;' />
 					<Add option='-isystem&quot;deps/include/freetype2&quot;' />
 					<Add option='-isystem&quot;/usr/include/irrlicht&quot;' />
@@ -56,7 +54,6 @@
 				<Option use_console_runner="0" />
 				<Compiler>
 					<Add option="-Wall" />
-					<Add option="-std=c++11" />
 					<Add option="-g" />
 					<Add option='-isystem&quot;deps\include\freetype2&quot;' />
 					<Add option='-isystem&quot;deps\include\irrlicht&quot;' />
@@ -78,7 +75,6 @@
 				<Compiler>
 					<Add option="-O3" />
 					<Add option="-Wall" />
-					<Add option="-std=c++11" />
 					<Add option='-isystem&quot;deps\include\freetype2&quot;' />
 					<Add option='-isystem&quot;deps\include\irrlicht&quot;' />
 					<Add option='-isystem&quot;deps\include\bullet&quot;' />
@@ -93,6 +89,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-std=c++14" />
 			<Add option="-fexceptions" />
 			<Add directory="include" />
 			<Add directory="deps/include/" />
