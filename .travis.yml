@@ -2,8 +2,7 @@ language: cpp
 os:
 - linux
 compiler: clang
-before_install:
--apt-get install irrlicht-devel bullet-devel freetype-devel
+install: apt-get install irrlicht-devel bullet-devel freetype-devel
 env:
   global:
 - LANG="en_US.UTF-8"
