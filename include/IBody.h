@@ -29,12 +29,12 @@
 class IBody : public IObstacle
 {
 public:
-    IBody(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position) :
+    IBody(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &position) :
         IObstacle(world, device, position) {}
 
     virtual ~IBody()
     {
-        world->removeRigidBody(rigidBody.get());
+        world.removeRigidBody(rigidBody.get());
     }
 
     btRigidBody &getRigidBody()
@@ -87,7 +87,7 @@ protected:
         btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, motionState.get(), shape.get(), inertia);
 
         rigidBody = std::make_unique<btRigidBody>(rigidBodyCI);
-        world->addRigidBody(rigidBody.get());
+        world.addRigidBody(rigidBody.get());
     }
 
     // created inside, must be deleted in desctructor

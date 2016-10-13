@@ -24,7 +24,7 @@
 class Tunnel : public IObstaclePattern
 {
 public:
-    Tunnel(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, btScalar radius,
+    Tunnel(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &position, btScalar radius,
         btScalar length) :
         IObstaclePattern(world, device, position), radius(radius), length(length)
     {
@@ -50,7 +50,6 @@ protected:
     btScalar length = 0;
 
     std::unique_ptr<Box> boxes[4] = { 0, 0, 0, 0 };
-    btPoint2PointConstraint *constraint = nullptr;
 };
 
 #endif // TUNNEL_H

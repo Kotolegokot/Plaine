@@ -44,7 +44,7 @@ using namespace irr;
 class ObstacleGenerator
 {
 public:
-    ObstacleGenerator(IrrlichtDevice *device, btDynamicsWorld *world, f32 farValue = 1500, f32 buffer = 300);
+    ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, f32 farValue = 1500, f32 buffer = 300);
     ~ObstacleGenerator();
     void generate(const core::vector3df &playerPosition);
     u32 getCubeCount() const;
@@ -59,7 +59,7 @@ private:
     void removeLeftBehind(f32 playerZ);
     f32 farValueWithBuffer() const;
 
-    IrrlichtDevice *device = nullptr;
+    IrrlichtDevice &device;
     std::deque<std::unique_ptr<IObstacle>> obstacles;
 
     u32 obstacleCount = 0;
@@ -77,7 +77,7 @@ private:
     f32 generatedEdgeBottom = 0;
 
     // physics world
-    btDynamicsWorld *world = nullptr;
+    btDynamicsWorld &world;
 };
 
 #endif // OBSTACLEGENERATOR_H

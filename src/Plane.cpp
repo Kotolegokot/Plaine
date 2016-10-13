@@ -18,24 +18,24 @@
 
 using namespace irr;
 
-Plane::Plane(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position) :
+Plane::Plane(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &position) :
     IBody(world, device, position)
 {
     createBody();
     //rigidBody->setAngularFactor(btVector3(0, 0, 1));
 
-    world->setInternalTickCallback(
+    world.setInternalTickCallback(
         [](btDynamicsWorld *world, btScalar timeStep)
         {
-            Plane *plane = static_cast<Plane *>(world->getWorldUserInfo());
-            btVector3 aV = plane->getRigidBody().getAngularVelocity();
+            Plane &plane = *static_cast<Plane *>(world->getWorldUserInfo());
+            btVector3 aV = plane.getRigidBody().getAngularVelocity();
             btScalar aVLength = aV.length();
             if (aVLength > 0) {
                 aV.safeNormalize();
 
                 aV *= aVLength - 0.1f*aVLength*aVLength;
 
-                plane->getRigidBody().setAngularVelocity(aV);
+                plane.getRigidBody().setAngularVelocity(aV);
             }
 
         }, static_cast<void *>(this));
@@ -43,10 +43,10 @@ Plane::Plane(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &po
 
 std::unique_ptr<scene::ISceneNode> Plane::createNode()
 {
-    std::unique_ptr<scene::IMesh> mesh(device->getSceneManager()->getMesh(PLANE_MODEL));
+    std::unique_ptr<scene::IMesh> mesh(device.getSceneManager()->getMesh(PLANE_MODEL));
 
-    std::unique_ptr<scene::ISceneNode> node(device->getSceneManager()->addMeshSceneNode(mesh.release()));
-    node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/plane.png"));
+    std::unique_ptr<scene::ISceneNode> node(device.getSceneManager()->addMeshSceneNode(mesh.release()));
+    node->setMaterialTexture(0, device.getVideoDriver()->getTexture("media/textures/plane.png"));
 
     return node;
 }

@@ -26,7 +26,7 @@ using namespace irr;
 class Box : public IBody
 {
 public:
-    Box(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, const btVector3 &halfExtents) :
+    Box(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &position, const btVector3 &halfExtents) :
         IBody(world, device, position), halfExtents(halfExtents)
     {
         createBody();
@@ -40,10 +40,10 @@ public:
 protected:
     virtual std::unique_ptr<scene::ISceneNode> createNode() override
     {
-        std::unique_ptr<scene::ISceneNode> node(device->getSceneManager()->addCubeSceneNode(1, 0, -1,
+        std::unique_ptr<scene::ISceneNode> node(device.getSceneManager()->addCubeSceneNode(1, 0, -1,
             core::vector3df(position.x(), position.y(), position.z())));
         node->setScale(core::vector3df(halfExtents.x() * 2, halfExtents.y() * 2, halfExtents.z() * 2));
-        node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
+        node->setMaterialTexture(0, device.getVideoDriver()->getTexture("media/textures/lsd.png"));
         node->setVisible(TEXTURES_ENABLED);
         // just for cubes' beauty
         if (FOG_ENABLED)

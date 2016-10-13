@@ -29,7 +29,7 @@ using namespace irr;
 class Tetrahedron : public IBody
 {
 public:
-    Tetrahedron(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, btScalar edge) :
+    Tetrahedron(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &position, btScalar edge) :
         IBody(world, device, position), edge(edge)
     {
         createBody();
@@ -44,11 +44,11 @@ public:
 protected:
     virtual std::unique_ptr<scene::ISceneNode> createNode() override
     {
-        std::unique_ptr<scene::IMesh> mesh(device->getSceneManager()->getMesh(TETRAHEDRON_MODEL));
+        std::unique_ptr<scene::IMesh> mesh(device.getSceneManager()->getMesh(TETRAHEDRON_MODEL));
 
-        std::unique_ptr<scene::ISceneNode> node(device->getSceneManager()->addMeshSceneNode(mesh.release()));
+        std::unique_ptr<scene::ISceneNode> node(device.getSceneManager()->addMeshSceneNode(mesh.release()));
         node->setScale(core::vector3df(edge, edge, edge));
-        node->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/textures/lsd.png"));
+        node->setMaterialTexture(0, device.getVideoDriver()->getTexture("media/textures/lsd.png"));
         node->setVisible(TEXTURES_ENABLED);
         if (FOG_ENABLED)
             node->setMaterialFlag(video::EMF_FOG_ENABLE, true);

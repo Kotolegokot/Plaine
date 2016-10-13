@@ -19,7 +19,7 @@
 
 using namespace irr;
 
-ObstacleGenerator::ObstacleGenerator(IrrlichtDevice *device, btDynamicsWorld *world, f32 farValue, f32 buffer) :
+ObstacleGenerator::ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, f32 farValue, f32 buffer) :
     device(device), farValue(farValue), buffer(buffer), world(world) {}
 
 ObstacleGenerator::~ObstacleGenerator()

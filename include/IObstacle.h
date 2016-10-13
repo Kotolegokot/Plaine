@@ -27,7 +27,7 @@ using namespace irr;
 class IObstacle
 {
 public:
-    IObstacle(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position) :
+    IObstacle(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &position) :
         world(world), device(device), position(position) {}
     virtual ~IObstacle() {}
 
@@ -35,8 +35,8 @@ public:
     virtual void setPosition(const btVector3 &position) = 0;
 
 protected:
-    btDynamicsWorld *world = nullptr;
-    IrrlichtDevice *device = nullptr;
+    btDynamicsWorld &world;
+    IrrlichtDevice &device;
     btVector3 position;
 };
 

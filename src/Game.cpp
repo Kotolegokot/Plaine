@@ -18,7 +18,7 @@
 
 using namespace irr;
 
-Game::Game(const struct ConfigData &data)
+Game::Game(const ConfigData &data)
 {
     // load configuration, initialize device and GUI
     configuration = data;
@@ -104,7 +104,7 @@ void Game::initializeScene()
     initializeBullet();
 
     // create plane
-    plane = new Plane(dynamicsWorld, device, btVector3(0, 0, 0));
+    plane = new Plane(*dynamicsWorld, *device, btVector3(0, 0, 0));
     planeControl = new PlaneControl(plane, configuration.controls);
 
     debugDrawer = new DebugDrawer(device);
@@ -139,7 +139,7 @@ void Game::initializeScene()
     light->setLightData(lightData);
 
     // create obstacle generator
-    obstacleGenerator = new ObstacleGenerator(device, dynamicsWorld, camera->getFarValue(), 500);
+    obstacleGenerator = new ObstacleGenerator(*device, *dynamicsWorld, camera->getFarValue(), 500);
 }
 
 void Game::error(const core::stringw &str) const

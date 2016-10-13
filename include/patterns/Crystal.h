@@ -24,7 +24,7 @@
 class Crystal : public IObstaclePattern
 {
 public:
-    Crystal(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position, btScalar radius,
+    Crystal(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &position, btScalar radius,
         btScalar length) :
         IObstaclePattern(world, device, position), radius(radius), length(length)
     {

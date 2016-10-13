@@ -29,7 +29,7 @@ using namespace irr;
 class IObstaclePattern
 {
 public:
-    IObstaclePattern(btDynamicsWorld *world, IrrlichtDevice *device, const btVector3 &position) :
+    IObstaclePattern(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &position) :
         world(world), device(device), position(position) {}
     virtual ~IObstaclePattern() {}
 
@@ -37,8 +37,8 @@ public:
     virtual size_t getObstacleCount() const = 0;
 
 protected:
-    btDynamicsWorld *world = nullptr;
-    IrrlichtDevice *device = nullptr;
+    btDynamicsWorld &world;
+    IrrlichtDevice &device;
     btVector3 position;
 
 };
