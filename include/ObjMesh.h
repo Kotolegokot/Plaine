@@ -53,7 +53,7 @@ private:
         Item(ItemType type, int intNumber) :
             type(type), data((void *) new int(intNumber)) {}
 
-        Item(Item &&item) :
+        Item(Item &&item) noexcept :
             type(item.type), data(item.data)
         {
             item.data = nullptr;
