@@ -21,11 +21,12 @@ addons:
       - libfreetype6-dev
 before_script:
   - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
-  - if [ $CC == "gcc" ]; then
-      export CXX=g++;
-    else
-      export CXX=clang++;
-    fi
 
 script:
   - make
+  
+deploy:
+  skip_cleanup: true  
+
+after_deploy:
+  make clean
