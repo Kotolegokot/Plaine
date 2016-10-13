@@ -60,7 +60,7 @@ void Plane::createShape()
 {
     ObjMesh objMesh(PLANE_MODEL);
 
-    shape = std::make_unique<btConvexTriangleMeshShape>(objMesh.getTriangleMesh());
+    shape = std::make_unique<btConvexTriangleMeshShape>(objMesh.getTriangleMesh().release());
 }
 
 btScalar Plane::getMass()

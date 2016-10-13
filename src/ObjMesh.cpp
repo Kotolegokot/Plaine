@@ -286,9 +286,9 @@ void ObjMesh::loadMesh(const std::string &filename)
     }*/
 }
 
-btTriangleMesh *ObjMesh::getTriangleMesh()
+std::unique_ptr<btTriangleMesh> ObjMesh::getTriangleMesh()
 {
-    btTriangleMesh *triangleMesh = new btTriangleMesh();
+    auto triangleMesh = std::make_unique<btTriangleMesh>();
     for (const std::vector<size_t> &polygon : polygons)
         for (size_t i = 1; i < polygon.size() - 1; i++)
             triangleMesh->addTriangle(vertices[polygon[0]], vertices[polygon[i]], vertices[polygon[i + 1]]);

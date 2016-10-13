@@ -18,6 +18,7 @@
 #define OBJMESH_H
 
 #include <iostream>
+#include <memory>
 #include <fstream>
 #include <vector>
 #include <string>
@@ -31,7 +32,7 @@ public:
     ObjMesh() = default;
     ObjMesh(const std::string &filename);
     void loadMesh(const std::string &filename);
-    btTriangleMesh *getTriangleMesh();
+    std::unique_ptr<btTriangleMesh> getTriangleMesh();
     void setPoints(btConvexHullShape &shape);
 
 private:
