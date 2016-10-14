@@ -87,6 +87,7 @@ protected:
         btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, motionState.get(), shape.get(), inertia);
 
         rigidBody = std::make_unique<btRigidBody>(rigidBodyCI);
+        rigidBody->setUserIndex(0); // default index for bodies
         world.addRigidBody(rigidBody.get());
     }
 
