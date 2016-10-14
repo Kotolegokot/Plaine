@@ -20,7 +20,7 @@ Also you can use `automake` to build the project (not tested on Windows). The fo
 * `make clean`
 * `make all` : both `debug` and `release`
 
-You can change the compiler used by specifying the CXX variable (i.e. `make release CXX=clang++`). The default one is `g++`.
+You can change the compiler used by specifying the CXX variable (i.e. `make release CXX=clang++`).
 
 ### Compiler
 TDM-GCC (Windows), gcc (linux), clang (linux) have been tested to successfully bulid the project.
