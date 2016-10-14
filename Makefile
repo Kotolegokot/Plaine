@@ -21,6 +21,7 @@ release:
 clean:
 	rm -rf bin/
 	rm -rf obj/
+	rm logfile
 
 debug_run:
 	echo ==== NEW START ==== >> logfile
