@@ -709,7 +709,7 @@ void Game::run()
                 // draw scene
                 sceneManager->drawAll();
                 #if DEBUG_OUTPUT
-                std::cout << "=== STEP_SIMULATION ===" << std::endl;
+                std::cout << "=== STEP_SIMULATION ===" << std::endl << std::endl;
                 #endif
             }
             guiEnvironment->drawAll();

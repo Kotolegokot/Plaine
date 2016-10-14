@@ -35,7 +35,6 @@ using namespace irr;
 
 #define _(string) gettext(string)
 #define _w(string) utf8_to_irrwide(gettext(string))
-#define _cw(string) utf8_to_wide(gettext(string))
 #define _wp(string) utf8_to_wide(gettext(string)).c_str()
 
 size_t convert(const char *to, const char *from, char *outbuf, size_t outbuf_size, char *inbuf, size_t inbuf_size);
