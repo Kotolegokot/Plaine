@@ -94,6 +94,13 @@ void Game::initializeBullet()
     // create world
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0, 0, 0));
+
+    gContactProcessedCallback = [](btManifoldPoint &cp, void *obj0, void *obj1) -> bool
+        {
+            std::cout << "Collision!" << std::endl;
+
+            return true;
+        };
 }
 
 void Game::initializeScene()
