@@ -498,6 +498,12 @@ void Game::run()
     video::SLight lightData;
     video::SColor color;
 
+    const unsigned int TickMs = 32;
+    u32 time_physics_prev, time_physics_curr;
+    u64 time_gameclock;
+
+    time_physics_prev = time_physics_curr = time_gameclock = timer->getTime();
+
     while (device->run())
     {
         // if we exit to menu or quit the game, then stop
@@ -560,15 +566,24 @@ void Game::run()
             #endif // IRIDESCENT_BACKGROUND
 
             if (!pause) {
-                planeControl->handle(*eventReceiver); // handle plane controls
+                  sceneManager->drawAll(); // draw scene
 
+                time_physics_curr = timer->getTime();
                 // physics simulation
-                dynamicsWorld->stepSimulation(1 / 60.0f);
+                dynamicsWorld->stepSimulation(((float)(time_physics_curr - time_physics_prev) / 1000.0), 10);
+                time_physics_prev = time_physics_curr;
                 #if DEBUG_DRAWER_ENABLED
                     dynamicsWorld->debugDrawWorld();
                 #endif // DEBUG_DRAWER_ENABLED
 
-                sceneManager->drawAll(); // draw scene
+                u64 dt = timer->getTime() - time_gameclock;
+
+                while (dt >= TickMs) {
+                    dt -= TickMs;
+                    time_gameclock += TickMs;
+
+                    planeControl->handle(*eventReceiver); // handle plane controls
+                }
                 #if DEBUG_OUTPUT
                     std::cout << "=== STEP_SIMULATION ===" << std::endl << std::endl;
                 #endif
