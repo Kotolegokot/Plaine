@@ -5,6 +5,7 @@ deps
 PlaneRunner.layout
 PlaneRunner.depend
 planerunner.pot
+logfile
 *.conf
 *~
 *.blend1

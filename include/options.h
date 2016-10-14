@@ -14,11 +14,38 @@
  * along with PlaneRunner. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define DEBUG_DRAWER_ENABLED false
-#define FOG_ENABLED true
-#define TEXTURES_ENABLED true
-#define IRIDESCENT_BACKGROUND true
-#define IRIDESCENT_LIGHT true
-#define IRIDESCENT_FOG true
-#define DEFAULT_COLOR video::SColor(0, 200, 200, 200)
-#define DEFAULT_LIGHT_COLOR video::SColor(0, 0, 0, 0)
+#ifndef DEBUG_DRAWER_ENABLED
+    #define DEBUG_DRAWER_ENABLED false
+#endif // DEBUG_DRAWER_ENABLED
+
+#ifndef FOG_ENABLED
+    #define FOG_ENABLED true
+#endif // FOG_ENABLED
+
+#ifndef TEXTURES_ENABLED
+    #define TEXTURES_ENABLED true
+#endif // TEXTURES_ENABLED
+
+#ifndef IRIDESCENT_BACKGROUND
+    #define IRIDESCENT_BACKGROUND true
+#endif // IRIDESCENT_BACKGROUND
+
+#ifndef IRIDESCENT_LIGHT
+    #define IRIDESCENT_LIGHT true
+#endif // IRIDESCENT_LIGHT
+
+#ifndef IRIDESCENT_FOG
+    #define IRIDESCENT_FOG true
+#endif // IRIDESCENT_FOG
+
+#ifndef DEFAULT_COLOR
+    #define DEFAULT_COLOR video::SColor(0, 200, 200, 200)
+#endif // DEFAULT_COLOR
+
+#ifndef DEFAULT_LIGHT_COLOR
+    #define DEFAULT_LIGHT_COLOR video::SColor(0, 0, 0, 0)
+#endif // DEFAULT_LIGHT_COLOR
+
+#ifndef DEBUG_OUTPUT
+    #define DEBUG_OUTPUT true
+#endif // DEBUG_OUTPUT

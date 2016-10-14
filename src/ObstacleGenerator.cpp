@@ -16,6 +16,7 @@
 
 #include "ObstacleGenerator.h"
 #include "util.h"
+#include "options.h"
 
 using namespace irr;
 
@@ -32,8 +33,12 @@ ObstacleGenerator::~ObstacleGenerator()
 void ObstacleGenerator::generate(const core::vector3df &playerPosition)
 {
     // number of obstacles generated within this tick
+    #if DEBUG_OUTPUT
     unsigned long obstacleGenerated = 0;
     auto handleCell = [&obstacleGenerated, this](btScalar x, btScalar y, btScalar z)
+    #else
+    auto handleCell =  [this](btScalar x, btScalar y, btScalar z)
+    #endif // DEBUG_OUTPUT
     {
         btScalar newX = x + getRandomf(-100, 100);
         btScalar newY = y + getRandomf(-100, 100);
@@ -46,7 +51,9 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                 Tunnel tunnel(world, device, btVector3(newX, newY, newZ), getRandomf(100, 200), getRandomf(300, 600));
                 tunnel.addObstaclesToDeque(obstacles);
                 obstacleCount += tunnel.getObstacleCount();
+                #if DEBUG_OUTPUT
                 obstacleGenerated += tunnel.getObstacleCount();
+                #endif // DEBUG_OUTPUT
                 break;
             }
         case 1:
@@ -54,7 +61,9 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                 Crystal crystal(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 100.f), getRandomf(300.f, 600.f));
                 crystal.addObstaclesToDeque(obstacles);
                 obstacleCount += crystal.getObstacleCount();
+                #if DEBUG_OUTPUT
                 obstacleGenerated += crystal.getObstacleCount();
+                #endif // DEBUG_OUTPUT
                 break;
             }
         case 2:
@@ -64,7 +73,9 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                         btVector3(getRandomf(50.0f, 250.0f), getRandomf(50.f, 250.f), getRandomf(50.f, 250.f)));
                 obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
+                #if DEBUG_OUTPUT
                 obstacleGenerated++;
+                #endif // DEBUG_OUTPUT
                 break;
             }
         case 3:
@@ -73,7 +84,9 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     std::make_unique<Icosahedron>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
                 obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
+                #if DEBUG_OUTPUT
                 obstacleGenerated++;
+                #endif // DEBUG_OUTPUT
                 break;
             }
         case 4:
@@ -82,7 +95,9 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     std::make_unique<Icosphere2>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 200.f));
                 obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
+                #if DEBUG_OUTPUT
                 obstacleGenerated++;
+                #endif // DEBUG_OUTPUT
                 break;
             }
         case 5:
@@ -91,7 +106,9 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     std::make_unique<Tetrahedron>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
                 obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
+                #if DEBUG_OUTPUT
                 obstacleGenerated++;
+                #endif // DEBUG_OUTPUT
                 break;
             }
         case 6:
@@ -100,7 +117,9 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                     std::make_unique<Cone>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 200.f), getRandomf(50.f, 200.f));
                 obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
+                #if DEBUG_OUTPUT
                 obstacleGenerated++;
+                #endif // DEBUG_OUTPUT
                 break;
             }
         case 7:
@@ -154,7 +173,9 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                 handleCell(x, y, z);
             }
 
+    #if DEBUG_OUTPUT
     std::cout << obstacleGenerated << " obstacles generated" << std::endl;
+    #endif // DEBUG_OUTPUT
 
     // these are the edges of the generated zone
     // the part of the level behind them is generated and must not be touched

@@ -606,13 +606,22 @@ void Game::run()
                 cameraPosition += position.Z;
                 cameraPosition += ")";
                 gui->textCameraPos->setText(cameraPosition.c_str());
+
+                #if DEBUG_OUTPUT
+                std::cout << "Plane position: (" << position.X << ", " << position.Y <<
+                                            ", " << position.Z << ")" << std::endl;
+                #endif // DEBUG_OUTPUT
             }
 
             // cube counter
             {
-                core::stringw cubeCount = _w("Cubes: ");
+                core::stringw cubeCount = _w("Obstacles: ");
                 cubeCount += obstacleGenerator->getCubeCount();
                 gui->textCubeCount->setText(cubeCount.c_str());
+
+                #if DEBUG_OUTPUT
+                std::cout << "Obstacles: " << obstacleGenerator->getCubeCount() << std::endl;
+                #endif // DEBUG_OUTPUT
             }
 
             // fps counter
@@ -620,6 +629,10 @@ void Game::run()
                 core::stringw fps = _w("FPS: ");
                 fps += driver->getFPS();
                 gui->textFPS->setText(fps.c_str());
+
+                #if DEBUG_OUTPUT
+                std::cout << "FPS: " << driver->getFPS() << std::endl;
+                #endif // DEBUG_OUTPUT
             }
 
             // velocity counter
@@ -629,6 +642,22 @@ void Game::run()
                 velocity += _w(", angular velocity: ");
                 velocity += plane->getRigidBody().getAngularVelocity().length();
                 gui->textVelocity->setText(velocity.c_str());
+
+                #if DEBUG_OUTPUT
+                std::cout << "Linear velocity: " << plane->getRigidBody().getLinearVelocity().length() << std::endl;
+                std::cout << "Angular velocity: " << plane->getRigidBody().getAngularVelocity().length() << std::endl;
+                #endif // DEBUG_OUTPUT
+            }
+
+            // points counter
+            {
+                 core::stringw points = _w("Points: ");
+                 points += (int) (plane ->getNode().getPosition().Z *0.01f);
+                 gui->textPoints->setText(points.c_str());
+
+                 #if DEBUG_OUTPUT
+                 std::cout << "Score: " << (int) plane->getNode().getPosition().Z * 0.01f << std::endl;
+                 #endif // DEBUG_OUTPUT
             }
 
             // set camera position, target, and rotation
@@ -641,13 +670,6 @@ void Game::run()
                 camera->setUpVector(upVector);
 
                 camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
-            }
-
-            //set points counter
-            {
-                 core::stringw points = _w("Points: ");
-                 points += (int) (plane ->getNode().getPosition().Z *0.01);
-                 gui->textPoints->setText(points.c_str());
             }
 
             //set cursor invisible
@@ -686,7 +708,7 @@ void Game::run()
                 dynamicsWorld->debugDrawWorld();
                 // draw scene
                 sceneManager->drawAll();
-                #ifdef DEBUG
+                #if DEBUG_OUTPUT
                 std::cout << "=== STEP_SIMULATION ===" << std::endl;
                 #endif
             }

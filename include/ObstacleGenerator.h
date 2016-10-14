@@ -23,6 +23,7 @@
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
+#include "options.h"
 #include "MotionState.h"
 #include "IObstacle.h"
 #include "IBody.h"

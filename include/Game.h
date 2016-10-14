@@ -83,6 +83,8 @@ private:
     void terminateScene();
     void terminateDevice();
 
+    void printDebugInfo();
+
     // Constants
     const core::stringw ERR_NOT_INITIALIZED = "device has failed to initialize!";
 };
