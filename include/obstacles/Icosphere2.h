@@ -37,7 +37,7 @@ public:
 
     virtual btScalar getMass() override
     {
-        btScalar k = 4 / 3 * core::PI;
+        btScalar k = 4.0f / 3.0f * core::PI;
         return radius*radius*radius*k*MASS_COEFFICIENT;
     }
 

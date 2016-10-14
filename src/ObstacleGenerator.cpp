@@ -19,7 +19,7 @@
 
 using namespace irr;
 
-ObstacleGenerator::ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, f32 farValue, f32 buffer) :
+ObstacleGenerator::ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, btScalar farValue, btScalar buffer) :
     device(device), farValue(farValue), buffer(buffer), world(world) {}
 
 ObstacleGenerator::~ObstacleGenerator()
@@ -31,95 +31,130 @@ ObstacleGenerator::~ObstacleGenerator()
 
 void ObstacleGenerator::generate(const core::vector3df &playerPosition)
 {
-    // The Z loop must be the first here, because the "nodes" deque must be sorted by nodes' Z coordinate
-    for (f32 z = preciseEdge(playerPosition.Z); z <= preciseEdge(playerPosition.Z + farValueWithBuffer()); z += STEP)
-        for (f32 x = preciseEdge(playerPosition.X - farValueWithBuffer()); x <= preciseEdge(playerPosition.X + farValueWithBuffer()); x += STEP)
-            for (f32 y = preciseEdge(playerPosition.Y - farValueWithBuffer()); y <= preciseEdge(playerPosition.Y + farValueWithBuffer()); y += STEP) {
+    // number of obstacles generated within this tick
+    unsigned long obstacleGenerated = 0;
+    auto handleCell = [&obstacleGenerated, this](btScalar x, btScalar y, btScalar z)
+    {
+        btScalar newX = x + getRandomf(-100, 100);
+        btScalar newY = y + getRandomf(-100, 100);
+        btScalar newZ = z + getRandomf(-100, 100);
 
-                // check if the position is within the already generated zone
-                bool insideX = false, insideY = false, insideZ = false;
-                insideX = x >= generatedEdgeLeft && x <= generatedEdgeRight;
-                insideY = y >= generatedEdgeBottom && y <= generatedEdgeTop;
-                insideZ = z <= generatedEdgeZ;
-
-                bool inside = insideX && insideY && insideZ;
-
-                // if it's not, we create a new cube
-                if (!inside) {
-                    // add some randomness to its position (for fun ofc)
-                    f32 newX = x + getRandomf(-100, 100);
-                    f32 newY = y + getRandomf(-100, 100);
-                    f32 newZ = z + getRandomf(-100, 100);
-
-                    // create obstacles and add them to the deque
-                    switch(int(getRandomf(0, 6))){
-                    case 0:
-                        {
-                            IObstaclePattern *pattern = nullptr;
-                            pattern = new Tunnel(world, device, btVector3(newX, newY, newZ), getRandomf(100, 200), getRandomf(300, 600));
-                            pattern->addObstaclesToDeque(obstacles);
-                            obstacleCount += pattern->getObstacleCount();
-                            delete pattern;
-                            break;
-                        }
-                    case 1:
-                        {
-                            IObstaclePattern *pattern = nullptr;
-                            pattern = new Crystal(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f), getRandomf(300.f, 600.f));
-                            pattern->addObstaclesToDeque(obstacles);
-                            obstacleCount += pattern->getObstacleCount();
-                            delete pattern;
-                            break;
-                        }
-                    case 2:
-                        {
-                            std::unique_ptr<IObstacle> obstacle =
-                                std::make_unique<Box>(world, device, btVector3(newX, newY, newZ),
-                                    btVector3(getRandomf(50.0f, 250.0f), getRandomf(50.f, 250.f), getRandomf(50.f, 250.f)));
-                            obstacles.push_back(std::move(obstacle));
-                            obstacleCount++;
-                            break;
-                        }
-                        case 3:
-                        {
-                            std::unique_ptr<IObstacle> obstacle =
-                                std::make_unique<Icosahedron>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
-                            obstacles.push_back(std::move(obstacle));
-                            obstacleCount++;
-                            break;
-                        }
-                    case 4:
-                        {
-                            std::unique_ptr<IObstacle> obstacle =
-                                std::make_unique<Icosphere2>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 200.f));
-                            obstacles.push_back(std::move(obstacle));
-                            obstacleCount++;
-                            break;
-                        }
-                    case 5:
-                        {
-                            std::unique_ptr<IObstacle> obstacle =
-                                std::make_unique<Tetrahedron>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
-                            obstacles.push_back(std::move(obstacle));
-                            obstacleCount++;
-                            break;
-                        }
-                    case 6:
-                        {
-                            std::unique_ptr<IObstacle> obstacle =
-                                std::make_unique<Cone>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 200.f), getRandomf(50.f, 200.f));
-                            obstacles.push_back(std::move(obstacle));
-                            obstacleCount++;
-                            break;
-                        }
-                    }
-
-                    //if (int(getRandomf(1, 1)) == 1)
-                    //    body->getRigidBody()->applyTorqueImpulse(btVector3(getRandomf(-10000, 10000), getRandomf(-10000, 10000), getRandomf(-10000, 10000))*body->getMass());
-                    //if (int(getRandomf(1, 1)) == 1)
-                    //    body->getRigidBody()->applyCentralImpulse(btVector3(getRandomf(-100, 100), getRandomf(-100, 100), getRandomf(-100, 100))*body->getMass());
-                }
+        // create obstacles and add them to the deque
+        switch(int(getRandomf(0, 8))) {
+        case 0:
+            {
+                Tunnel tunnel(world, device, btVector3(newX, newY, newZ), getRandomf(100, 200), getRandomf(300, 600));
+                tunnel.addObstaclesToDeque(obstacles);
+                obstacleCount += tunnel.getObstacleCount();
+                obstacleGenerated += tunnel.getObstacleCount();
+                break;
             }
+        case 1:
+            {
+                Crystal crystal(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 100.f), getRandomf(300.f, 600.f));
+                crystal.addObstaclesToDeque(obstacles);
+                obstacleCount += crystal.getObstacleCount();
+                obstacleGenerated += crystal.getObstacleCount();
+                break;
+            }
+        case 2:
+            {
+                std::unique_ptr<IObstacle> obstacle =
+                    std::make_unique<Box>(world, device, btVector3(newX, newY, newZ),
+                        btVector3(getRandomf(50.0f, 250.0f), getRandomf(50.f, 250.f), getRandomf(50.f, 250.f)));
+                obstacles.push_back(std::move(obstacle));
+                obstacleCount++;
+                obstacleGenerated++;
+                break;
+            }
+        case 3:
+            {
+                std::unique_ptr<IObstacle> obstacle =
+                    std::make_unique<Icosahedron>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
+                obstacles.push_back(std::move(obstacle));
+                obstacleCount++;
+                obstacleGenerated++;
+                break;
+            }
+        case 4:
+            {
+                std::unique_ptr<IObstacle> obstacle =
+                    std::make_unique<Icosphere2>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 200.f));
+                obstacles.push_back(std::move(obstacle));
+                obstacleCount++;
+                obstacleGenerated++;
+                break;
+            }
+        case 5:
+            {
+                std::unique_ptr<IObstacle> obstacle =
+                    std::make_unique<Tetrahedron>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
+                obstacles.push_back(std::move(obstacle));
+                obstacleCount++;
+                obstacleGenerated++;
+                break;
+            }
+        case 6:
+            {
+                std::unique_ptr<IObstacle> obstacle =
+                    std::make_unique<Cone>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 200.f), getRandomf(50.f, 200.f));
+                obstacles.push_back(std::move(obstacle));
+                obstacleCount++;
+                obstacleGenerated++;
+                break;
+            }
+        case 7:
+            {
+                //Emptiness empt(nothing);
+                //empt.add_to_the_world(world, device);
+                break;
+            }
+        default:
+            break;
+        }
+
+        //if (int(getRandomf(1, 1)) == 1)
+        //    body->getRigidBody()->applyTorqueImpulse(btVector3(getRandomf(-10000, 10000), getRandomf(-10000, 10000), getRandomf(-10000, 10000))*body->getMass());
+        //if (int(getRandomf(1, 1)) == 1)
+        //    body->getRigidBody()->applyCentralImpulse(btVector3(getRandomf(-100, 100), getRandomf(-100, 100), getRandomf(-100, 100))*body->getMass());
+    };
+
+    // The Z loop must be the first here, because the obstacle deque must be sorted by obstacle' Z coordinate
+    for (btScalar z = preciseEdge(playerPosition.Z - buffer); z <= generatedEdgeZ; z += STEP) {
+
+        for (btScalar x = preciseEdge(playerPosition.X - farValueWithBuffer()); x < generatedEdgeLeft; x += STEP)
+            for (btScalar y = preciseEdge(playerPosition.Y - farValueWithBuffer());
+                y <= preciseEdge(playerPosition.Y + farValueWithBuffer()); y += STEP)
+            {
+                handleCell(x, y, z);
+            }
+
+        for (btScalar x = generatedEdgeLeft; x <= generatedEdgeRight; x += STEP) {
+            for (btScalar y = preciseEdge(playerPosition.Y - farValueWithBuffer()); y < generatedEdgeBottom; y += STEP)
+                handleCell(x, y, z);
+
+            for (btScalar y = generatedEdgeTop + STEP; y <= preciseEdge(playerPosition.Y + farValueWithBuffer()); y += STEP)
+                handleCell(x, y, z);
+        }
+
+        for (btScalar x = generatedEdgeRight + STEP; x <= preciseEdge(playerPosition.X + farValueWithBuffer()); x += STEP)
+            for (btScalar y = preciseEdge(playerPosition.Y - farValueWithBuffer());
+                y <= preciseEdge(playerPosition.Y + farValueWithBuffer()); y += STEP)
+            {
+                handleCell(x, y, z);
+            }
+    }
+
+    for (btScalar z = generatedEdgeZ + STEP; z <= preciseEdge(playerPosition.Z + farValueWithBuffer()); z += STEP)
+        for (btScalar x = preciseEdge(playerPosition.X - farValueWithBuffer());
+            x <= preciseEdge(playerPosition.X + farValueWithBuffer()); x += STEP)
+            for (btScalar y = preciseEdge(playerPosition.Y - farValueWithBuffer());
+                y <= preciseEdge(playerPosition.Y + farValueWithBuffer()); y += STEP)
+            {
+                handleCell(x, y, z);
+            }
+
+    std::cout << obstacleGenerated << " obstacles generated" << std::endl;
 
     // these are the edges of the generated zone
     // the part of the level behind them is generated and must not be touched
@@ -133,13 +168,13 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
     removeLeftBehind(playerPosition.Z);
 }
 
-f32 ObstacleGenerator::preciseEdge(f32 edge) const
+btScalar ObstacleGenerator::preciseEdge(btScalar edge) const
 {
     return floor(edge / STEP)*STEP;
 }
 
 // removes obstacles behind the player
-void ObstacleGenerator::removeLeftBehind(f32 playerZ)
+void ObstacleGenerator::removeLeftBehind(btScalar playerZ)
 {
     while (!obstacles.empty()) {
         if (obstacles.front()->getPosition().z() < playerZ - buffer)
@@ -156,27 +191,27 @@ u32 ObstacleGenerator::getCubeCount() const
     return obstacleCount;
 }
 
-f32 ObstacleGenerator::farValueWithBuffer() const
+btScalar ObstacleGenerator::farValueWithBuffer() const
 {
     return farValue + buffer;
 }
 
-void ObstacleGenerator::setFarValue(f32 value)
+void ObstacleGenerator::setFarValue(btScalar value)
 {
     farValue = value;
 }
 
-f32 ObstacleGenerator::getFarValue() const
+btScalar ObstacleGenerator::getFarValue() const
 {
     return farValue;
 }
 
-void ObstacleGenerator::setBuffer(f32 buffer)
+void ObstacleGenerator::setBuffer(btScalar buffer)
 {
     this->buffer = buffer;
 }
 
-f32 ObstacleGenerator::getBuffer() const
+btScalar ObstacleGenerator::getBuffer() const
 {
     return buffer;
 }

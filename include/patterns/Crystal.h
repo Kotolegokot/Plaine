@@ -29,7 +29,7 @@ public:
         IObstaclePattern(world, device, position), radius(radius), length(length)
     {
         cone1 = std::make_unique<Cone>(world, device, position, radius, length / 2.0f);
-        cone2 = std::make_unique<Cone>(world, device, position, radius, length / 2.0f);
+        cone2 = std::make_unique<Cone>(world, device, position + btVector3(0, 50, 0), radius, length / 2.0f);
 
         // turn cone2 upside down
         btTransform transform;

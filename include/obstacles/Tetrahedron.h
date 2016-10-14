@@ -37,7 +37,7 @@ public:
 
     virtual btScalar getMass() override
     {
-        btScalar k = 1 / 6 / std::sqrt(2);
+        btScalar k = 1.0f / 6.0f / std::sqrt(2);
         return edge * edge * edge * k * MASS_COEFFICIENT;
     }
 
