@@ -66,7 +66,10 @@ private:
     btCollisionDispatcher *dispatcher = nullptr;
     btSequentialImpulseConstraintSolver *solver = nullptr;
     btDiscreteDynamicsWorld *dynamicsWorld = nullptr;
-    btIDebugDraw *debugDrawer = nullptr;
+
+    #if DEBUG_DRAWER_ENABLED
+        btIDebugDraw *debugDrawer = nullptr;
+    #endif // DEBUG_DRAWER_ENABLED
 
     // Scene
     scene::ILightSceneNode *light = nullptr;
@@ -82,6 +85,11 @@ private:
     void initializeScene();
     void terminateScene();
     void terminateDevice();
+
+    void updateHUD();
+    void updateCamera();
+    // returns false if need to quit pause menu
+    bool handlePause(video::SColor &color);
 
     // Constants
     const core::stringw ERR_NOT_INITIALIZED = "device has failed to initialize!";

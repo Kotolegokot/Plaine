@@ -107,38 +107,30 @@ void Game::initializeScene()
     plane = new Plane(*dynamicsWorld, *device, btVector3(0, 0, 0));
     planeControl = new PlaneControl(*plane, configuration.controls);
 
-    debugDrawer = new DebugDrawer(device);
-    if (DEBUG_DRAWER_ENABLED)
+    #if DEBUG_DRAWER_ENABLED
+        debugDrawer = new DebugDrawer(device);
         debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-    dynamicsWorld->setDebugDrawer(debugDrawer);
+        dynamicsWorld->setDebugDrawer(debugDrawer);
+    #endif // DEBUG_DRAWER_ENABLED
 
     // create camera
     {
         camera = sceneManager->addCameraSceneNode(0);
         camera->setFarValue(configuration.renderDistance);
-
-        // set camera position and rotation
-        core::vector3df upVector(0, 1, 0);
-        upVector.rotateXYBy(plane->getEulerRotation().z() * core::RADTODEG64);
-
-        camera->setPosition(plane->getNode().getPosition() + upVector * 0.3f * CAMERA_DISTANCE
-                - core::vector3df(0, 0, CAMERA_DISTANCE));
-        camera->setUpVector(upVector);
-
-        camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
+        updateCamera();
     }
 
-
     // add some light
-    light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), DEFAULT_LIGHT_COLOR, 300);
-    light->setLightType(video::ELT_DIRECTIONAL);
-    video::SLight lightData;
-    lightData = light->getLightData();
-    lightData.DiffuseColor = DEFAULT_LIGHT_COLOR;
-    lightData.AmbientColor = DEFAULT_LIGHT_COLOR;
-    light->setLightData(lightData);
+    {
+        light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), DEFAULT_LIGHT_COLOR, 300);
+        light->setLightType(video::ELT_DIRECTIONAL);
+        video::SLight lightData;
+        lightData = light->getLightData();
+        lightData.DiffuseColor = DEFAULT_LIGHT_COLOR;
+        lightData.AmbientColor = DEFAULT_LIGHT_COLOR;
+        light->setLightData(lightData);
+    }
 
-    // create obstacle generator
     obstacleGenerator = new ObstacleGenerator(*device, *dynamicsWorld, camera->getFarValue(), 500);
 }
 
@@ -500,182 +492,45 @@ void Game::menu()
 // start the game itself
 void Game::run()
 {
-    // initialize HUD
     gui->initialize(HUD);
-    //initialize scene
     initializeScene();
-    // create structure for light data
+
     video::SLight lightData;
-    // create variable for color
     video::SColor color;
+
     while (device->run())
     {
-        // if we exit to menu or quit from game -> stop
+        // if we exit to menu or quit the game, then stop
         if (eventReceiver->state == MENU || eventReceiver->quit) {
             break;
         }
-        // set color
+
         color = iridescentColor(timer->getTime());
         if (pause) {
-            // catch a resize of window
-            if (configuration.resolution != driver->getScreenSize())
-            {
-                configuration.resolution = driver->getScreenSize();
-                gui->resizeGUI();
-            }
-            // screen size
-            core::stringw scrs = _w("Screen size: ");
-            scrs += configuration.resolution.Width;
-            scrs += "x";
-            scrs += configuration.resolution.Height;
-            gui->textScreenSize->setText(scrs.c_str());
-            // set cursor visible
-            device->getCursorControl()->setVisible(true);
-
-            // if need to toggle gui
-            if (eventReceiver->toggleGUI) {
-                pause = !pause;
-                gui->terminate();
-                gui->initialize(HUD);
-                eventReceiver->toggleGUI = false;
-            }
-            if ((guiEnvironment->getFocus() != nullptr) && (eventReceiver->tabPressed))
-            {
-                gui->selectWithTab();
-                eventReceiver->tabPressed = false;
-            }
-            if (eventReceiver->downPressed)
-            {
-                if (guiEnvironment->getFocus() == nullptr)
-                    gui->selectElement(0);
-                else
-                    gui->selectNextElement();
-                eventReceiver->downPressed = false;
-            }
-            if (eventReceiver->upPressed)
-            {
-                if (guiEnvironment->getFocus() == nullptr)
-                    gui->selectElement(0);
-                else
-                    gui->selectPreviousElement();
-                eventReceiver->upPressed = false;
-            }
-            if (eventReceiver->IsKeyDown(KEY_RIGHT))
-            {
-                if ((!eventReceiver->rightPressed) && (guiEnvironment->getFocus() != nullptr))
-                {
-                    SEvent event;
-                    event.EventType = EET_GUI_EVENT;
-                    event.GUIEvent.Caller = guiEnvironment->getFocus();
-                    event.GUIEvent.Element = guiEnvironment->getFocus();
-                    event.GUIEvent.EventType = gui::EGET_BUTTON_CLICKED;
-                    device->postEventFromUser(event);
-                    eventReceiver->rightPressed = true;
-                }
-            } else
-                eventReceiver->rightPressed = false;
-            if (eventReceiver->leftPressed)
-            {
-                eventReceiver->state = MENU;
-                eventReceiver->toggleGUI = true;
-                eventReceiver->leftPressed = false;
+            if (!handlePause(color))
                 break;
-            }
         } else {
-            // setting fog color
-            if (FOG_ENABLED && IRIDESCENT_FOG)
-                driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300, configuration.renderDistance, 0.01f, true, true);
+            // set fog color
+            #if FOG_ENABLED && IRIDESCENT_FOG
+                driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300,
+                    configuration.renderDistance, 0.01f, true, true);
+            #endif // FOG_ENABLED && IRIDESCENT_FOG
 
-            // setting light color
-            if (IRIDESCENT_LIGHT)
-            {
+            // set light color
+            #if IRIDESCENT_LIGHT
                 lightData = light->getLightData();
                 lightData.DiffuseColor = color;
                 lightData.AmbientColor = color;
                 light->setLightData(lightData);
-            }
+            #endif // IRIDESCENT_LIGHT
 
-            // camera position
-            {
-                core::stringw cameraPosition = _w("Plane position: (");
-                core::vector3df position = plane->getNode().getPosition();
-                cameraPosition += position.X;
-                cameraPosition += ", ";
-                cameraPosition += position.Y;
-                cameraPosition += ", ";
-                cameraPosition += position.Z;
-                cameraPosition += ")";
-                gui->textCameraPos->setText(cameraPosition.c_str());
-
-                #if DEBUG_OUTPUT
-                std::cout << "Plane position: (" << position.X << ", " << position.Y <<
-                                            ", " << position.Z << ")" << std::endl;
-                #endif // DEBUG_OUTPUT
-            }
-
-            // cube counter
-            {
-                core::stringw cubeCount = _w("Obstacles: ");
-                cubeCount += obstacleGenerator->getCubeCount();
-                gui->textCubeCount->setText(cubeCount.c_str());
-
-                #if DEBUG_OUTPUT
-                std::cout << "Obstacles: " << obstacleGenerator->getCubeCount() << std::endl;
-                #endif // DEBUG_OUTPUT
-            }
-
-            // fps counter
-            {
-                core::stringw fps = _w("FPS: ");
-                fps += driver->getFPS();
-                gui->textFPS->setText(fps.c_str());
-
-                #if DEBUG_OUTPUT
-                std::cout << "FPS: " << driver->getFPS() << std::endl;
-                #endif // DEBUG_OUTPUT
-            }
-
-            // velocity counter
-            {
-                core::stringw velocity = _w("Linear velocity: ");
-                velocity += (int) plane->getRigidBody().getLinearVelocity().length();
-                velocity += _w(", angular velocity: ");
-                velocity += plane->getRigidBody().getAngularVelocity().length();
-                gui->textVelocity->setText(velocity.c_str());
-
-                #if DEBUG_OUTPUT
-                std::cout << "Linear velocity: " << plane->getRigidBody().getLinearVelocity().length() << std::endl;
-                std::cout << "Angular velocity: " << plane->getRigidBody().getAngularVelocity().length() << std::endl;
-                #endif // DEBUG_OUTPUT
-            }
-
-            // points counter
-            {
-                 core::stringw points = _w("Points: ");
-                 points += (int) (plane ->getNode().getPosition().Z *0.01f);
-                 gui->textPoints->setText(points.c_str());
-
-                 #if DEBUG_OUTPUT
-                 std::cout << "Score: " << (int) plane->getNode().getPosition().Z * 0.01f << std::endl;
-                 #endif // DEBUG_OUTPUT
-            }
-
-            // set camera position, target, and rotation
-            {
-                core::vector3df upVector(0, 1, 0);
-                upVector.rotateXYBy(plane->getEulerRotation().z() * core::RADTODEG64);
-
-                camera->setPosition(plane->getNode().getPosition() + upVector * 0.3f * CAMERA_DISTANCE
-                    - core::vector3df(0, 0, CAMERA_DISTANCE));
-                camera->setUpVector(upVector);
-
-                camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
-            }
+            updateHUD();
+            updateCamera(); // update camera position, target, and rotation
 
             //set cursor invisible
             device->getCursorControl()->setVisible(false);
 
-            // generate level
+            // generate obstacles
             obstacleGenerator->generate(plane->getNode().getPosition());
 
             // if toggling gui is needed
@@ -686,32 +541,39 @@ void Game::run()
                 eventReceiver->toggleGUI = false;
             }
         }
-        // if escape is pressed
+
+        // if escape is pressed (what kind of magic is that??)
         if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
             if (!eventReceiver->escapePressed) {
                 eventReceiver->toggleGUI = true;
                 eventReceiver->escapePressed = true;
             }
-        } else if (!eventReceiver->IsKeyDown(KEY_ESCAPE)) {
+        } else {
             eventReceiver->escapePressed = false;
         }
+
         if (device->isWindowActive()) {
-            if (IRIDESCENT_BACKGROUND)
+            #if IRIDESCENT_BACKGROUND
                 driver->beginScene(true, true, color);
-            else
+            #else
                 driver->beginScene(true, true, DEFAULT_COLOR);
+            #endif // IRIDESCENT_BACKGROUND
+
             if (!pause) {
-                // handle plane controls
-                planeControl->handle(*eventReceiver);
+                planeControl->handle(*eventReceiver); // handle plane controls
+
                 // physics simulation
                 dynamicsWorld->stepSimulation(1 / 60.0f);
-                dynamicsWorld->debugDrawWorld();
-                // draw scene
-                sceneManager->drawAll();
+                #if DEBUG_DRAWER_ENABLED
+                    dynamicsWorld->debugDrawWorld();
+                #endif // DEBUG_DRAWER_ENABLED
+
+                sceneManager->drawAll(); // draw scene
                 #if DEBUG_OUTPUT
-                std::cout << "=== STEP_SIMULATION ===" << std::endl << std::endl;
+                    std::cout << "=== STEP_SIMULATION ===" << std::endl << std::endl;
                 #endif
             }
+
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
@@ -727,4 +589,159 @@ void Game::run()
 
     terminateScene();
     gui->terminate();
+}
+
+void Game::updateHUD()
+{
+    // camera position
+    {
+        core::stringw cameraPosition = _w("Plane position: (");
+        core::vector3df position = plane->getNode().getPosition();
+        cameraPosition += position.X;
+        cameraPosition += ", ";
+        cameraPosition += position.Y;
+        cameraPosition += ", ";
+        cameraPosition += position.Z;
+        cameraPosition += ")";
+        gui->textCameraPos->setText(cameraPosition.c_str());
+
+        #if DEBUG_OUTPUT
+            std::cout << "Plane position: (" << position.X << ", " << position.Y
+                      << ", " << position.Z << ")" << std::endl;
+        #endif // DEBUG_OUTPUT
+    }
+
+    // cube counter
+    {
+        core::stringw cubeCount = _w("Obstacles: ");
+        cubeCount += obstacleGenerator->getCubeCount();
+        gui->textCubeCount->setText(cubeCount.c_str());
+
+        #if DEBUG_OUTPUT
+            std::cout << "Obstacles: " << obstacleGenerator->getCubeCount() << std::endl;
+        #endif // DEBUG_OUTPUT
+    }
+
+    // fps counter
+    {
+        core::stringw fps = _w("FPS: ");
+        fps += driver->getFPS();
+        gui->textFPS->setText(fps.c_str());
+
+        #if DEBUG_OUTPUT
+            std::cout << "FPS: " << driver->getFPS() << std::endl;
+        #endif // DEBUG_OUTPUT
+    }
+
+    // velocity counter
+    {
+        core::stringw velocity = _w("Linear velocity: ");
+        velocity += (int) plane->getRigidBody().getLinearVelocity().length();
+        velocity += _w(", angular velocity: ");
+        velocity += plane->getRigidBody().getAngularVelocity().length();
+        gui->textVelocity->setText(velocity.c_str());
+
+        #if DEBUG_OUTPUT
+            std::cout << "Linear velocity: " << plane->getRigidBody().getLinearVelocity().length() << std::endl;
+            std::cout << "Angular velocity: " << plane->getRigidBody().getAngularVelocity().length() << std::endl;
+        #endif // DEBUG_OUTPUT
+    }
+
+    // points counter
+    {
+         core::stringw points = _w("Points: ");
+         points += (int) (plane ->getNode().getPosition().Z *0.01f);
+         gui->textPoints->setText(points.c_str());
+
+         #if DEBUG_OUTPUT
+            std::cout << "Score: " << (int) plane->getNode().getPosition().Z * 0.01f << std::endl;
+         #endif // DEBUG_OUTPUT
+    }
+}
+
+void Game::updateCamera()
+{
+    core::vector3df upVector(0, 1, 0);
+    upVector.rotateXYBy(plane->getEulerRotation().z() * core::RADTODEG64);
+
+    camera->setPosition(plane->getNode().getPosition() + upVector * 0.3f * CAMERA_DISTANCE
+        - core::vector3df(0, 0, CAMERA_DISTANCE));
+    camera->setUpVector(upVector);
+
+    camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
+}
+
+bool Game::handlePause(video::SColor &color)
+{
+    // catch window resize
+    if (configuration.resolution != driver->getScreenSize())
+    {
+        configuration.resolution = driver->getScreenSize();
+        gui->resizeGUI();
+    }
+
+    // screen size
+    {
+        core::stringw scrs = _w("Screen size: ");
+        scrs += configuration.resolution.Width;
+        scrs += "x";
+        scrs += configuration.resolution.Height;
+        gui->textScreenSize->setText(scrs.c_str());
+    }
+
+    // set cursor visible
+    device->getCursorControl()->setVisible(true);
+
+    // if need to toggle GUI
+    if (eventReceiver->toggleGUI) {
+        pause = !pause;
+        gui->terminate();
+        gui->initialize(HUD);
+        eventReceiver->toggleGUI = false;
+    }
+
+    if (guiEnvironment->getFocus() && eventReceiver->tabPressed) {
+        gui->selectWithTab();
+        eventReceiver->tabPressed = false;
+    }
+
+    if (eventReceiver->downPressed) {
+        if (!guiEnvironment->getFocus())
+            gui->selectElement(0);
+        else
+            gui->selectNextElement();
+        eventReceiver->downPressed = false;
+    }
+
+    if (eventReceiver->upPressed) {
+        if (!guiEnvironment->getFocus())
+            gui->selectElement(0);
+        else
+            gui->selectPreviousElement();
+        eventReceiver->upPressed = false;
+    }
+
+    if (eventReceiver->IsKeyDown(KEY_RIGHT)) {
+        if (!eventReceiver->rightPressed && guiEnvironment->getFocus())
+        {
+            SEvent event;
+            event.EventType = EET_GUI_EVENT;
+            event.GUIEvent.Caller = guiEnvironment->getFocus();
+            event.GUIEvent.Element = guiEnvironment->getFocus();
+            event.GUIEvent.EventType = gui::EGET_BUTTON_CLICKED;
+            device->postEventFromUser(event);
+            eventReceiver->rightPressed = true;
+        }
+    } else
+        eventReceiver->rightPressed = false;
+
+    if (eventReceiver->leftPressed)
+    {
+        eventReceiver->state = MENU;
+        eventReceiver->toggleGUI = true;
+        eventReceiver->leftPressed = false;
+        return false;
+    }
+
+    return true;
 }
