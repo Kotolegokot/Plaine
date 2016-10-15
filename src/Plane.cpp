@@ -23,6 +23,7 @@ Plane::Plane(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &po
 {
     createBody();
     rigidBody->setUserIndex(1);
+    rigidBody->setUserPointer(this);
 
     world.setInternalTickCallback(
         [](btDynamicsWorld *world, btScalar timeStep)
@@ -40,6 +41,17 @@ Plane::Plane(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &po
 
         }, static_cast<void *>(this));
 }
+
+void Plane::setExploded(bool exploded)
+{
+    this->exploded = exploded;
+}
+
+bool Plane::getExploded() const
+{
+    return exploded;
+}
+
 
 std::unique_ptr<scene::ISceneNode> Plane::createNode()
 {

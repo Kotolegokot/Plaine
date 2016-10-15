@@ -97,13 +97,24 @@ void Game::initializeBullet()
 
     gContactProcessedCallback = [](btManifoldPoint &cp, void *obj0p, void *obj1p) -> bool
         {
-            btCollisionObject &obj0 = *static_cast<btCollisionObject *>(obj0p);
-            btCollisionObject &obj1 = *static_cast<btCollisionObject *>(obj1p);
+            btCollisionObject *obj0 = static_cast<btCollisionObject *>(obj0p);
+            btCollisionObject *obj1 = static_cast<btCollisionObject *>(obj1p);
 
-            #if DEBUG_OUTPUT
-                if (obj0.getUserIndex() == 1 || obj1.getUserIndex() == 1)
+            if (obj0->getUserIndex() == 1 || obj1->getUserIndex() == 1) {
+                #if DEBUG_OUTPUT
                     std::cout << "Plane collision occured" << std::endl;
-            #endif // DEBUG_OUTPUT
+                    std::cout << "Collision impulse: " << cp.getAppliedImpulse() << std::endl;
+                #endif // DEBUG_OUTPUT
+
+                // obj0 is always the plane
+                if (obj1->getUserIndex() == 1)
+                    std::swap(obj0, obj1);
+
+                Plane &plane = *static_cast<Plane *>(obj0->getUserPointer());
+
+                if (cp.getAppliedImpulse() > 400)
+                    plane.setExploded(true);
+            }
 
             return true;
         };
@@ -529,6 +540,10 @@ void Game::run()
             if (!handlePause(color))
                 break;
         } else {
+            #if DEBUG_OUTPUT
+                std::cout << "=== BEGIN SIMULATION ===" << std::endl;;
+            #endif // DEBUG_OUTPUT
+
             // set fog color
             #if FOG_ENABLED && IRIDESCENT_FOG
                 driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300,
@@ -597,9 +612,18 @@ void Game::run()
 
                     planeControl->handle(*eventReceiver); // handle plane controls
                 }
+
                 #if DEBUG_OUTPUT
-                    std::cout << "=== STEP_SIMULATION ===" << std::endl << std::endl;
+                    std::cout << "=== END_SIMULATION ===" << std::endl << std::endl;
                 #endif
+
+                if (plane->getExploded()) {
+                    std::cout << "ACHTUNG! VZORVALSYA!!!" << std::endl;
+                    pause = true;
+                    gui->terminate();
+                    gui->initialize(INGAME_MENU);
+                    plane->setExploded(false);
+                }
             }
 
             guiEnvironment->drawAll();

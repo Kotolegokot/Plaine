@@ -36,6 +36,9 @@ class Plane : public IBody
 public:
     Plane(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &position);
 
+    void setExploded(bool exploded);
+    bool getExploded() const;
+
     // some convenient
     btVector3 getLinearVelocity() const;
     void setLinearVelocity(const btVector3 &linearVelocity);
@@ -63,6 +66,9 @@ protected:
     virtual void createMotionState(std::unique_ptr<scene::ISceneNode> node) override;
     virtual void createShape() override;
     virtual btScalar getMass() override;
+
+private:
+    bool exploded = false;
 };
 
 #endif // PLANE_H
