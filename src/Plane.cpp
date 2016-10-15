@@ -24,22 +24,6 @@ Plane::Plane(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &po
     createBody();
     rigidBody->setUserIndex(1);
     rigidBody->setUserPointer(this);
-
-    world.setInternalTickCallback(
-        [](btDynamicsWorld *world, btScalar timeStep)
-        {
-            Plane &plane = *static_cast<Plane *>(world->getWorldUserInfo());
-            btVector3 aV = plane.getRigidBody().getAngularVelocity();
-            btScalar aVLength = aV.length();
-            if (aVLength > 0) {
-                aV.safeNormalize();
-
-                aV *= aVLength - 0.1f*aVLength*aVLength;
-
-                plane.getRigidBody().setAngularVelocity(aV);
-            }
-
-        }, static_cast<void *>(this));
 }
 
 void Plane::setExploded(bool exploded)
