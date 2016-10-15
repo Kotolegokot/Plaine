@@ -95,9 +95,15 @@ void Game::initializeBullet()
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0, 0, 0));
 
-    gContactProcessedCallback = [](btManifoldPoint &cp, void *obj0, void *obj1) -> bool
+    gContactProcessedCallback = [](btManifoldPoint &cp, void *obj0p, void *obj1p) -> bool
         {
-            std::cout << "Collision!" << std::endl;
+            btCollisionObject &obj0 = *static_cast<btCollisionObject *>(obj0p);
+            btCollisionObject &obj1 = *static_cast<btCollisionObject *>(obj1p);
+
+            #if DEBUG_OUTPUT
+                if (obj0.getUserIndex() == 1 || obj1.getUserIndex() == 1)
+                    std::cout << "Plane collision occured" << std::endl;
+            #endif // DEBUG_OUTPUT
 
             return true;
         };
