@@ -131,6 +131,8 @@ void Game::initializeScene()
     plane = new Plane(*dynamicsWorld, *device, btVector3(0, 0, 0));
     planeControl = new PlaneControl(*plane, configuration.controls);
 
+    explosion = new Explosion(*dynamicsWorld, plane->getPosition(), 1000); // create explosion
+
     #if DEBUG_DRAWER_ENABLED
         debugDrawer = new DebugDrawer(device);
         debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
@@ -175,6 +177,7 @@ void Game::terminateDevice()
 
 void Game::terminateScene()
 {
+    delete explosion;
     delete plane;
     // IMPORTANT: obstacleGenerator must be deleted before dynamicsWorld and sceneManager
     delete obstacleGenerator;
@@ -594,7 +597,12 @@ void Game::run()
             #endif // IRIDESCENT_BACKGROUND
 
             if (!pause) {
-                  sceneManager->drawAll(); // draw scene
+                if (plane->getExploded()) {
+                    explosion->explode();
+                    plane->setExploded(false);
+                }
+
+                sceneManager->drawAll(); // draw scene
 
                 time_physics_curr = timer->getTime();
                 // physics simulation
@@ -611,19 +619,12 @@ void Game::run()
                     time_gameclock += TickMs;
 
                     planeControl->handle(*eventReceiver); // handle plane controls
+                    explosion->setPosition(plane->getPosition());
                 }
 
                 #if DEBUG_OUTPUT
                     std::cout << "=== END_SIMULATION ===" << std::endl << std::endl;
                 #endif
-
-                if (plane->getExploded()) {
-                    std::cout << "ACHTUNG! VZORVALSYA!!!" << std::endl;
-                    pause = true;
-                    gui->terminate();
-                    gui->initialize(INGAME_MENU);
-                    plane->setExploded(false);
-                }
             }
 
             guiEnvironment->drawAll();
@@ -634,6 +635,8 @@ void Game::run()
                 gui->terminate();
                 gui->initialize(INGAME_MENU);
             }
+
+            time_physics_curr = time_physics_prev = timer->getTime();
             device->yield();
         }
     }

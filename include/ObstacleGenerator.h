@@ -36,7 +36,7 @@
 #include "patterns/Tunnel.h"
 
 // average distance between obstacles
-#define STEP 800
+#define STEP 400
 
 using namespace irr;
 

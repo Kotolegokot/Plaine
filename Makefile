@@ -16,7 +16,7 @@ debug:
 
 release:
 	mkdir bin/Release -p
-	$(CXX) $(CFLAGS) -O3 -DDEBUG_OUTPUT=false $(SOURCE_INCLUDE) $(LIB_INCLUDE) $(SOURCE) $(LIB) -o bin/Release/$(EXECUTABLE)
+	$(CXX) $(CFLAGS) -O3 -DDEBUG_OUTPUT=false -DFAR_CAMERA_DISTANCE=false $(SOURCE_INCLUDE) $(LIB_INCLUDE) $(SOURCE) $(LIB) -o bin/Release/$(EXECUTABLE)
 
 clean:
 	rm -rf bin/

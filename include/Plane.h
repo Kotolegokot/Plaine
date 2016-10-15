@@ -24,7 +24,13 @@
 #include "ObjMesh.h"
 
 #define PLANE_MODEL "media/models/plane.obj"
+
+#if FAR_CAMERA_DISTANCE
+#define CAMERA_DISTANCE 600
+#else
 #define CAMERA_DISTANCE 200
+#endif // FAR_CAMERA_DISTANCE
+
 #define PLANE_MASS 1
 
 // this class defines plane

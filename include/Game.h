@@ -20,6 +20,8 @@
 #include <iostream>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
+#include <BulletCollision/CollisionDispatch/btCollisionObject.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include <CGUITTFont.h>
 #include <ITimer.h>
@@ -32,6 +34,7 @@
 #include "PlaneControl.h"
 #include "DebugDrawer.h"
 #include "options.h"
+#include "Explosion.h"
 
 using namespace irr;
 
@@ -77,6 +80,7 @@ private:
     ObstacleGenerator *obstacleGenerator = nullptr;
     Plane *plane = nullptr;
     PlaneControl *planeControl = nullptr;
+    Explosion *explosion = nullptr;
 
     void error(const core::stringw &str) const;
     bool initializeDevice();

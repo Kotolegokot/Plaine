@@ -40,6 +40,15 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
     auto handleCell =  [this](btScalar x, btScalar y, btScalar z)
     #endif // DEBUG_OUTPUT
     {
+        std::unique_ptr<IObstacle> obstacle = std::make_unique<Box>(world, device, btVector3(x, y, z), btVector3(100, 100, 100));
+        obstacles.push_back(std::move(obstacle));
+        obstacleCount++;
+        #if DEBUG_OUTPUT
+            obstacleGenerated++;
+        #endif // DEBUG_OUTPUT
+
+        return;
+
         btScalar newX = x + getRandomf(-100, 100);
         btScalar newY = y + getRandomf(-100, 100);
         btScalar newZ = z + getRandomf(-100, 100);
@@ -52,7 +61,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                 tunnel.addObstaclesToDeque(obstacles);
                 obstacleCount += tunnel.getObstacleCount();
                 #if DEBUG_OUTPUT
-                obstacleGenerated += tunnel.getObstacleCount();
+                    obstacleGenerated += tunnel.getObstacleCount();
                 #endif // DEBUG_OUTPUT
                 break;
             }
@@ -62,7 +71,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                 crystal.addObstaclesToDeque(obstacles);
                 obstacleCount += crystal.getObstacleCount();
                 #if DEBUG_OUTPUT
-                obstacleGenerated += crystal.getObstacleCount();
+                    obstacleGenerated += crystal.getObstacleCount();
                 #endif // DEBUG_OUTPUT
                 break;
             }
@@ -74,7 +83,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                 obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
                 #if DEBUG_OUTPUT
-                obstacleGenerated++;
+                    obstacleGenerated++;
                 #endif // DEBUG_OUTPUT
                 break;
             }
@@ -85,7 +94,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                 obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
                 #if DEBUG_OUTPUT
-                obstacleGenerated++;
+                    obstacleGenerated++;
                 #endif // DEBUG_OUTPUT
                 break;
             }
@@ -96,7 +105,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                 obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
                 #if DEBUG_OUTPUT
-                obstacleGenerated++;
+                    obstacleGenerated++;
                 #endif // DEBUG_OUTPUT
                 break;
             }
@@ -107,7 +116,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                 obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
                 #if DEBUG_OUTPUT
-                obstacleGenerated++;
+                    obstacleGenerated++;
                 #endif // DEBUG_OUTPUT
                 break;
             }
@@ -118,7 +127,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                 obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
                 #if DEBUG_OUTPUT
-                obstacleGenerated++;
+                    obstacleGenerated++;
                 #endif // DEBUG_OUTPUT
                 break;
             }

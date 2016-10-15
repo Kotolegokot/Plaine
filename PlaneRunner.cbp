@@ -39,6 +39,7 @@
 					<Add option='-isystem&quot;/usr/include/bullet&quot;' />
 					<Add option='-isystem&quot;deps/include/bullet&quot;' />
 					<Add option="-DDEBUG_OUTPUT=false" />
+					<Add option="-DFAR_CAMERA_DISTANCE=false" />
 					<Add directory="include" />
 					<Add directory="include/obstacles" />
 				</Compiler>
@@ -78,6 +79,7 @@
 					<Add option='-isystem&quot;deps\include\irrlicht&quot;' />
 					<Add option='-isystem&quot;deps\include\bullet&quot;' />
 					<Add option="-DDEBUG_OUTPUT=false" />
+					<Add option="-DFAR_CAMERA_DISTANCE=false" />
 					<Add directory="include" />
 					<Add directory="include/obstacles" />
 				</Compiler>
@@ -106,6 +108,7 @@
 		<Unit filename="include/Config.h" />
 		<Unit filename="include/DebugDrawer.h" />
 		<Unit filename="include/EventReceiver.h" />
+		<Unit filename="include/Explosion.h" />
 		<Unit filename="include/GUI.h" />
 		<Unit filename="include/Game.h" />
 		<Unit filename="include/IBody.h" />
@@ -130,6 +133,7 @@
 		<Unit filename="src/Config.cpp" />
 		<Unit filename="src/DebugDrawer.cpp" />
 		<Unit filename="src/EventReceiver.cpp" />
+		<Unit filename="src/Explosion.cpp" />
 		<Unit filename="src/GUI.cpp" />
 		<Unit filename="src/Game.cpp" />
 		<Unit filename="src/MotionState.cpp" />
