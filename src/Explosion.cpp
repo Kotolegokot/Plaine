@@ -1,6 +1,6 @@
 #include "Explosion.h"
 
-using namespace std;
+using namespace irr;
 
 Explosion::Explosion(btDynamicsWorld &world, IrrlichtDevice &device,
                      const btVector3 &position, btScalar radius) :
@@ -14,7 +14,12 @@ Explosion::Explosion(btDynamicsWorld &world, IrrlichtDevice &device,
     world.addCollisionObject(explosionObject.get());
     world.getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback);
 
-    particleSystem = device.getSceneManager()->addParticleSystemSceneNode(false);
+    particleSystem =
+        std::unique_ptr<scene::IParticleSystemSceneNode>(device.getSceneManager()->addParticleSystemSceneNode(false));
+    auto particleAffector =
+        std::unique_ptr<scene::IParticleAffector>(particleSystem->createFadeOutParticleAffector());
+    particleSystem->addAffector(particleAffector.get());
+    particleAffector.release()->drop();
 }
 
 Explosion::~Explosion()
@@ -38,6 +43,8 @@ void Explosion::explode()
         std::cout << "ACHTUNG! VZORVALSYA!" << std::endl;
     #endif // DEBUG_OUTPUT
 
+    startAnimation();
+
     for (int i = 0; i < explosionObject->getNumOverlappingObjects(); i++)
     {
         btRigidBody &body = *dynamic_cast<btRigidBody *>(explosionObject->getOverlappingObject(i));
@@ -53,4 +60,28 @@ void Explosion::explode()
         impulse *= 1000000 / impulseLength;
         body.applyCentralImpulse(impulse);
     }
+}
+
+void Explosion::startAnimation()
+{
+    auto emitter =
+        std::unique_ptr<scene::IParticleEmitter>(particleSystem->createBoxEmitter(
+            core::aabbox3d<f32>(-7, 0, -7, 7, 1, 7), // emitter size
+            core::vector3df(0.0f, 0.06f, 0.0f),      // initial direction
+            80, 100,                                 // emit rate
+            video::SColor(0, 255, 255, 255),         // darkest color
+            video::SColor(0, 255, 255, 255),         // brightest color
+            800, 2000, 0,                            // min and max age, ange
+            core::dimension2df(10.0f, 10.0f),        // min size
+            core::dimension2df(20.0f, 20.0f)));       // max size
+
+    particleSystem->setEmitter(emitter.get());
+    emitter.release()->drop();
+
+    const auto &position = getPosition();
+    particleSystem->setPosition(core::vector3df(position.x(), position.y(), position.z()));
+    particleSystem->setScale(core::vector3df(2, 2, 2));
+    particleSystem->setMaterialFlag(video::EMF_ZWRITE_ENABLE, false);
+    particleSystem->setMaterialTexture(0, device.getVideoDriver()->getTexture("media/textures/lsd.png"));
+    particleSystem->setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR);
 }

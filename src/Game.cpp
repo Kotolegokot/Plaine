@@ -131,7 +131,7 @@ void Game::initializeScene()
     plane = new Plane(*dynamicsWorld, *device, btVector3(0, 0, 0));
     planeControl = new PlaneControl(*plane, configuration.controls);
 
-    explosion = new Explosion(*dynamicsWorld, plane->getPosition(), 1000); // create explosion
+    explosion = new Explosion(*dynamicsWorld, *device, plane->getPosition(), 1000); // create explosion
 
     #if DEBUG_DRAWER_ENABLED
         debugDrawer = new DebugDrawer(device);

@@ -8,7 +8,7 @@
 #include <BulletCollision/CollisionDispatch/btCollisionObject.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 
-using namespace std;
+using namespace irr;
 
 class Explosion
 {
@@ -27,6 +27,8 @@ private:
     IrrlichtDevice &device;
     std::unique_ptr<btGhostObject> explosionObject;
     std::unique_ptr<scene::IParticleSystemSceneNode> particleSystem;
+
+    void startAnimation();
 };
 
 #endif // EXPLOSION_H
