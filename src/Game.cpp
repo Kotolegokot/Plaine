@@ -488,20 +488,24 @@ void Game::menu()
             }
         } else
                 eventReceiver->rightPressed = false;
-        if (eventReceiver->leftPressed)
+        if (eventReceiver->IsKeyDown(KEY_LEFT))
         {
-            if (eventReceiver->state == SETTINGS)
+            if ((!eventReceiver->leftPressed))
             {
-                eventReceiver->state = MENU;
-                eventReceiver->toggleGUI = true;
+                if (eventReceiver->state == SETTINGS)
+                {
+                    eventReceiver->state = MENU;
+                    eventReceiver->toggleGUI = true;
+                }
+                else if (eventReceiver->state == CONTROL_SETTINGS)
+                {
+                    eventReceiver->state = SETTINGS;
+                    eventReceiver->toggleGUI = true;
+                }
+                eventReceiver->leftPressed = true;
             }
-            else if (eventReceiver->state == CONTROL_SETTINGS)
-            {
-                eventReceiver->state = SETTINGS;
-                eventReceiver->toggleGUI = true;
-            }
-            eventReceiver->leftPressed = false;
-        }
+        } else
+                eventReceiver->leftPressed = false;
         if (device->isWindowActive()) {
             if (IRIDESCENT_BACKGROUND)
                 driver->beginScene(true, true, iridescentColor(timer->getTime()));
@@ -621,6 +625,15 @@ void Game::run()
                     planeControl->handle(*eventReceiver); // handle plane controls
                     explosion->setPosition(plane->getPosition());
                 }
+
+                if (eventReceiver->IsKeyDown(KEY_LEFT))
+                {
+                    if ((!eventReceiver->leftPressed))
+                    {
+                        eventReceiver->leftPressed = true;
+                    }
+                } else
+                    eventReceiver->leftPressed = false;
 
                 #if DEBUG_OUTPUT
                     std::cout << "=== END_SIMULATION ===" << std::endl << std::endl;
@@ -790,13 +803,17 @@ bool Game::handlePause(video::SColor &color)
     } else
         eventReceiver->rightPressed = false;
 
-    if (eventReceiver->leftPressed)
-    {
-        eventReceiver->state = MENU;
-        eventReceiver->toggleGUI = true;
-        eventReceiver->leftPressed = false;
-        return false;
-    }
+    if (eventReceiver->IsKeyDown(KEY_LEFT))
+        {
+            if ((!eventReceiver->leftPressed))
+            {
+                eventReceiver->state = MENU;
+                eventReceiver->toggleGUI = true;
+                eventReceiver->leftPressed = true;
+                return false;
+            }
+        } else
+                eventReceiver->leftPressed = false;
 
     return true;
 }

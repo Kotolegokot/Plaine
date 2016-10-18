@@ -34,8 +34,6 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 tabPressed = true;
             if (pressedKeys[KEY_UP])
                 upPressed = true;
-            if (pressedKeys[KEY_LEFT])
-                leftPressed = true;
             if (pressedKeys[KEY_DOWN])
                 downPressed = true;
             return escapePressed;
