@@ -1,7 +1,10 @@
 #include "Explosion.h"
 
-Explosion::Explosion(btDynamicsWorld &world, const btVector3 &position, btScalar radius) :
-    world(world)
+using namespace std;
+
+Explosion::Explosion(btDynamicsWorld &world, IrrlichtDevice &device,
+                     const btVector3 &position, btScalar radius) :
+    world(world), device(device)
 {
     explosionObject = std::make_unique<btGhostObject>();
     explosionObject->setCollisionShape(new btSphereShape(radius));
@@ -10,6 +13,8 @@ Explosion::Explosion(btDynamicsWorld &world, const btVector3 &position, btScalar
 
     world.addCollisionObject(explosionObject.get());
     world.getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback);
+
+    particleSystem = device.getSceneManager()->addParticleSystemSceneNode(false);
 }
 
 Explosion::~Explosion()
