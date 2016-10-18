@@ -10,3 +10,4 @@ logfile
 *~
 *.blend1
 *.swp
+build/*
