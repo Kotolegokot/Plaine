@@ -14,11 +14,11 @@ Fuck you bitch motherfucker
 ## Building
 Simply open the project in Code::Blocks, choose the appropriate build target and press Ctrl-F9. Libs must be put into `deps/lib/` (i.e. `deps/lib/Irrlicht.dll`) directory, and their headers into `deps/include/` (i.e. `deps/include/irrlicht/`). Linux standard paths (`/usr/lib/`, `/usr/include/` etc.) work as well.
 
-Also you can use `automake` to build the project (not tested on Windows). The following targets are available:
-* `make debug`
-* `make release`
-* `make clean`
-* `make all` : both `debug` and `release`
+Also you can use `cmake` to build the project (doesn't work on Windows yet (mb)):
+* `mkdir build`
+* `cd build`
+* `cmake .. [-DDEBUG=1]`
+* `make`
 
 You can change the compiler used by specifying the CXX variable (i.e. `make release CXX=clang++`).
 
