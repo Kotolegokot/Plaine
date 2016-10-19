@@ -73,9 +73,9 @@ void GUI::initializeMenuGUI()
         0, ID_BUTTON_SETTINGS, _wp("Settings"), _wp("Game settings"));
     buttonQuit = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE),
         0, ID_BUTTON_QUIT, _wp("Quit"), _wp("Exit game"));
-    selectibleElements.push_back(buttonStart);
-    selectibleElements.push_back(buttonSettings);
-    selectibleElements.push_back(buttonQuit);
+    selectableElements.push_back(buttonStart);
+    selectableElements.push_back(buttonSettings);
+    selectableElements.push_back(buttonQuit);
 }
 
 void GUI::terminateMenuGUI()
@@ -95,9 +95,9 @@ void GUI::initializeInGameGUI()
         0, ID_BUTTON_MENU, _wp("Menu"), _wp("Exit to Main menu"));
     buttonQuit = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE),
         0, ID_BUTTON_QUIT, _wp("Quit"), _wp("Exit game"));
-    selectibleElements.push_back(buttonResume);
-    selectibleElements.push_back(buttonMenu);
-    selectibleElements.push_back(buttonQuit);
+    selectableElements.push_back(buttonResume);
+    selectableElements.push_back(buttonMenu);
+    selectableElements.push_back(buttonQuit);
 }
 
 void GUI::terminateInGameGUI()
@@ -227,12 +227,12 @@ void GUI::initializeSettingsGUI()
         0, ID_BUTTON_MENU, _wp("Back"), _wp("Exit to Main menu"));
     buttonQuit = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE),
         0, ID_BUTTON_QUIT, _wp("Quit"), _wp("Exit game"));
-    selectibleElements.push_back(checkBoxVSync);
-    selectibleElements.push_back(checkBoxStencilBuffer);
-    selectibleElements.push_back(buttonToggleFullscreen);
-    selectibleElements.push_back(buttonControlSettings);
-    selectibleElements.push_back(buttonMenu);
-    selectibleElements.push_back(buttonQuit);
+    selectableElements.push_back(checkBoxVSync);
+    selectableElements.push_back(checkBoxStencilBuffer);
+    selectableElements.push_back(buttonToggleFullscreen);
+    selectableElements.push_back(buttonControlSettings);
+    selectableElements.push_back(buttonMenu);
+    selectableElements.push_back(buttonQuit);
 }
 
 void GUI::terminateSettingsGUI()
@@ -282,15 +282,15 @@ void GUI::initializeControlSettingsGUI()
     buttonQuit = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE),
         0, ID_BUTTON_QUIT, _wp("Quit"), _wp("Exit game"));
     state = CONTROL_SETTINGS;
-    selectibleElements.push_back(buttonControlUp);
-    selectibleElements.push_back(buttonControlLeft);
-    selectibleElements.push_back(buttonControlDown);
-    selectibleElements.push_back(buttonControlRight);
-    selectibleElements.push_back(buttonControlCcwRoll);
-    selectibleElements.push_back(buttonControlCwRoll);
-    selectibleElements.push_back(buttonDefaultControls);
-    selectibleElements.push_back(buttonSettings);
-    selectibleElements.push_back(buttonQuit);
+    selectableElements.push_back(buttonControlUp);
+    selectableElements.push_back(buttonControlLeft);
+    selectableElements.push_back(buttonControlDown);
+    selectableElements.push_back(buttonControlRight);
+    selectableElements.push_back(buttonControlCcwRoll);
+    selectableElements.push_back(buttonControlCwRoll);
+    selectableElements.push_back(buttonDefaultControls);
+    selectableElements.push_back(buttonSettings);
+    selectableElements.push_back(buttonQuit);
 }
 
 void GUI::terminateControlSettingsGUI()
@@ -366,26 +366,26 @@ void GUI::updateSelection()
 
 void GUI::selectWithTab()
 {
-    for (size_t i = 0; i < selectibleElements.size(); i++)
-        if (guiEnvironment.getFocus() == selectibleElements.at(i))
+    for (size_t i = 0; i < selectableElements.size(); i++)
+        if (guiEnvironment.getFocus() == selectableElements.at(i))
             selectedElement = i;
     updateSelection();
 }
 
 void GUI::selectElement(int num)
 {
-    guiEnvironment.setFocus(selectibleElements.at(num));
+    guiEnvironment.setFocus(selectableElements.at(num));
     selectedElement = num;
     updateSelection();
 }
 
 void GUI::selectNextElement()
 {
-    if (selectedElement < selectibleElements.size() - 1)
+    if (selectedElement < selectableElements.size() - 1)
         selectedElement++;
     else
         selectedElement = 0;
-    guiEnvironment.setFocus(selectibleElements.at(selectedElement));
+    guiEnvironment.setFocus(selectableElements.at(selectedElement));
     updateSelection();
 }
 
@@ -394,8 +394,8 @@ void GUI::selectPreviousElement()
     if (selectedElement > 0)
         selectedElement--;
     else
-        selectedElement = selectibleElements.size() - 1;
-    guiEnvironment.setFocus(selectibleElements.at(selectedElement));
+        selectedElement = selectableElements.size() - 1;
+    guiEnvironment.setFocus(selectableElements.at(selectedElement));
     updateSelection();
 }
 
@@ -423,7 +423,7 @@ void GUI::terminate()
         break;
     }
     this->state = TERMINATED;
-    selectibleElements.clear();
+    selectableElements.clear();
 }
 
 void GUI::setVisible(bool visible)

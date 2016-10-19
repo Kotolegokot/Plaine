@@ -78,7 +78,7 @@ public:
     GUIState getState();
 private:
     GUIState state;
-    std::vector<gui::IGUIElement*> selectibleElements;
+    std::vector<gui::IGUIElement*> selectableElements;
     size_t selectedElement;
     const int SPACE = 10;
 
