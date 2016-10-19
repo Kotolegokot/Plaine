@@ -194,7 +194,7 @@ void Game::menu()
 {
     // if game is not initialized send error message and exit
     if (!initialized) {
-        error(ERR_NOT_INITIALIZED);
+        error("device has failed to initialize!");
         return;
     }
     // set resolution to actual screen size

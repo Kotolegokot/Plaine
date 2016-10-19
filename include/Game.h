@@ -94,9 +94,6 @@ private:
     void updateCamera();
     // returns false if need to quit pause menu
     bool handlePause(video::SColor &color);
-
-    // Constants
-    const core::stringw ERR_NOT_INITIALIZED = "device has failed to initialize!";
 };
 
 #endif // GAME_H
