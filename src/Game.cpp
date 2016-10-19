@@ -40,7 +40,7 @@ void Game::initializeGUI()
     if (font)
         skin->setFont(font);
 
-    gui = new GUI(configuration, guiEnvironment);
+    gui = new GUI(configuration, *guiEnvironment);
 }
 
 bool Game::initializeDevice()

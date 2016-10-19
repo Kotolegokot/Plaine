@@ -26,11 +26,9 @@ enum GUIState { MENU, INGAME_MENU, HUD, SETTINGS, CONTROL_SETTINGS, TERMINATED }
 class GUI
 {
 public:
-    GUI(struct ConfigData &data, gui::IGUIEnvironment *guiEnv);
+    GUI(struct ConfigData &data, gui::IGUIEnvironment &guiEnvironment);
     ConfigData &configuration;
     int buttonWidth, buttonHeight;
-
-    gui::IGUIEnvironment *guiEnvironment = nullptr;
 
     // GUI
     gui::IGUIButton *buttonStart = nullptr;
@@ -81,8 +79,10 @@ public:
 private:
     GUIState state;
     std::vector<gui::IGUIElement*> selectibleElements;
-    int selectedElement;
+    size_t selectedElement;
     const int SPACE = 10;
+
+    gui::IGUIEnvironment &guiEnvironment;
 
     void updateSelection();
 
