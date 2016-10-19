@@ -56,12 +56,13 @@ bool Game::initializeDevice()
 
     // create device (which is simply a window in which the
     //      whole world is rendered)
-    device = createDevice(video::EDT_OPENGL, configuration.resolution, 32, configuration.fullscreen, configuration.stencilBuffer, configuration.vsync);
+    device = createDevice(video::EDT_OPENGL, configuration.resolution, 32,
+                          configuration.fullscreen, configuration.stencilBuffer, configuration.vsync);
     if (!device) {
         error("Couldn't create a device :(\n");
         return false;
     }
-    device->setWindowCaption(L"PlaneTest");
+    device->setWindowCaption(L"PlaneRunner");
 
     // get a lot of useful pointers from device
     timer = device->getTimer();
