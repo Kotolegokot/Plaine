@@ -43,8 +43,7 @@ void GUI::initialize(GUIState state)
     terminate();
 
     // choose specific method for initializing GUI
-    switch (state)
-    {
+    switch (state) {
     case(MENU):
         initializeMenuGUI();
         break;
@@ -63,6 +62,7 @@ void GUI::initialize(GUIState state)
     case(TERMINATED):
         break;
     }
+
     this->state = state;
 }
 
@@ -318,8 +318,7 @@ void GUI::terminateControlSettingsGUI()
 
 void GUI::updateSelection()
 {
-    switch (state)
-    {
+    switch (state) {
     case(MENU):
             buttonStart->setText(_wp("Start"));
             buttonSettings->setText(_wp("Settings"));
@@ -357,7 +356,9 @@ void GUI::updateSelection()
     case(TERMINATED):
         break;
     }
-    if ((guiEnvironment.getFocus()->getType() != (gui::EGUIET_EDIT_BOX)) && (guiEnvironment.getFocus()->getType() != gui::EGUIET_COMBO_BOX))
+
+    if (guiEnvironment.getFocus()->getType() != gui::EGUIET_EDIT_BOX &&
+        guiEnvironment.getFocus()->getType() != gui::EGUIET_COMBO_BOX)
     {
         core::stringw str = ">";
         str += guiEnvironment.getFocus()->getText();
@@ -365,7 +366,6 @@ void GUI::updateSelection()
         guiEnvironment.getFocus()->setText(str.c_str());
     }
 }
-
 
 void GUI::selectWithTab()
 {
@@ -405,23 +405,22 @@ void GUI::selectPreviousElement()
 void GUI::terminate()
 {
     //choose specific method for terminating GUI
-    switch (state)
-    {
+    switch (state) {
     case(MENU):
-            terminateMenuGUI();
-            break;
+        terminateMenuGUI();
+        break;
     case(INGAME_MENU):
-            terminateInGameGUI();
-            break;
-        case(HUD):
-            terminateHUD();
-            break;
+        terminateInGameGUI();
+        break;
+    case(HUD):
+        terminateHUD();
+        break;
     case(SETTINGS):
-            terminateSettingsGUI();
-            break;
+        terminateSettingsGUI();
+        break;
      case(CONTROL_SETTINGS):
-            terminateControlSettingsGUI();
-            break;
+        terminateControlSettingsGUI();
+        break;
     case(TERMINATED):
         break;
     }
@@ -432,8 +431,7 @@ void GUI::terminate()
 
 void GUI::setVisible(bool visible)
 {
-    switch (state)
-    {
+    switch (state) {
     case (MENU):
         {
             textScreenSize->setVisible(visible);
@@ -505,8 +503,7 @@ void GUI::resizeGUI()
 {
     //changing gui position and size when window is resizing
     recalculateButtonProportions();
-    switch (state)
-    {
+    switch (state) {
     case (MENU):
         {
             buttonStart->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 3*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 3*SPACE));
