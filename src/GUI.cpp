@@ -21,7 +21,7 @@ using namespace irr;
 GUI::GUI (struct ConfigData &data, gui::IGUIEnvironment &guiEnvironment) :
     configuration(data), guiEnvironment(guiEnvironment) {}
 
-GUIState GUI::getState()
+GUIState GUI::getState() const
 {
     return state;
 }

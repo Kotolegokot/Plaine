@@ -17,9 +17,9 @@
 #ifndef GUI_H
 #define GUI_H
 
+#include <vector>
 #include "Config.h"
 #include "util.h"
-#include <vector>
 
 enum GUIState { MENU, INGAME_MENU, HUD, SETTINGS, CONTROL_SETTINGS, TERMINATED };
 
@@ -66,7 +66,6 @@ public:
     gui::IGUICheckBox *checkBoxStencilBuffer = nullptr;
     gui::IGUISpinBox *spinBoxRenderDistance = nullptr;
 
-    void recalculateButtonProportions();
     void initialize(GUIState state);
     void terminate();
     void resizeGUI();
@@ -75,7 +74,7 @@ public:
     void selectNextElement();
     void selectPreviousElement();
     void selectWithTab();
-    GUIState getState();
+    GUIState getState() const;
 private:
     GUIState state = TERMINATED;
     std::vector<gui::IGUIElement*> selectableElements;
@@ -85,6 +84,7 @@ private:
     gui::IGUIEnvironment &guiEnvironment;
 
     void updateSelection();
+    void recalculateButtonProportions();
 
     void initializeMenuGUI();
     void initializeInGameGUI();
