@@ -601,6 +601,8 @@ void Game::run()
             #endif // IRIDESCENT_BACKGROUND
 
             if (!pause) {
+                if (eventReceiver->IsKeyDown(KEY_KEY_X))
+                    plane->setExploded(true);
                 if (plane->getExploded()) {
                     explosion->explode();
                     plane->setExploded(false);

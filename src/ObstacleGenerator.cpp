@@ -40,15 +40,6 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
     auto handleCell =  [this](btScalar x, btScalar y, btScalar z)
     #endif // DEBUG_OUTPUT
     {
-        std::unique_ptr<IObstacle> obstacle = std::make_unique<Box>(world, device, btVector3(x, y, z), btVector3(100, 100, 100));
-        obstacles.push_back(std::move(obstacle));
-        obstacleCount++;
-        #if DEBUG_OUTPUT
-            obstacleGenerated++;
-        #endif // DEBUG_OUTPUT
-
-        return;
-
         btScalar newX = x + getRandomf(-100, 100);
         btScalar newY = y + getRandomf(-100, 100);
         btScalar newZ = z + getRandomf(-100, 100);

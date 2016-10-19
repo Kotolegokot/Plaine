@@ -66,7 +66,7 @@ void Explosion::startAnimation()
 {
     auto emitter =
         std::unique_ptr<scene::IParticleEmitter>(particleSystem->createBoxEmitter(
-            core::aabbox3d<f32>(-7, 0, -7, 7, 1, 7), // emitter size
+            core::aabbox3d<f32>(-7, 7, -7, 7, 7, 7), // emitter size
             core::vector3df(0.0f, 0.06f, 0.0f),      // initial direction
             80, 100,                                 // emit rate
             video::SColor(0, 255, 255, 255),         // darkest color
