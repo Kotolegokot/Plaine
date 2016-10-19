@@ -23,17 +23,17 @@ MotionState::MotionState(const btTransform &startTransform, scene::ISceneNode *n
 
 MotionState::~MotionState()
 {
-    node->remove();
+    node.release()->remove();
 }
 
-void MotionState::setNode(scene::ISceneNode *node)
+void MotionState::setNode(std::unique_ptr<scene::ISceneNode> node)
 {
-    this->node = node;
+    this->node = std::move(node);
 }
 
-scene::ISceneNode *MotionState::getNode() const
+scene::ISceneNode &MotionState::getNode()
 {
-    return node;
+    return *node;
 }
 
 void MotionState::setPosition(const core::vector3df &position)

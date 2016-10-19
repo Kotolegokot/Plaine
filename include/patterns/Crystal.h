@@ -39,10 +39,10 @@ public:
         cone2->getRigidBody().setCenterOfMassTransform(transform);
     }
 
-    void addObstaclesToDeque(std::deque<std::unique_ptr<IObstacle>> &deque) override
+    void addObstaclesToList(std::list<std::unique_ptr<IObstacle>> &list) override
     {
-        deque.push_back(std::move(cone1));
-        deque.push_back(std::move(cone2));
+        list.push_back(std::move(cone1));
+        list.push_back(std::move(cone2));
     }
 
     size_t getObstacleCount() const override

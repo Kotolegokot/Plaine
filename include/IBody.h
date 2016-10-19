@@ -44,7 +44,7 @@ public:
 
     scene::ISceneNode &getNode()
     {
-        return *((MotionState *) rigidBody->getMotionState())->getNode();
+        return ((MotionState *) rigidBody->getMotionState())->getNode();
     }
 
     btVector3 getPosition() const override
@@ -87,6 +87,7 @@ protected:
         btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, motionState.get(), shape.get(), inertia);
 
         rigidBody = std::make_unique<btRigidBody>(rigidBodyCI);
+        rigidBody->setUserIndex(0); // default index for bodies
         world.addRigidBody(rigidBody.get());
     }
 

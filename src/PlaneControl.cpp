@@ -69,6 +69,12 @@ void PlaneControl::handle(EventReceiver &eventReceiver)
     planeVelosity *= 0.001f*planeVelocityLength*planeVelocityLength;
     plane.getRigidBody().applyForce(planeVelosity, btVector3(0, 0, 0));
 
+    btVector3 angularVelocity = plane.getRigidBody().getAngularVelocity();
+    btScalar angularVelocityLength = angularVelocity.length();
+    angularVelocity.safeNormalize();
+    angularVelocity *= angularVelocityLength - 0.1f*angularVelocityLength*angularVelocityLength;
+    plane.getRigidBody().setAngularVelocity(angularVelocity);
+
     turnImpulse *= 25;
     rollImpulse *= 150;
     //std::cout << "X:" << plane->getEulerRotation().getX() << " Y:" << plane->getEulerRotation().getY() << " Z:" << plane->getEulerRotation().getZ() << std::endl;

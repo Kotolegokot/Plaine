@@ -17,7 +17,7 @@
 #ifndef IOBSTACLEPATTERN_H
 #define IOBSTACLEPATTERN_H
 
-#include <deque>
+#include <list>
 #include <memory>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
@@ -33,7 +33,7 @@ public:
         world(world), device(device), position(position) {}
     virtual ~IObstaclePattern() {}
 
-    virtual void addObstaclesToDeque(std::deque<std::unique_ptr<IObstacle>> &deque) = 0;
+    virtual void addObstaclesToList(std::list<std::unique_ptr<IObstacle>> &list) = 0;
     virtual size_t getObstacleCount() const = 0;
 
 protected:

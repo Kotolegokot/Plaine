@@ -17,7 +17,7 @@
 #ifndef OBSTACLEGENERATOR_H
 #define OBSTACLEGENERATOR_H
 
-#include <deque>
+#include <list>
 #include <memory>
 #include <functional>
 #include <irrlicht.h>
@@ -62,7 +62,7 @@ private:
     btScalar farValueWithBuffer() const;
 
     IrrlichtDevice &device;
-    std::deque<std::unique_ptr<IObstacle>> obstacles;
+    std::list<std::unique_ptr<IObstacle>> obstacles;
 
     u32 obstacleCount = 0;
 

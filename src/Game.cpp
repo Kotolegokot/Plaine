@@ -94,6 +94,30 @@ void Game::initializeBullet()
     // create world
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0, 0, 0));
+
+    gContactProcessedCallback = [](btManifoldPoint &cp, void *obj0p, void *obj1p) -> bool
+        {
+            btCollisionObject *obj0 = static_cast<btCollisionObject *>(obj0p);
+            btCollisionObject *obj1 = static_cast<btCollisionObject *>(obj1p);
+
+            if (obj0->getUserIndex() == 1 || obj1->getUserIndex() == 1) {
+                #if DEBUG_OUTPUT
+                    std::cout << "Plane collision occured" << std::endl;
+                    std::cout << "Collision impulse: " << cp.getAppliedImpulse() << std::endl;
+                #endif // DEBUG_OUTPUT
+
+                // obj0 is always the plane
+                if (obj1->getUserIndex() == 1)
+                    std::swap(obj0, obj1);
+
+                Plane &plane = *static_cast<Plane *>(obj0->getUserPointer());
+
+                if (cp.getAppliedImpulse() > 400)
+                    plane.setExploded(true);
+            }
+
+            return true;
+        };
 }
 
 void Game::initializeScene()
@@ -106,6 +130,8 @@ void Game::initializeScene()
     // create plane
     plane = new Plane(*dynamicsWorld, *device, btVector3(0, 0, 0));
     planeControl = new PlaneControl(*plane, configuration.controls);
+
+    explosion = new Explosion(*dynamicsWorld, *device, plane->getPosition(), 1000); // create explosion
 
     #if DEBUG_DRAWER_ENABLED
         debugDrawer = new DebugDrawer(device);
@@ -151,6 +177,7 @@ void Game::terminateDevice()
 
 void Game::terminateScene()
 {
+    delete explosion;
     delete plane;
     // IMPORTANT: obstacleGenerator must be deleted before dynamicsWorld and sceneManager
     delete obstacleGenerator;
@@ -461,20 +488,24 @@ void Game::menu()
             }
         } else
                 eventReceiver->rightPressed = false;
-        if (eventReceiver->leftPressed)
+        if (eventReceiver->IsKeyDown(KEY_LEFT))
         {
-            if (eventReceiver->state == SETTINGS)
+            if ((!eventReceiver->leftPressed))
             {
-                eventReceiver->state = MENU;
-                eventReceiver->toggleGUI = true;
+                if (eventReceiver->state == SETTINGS)
+                {
+                    eventReceiver->state = MENU;
+                    eventReceiver->toggleGUI = true;
+                }
+                else if (eventReceiver->state == CONTROL_SETTINGS)
+                {
+                    eventReceiver->state = SETTINGS;
+                    eventReceiver->toggleGUI = true;
+                }
+                eventReceiver->leftPressed = true;
             }
-            else if (eventReceiver->state == CONTROL_SETTINGS)
-            {
-                eventReceiver->state = SETTINGS;
-                eventReceiver->toggleGUI = true;
-            }
-            eventReceiver->leftPressed = false;
-        }
+        } else
+                eventReceiver->leftPressed = false;
         if (device->isWindowActive()) {
             if (IRIDESCENT_BACKGROUND)
                 driver->beginScene(true, true, iridescentColor(timer->getTime()));
@@ -516,6 +547,10 @@ void Game::run()
             if (!handlePause(color))
                 break;
         } else {
+            #if DEBUG_OUTPUT
+                std::cout << "=== BEGIN SIMULATION ===" << std::endl;;
+            #endif // DEBUG_OUTPUT
+
             // set fog color
             #if FOG_ENABLED && IRIDESCENT_FOG
                 driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300,
@@ -566,7 +601,13 @@ void Game::run()
             #endif // IRIDESCENT_BACKGROUND
 
             if (!pause) {
-                  sceneManager->drawAll(); // draw scene
+                if (plane->getExploded()) {
+                    explosion->explode();
+                    plane->setExploded(false);
+                }
+
+                explosion->setPosition(plane->getPosition());
+                sceneManager->drawAll(); // draw scene
 
                 time_physics_curr = timer->getTime();
                 // physics simulation
@@ -584,8 +625,18 @@ void Game::run()
 
                     planeControl->handle(*eventReceiver); // handle plane controls
                 }
+
+                if (eventReceiver->IsKeyDown(KEY_LEFT))
+                {
+                    if ((!eventReceiver->leftPressed))
+                    {
+                        eventReceiver->leftPressed = true;
+                    }
+                } else
+                    eventReceiver->leftPressed = false;
+
                 #if DEBUG_OUTPUT
-                    std::cout << "=== STEP_SIMULATION ===" << std::endl << std::endl;
+                    std::cout << "=== END_SIMULATION ===" << std::endl << std::endl;
                 #endif
             }
 
@@ -597,6 +648,8 @@ void Game::run()
                 gui->terminate();
                 gui->initialize(INGAME_MENU);
             }
+
+            time_physics_curr = time_physics_prev = timer->getTime();
             device->yield();
         }
     }
@@ -750,13 +803,17 @@ bool Game::handlePause(video::SColor &color)
     } else
         eventReceiver->rightPressed = false;
 
-    if (eventReceiver->leftPressed)
-    {
-        eventReceiver->state = MENU;
-        eventReceiver->toggleGUI = true;
-        eventReceiver->leftPressed = false;
-        return false;
-    }
+    if (eventReceiver->IsKeyDown(KEY_LEFT))
+        {
+            if ((!eventReceiver->leftPressed))
+            {
+                eventReceiver->state = MENU;
+                eventReceiver->toggleGUI = true;
+                eventReceiver->leftPressed = true;
+                return false;
+            }
+        } else
+                eventReceiver->leftPressed = false;
 
     return true;
 }

@@ -49,3 +49,7 @@
 #ifndef DEBUG_OUTPUT
     #define DEBUG_OUTPUT true
 #endif // DEBUG_OUTPUT
+
+#ifndef FAR_CAMERA_DISTANCE
+    #define FAR_CAMERA_DISTANCE false
+#endif // FAR_CAMERA_DISTANCE
