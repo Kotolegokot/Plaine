@@ -190,7 +190,7 @@ void Game::terminateScene()
 }
 
 // show main menu
-void Game::menu()
+void Game::mainMenu()
 {
     // if game is not initialized send error message and exit
     if (!initialized) {

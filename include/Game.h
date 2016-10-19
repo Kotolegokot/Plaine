@@ -46,7 +46,7 @@ public:
     Game(const struct ConfigData &data = ConfigData());
     ~Game();
     void run();
-    void menu();
+    void mainMenu();
 
 private:
     bool initialized = false;

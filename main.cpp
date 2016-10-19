@@ -41,7 +41,7 @@ int main()
     // create instance of game class and give it configuration structure
     Game game(data);
     // run menu
-    game.menu();
+    game.mainMenu();
 
     return 0;
 }
