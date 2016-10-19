@@ -34,10 +34,10 @@ public:
         boxes[3] = std::make_unique<Box>(world, device, position + btVector3(0, -radius, 0), btVector3(radius, radius / 10, length / 2));
     }
 
-    void addObstaclesToDeque(std::deque<std::unique_ptr<IObstacle>> &deque) override
+    void addObstaclesToList(std::list<std::unique_ptr<IObstacle>> &list) override
     {
         for (int i = 0; i < 4; i++)
-            deque.push_back(std::move(boxes[i]));
+            list.push_back(std::move(boxes[i]));
     }
 
     size_t getObstacleCount() const override
