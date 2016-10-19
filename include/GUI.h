@@ -26,7 +26,7 @@ enum GUIState { MENU, INGAME_MENU, HUD, SETTINGS, CONTROL_SETTINGS, TERMINATED }
 class GUI
 {
 public:
-    GUI(struct ConfigData &data, gui::IGUIEnvironment &guiEnvironment);
+    GUI(ConfigData &data, gui::IGUIEnvironment &guiEnvironment);
     ConfigData &configuration;
     int buttonWidth, buttonHeight;
 

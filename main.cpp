@@ -39,9 +39,7 @@ int main()
     textdomain("planerunner");
 
     // create instance of game class and give it configuration structure
-    Game game(data);
-    // run menu
-    game.mainMenu();
+    Game(data).mainMenu();
 
     return 0;
 }
