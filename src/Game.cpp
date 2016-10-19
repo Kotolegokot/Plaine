@@ -112,8 +112,8 @@ void Game::initializeBullet()
 
                 Plane &plane = *static_cast<Plane *>(obj0->getUserPointer());
 
-                if (cp.getAppliedImpulse() > 400)
-                    plane.setExploded(true);
+                /*if (cp.getAppliedImpulse() > 400)
+                    plane.setExploded(true);*/
             }
 
             return true;
@@ -601,13 +601,12 @@ void Game::run()
             #endif // IRIDESCENT_BACKGROUND
 
             if (!pause) {
-                if (eventReceiver->IsKeyDown(KEY_KEY_X))
-                    plane->setExploded(true);
                 if (plane->getExploded()) {
                     explosion->explode();
                     plane->setExploded(false);
                 }
 
+                explosion->setPosition(plane->getPosition());
                 sceneManager->drawAll(); // draw scene
 
                 time_physics_curr = timer->getTime();
@@ -625,7 +624,8 @@ void Game::run()
                     time_gameclock += TickMs;
 
                     planeControl->handle(*eventReceiver); // handle plane controls
-                    explosion->setPosition(plane->getPosition());
+                    if (eventReceiver->IsKeyDown(KEY_KEY_X))
+                        plane->setExploded(true);
                 }
 
                 if (eventReceiver->IsKeyDown(KEY_LEFT))

@@ -2,6 +2,7 @@
 #define EXPLOSION_H
 
 #include <memory>
+#include <algorithm>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
@@ -25,8 +26,10 @@ public:
 private:
     btDynamicsWorld &world;
     IrrlichtDevice &device;
+    btScalar radius = 0.0f;
     std::unique_ptr<btGhostObject> explosionObject;
     std::unique_ptr<scene::IParticleSystemSceneNode> particleSystem;
+
 
     void startAnimation();
 };
