@@ -29,8 +29,8 @@ class EventReceiver : public IEventReceiver
 {
 public:
     EventReceiver();
-    virtual bool OnEvent(const SEvent &event);
-    virtual bool IsKeyDown(EKEY_CODE keyCode) const;
+    virtual bool OnEvent(const SEvent &event) override;
+    bool IsKeyDown(EKEY_CODE keyCode) const;
 
     bool quit = false;
     bool start = false;
@@ -59,10 +59,13 @@ public:
     // see GUI.h additional for information
     GUIState state = MENU;
 
-    EKEY_CODE lastKey = KEY_KEY_CODES_COUNT;
+    EKEY_CODE getLastKey() const;
+    bool lastKeyAvailable() const;
+    void clearLastKey();
 private:
     // this array shows which keys are pressed and which are not
     bool pressedKeys[KEY_KEY_CODES_COUNT];
+    EKEY_CODE lastKey = KEY_KEY_CODES_COUNT;
 };
 
 #endif // EVENTRECEIVER_H

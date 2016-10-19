@@ -28,7 +28,9 @@ bool EventReceiver::OnEvent(const SEvent &event)
 {
     // if the event is related to keys
     if (event.EventType == EET_KEY_INPUT_EVENT) {
-        if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
+        if (!(changingControlUp || changingControlDown || changingControlLeft ||
+              changingControlRight || changingControlCwRoll || changingControlCcwRoll))
+        {
             pressedKeys[event.KeyInput.Key] = event.KeyInput.PressedDown;
             if (pressedKeys[KEY_TAB])
                 tabPressed = true;
@@ -36,15 +38,16 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 upPressed = true;
             if (pressedKeys[KEY_DOWN])
                 downPressed = true;
+
             return escapePressed;
         } else
             lastKey = event.KeyInput.Key;
-
     }
 
     // if the event is related to GUI
     else if (event.EventType == EET_GUI_EVENT) {
         s32 id = event.GUIEvent.Caller->getID();
+
         switch (event.GUIEvent.EventType) {
         case gui::EGET_BUTTON_CLICKED:
             if (id == ID_BUTTON_START) {
@@ -160,4 +163,19 @@ bool EventReceiver::OnEvent(const SEvent &event)
 bool EventReceiver::IsKeyDown(EKEY_CODE keyCode) const
 {
     return pressedKeys[keyCode];
+}
+
+EKEY_CODE EventReceiver::getLastKey() const
+{
+    return lastKey;
+}
+
+bool EventReceiver::lastKeyAvailable() const
+{
+    return lastKey != KEY_KEY_CODES_COUNT;
+}
+
+void EventReceiver::clearLastKey()
+{
+    lastKey = KEY_KEY_CODES_COUNT;
 }

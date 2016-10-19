@@ -367,7 +367,7 @@ void Game::menu()
                     eventReceiver->changingControlDown = false;
                     eventReceiver->changingControlRight = false;
                     eventReceiver->defaultControls = false;
-                    eventReceiver->lastKey = KEY_KEY_CODES_COUNT;
+                    eventReceiver->clearLastKey();
                     gui->initialize(CONTROL_SETTINGS);
                 }
                 // if control key was chosen to replace
@@ -376,38 +376,38 @@ void Game::menu()
                     eventReceiver->changingControlCwRoll || eventReceiver->changingControlCcwRoll))
                 {
                     //if something has been pressed after choice of key that user want to replace
-                   if (eventReceiver->lastKey != KEY_KEY_CODES_COUNT)
+                   if (eventReceiver->lastKeyAvailable())
                    {
                        // and if it's not escape or another inappropriate key
-                       if ((eventReceiver->lastKey != KEY_ESCAPE) &&
-                           (keyCodeName(eventReceiver->lastKey) != ""))
+                       if ((eventReceiver->getLastKey() != KEY_ESCAPE) &&
+                           (!keyCodeName(eventReceiver->getLastKey()).empty()))
                         {
                             //if key is already occupied somewhere
-                            if (eventReceiver->lastKey == configuration.controls.up)
+                            if (eventReceiver->getLastKey() == configuration.controls.up)
                                 configuration.controls.up = KEY_KEY_CODES_COUNT;
-                            else if (eventReceiver->lastKey == configuration.controls.left)
+                            else if (eventReceiver->getLastKey() == configuration.controls.left)
                                 configuration.controls.left = KEY_KEY_CODES_COUNT;
-                            else if (eventReceiver->lastKey == configuration.controls.down)
+                            else if (eventReceiver->getLastKey() == configuration.controls.down)
                                 configuration.controls.down = KEY_KEY_CODES_COUNT;
-                            else if (eventReceiver->lastKey == configuration.controls.right)
+                            else if (eventReceiver->getLastKey() == configuration.controls.right)
                                 configuration.controls.right = KEY_KEY_CODES_COUNT;
-                            else if (eventReceiver->lastKey == configuration.controls.cwRoll)
+                            else if (eventReceiver->getLastKey() == configuration.controls.cwRoll)
                                 configuration.controls.cwRoll = KEY_KEY_CODES_COUNT;
-                            else if (eventReceiver->lastKey == configuration.controls.ccwRoll)
+                            else if (eventReceiver->getLastKey() == configuration.controls.ccwRoll)
                                 configuration.controls.ccwRoll = KEY_KEY_CODES_COUNT;
                             //if not
                             if (eventReceiver->changingControlUp)
-                                configuration.controls.up = eventReceiver->lastKey;
+                                configuration.controls.up = eventReceiver->getLastKey();
                             else if (eventReceiver->changingControlLeft)
-                                configuration.controls.left = eventReceiver->lastKey;
+                                configuration.controls.left = eventReceiver->getLastKey();
                             else if (eventReceiver->changingControlDown)
-                                configuration.controls.down = eventReceiver->lastKey;
+                                configuration.controls.down = eventReceiver->getLastKey();
                             else if (eventReceiver->changingControlRight)
-                                configuration.controls.right = eventReceiver->lastKey;
+                                configuration.controls.right = eventReceiver->getLastKey();
                             else if (eventReceiver->changingControlCwRoll)
-                                configuration.controls.cwRoll = eventReceiver->lastKey;
+                                configuration.controls.cwRoll = eventReceiver->getLastKey();
                             else if (eventReceiver->changingControlCcwRoll)
-                                configuration.controls.ccwRoll = eventReceiver->lastKey;
+                                configuration.controls.ccwRoll = eventReceiver->getLastKey();
                         }
                         eventReceiver->changingControlUp = false;
                         eventReceiver->changingControlLeft = false;
@@ -415,7 +415,7 @@ void Game::menu()
                         eventReceiver->changingControlRight = false;
                         eventReceiver->changingControlCwRoll = false;
                         eventReceiver->changingControlCcwRoll = false;
-                        eventReceiver->lastKey = KEY_KEY_CODES_COUNT;
+                        eventReceiver->clearLastKey();
                         gui->initialize(CONTROL_SETTINGS);
                    }
                    else if (eventReceiver->changingControlUp)
@@ -432,19 +432,24 @@ void Game::menu()
                         gui->buttonControlCcwRoll->setText(_wp("Press a key"));
                 }
         }
+
         // catch a resize of window
         if (configuration.resolution != driver->getScreenSize())
         {
             configuration.resolution = driver->getScreenSize();
             gui->resizeGUI();
         }
+
         // screen size
-        core::stringw scrs = _w("Screen size: ");
-        scrs += configuration.resolution.Width;
-        scrs += "x";
-        scrs += configuration.resolution.Height;
-        gui->textScreenSize->setText(scrs.c_str());
-        if ((guiEnvironment->getFocus() != nullptr) && (eventReceiver->tabPressed))
+        {
+            core::stringw scrs = _w("Screen size: ");
+            scrs += configuration.resolution.Width;
+            scrs += "x";
+            scrs += configuration.resolution.Height;
+            gui->textScreenSize->setText(scrs.c_str());
+        }
+
+        if (guiEnvironment->getFocus() && eventReceiver->tabPressed)
         {
             gui->selectWithTab();
             eventReceiver->tabPressed = false;
