@@ -20,7 +20,7 @@ Also you can use `cmake` to build the project (doesn't work on Windows yet (mb))
 * `cmake .. [-DDEBUG=1]`
 * `make`
 
-You can change the compiler used by specifying the CXX variable (i.e. `make release CXX=clang++`).
+You can change the compiler used by specifying the CXX variable.
 
 ### Compiler
 TDM-GCC (Windows), gcc (linux), clang (linux) have been tested to successfully bulid the project.
