@@ -27,10 +27,8 @@ using namespace irr;
 
 int main()
 {
-    // create structure for config
-    ConfigData data;
     // load config into the structure (conf file is kept in the root directory of the project)
-    data = Config::loadConfig("game.conf");
+    ConfigData data = Config::loadConfig("game.conf");
     // setting language (platform dependent realization!)
     setLanguage(data.language, false);
 
