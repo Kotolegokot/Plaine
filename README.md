@@ -1,8 +1,6 @@
 # PlaneRunner
 Fuck you bitch motherfucker
 
-![Hn'a](https://travis-ci.org/Kotolegokot/PlaneRunner.svg?branch=master)
-
 ## Dependencies
 * [Irrlicht](http://irrlicht.sourceforge.net)
 * [bullet](bulletphysics.org)
