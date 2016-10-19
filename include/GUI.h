@@ -77,7 +77,7 @@ public:
     void selectWithTab();
     GUIState getState();
 private:
-    GUIState state;
+    GUIState state = TERMINATED;
     std::vector<gui::IGUIElement*> selectableElements;
     size_t selectedElement;
     const int SPACE = 10;

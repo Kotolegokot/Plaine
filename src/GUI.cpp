@@ -39,7 +39,10 @@ void GUI::recalculateButtonProportions()
 
 void GUI::initialize(GUIState state)
 {
-    //choose specific method for initializing GUI
+    // terminate first
+    terminate();
+
+    // choose specific method for initializing GUI
     switch (state)
     {
     case(MENU):
@@ -422,6 +425,7 @@ void GUI::terminate()
     case(TERMINATED):
         break;
     }
+
     this->state = TERMINATED;
     selectableElements.clear();
 }

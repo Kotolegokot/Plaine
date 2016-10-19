@@ -197,18 +197,18 @@ void Game::menu()
         error("device has failed to initialize!");
         return;
     }
+
     // set resolution to actual screen size
     configuration.resolution = driver->getScreenSize();
     // initialize menu
     gui->initialize(MENU);
     //sets cursor visible
     device->getCursorControl()->setVisible(true);
+
     while (device->run()) {
         // if start button is pressed then run the game
-        if (eventReceiver->state == HUD) {
-            gui->terminate();
+        if (eventReceiver->state == HUD)
             run();
-        }
         // if quit button is pressed then exit the game
         if (eventReceiver->quit) {
             break;
@@ -237,7 +237,6 @@ void Game::menu()
         // if window need restart to implement new graphic settings
         if (gui->getState() == SETTINGS && eventReceiver->state == MENU && eventReceiver->needRestartInMenu)
             {
-                gui->terminate();
                 terminateDevice();
                 if (!initializeDevice())
                     return;
@@ -249,7 +248,6 @@ void Game::menu()
         // if need to toggle gui
         if (eventReceiver->toggleGUI)
         {
-            gui->terminate();
             switch (eventReceiver->state)
             {
             case(MENU):
@@ -282,8 +280,8 @@ void Game::menu()
                 configuration.resolution = core::dimension2d<u32>(640, 480);
                 // toggles off resizable mode
                 configuration.resizable = false;
+
                 // restart window
-                gui->terminate();
                 terminateDevice();
                 if (!initializeDevice())
                     return;
@@ -310,8 +308,8 @@ void Game::menu()
                         configuration.resizable = true;
                         break;
                 }
+
                 // restart window
-                gui->terminate();
                 terminateDevice();
                 if (!initializeDevice())
                     return;
@@ -355,7 +353,6 @@ void Game::menu()
                 }
                 eventReceiver->toggleLanguage = false;
                 setLanguage(configuration.language, true);
-                gui->terminate();
                 gui->initialize(SETTINGS);
             }
         }
@@ -371,7 +368,6 @@ void Game::menu()
                     eventReceiver->changingControlRight = false;
                     eventReceiver->defaultControls = false;
                     eventReceiver->lastKey = KEY_KEY_CODES_COUNT;
-                    gui->terminate();
                     gui->initialize(CONTROL_SETTINGS);
                 }
                 // if control key was chosen to replace
@@ -420,7 +416,6 @@ void Game::menu()
                         eventReceiver->changingControlCwRoll = false;
                         eventReceiver->changingControlCcwRoll = false;
                         eventReceiver->lastKey = KEY_KEY_CODES_COUNT;
-                        gui->terminate();
                         gui->initialize(CONTROL_SETTINGS);
                    }
                    else if (eventReceiver->changingControlUp)
@@ -577,7 +572,6 @@ void Game::run()
             // if toggling gui is needed
             if (eventReceiver->toggleGUI) {
                 pause = !pause;
-                gui->terminate();
                 gui->initialize(INGAME_MENU);
                 eventReceiver->toggleGUI = false;
             }
@@ -645,7 +639,6 @@ void Game::run()
         } else {
             if (!pause) {
                 pause = true;
-                gui->terminate();
                 gui->initialize(INGAME_MENU);
             }
 
@@ -763,7 +756,6 @@ bool Game::handlePause(video::SColor &color)
     // if need to toggle GUI
     if (eventReceiver->toggleGUI) {
         pause = !pause;
-        gui->terminate();
         gui->initialize(HUD);
         eventReceiver->toggleGUI = false;
     }
