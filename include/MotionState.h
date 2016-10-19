@@ -17,6 +17,7 @@
 #ifndef MOTIONSTATE_H
 #define MOTIONSTATE_H
 
+#include <memory>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
@@ -34,14 +35,14 @@ class MotionState : public btMotionState
 {
 protected:
 	btTransform transform;
- 	scene::ISceneNode *node = nullptr;
+ 	std::unique_ptr<scene::ISceneNode> node;
     static btVector3 quatToEuler(const btQuaternion &quat);
 
 public:
 	MotionState(const btTransform &startTransform = btTransform::getIdentity(), scene::ISceneNode *node = nullptr);
 	virtual ~MotionState();
-	void setNode(scene::ISceneNode *node);
-	scene::ISceneNode *getNode() const;
+	void setNode(std::unique_ptr<scene::ISceneNode> node);
+	scene::ISceneNode &getNode();
 	void setPosition(const core::vector3df &position);
 	core::vector3df getPosition() const;
 	virtual void getWorldTransform(btTransform &worldTrans) const;

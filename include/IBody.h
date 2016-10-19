@@ -44,7 +44,7 @@ public:
 
     scene::ISceneNode &getNode()
     {
-        return *((MotionState *) rigidBody->getMotionState())->getNode();
+        return ((MotionState *) rigidBody->getMotionState())->getNode();
     }
 
     btVector3 getPosition() const override
