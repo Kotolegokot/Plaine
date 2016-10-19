@@ -65,9 +65,8 @@ struct ConfigData {
 class Config
 {
 public:
-    Config() = default;
-    ConfigData loadConfig(const std::string &filename);
-    void saveConfig(const std::string &filename, const ConfigData &data);
+    static ConfigData loadConfig(const std::string &filename);
+    static void saveConfig(const std::string &filename, const ConfigData &data);
 
 private:
     struct Item {
@@ -164,7 +163,7 @@ private:
     };
 
     static std::vector<Item> parse(const std::string &filename);
-    void error(Item::ItemType expected, Item::ItemType found);
+    static void error(Item::ItemType expected, Item::ItemType found);
 };
 
 #endif // CONFIG_H

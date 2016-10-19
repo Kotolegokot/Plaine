@@ -168,8 +168,7 @@ void Game::error(const core::stringw &str) const
 
 void Game::terminateDevice()
 {
-    Config conf;
-    conf.saveConfig("game.conf", configuration);
+    Config::saveConfig("game.conf", configuration);
     gui->terminate();
     device->closeDevice();
     device->run();

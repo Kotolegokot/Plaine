@@ -29,10 +29,8 @@ int main()
 {
     // create structure for config
     ConfigData data;
-    // create config loader
-    Config conf;
-    // load config into the structure (conf file lies in the root directory of the project)
-    data = conf.loadConfig("game.conf");
+    // load config into the structure (conf file is kept in the root directory of the project)
+    data = Config::loadConfig("game.conf");
     // setting language (platform dependent realization!)
     setLanguage(data.language, false);
 
