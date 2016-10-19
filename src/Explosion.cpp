@@ -31,7 +31,7 @@ Explosion::Explosion(btDynamicsWorld &world, IrrlichtDevice &device,
 Explosion::~Explosion()
 {
     world.removeCollisionObject(explosionObject.get());
-    particleSystem.release()->remove();
+    //particleSystem.release()->remove();
 }
 
 void Explosion::setPosition(const btVector3 &position)
