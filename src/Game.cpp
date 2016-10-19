@@ -71,7 +71,7 @@ bool Game::initializeDevice()
     guiEnvironment = device->getGUIEnvironment();
     skin = guiEnvironment->getSkin();
     fileSystem = device->getFileSystem();
-    eventReceiver = new EventReceiver(*gui);
+    eventReceiver = new EventReceiver();
     device->setEventReceiver(eventReceiver);
     device->setResizable(configuration.resizable);
 
