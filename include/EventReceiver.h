@@ -32,8 +32,26 @@ public:
     virtual bool OnEvent(const SEvent &event) override;
     bool IsKeyDown(EKEY_CODE keyCode) const;
 
-    bool quit = false;
-    bool start = false;
+    bool quitClicked = false;
+    bool startClicked = false;
+    bool settingsClicked = false;
+    bool menuClicked = false;
+    bool toggleFullscreenClicked = false;
+    bool resumeClicked = false;
+    bool controlSettingsClicked = false;
+    bool controlUpClicked = false;
+    bool controlLeftClicked = false;
+    bool controlDownClicked = false;
+    bool controlRightClicked = false;
+    bool controlCWClicked = false;
+    bool controlCCWClicked = false;
+    bool defaultControlsClicked = false;
+    bool resolutionChanged = false;
+    bool languageChanged = false;
+    bool vSyncChanged = false;
+    bool stencilBufferChanged = false;
+    bool renderDistanceChanged = false;
+
     bool changingControlUp = false;
     bool changingControlDown = false;
     bool changingControlLeft = false;

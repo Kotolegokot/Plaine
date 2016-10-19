@@ -51,10 +51,12 @@ bool EventReceiver::OnEvent(const SEvent &event)
         switch (event.GUIEvent.EventType) {
         case gui::EGET_BUTTON_CLICKED:
             if (id == ID_BUTTON_START) {
+                startClicked = true;
                 desiredState = HUD;
                 return true;
             }
             else if (id == ID_BUTTON_SETTINGS) {
+                settingsClicked = true;
                 desiredState = SETTINGS;
                 toggleGUI = true;
                 changingControlUp = false;
@@ -66,65 +68,76 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 return true;
             }
             else if (id == ID_BUTTON_RESUME) {
+                resumeClicked = true;
                 desiredState = HUD;
                 toggleGUI = true;
                 return true;
             }
             else if (id == ID_BUTTON_QUIT) {
-                quit = true;
+                quitClicked = true;
                 return true;
             }
             else if (id == ID_BUTTON_MENU) {
+                menuClicked = true;
                 desiredState = MENU;
                 toggleGUI = true;
                 return true;
             }
             else if (id == ID_BUTTON_TOGGLE_FULLSCREEN) {
+                toggleFullscreenClicked = true;
                 toggleFullscreen = true;
                 return true;
             }
             else if (id == ID_BUTTON_CONTROL_SETTINGS) {
+                controlSettingsClicked = true;
                 desiredState = CONTROL_SETTINGS;
                 toggleGUI = true;
                 return true;
             }
             else if (id == ID_BUTTON_CONTROL_UP) {
+                controlUpClicked = true;
                 if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
                     changingControlUp = true;
                 }
                 return true;
             }
             else if (id == ID_BUTTON_CONTROL_DOWN) {
+                controlDownClicked = true;
                 if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
                     changingControlDown = true;
                 }
                 return true;
             }
             else if (id == ID_BUTTON_CONTROL_LEFT) {
+                controlLeftClicked = true;
                 if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
                     changingControlLeft = true;
                 }
                 return true;
             }
             else if (id == ID_BUTTON_CONTROL_RIGHT) {
+                controlRightClicked = true;
                 if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
                     changingControlRight = true;
                 }
                 return true;
             }
             else if (id == ID_BUTTON_CONTROL_CW_ROLL) {
+                controlCWClicked = true;
                 if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
                     changingControlCwRoll = true;
                 }
                 return true;
             }
             else if (id == ID_BUTTON_CONTROL_CCW_ROLL) {
+                controlCCWClicked = true;
                 if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
                     changingControlCcwRoll = true;
                 }
                 return true;
             }
-            else if (id == ID_BUTTON_DEFUALT_CONTROLS){
+            else if (id == ID_BUTTON_DEFUALT_CONTROLS) {
+                defaultControlsClicked = true;
                 defaultControls = true;
                 return true;
             }
@@ -132,21 +145,29 @@ bool EventReceiver::OnEvent(const SEvent &event)
         case gui::EGET_COMBO_BOX_CHANGED:
             if (id == ID_COMBOBOX_LANGUAGE)
             {
+                languageChanged = true;
                 toggleLanguage = true;
                 break;
             }
             else if (id == ID_COMBOBOX_RESOLUTION)
             {
+                resolutionChanged = true;
                 toggleResolution = true;
                 return true;
             }
         case gui::EGET_CHECKBOX_CHANGED:
-            {
+            if (id == ID_CHECKBOX_VSYNC) {
+                vSyncChanged = true;
+                toggleGraphicMode = true;
+                return true;
+            } else if (id == ID_CHECKBOX_STENCILBUFFER) {
+                stencilBufferChanged = true;
                 toggleGraphicMode = true;
                 return true;
             }
         case gui::EGET_SPINBOX_CHANGED:
-            {
+            if (id == ID_SPINBOX_RENDER_DISTANCE) {
+                renderDistanceChanged = true;
                 toggleGraphicMode = true;
                 return true;
             }

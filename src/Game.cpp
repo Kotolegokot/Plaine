@@ -210,7 +210,7 @@ void Game::mainMenu()
         if (eventReceiver->desiredState == HUD)
             run();
         // if quit button is pressed then exit the game
-        if (eventReceiver->quit) {
+        if (eventReceiver->quitClicked) {
             break;
         }
         // escape key reactions in different GUI states
@@ -538,7 +538,7 @@ void Game::run()
     while (device->run())
     {
         // if we exit to menu or quit the game, then stop
-        if (eventReceiver->desiredState == MENU || eventReceiver->quit) {
+        if (eventReceiver->desiredState == MENU || eventReceiver->quitClicked) {
             break;
         }
 
