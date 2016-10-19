@@ -54,18 +54,14 @@ public:
     bool downPressed = false;
     bool rightPressed = false;
 
-    // states of GUI
-    //
-    // see GUI.h additional for information
-    GUIState state = MENU;
-
     EKEY_CODE getLastKey() const;
     bool lastKeyAvailable() const;
     void clearLastKey();
+
+    GUIState desiredState = MENU; // desired state of GUI in menu; GUI must change to match it ASAP
 private:
-    // this array shows which keys are pressed and which are not
-    bool pressedKeys[KEY_KEY_CODES_COUNT];
-    EKEY_CODE lastKey = KEY_KEY_CODES_COUNT;
+    bool pressedKeys[KEY_KEY_CODES_COUNT]; // this array shows which keys are pressed and which are not
+    EKEY_CODE lastKey = KEY_KEY_CODES_COUNT; // last pressed key (only works in Controls menu)
 };
 
 #endif // EVENTRECEIVER_H

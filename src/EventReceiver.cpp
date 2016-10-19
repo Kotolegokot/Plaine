@@ -51,11 +51,11 @@ bool EventReceiver::OnEvent(const SEvent &event)
         switch (event.GUIEvent.EventType) {
         case gui::EGET_BUTTON_CLICKED:
             if (id == ID_BUTTON_START) {
-                state = HUD;
+                desiredState = HUD;
                 return true;
             }
             else if (id == ID_BUTTON_SETTINGS) {
-                state = SETTINGS;
+                desiredState = SETTINGS;
                 toggleGUI = true;
                 changingControlUp = false;
                 changingControlDown = false;
@@ -66,7 +66,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 return true;
             }
             else if (id == ID_BUTTON_RESUME) {
-                state = HUD;
+                desiredState = HUD;
                 toggleGUI = true;
                 return true;
             }
@@ -75,7 +75,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 return true;
             }
             else if (id == ID_BUTTON_MENU) {
-                state = MENU;
+                desiredState = MENU;
                 toggleGUI = true;
                 return true;
             }
@@ -84,7 +84,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 return true;
             }
             else if (id == ID_BUTTON_CONTROL_SETTINGS) {
-                state = CONTROL_SETTINGS;
+                desiredState = CONTROL_SETTINGS;
                 toggleGUI = true;
                 return true;
             }

@@ -207,7 +207,7 @@ void Game::menu()
 
     while (device->run()) {
         // if start button is pressed then run the game
-        if (eventReceiver->state == HUD)
+        if (eventReceiver->desiredState == HUD)
             run();
         // if quit button is pressed then exit the game
         if (eventReceiver->quit) {
@@ -218,16 +218,16 @@ void Game::menu()
             if (!eventReceiver->escapePressed)
             {
                 eventReceiver->escapePressed = true;
-                if (eventReceiver->state == MENU)
+                if (eventReceiver->desiredState == MENU)
                     return;
-                else if (eventReceiver->state == SETTINGS)
+                else if (eventReceiver->desiredState == SETTINGS)
                     {
-                        eventReceiver->state = MENU;
+                        eventReceiver->desiredState = MENU;
                         eventReceiver->toggleGUI = true;
                     }
-                else if (eventReceiver->state == CONTROL_SETTINGS)
+                else if (eventReceiver->desiredState == CONTROL_SETTINGS)
                     {
-                        eventReceiver->state = SETTINGS;
+                        eventReceiver->desiredState = SETTINGS;
                         eventReceiver->toggleGUI = true;
                     }
             }
@@ -235,7 +235,7 @@ void Game::menu()
         else if (!eventReceiver->IsKeyDown(KEY_ESCAPE))
             eventReceiver->escapePressed = false;
         // if window need restart to implement new graphic settings
-        if (gui->getState() == SETTINGS && eventReceiver->state == MENU && eventReceiver->needRestartInMenu)
+        if (gui->getState() == SETTINGS && eventReceiver->desiredState == MENU && eventReceiver->needRestartInMenu)
             {
                 terminateDevice();
                 if (!initializeDevice())
@@ -248,7 +248,7 @@ void Game::menu()
         // if need to toggle gui
         if (eventReceiver->toggleGUI)
         {
-            switch (eventReceiver->state)
+            switch (eventReceiver->desiredState)
             {
             case(MENU):
                 gui->initialize(MENU);
@@ -271,7 +271,7 @@ void Game::menu()
             eventReceiver->toggleGUI = false;
         }
         // settings
-        if (eventReceiver->state == SETTINGS) {
+        if (eventReceiver->desiredState == SETTINGS) {
                 // toggles fullscreen
             if (eventReceiver->toggleFullscreen)
             {
@@ -287,7 +287,7 @@ void Game::menu()
                     return;
                 initializeGUI();
                 initialized = true;
-                eventReceiver->state = SETTINGS;
+                eventReceiver->desiredState = SETTINGS;
                 gui->initialize(SETTINGS);
                 eventReceiver->needRestartInMenu = false;
             }
@@ -315,7 +315,7 @@ void Game::menu()
                     return;
                 initializeGUI();
                 initialized = true;
-                eventReceiver->state = SETTINGS;
+                eventReceiver->desiredState = SETTINGS;
                 gui->initialize(SETTINGS);
                 eventReceiver->needRestartInMenu = false;
             }
@@ -357,7 +357,7 @@ void Game::menu()
             }
         }
         // control settings
-        if (eventReceiver->state == CONTROL_SETTINGS) {
+        if (eventReceiver->desiredState == CONTROL_SETTINGS) {
                 // if "default" button is pressed
                 if (eventReceiver->defaultControls)
                 {
@@ -492,14 +492,14 @@ void Game::menu()
         {
             if ((!eventReceiver->leftPressed))
             {
-                if (eventReceiver->state == SETTINGS)
+                if (eventReceiver->desiredState == SETTINGS)
                 {
-                    eventReceiver->state = MENU;
+                    eventReceiver->desiredState = MENU;
                     eventReceiver->toggleGUI = true;
                 }
-                else if (eventReceiver->state == CONTROL_SETTINGS)
+                else if (eventReceiver->desiredState == CONTROL_SETTINGS)
                 {
-                    eventReceiver->state = SETTINGS;
+                    eventReceiver->desiredState = SETTINGS;
                     eventReceiver->toggleGUI = true;
                 }
                 eventReceiver->leftPressed = true;
@@ -538,7 +538,7 @@ void Game::run()
     while (device->run())
     {
         // if we exit to menu or quit the game, then stop
-        if (eventReceiver->state == MENU || eventReceiver->quit) {
+        if (eventReceiver->desiredState == MENU || eventReceiver->quit) {
             break;
         }
 
@@ -804,7 +804,7 @@ bool Game::handlePause(video::SColor &color)
         {
             if ((!eventReceiver->leftPressed))
             {
-                eventReceiver->state = MENU;
+                eventReceiver->desiredState = MENU;
                 eventReceiver->toggleGUI = true;
                 eventReceiver->leftPressed = true;
                 return false;
