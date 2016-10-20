@@ -331,7 +331,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                 ++i;
 
                 EXPECT(Item::INT);
-                data.controls.up = (EKEY_CODE)i->getInt();
+                data.controls[CONTROL::UP] = (EKEY_CODE)i->getInt();
                 ++i;
                 EXPECT(Item::NEWLINE);
 
@@ -343,7 +343,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                 ++i;
 
                 EXPECT(Item::INT);
-                data.controls.left = (EKEY_CODE)i->getInt();
+                data.controls[CONTROL::LEFT] = (EKEY_CODE)i->getInt();
                 ++i;
                 EXPECT(Item::NEWLINE);
 
@@ -355,7 +355,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                 ++i;
 
                 EXPECT(Item::INT);
-                data.controls.down = (EKEY_CODE)i->getInt();
+                data.controls[CONTROL::DOWN] = (EKEY_CODE)i->getInt();
                 ++i;
                 EXPECT(Item::NEWLINE);
 
@@ -367,7 +367,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                 ++i;
 
                 EXPECT(Item::INT);
-                data.controls.right = (EKEY_CODE)i->getInt();
+                data.controls[CONTROL::RIGHT] = (EKEY_CODE)i->getInt();
                 ++i;
                 EXPECT(Item::NEWLINE);
 
@@ -379,7 +379,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                 ++i;
 
                 EXPECT(Item::INT);
-                data.controls.cwRoll = (EKEY_CODE)i->getInt();
+                data.controls[CONTROL::CW_ROLL] = (EKEY_CODE)i->getInt();
                 ++i;
                 EXPECT(Item::NEWLINE);
 
@@ -391,7 +391,7 @@ ConfigData Config::loadConfig(const std::string &filename)
                 ++i;
 
                 EXPECT(Item::INT);
-                data.controls.ccwRoll = (EKEY_CODE)i->getInt();
+                data.controls[CONTROL::CCW_ROLL] = (EKEY_CODE)i->getInt();
                 ++i;
                 EXPECT(Item::NEWLINE);
 
@@ -423,10 +423,10 @@ void Config::saveConfig(const std::string &filename, const ConfigData &data)
     outputFile << "stencilbuffer=" << (data.stencilBuffer ? "on" : "off") << std::endl;
     outputFile << "renderdistance=" << data.renderDistance << std::endl;
     outputFile << "controls:" << std::endl;
-    outputFile << "    up=" << data.controls.up << std::endl;
-    outputFile << "    left=" << data.controls.left << std::endl;
-    outputFile << "    down=" << data.controls.down << std::endl;
-    outputFile << "    right=" << data.controls.right << std::endl;
-    outputFile << "    clockwiseroll=" << data.controls.cwRoll << std::endl;
-    outputFile << "    counterclockwiseroll=" << data.controls.ccwRoll << std::endl;
+    outputFile << "    up=" << data.controls[CONTROL::UP] << std::endl;
+    outputFile << "    left=" << data.controls[CONTROL::LEFT] << std::endl;
+    outputFile << "    down=" << data.controls[CONTROL::DOWN] << std::endl;
+    outputFile << "    right=" << data.controls[CONTROL::RIGHT] << std::endl;
+    outputFile << "    clockwiseroll=" << data.controls[CONTROL::CW_ROLL] << std::endl;
+    outputFile << "    counterclockwiseroll=" << data.controls[CONTROL::CCW_ROLL] << std::endl;
 }

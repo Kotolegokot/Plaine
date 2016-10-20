@@ -17,6 +17,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <algorithm>
 #include <iostream>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>

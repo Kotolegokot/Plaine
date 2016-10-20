@@ -17,6 +17,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <array>
 #include <vector>
 #include <string>
 #include <fstream>
@@ -27,13 +28,34 @@
 
 using namespace irr;
 
-struct Controls {
-    EKEY_CODE up = KEY_KEY_W;
-    EKEY_CODE down  =  KEY_KEY_S;
-    EKEY_CODE left  =  KEY_KEY_A;
-    EKEY_CODE right  =  KEY_KEY_D;
-    EKEY_CODE ccwRoll = KEY_KEY_Q;
-    EKEY_CODE cwRoll = KEY_KEY_E;
+constexpr size_t CONTROLS_COUNT = 6;
+struct CONTROL {
+    enum { UP, LEFT, DOWN, RIGHT, CW_ROLL, CCW_ROLL };
+};
+
+class Controls {
+public:
+    Controls()
+    {
+        this->operator[](CONTROL::UP) = KEY_KEY_W;
+        this->operator[](CONTROL::LEFT) = KEY_KEY_S;
+        this->operator[](CONTROL::DOWN) = KEY_KEY_A;
+        this->operator[](CONTROL::RIGHT) = KEY_KEY_D;
+        this->operator[](CONTROL::CW_ROLL) = KEY_KEY_E;
+        this->operator[](CONTROL::CCW_ROLL) = KEY_KEY_Q;
+    }
+
+    EKEY_CODE &operator[](size_t i)
+    {
+        return keyCodes[i];
+    }
+
+    EKEY_CODE operator[](size_t i) const
+    {
+        return keyCodes[i];
+    }
+private:
+    std::array<EKEY_CODE, CONTROLS_COUNT> keyCodes;
 };
 
 // structure containing all the configuration info

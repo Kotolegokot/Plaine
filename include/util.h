@@ -46,8 +46,13 @@ void setLanguage(std::string language, bool replace);
 f32 getRandomf(f32 min = 0, f32 max = 1);
 video::SColor iridescentColor(const u32 &currentTime);
 
+// number of GUI elements that have an id
+constexpr size_t GUI_IDS_COUNT = 19;
+
 // GUI IDs
-enum { ID_BUTTON_QUIT,
+// !! don't forget to change GUI_IDS_COUNT if you change this enumeration !!
+enum GUI_ID {
+    ID_BUTTON_QUIT,
     ID_BUTTON_START,
     ID_BUTTON_SETTINGS,
     ID_BUTTON_MENU,
@@ -60,15 +65,14 @@ enum { ID_BUTTON_QUIT,
     ID_BUTTON_CONTROL_RIGHT,
     ID_BUTTON_CONTROL_CW_ROLL,
     ID_BUTTON_CONTROL_CCW_ROLL,
-    ID_BUTTON_DEFUALT_CONTROLS,
+    ID_BUTTON_DEFAULT_CONTROLS,
     ID_COMBOBOX_RESOLUTION,
     ID_COMBOBOX_LANGUAGE,
     ID_CHECKBOX_VSYNC,
     ID_CHECKBOX_STENCILBUFFER,
-    ID_SPINBOX_RENDER_DISTANCE};
+    ID_SPINBOX_RENDER_DISTANCE };
 
 
-//const
-const f32 COLOR_CHANGE_INTERVAL = 3000.0f;
+constexpr f32 COLOR_CHANGE_INTERVAL = 3000.0f;
 
 #endif // UTIL_H_INCLUDED

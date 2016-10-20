@@ -17,6 +17,7 @@
 #ifndef EVENTRECEIVER_H
 #define EVENTRECEIVER_H
 
+#include <array>
 #include <irrlicht.h>
 #include "util.h"
 #include "GUI.h"
@@ -31,26 +32,6 @@ public:
     EventReceiver();
     virtual bool OnEvent(const SEvent &event) override;
     bool IsKeyDown(EKEY_CODE keyCode) const;
-
-    bool quitClicked = false;
-    bool startClicked = false;
-    bool settingsClicked = false;
-    bool menuClicked = false;
-    bool toggleFullscreenClicked = false;
-    bool resumeClicked = false;
-    bool controlSettingsClicked = false;
-    bool controlUpClicked = false;
-    bool controlLeftClicked = false;
-    bool controlDownClicked = false;
-    bool controlRightClicked = false;
-    bool controlCWClicked = false;
-    bool controlCCWClicked = false;
-    bool defaultControlsClicked = false;
-    bool resolutionChanged = false;
-    bool languageChanged = false;
-    bool vSyncChanged = false;
-    bool stencilBufferChanged = false;
-    bool renderDistanceChanged = false;
 
     bool changingControlUp = false;
     bool changingControlDown = false;
@@ -74,12 +55,16 @@ public:
 
     EKEY_CODE getLastKey() const;
     bool lastKeyAvailable() const;
-    void clearLastKey();
+    void startCatchingKey();
+    void stopCatchingKey();
 
-    GUIState desiredState = MENU; // desired state of GUI in menu; GUI must change to match it ASAP
+    bool checkEvent(GUI_ID id);
 private:
-    bool pressedKeys[KEY_KEY_CODES_COUNT]; // this array shows which keys are pressed and which are not
+    std::array<bool, KEY_KEY_CODES_COUNT> pressedKeys; // this array shows which keys are pressed and which are not
+    std::array<bool, GUI_IDS_COUNT> guiEvents; // this array shows if a button is clicked or a combobox is changed etc.
     EKEY_CODE lastKey = KEY_KEY_CODES_COUNT; // last pressed key (only works in Controls menu)
+
+    bool catchingKey = false;
 };
 
 #endif // EVENTRECEIVER_H

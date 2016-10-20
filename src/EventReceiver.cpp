@@ -20,17 +20,15 @@ using namespace irr;
 
 EventReceiver::EventReceiver()
 {
-    for (u32 i = 0; i < KEY_KEY_CODES_COUNT; i++)
-        pressedKeys[i] = false;
+    pressedKeys.fill(false);
+    guiEvents.fill(false);
 }
 
 bool EventReceiver::OnEvent(const SEvent &event)
 {
     // if the event is related to keys
     if (event.EventType == EET_KEY_INPUT_EVENT) {
-        if (!(changingControlUp || changingControlDown || changingControlLeft ||
-              changingControlRight || changingControlCwRoll || changingControlCcwRoll))
-        {
+        if (!catchingKey) {
             pressedKeys[event.KeyInput.Key] = event.KeyInput.PressedDown;
             if (pressedKeys[KEY_TAB])
                 tabPressed = true;
@@ -50,6 +48,13 @@ bool EventReceiver::OnEvent(const SEvent &event)
 
         switch (event.GUIEvent.EventType) {
         case gui::EGET_BUTTON_CLICKED:
+        case gui::EGET_COMBO_BOX_CHANGED:
+        case gui::EGET_CHECKBOX_CHANGED:
+        case gui::EGET_SPINBOX_CHANGED:
+            guiEvents[id] = true;
+            break;
+
+        /*case gui::EGET_BUTTON_CLICKED:
             if (id == ID_BUTTON_START) {
                 startClicked = true;
                 desiredState = HUD;
@@ -170,7 +175,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
                 renderDistanceChanged = true;
                 toggleGraphicMode = true;
                 return true;
-            }
+            }*/
         default:
             {
                 break;
@@ -196,7 +201,21 @@ bool EventReceiver::lastKeyAvailable() const
     return lastKey != KEY_KEY_CODES_COUNT;
 }
 
-void EventReceiver::clearLastKey()
+bool EventReceiver::checkEvent(GUI_ID id)
 {
+    bool result = guiEvents[id];
+    guiEvents[id] = false;
+
+    return result;
+}
+
+void EventReceiver::startCatchingKey()
+{
+    catchingKey = true;
+}
+
+void EventReceiver::stopCatchingKey()
+{
+    catchingKey = false;
     lastKey = KEY_KEY_CODES_COUNT;
 }
