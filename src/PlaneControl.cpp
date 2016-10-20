@@ -72,10 +72,10 @@ void PlaneControl::handle(EventReceiver &eventReceiver)
     btVector3 angularVelocity = plane.getRigidBody().getAngularVelocity();
     btScalar angularVelocityLength = angularVelocity.length();
     angularVelocity.safeNormalize();
-    angularVelocity *= angularVelocityLength - 0.1f*angularVelocityLength*angularVelocityLength;
+    angularVelocity *= std::fabs(angularVelocityLength - 0.1f*angularVelocityLength*angularVelocityLength);
     plane.getRigidBody().setAngularVelocity(angularVelocity);
 
-    turnImpulse *= 25;
+    turnImpulse *= 50;
     rollImpulse *= 150;
     //std::cout << "X:" << plane->getEulerRotation().getX() << " Y:" << plane->getEulerRotation().getY() << " Z:" << plane->getEulerRotation().getZ() << std::endl;
     if ((yawImpulse.getY() == 1) && (plane.getEulerRotation().getY() < 0.15f))
