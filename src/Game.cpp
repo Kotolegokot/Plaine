@@ -370,7 +370,7 @@ void Game::mainMenu()
             gui->textScreenSize->setText(scrs.c_str());
         }
 
-        if (guiEnvironment->getFocus() && eventReceiver->checkKeyPressed(KEY_TAB))
+        if (guiEnvironment->getFocus() && eventReceiver->isKeyDown(KEY_TAB))
         {
             gui->selectWithTab();
         }
