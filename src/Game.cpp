@@ -275,6 +275,8 @@ void Game::mainMenu()
                 // sets default resolution (ignored if fullscreen is on)
                 configuration.resolution = core::dimension2d<u32>(640, 480);
                 configuration.resizable = false;
+
+                gui->reload();
             }
             if (eventReceiver->checkEvent(ID_SPINBOX_RENDER_DISTANCE)) {
                 configuration.renderDistance = gui->spinBoxRenderDistance->getValue();
