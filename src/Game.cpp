@@ -210,6 +210,7 @@ void Game::mainMenu()
     size_t catchingControlID = CONTROLS_COUNT;
 
     bool escapeHandled = false;
+    ConfigData oldConfiguration = configuration;
 
     while (device->run()) {
         // handle gui events
@@ -220,7 +221,7 @@ void Game::mainMenu()
             if (eventReceiver->checkEvent(ID_BUTTON_SETTINGS))
                 gui->initialize(SETTINGS);
             if (eventReceiver->checkEvent(ID_BUTTON_QUIT) ||
-                eventReceiver->IsKeyDown(KEY_ESCAPE) && !escapeHandled)
+                (eventReceiver->IsKeyDown(KEY_ESCAPE) && !escapeHandled))
                 return;
             break;
 
@@ -262,14 +263,6 @@ void Game::mainMenu()
                         configuration.resizable = true;
                         break;
                 }
-
-                // restart window
-                terminateDevice();
-                if (!initializeDevice())
-                    return;
-                initializeGUI();
-                initialized = true;
-                gui->initialize(SETTINGS);
             }
             if (eventReceiver->checkEvent(ID_BUTTON_CONTROL_SETTINGS)) {
                 gui->initialize(CONTROL_SETTINGS);
@@ -280,13 +273,6 @@ void Game::mainMenu()
                 // sets default resolution (ignored if fullscreen is on)
                 configuration.resolution = core::dimension2d<u32>(640, 480);
                 configuration.resizable = false;
-
-                terminateDevice();
-                if (!initializeDevice())
-                    return;
-                initializeGUI();
-                initialized = true;
-                gui->initialize(SETTINGS);
             }
             if (eventReceiver->checkEvent(ID_SPINBOX_RENDER_DISTANCE)) {
                 configuration.renderDistance = gui->spinBoxRenderDistance->getValue();
@@ -297,17 +283,28 @@ void Game::mainMenu()
             if (eventReceiver->checkEvent(ID_CHECKBOX_STENCILBUFFER)) {
                 configuration.stencilBuffer = gui->checkBoxStencilBuffer->isChecked();
             }
-            if (eventReceiver->checkEvent(ID_BUTTON_MENU)) {
+            if (eventReceiver->checkEvent(ID_BUTTON_MENU) ||
+                (eventReceiver->IsKeyDown(KEY_ESCAPE) && !escapeHandled))
+            {
+                escapeHandled = true;
+
+                bool needRestart = configuration.needRestart(oldConfiguration);
+
+                if (needRestart) {
+                    terminateDevice();
+                    if (!initializeDevice())
+                        return;
+                    initializeGUI();
+                    initialized = true;
+                }
+
                 gui->initialize(MAIN_MENU);
             }
             if (eventReceiver->checkEvent(ID_BUTTON_QUIT)) {
+                configuration = configuration;
                 return;
             }
 
-            if (eventReceiver->IsKeyDown(KEY_ESCAPE) && !escapeHandled) {
-                escapeHandled = true;
-                gui->initialize(MAIN_MENU);
-            }
             break;
 
         case CONTROL_SETTINGS:
@@ -330,6 +327,7 @@ void Game::mainMenu()
                 gui->initialize(SETTINGS);
             }
             if (eventReceiver->checkEvent(ID_BUTTON_QUIT)) {
+                configuration = configuration;
                 return;
             }
 
@@ -341,6 +339,7 @@ void Game::mainMenu()
                                 configuration.controls[i] = KEY_KEY_CODES_COUNT;
                         configuration.controls[catchingControlID] = eventReceiver->getLastKey();
                     }
+                    configuration = configuration;
 
                     eventReceiver->stopCatchingKey();
                     catchingControlID = CONTROLS_COUNT;

@@ -68,6 +68,15 @@ struct ConfigData {
     bool stencilBuffer = true;
     u32 renderDistance = 2000;
     Controls controls;
+
+    bool needRestart(const ConfigData &another) const
+    {
+        return another.vsync != vsync ||
+            another.stencilBuffer != stencilBuffer ||
+            another.fullscreen != fullscreen ||
+            another.resizable != resizable ||
+            another.resolution != resolution;
+    }
 };
 
 // this class helps save and load configuration files
