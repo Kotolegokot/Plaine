@@ -21,8 +21,7 @@ using namespace irr;
 GUI::GUI(ConfigData &data, gui::IGUIEnvironment &guiEnvironment) :
     configuration(data), guiEnvironment(guiEnvironment)
 {
-    for (auto &buttonControl : buttonsControl)
-        buttonControl = nullptr;
+    buttonsControl.fill(nullptr);
 }
 
 GUI::~GUI()

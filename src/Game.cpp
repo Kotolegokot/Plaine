@@ -269,6 +269,9 @@ void Game::mainMenu()
                 initialized = true;
                 gui->initialize(SETTINGS);
             }
+            if (eventReceiver->checkEvent(ID_BUTTON_CONTROL_SETTINGS)) {
+                gui->initialize(CONTROL_SETTINGS);
+            }
             if (eventReceiver->checkEvent(ID_BUTTON_TOGGLE_FULLSCREEN)) {
                 configuration.fullscreen = !configuration.fullscreen;
 
@@ -291,6 +294,12 @@ void Game::mainMenu()
             }
             if (eventReceiver->checkEvent(ID_CHECKBOX_STENCILBUFFER)) {
                 configuration.stencilBuffer = gui->checkBoxStencilBuffer->isChecked();
+            }
+            if (eventReceiver->checkEvent(ID_BUTTON_MENU)) {
+                gui->initialize(MAIN_MENU);
+            }
+            if (eventReceiver->checkEvent(ID_BUTTON_QUIT)) {
+                return;
             }
             break;
 
@@ -322,6 +331,7 @@ void Game::mainMenu()
                 if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
                     eventReceiver->stopCatchingKey();
                     catching.fill(false);
+                    gui->reload();
                 } else if (eventReceiver->lastKeyAvailable() && !keyCodeName(eventReceiver->getLastKey()).empty()) {
                     for (size_t i = 0; i < CONTROLS_COUNT; i++)
                         if (catching[i]) {
@@ -332,6 +342,7 @@ void Game::mainMenu()
                         }
                     eventReceiver->stopCatchingKey();
                     catching.fill(false);
+                    gui->reload();
                 }
             }
 
