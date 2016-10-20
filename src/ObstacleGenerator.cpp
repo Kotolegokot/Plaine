@@ -45,7 +45,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
         btScalar newZ = z + getRandomf(-100, 100);
 
         // create obstacles and add them to the deque
-        switch(int(getRandomf(0, 8))) {
+        switch(int(getRandomf(0, 7))) {
         case 0:
             {
                 Tunnel tunnel(world, device, btVector3(newX, newY, newZ), getRandomf(100, 200), getRandomf(300, 600));
@@ -112,17 +112,6 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                 break;
             }
         case 6:
-            {
-                std::unique_ptr<IObstacle> obstacle =
-                    std::make_unique<Cone>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 200.f), getRandomf(50.f, 200.f));
-                obstacles.push_back(std::move(obstacle));
-                obstacleCount++;
-                #if DEBUG_OUTPUT
-                    obstacleGenerated++;
-                #endif // DEBUG_OUTPUT
-                break;
-            }
-        case 7:
             {
                 //Emptiness empt(nothing);
                 //empt.add_to_the_world(world, device);
