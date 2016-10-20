@@ -18,15 +18,17 @@
 #define GUI_H
 
 #include <vector>
+#include <array>
 #include "Config.h"
 #include "util.h"
 
-enum GUIState { MENU, INGAME_MENU, HUD, SETTINGS, CONTROL_SETTINGS, TERMINATED };
+enum GUIState { MAIN_MENU, PAUSE_MENU, HUD, SETTINGS, CONTROL_SETTINGS, TERMINATED };
 
 class GUI
 {
 public:
-    GUI(struct ConfigData &data, gui::IGUIEnvironment &guiEnvironment);
+    GUI(ConfigData &data, gui::IGUIEnvironment &guiEnvironment);
+    ~GUI();
     ConfigData &configuration;
     int buttonWidth, buttonHeight;
 
@@ -35,13 +37,8 @@ public:
     gui::IGUIButton *buttonSettings = nullptr;
     gui::IGUIButton *buttonToggleFullscreen = nullptr;
     gui::IGUIButton *buttonControlSettings = nullptr;
-    gui::IGUIButton *buttonControlUp = nullptr;
-    gui::IGUIButton *buttonControlDown = nullptr;
-    gui::IGUIButton *buttonControlLeft = nullptr;
-    gui::IGUIButton *buttonControlRight = nullptr;
-    gui::IGUIButton *buttonControlCwRoll = nullptr;
-    gui::IGUIButton *buttonControlCcwRoll = nullptr;
     gui::IGUIButton *buttonDefaultControls = nullptr;
+    std::array<gui::IGUIButton *, CONTROLS_COUNT> buttonsControl;
     gui::IGUIButton *buttonResume = nullptr;
     gui::IGUIButton *buttonMenu = nullptr;
     gui::IGUIButton *buttonQuit = nullptr;
@@ -56,17 +53,13 @@ public:
     gui::IGUIStaticText *textRenderDistance = nullptr;
     gui::IGUIStaticText *textLanguage = nullptr;
     gui::IGUIStaticText *textCameraPos = nullptr;
-    gui::IGUIStaticText *textControlUp = nullptr;
-    gui::IGUIStaticText *textControlDown = nullptr;
-    gui::IGUIStaticText *textControlLeft = nullptr;
-    gui::IGUIStaticText *textControlRight = nullptr;
-    gui::IGUIStaticText *textControlCwRoll = nullptr;
-    gui::IGUIStaticText *textControlCcwRoll = nullptr;
+    std::array<gui::IGUIStaticText *, CONTROLS_COUNT> textsControl;
     gui::IGUICheckBox *checkBoxVSync = nullptr;
     gui::IGUICheckBox *checkBoxStencilBuffer = nullptr;
     gui::IGUISpinBox *spinBoxRenderDistance = nullptr;
 
     void initialize(GUIState state);
+    void reload();
     void terminate();
     void resizeGUI();
     void setVisible(bool visible);
@@ -74,6 +67,7 @@ public:
     void selectNextElement();
     void selectPreviousElement();
     void selectWithTab();
+
     GUIState getState() const;
 private:
     GUIState state = TERMINATED;

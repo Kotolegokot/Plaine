@@ -33,6 +33,11 @@ Game::~Game()
     terminateDevice();
 }
 
+void Game::start()
+{
+    mainMenu();
+}
+
 void Game::initializeGUI()
 {
     // load font
@@ -173,6 +178,8 @@ void Game::terminateDevice()
     device->closeDevice();
     device->run();
     device->drop();
+
+    initialized = false;
 }
 
 void Game::terminateScene()
@@ -190,7 +197,7 @@ void Game::terminateScene()
 }
 
 // show main menu
-void Game::menu()
+void Game::mainMenu()
 {
     // if game is not initialized send error message and exit
     if (!initialized) {
@@ -201,138 +208,37 @@ void Game::menu()
     // set resolution to actual screen size
     configuration.resolution = driver->getScreenSize();
     // initialize menu
-    gui->initialize(MENU);
+    gui->initialize(MAIN_MENU);
     //sets cursor visible
     device->getCursorControl()->setVisible(true);
 
+    size_t catchingControlID = CONTROLS_COUNT;
+
+    ConfigData oldConfiguration = configuration;
+
     while (device->run()) {
-        // if start button is pressed then run the game
-        if (eventReceiver->desiredState == HUD)
-            run();
-        // if quit button is pressed then exit the game
-        if (eventReceiver->quit) {
+        // handle gui events
+        switch (gui->getState()) {
+        case MAIN_MENU:
+            if (eventReceiver->checkEvent(ID_BUTTON_START)) {
+                if (run())
+                    gui->initialize(MAIN_MENU);
+                else
+                    return;
+            }
+            if (eventReceiver->checkEvent(ID_BUTTON_SETTINGS)) {
+                oldConfiguration = configuration;
+                gui->initialize(SETTINGS);
+            }
+            if (eventReceiver->checkEvent(ID_BUTTON_QUIT) ||
+                eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
+                eventReceiver->checkKeyPressed(KEY_LEFT))
+                return;
             break;
-        }
-        // escape key reactions in different GUI states
-        if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
-            if (!eventReceiver->escapePressed)
-            {
-                eventReceiver->escapePressed = true;
-                if (eventReceiver->desiredState == MENU)
-                    return;
-                else if (eventReceiver->desiredState == SETTINGS)
-                    {
-                        eventReceiver->desiredState = MENU;
-                        eventReceiver->toggleGUI = true;
-                    }
-                else if (eventReceiver->desiredState == CONTROL_SETTINGS)
-                    {
-                        eventReceiver->desiredState = SETTINGS;
-                        eventReceiver->toggleGUI = true;
-                    }
-            }
-        }
-        else if (!eventReceiver->IsKeyDown(KEY_ESCAPE))
-            eventReceiver->escapePressed = false;
-        // if window need restart to implement new graphic settings
-        if (gui->getState() == SETTINGS && eventReceiver->desiredState == MENU && eventReceiver->needRestartInMenu)
-            {
-                terminateDevice();
-                if (!initializeDevice())
-                    return;
-                initializeGUI();
-                initialized = true;
-                gui->initialize(MENU);
-                eventReceiver->needRestartInMenu = false;
-            }
-        // if need to toggle gui
-        if (eventReceiver->toggleGUI)
-        {
-            switch (eventReceiver->desiredState)
-            {
-            case(MENU):
-                gui->initialize(MENU);
-                break;
-            case(INGAME_MENU):
-                gui->initialize(INGAME_MENU);
-                break;
-            case(HUD):
-                gui->initialize(HUD);
-                break;
-            case(SETTINGS):
-                gui->initialize(SETTINGS);
-                break;
-            case(CONTROL_SETTINGS):
-                gui->initialize(CONTROL_SETTINGS);
-                break;
-            case(TERMINATED):
-                break;
-            }
-            eventReceiver->toggleGUI = false;
-        }
-        // settings
-        if (eventReceiver->desiredState == SETTINGS) {
-                // toggles fullscreen
-            if (eventReceiver->toggleFullscreen)
-            {
-                configuration.fullscreen = !configuration.fullscreen;
-                // sets default resolution (ignores if fullscreen is on)
-                configuration.resolution = core::dimension2d<u32>(640, 480);
-                // toggles off resizable mode
-                configuration.resizable = false;
 
-                // restart window
-                terminateDevice();
-                if (!initializeDevice())
-                    return;
-                initializeGUI();
-                initialized = true;
-                eventReceiver->desiredState = SETTINGS;
-                gui->initialize(SETTINGS);
-                eventReceiver->needRestartInMenu = false;
-            }
-             // toggles resolution
-            if (eventReceiver->toggleResolution)
-            {
-                switch (gui->comboBoxResolution->getSelected())
-                {
-                case 0:
-                        configuration.resolution = core::dimension2d<u32>(640, 480);
-                        configuration.resizable = false;
-                        break;
-                case 1:
-                        configuration.resolution = core::dimension2d<u32>(1240, 720);
-                        configuration.resizable = false;
-                        break;
-                case 2:
-                        configuration.resizable = true;
-                        break;
-                }
-
-                // restart window
-                terminateDevice();
-                if (!initializeDevice())
-                    return;
-                initializeGUI();
-                initialized = true;
-                eventReceiver->desiredState = SETTINGS;
-                gui->initialize(SETTINGS);
-                eventReceiver->needRestartInMenu = false;
-            }
-            // toggle render distance, vsync and stencil buffer
-            if(eventReceiver->toggleGraphicMode)
-            {
-                configuration.renderDistance = gui->spinBoxRenderDistance->getValue();
-                configuration.vsync = gui->checkBoxVSync->isChecked();
-                configuration.stencilBuffer = gui->checkBoxStencilBuffer->isChecked();
-                eventReceiver->toggleGraphicMode = false;
-                eventReceiver->needRestartInMenu = true;
-            }
-            // toggles language
-            if (eventReceiver->toggleLanguage)
-            {
-                switch (gui->comboBoxLanguage->getSelected())
-                {
+        case SETTINGS:
+            if (eventReceiver->checkEvent(ID_COMBOBOX_LANGUAGE)) {
+                switch (gui->comboBoxLanguage->getSelected()) {
                 case 0:
                     configuration.language = "";
                     break;
@@ -351,92 +257,130 @@ void Game::menu()
                 default:
                     configuration.language = "";
                 }
-                eventReceiver->toggleLanguage = false;
                 setLanguage(configuration.language, true);
+                gui->reload();
+            }
+            if (eventReceiver->checkEvent(ID_COMBOBOX_RESOLUTION)) {
+                switch (gui->comboBoxResolution->getSelected()) {
+                case 0:
+                        configuration.resolution = core::dimension2d<u32>(640, 480);
+                        configuration.resizable = false;
+                        break;
+                case 1:
+                        configuration.resolution = core::dimension2d<u32>(1240, 720);
+                        configuration.resizable = false;
+                        break;
+                case 2:
+                        configuration.resizable = true;
+                        break;
+                }
+
+                terminateDevice();
+                if (!initializeDevice())
+                    return;
+                initializeGUI();
+                initialized = true;
+                oldConfiguration = configuration;
+
                 gui->initialize(SETTINGS);
             }
-        }
-        // control settings
-        if (eventReceiver->desiredState == CONTROL_SETTINGS) {
-                // if "default" button is pressed
-                if (eventReceiver->defaultControls)
-                {
-                    configuration.controls = Controls();
-                    eventReceiver->changingControlUp = false;
-                    eventReceiver->changingControlLeft = false;
-                    eventReceiver->changingControlDown = false;
-                    eventReceiver->changingControlRight = false;
-                    eventReceiver->defaultControls = false;
-                    eventReceiver->clearLastKey();
-                    gui->initialize(CONTROL_SETTINGS);
+            if (eventReceiver->checkEvent(ID_BUTTON_CONTROL_SETTINGS)) {
+                gui->initialize(CONTROL_SETTINGS);
+            }
+            if (eventReceiver->checkEvent(ID_BUTTON_TOGGLE_FULLSCREEN)) {
+                configuration.fullscreen = !configuration.fullscreen;
+
+                terminateDevice();
+                if (!initializeDevice())
+                    return;
+                initializeGUI();
+                initialized = true;
+                oldConfiguration = configuration;
+
+                gui->initialize(SETTINGS);
+
+            }
+            if (eventReceiver->checkEvent(ID_SPINBOX_RENDER_DISTANCE)) {
+                configuration.renderDistance = gui->spinBoxRenderDistance->getValue();
+            }
+            if (eventReceiver->checkEvent(ID_CHECKBOX_VSYNC)) {
+                configuration.vsync = gui->checkBoxVSync->isChecked();
+            }
+            if (eventReceiver->checkEvent(ID_CHECKBOX_STENCILBUFFER)) {
+                configuration.stencilBuffer = gui->checkBoxStencilBuffer->isChecked();
+            }
+            if (eventReceiver->checkEvent(ID_BUTTON_MENU) ||
+                eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
+                eventReceiver->checkKeyPressed(KEY_LEFT))
+            {
+                bool needRestart = configuration.needRestart(oldConfiguration);
+                if (needRestart) {
+                    terminateDevice();
+                    if (!initializeDevice())
+                        return;
+                    initializeGUI();
+                    initialized = true;
                 }
-                // if control key was chosen to replace
-                if((eventReceiver->changingControlUp || eventReceiver->changingControlLeft ||
-                    eventReceiver->changingControlDown || eventReceiver->changingControlRight ||
-                    eventReceiver->changingControlCwRoll || eventReceiver->changingControlCcwRoll))
-                {
-                    //if something has been pressed after choice of key that user want to replace
-                   if (eventReceiver->lastKeyAvailable())
-                   {
-                       // and if it's not escape or another inappropriate key
-                       if ((eventReceiver->getLastKey() != KEY_ESCAPE) &&
-                           (!keyCodeName(eventReceiver->getLastKey()).empty()))
-                        {
-                            //if key is already occupied somewhere
-                            if (eventReceiver->getLastKey() == configuration.controls.up)
-                                configuration.controls.up = KEY_KEY_CODES_COUNT;
-                            else if (eventReceiver->getLastKey() == configuration.controls.left)
-                                configuration.controls.left = KEY_KEY_CODES_COUNT;
-                            else if (eventReceiver->getLastKey() == configuration.controls.down)
-                                configuration.controls.down = KEY_KEY_CODES_COUNT;
-                            else if (eventReceiver->getLastKey() == configuration.controls.right)
-                                configuration.controls.right = KEY_KEY_CODES_COUNT;
-                            else if (eventReceiver->getLastKey() == configuration.controls.cwRoll)
-                                configuration.controls.cwRoll = KEY_KEY_CODES_COUNT;
-                            else if (eventReceiver->getLastKey() == configuration.controls.ccwRoll)
-                                configuration.controls.ccwRoll = KEY_KEY_CODES_COUNT;
-                            //if not
-                            if (eventReceiver->changingControlUp)
-                                configuration.controls.up = eventReceiver->getLastKey();
-                            else if (eventReceiver->changingControlLeft)
-                                configuration.controls.left = eventReceiver->getLastKey();
-                            else if (eventReceiver->changingControlDown)
-                                configuration.controls.down = eventReceiver->getLastKey();
-                            else if (eventReceiver->changingControlRight)
-                                configuration.controls.right = eventReceiver->getLastKey();
-                            else if (eventReceiver->changingControlCwRoll)
-                                configuration.controls.cwRoll = eventReceiver->getLastKey();
-                            else if (eventReceiver->changingControlCcwRoll)
-                                configuration.controls.ccwRoll = eventReceiver->getLastKey();
-                        }
-                        eventReceiver->changingControlUp = false;
-                        eventReceiver->changingControlLeft = false;
-                        eventReceiver->changingControlDown = false;
-                        eventReceiver->changingControlRight = false;
-                        eventReceiver->changingControlCwRoll = false;
-                        eventReceiver->changingControlCcwRoll = false;
-                        eventReceiver->clearLastKey();
-                        gui->initialize(CONTROL_SETTINGS);
-                   }
-                   else if (eventReceiver->changingControlUp)
-                        gui->buttonControlUp->setText(_wp("Press a key"));
-                    else if (eventReceiver->changingControlLeft)
-                        gui->buttonControlLeft->setText(_wp("Press a key"));
-                    else if (eventReceiver->changingControlDown)
-                        gui->buttonControlDown->setText(_wp("Press a key"));
-                    else if (eventReceiver->changingControlRight)
-                        gui->buttonControlRight->setText(_wp("Press a key"));
-                    else if (eventReceiver->changingControlCwRoll)
-                        gui->buttonControlCwRoll->setText(_wp("Press a key"));
-                    else if (eventReceiver->changingControlCcwRoll)
-                        gui->buttonControlCcwRoll->setText(_wp("Press a key"));
+
+                gui->initialize(MAIN_MENU);
+            }
+            if (eventReceiver->checkEvent(ID_BUTTON_QUIT)) {
+                return;
+            }
+
+            break;
+
+        case CONTROL_SETTINGS:
+            for (size_t i = 0; i < CONTROLS_COUNT; i++)
+                if (eventReceiver->checkEvent(static_cast<GUI_ID>(gui->buttonsControl[i]->getID()))) {
+                    eventReceiver->startCatchingKey();
+                    catchingControlID = i;
+                    gui->reload();
+                    gui->buttonsControl[i]->setText(_wp("Press a key"));
                 }
+            if (eventReceiver->checkEvent(ID_BUTTON_DEFAULT_CONTROLS)) {
+                eventReceiver->stopCatchingKey();
+                catchingControlID = CONTROLS_COUNT;
+                configuration.controls = Controls();
+                gui->reload();
+            }
+            if (eventReceiver->checkEvent(ID_BUTTON_SETTINGS)) {
+                eventReceiver->stopCatchingKey();
+                catchingControlID = CONTROLS_COUNT;
+                gui->initialize(SETTINGS);
+            }
+            if (eventReceiver->checkEvent(ID_BUTTON_QUIT)) {
+                return;
+            }
+
+            if (catchingControlID != CONTROLS_COUNT) {
+                if (eventReceiver->lastKeyAvailable() &&
+                    (!keyCodeName(eventReceiver->getLastKey()).empty() || eventReceiver->getLastKey() == KEY_ESCAPE)) {
+                    if (!eventReceiver->checkKeyPressed(KEY_ESCAPE)) {
+                        for (size_t i = 0; i < CONTROLS_COUNT; i++)
+                            if (configuration.controls[i] == eventReceiver->getLastKey())
+                                configuration.controls[i] = KEY_KEY_CODES_COUNT;
+                        configuration.controls[catchingControlID] = eventReceiver->getLastKey();
+                    }
+
+                    eventReceiver->stopCatchingKey();
+                    catchingControlID = CONTROLS_COUNT;
+                    gui->reload();
+                }
+            } else {
+                if (eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
+                    eventReceiver->checkKeyPressed(KEY_LEFT)) {
+                    gui->initialize(SETTINGS);
+                }
+            }
+
+        default:
+            break;
         }
 
-        // catch a resize of window
-        if (configuration.resolution != driver->getScreenSize())
-        {
-            configuration.resolution = driver->getScreenSize();
+        // catch window resize
+        if (configuration.resolution != driver->getScreenSize()) {
+            oldConfiguration.resolution = configuration.resolution = driver->getScreenSize();
             gui->resizeGUI();
         }
 
@@ -449,63 +393,8 @@ void Game::menu()
             gui->textScreenSize->setText(scrs.c_str());
         }
 
-        if (guiEnvironment->getFocus() && eventReceiver->tabPressed)
-        {
-            gui->selectWithTab();
-            eventReceiver->tabPressed = false;
-        }
-        if (eventReceiver->downPressed)
-        {
-            if (guiEnvironment->getFocus() == nullptr)
-                gui->selectElement(0);
-            else
-            {
-                gui->selectNextElement();
-            }
-            eventReceiver->downPressed = false;
-        }
-        if (eventReceiver->upPressed)
-        {
-            if (guiEnvironment->getFocus() == nullptr)
-                gui->selectElement(0);
-            else
-            {
-                gui->selectPreviousElement();
-            }
-            eventReceiver->upPressed = false;
-        }
-        if (eventReceiver->IsKeyDown(KEY_RIGHT))
-        {
-            if ((!eventReceiver->rightPressed) && (guiEnvironment->getFocus()->getType() == gui::EGUIET_BUTTON) && (guiEnvironment->getFocus() != nullptr))
-            {
-                    SEvent event;
-                    event.EventType = EET_GUI_EVENT;
-                    event.GUIEvent.Caller = guiEnvironment->getFocus();
-                    event.GUIEvent.Element = guiEnvironment->getFocus();
-                    event.GUIEvent.EventType = gui::EGET_BUTTON_CLICKED;
-                    device->postEventFromUser(event);
-                    eventReceiver->rightPressed = true;
-            }
-        } else
-                eventReceiver->rightPressed = false;
-        if (eventReceiver->IsKeyDown(KEY_LEFT))
-        {
-            if ((!eventReceiver->leftPressed))
-            {
-                if (eventReceiver->desiredState == SETTINGS)
-                {
-                    eventReceiver->desiredState = MENU;
-                    eventReceiver->toggleGUI = true;
-                }
-                else if (eventReceiver->desiredState == CONTROL_SETTINGS)
-                {
-                    eventReceiver->desiredState = SETTINGS;
-                    eventReceiver->toggleGUI = true;
-                }
-                eventReceiver->leftPressed = true;
-            }
-        } else
-                eventReceiver->leftPressed = false;
+        handleSelecting();
+
         if (device->isWindowActive()) {
             if (IRIDESCENT_BACKGROUND)
                 driver->beginScene(true, true, iridescentColor(timer->getTime()));
@@ -517,11 +406,11 @@ void Game::menu()
             device->yield();
         }
     }
-    gui->terminate();
 }
 
 // start the game itself
-void Game::run()
+// returns false if quit is pressed
+bool Game::run()
 {
     gui->initialize(HUD);
     initializeScene();
@@ -537,60 +426,7 @@ void Game::run()
 
     while (device->run())
     {
-        // if we exit to menu or quit the game, then stop
-        if (eventReceiver->desiredState == MENU || eventReceiver->quit) {
-            break;
-        }
-
         color = iridescentColor(timer->getTime());
-        if (pause) {
-            if (!handlePause(color))
-                break;
-        } else {
-            #if DEBUG_OUTPUT
-                std::cout << "=== BEGIN SIMULATION ===" << std::endl;;
-            #endif // DEBUG_OUTPUT
-
-            // set fog color
-            #if FOG_ENABLED && IRIDESCENT_FOG
-                driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300,
-                    configuration.renderDistance, 0.01f, true, true);
-            #endif // FOG_ENABLED && IRIDESCENT_FOG
-
-            // set light color
-            #if IRIDESCENT_LIGHT
-                lightData = light->getLightData();
-                lightData.DiffuseColor = color;
-                lightData.AmbientColor = color;
-                light->setLightData(lightData);
-            #endif // IRIDESCENT_LIGHT
-
-            updateHUD();
-            updateCamera(); // update camera position, target, and rotation
-
-            //set cursor invisible
-            device->getCursorControl()->setVisible(false);
-
-            // generate obstacles
-            obstacleGenerator->generate(plane->getNode().getPosition());
-
-            // if toggling gui is needed
-            if (eventReceiver->toggleGUI) {
-                pause = !pause;
-                gui->initialize(INGAME_MENU);
-                eventReceiver->toggleGUI = false;
-            }
-        }
-
-        // if escape is pressed (what kind of magic is that??)
-        if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
-            if (!eventReceiver->escapePressed) {
-                eventReceiver->toggleGUI = true;
-                eventReceiver->escapePressed = true;
-            }
-        } else {
-            eventReceiver->escapePressed = false;
-        }
 
         if (device->isWindowActive()) {
             #if IRIDESCENT_BACKGROUND
@@ -599,14 +435,87 @@ void Game::run()
                 driver->beginScene(true, true, DEFAULT_COLOR);
             #endif // IRIDESCENT_BACKGROUND
 
-            if (!pause) {
+
+            switch (gui->getState()) {
+            case PAUSE_MENU:
+                // catch window resize
+                if (configuration.resolution != driver->getScreenSize()) {
+                    configuration.resolution = driver->getScreenSize();
+                    gui->resizeGUI();
+                }
+
+                // screen size
+                {
+                    core::stringw scrs = _w("Screen size: ");
+                    scrs += configuration.resolution.Width;
+                    scrs += "x";
+                    scrs += configuration.resolution.Height;
+                    gui->textScreenSize->setText(scrs.c_str());
+                }
+
+                // set cursor visible
+                device->getCursorControl()->setVisible(true);
+
+                if (eventReceiver->checkEvent(ID_BUTTON_RESUME) ||
+                    eventReceiver->checkKeyPressed(KEY_ESCAPE))
+                {
+                    gui->initialize(HUD);
+                }
+
+                handleSelecting();
+
+                if (eventReceiver->checkKeyPressed(KEY_LEFT) ||
+                    eventReceiver->checkEvent(ID_BUTTON_MENU))
+                {
+                    terminateScene();
+                    return true;
+                }
+
+                if (eventReceiver->checkEvent(ID_BUTTON_QUIT)) {
+                    terminateScene();
+                    return false;
+                }
+
+                time_physics_curr = time_physics_prev = timer->getTime();
+                break;
+            case HUD: {
+                #if DEBUG_OUTPUT
+                    std::cout << "=== BEGIN SIMULATION ===" << std::endl;;
+                #endif // DEBUG_OUTPUT
+
+                // set fog color
+                #if FOG_ENABLED && IRIDESCENT_FOG
+                    driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300,
+                        configuration.renderDistance, 0.01f, true, true);
+                #endif // FOG_ENABLED && IRIDESCENT_FOG
+
+                // set light color
+                #if IRIDESCENT_LIGHT
+                    lightData = light->getLightData();
+                    lightData.DiffuseColor = color;
+                    lightData.AmbientColor = color;
+                    light->setLightData(lightData);
+                #endif // IRIDESCENT_LIGHT
+
+                updateHUD();
+                updateCamera(); // update camera position, target, and rotation
+
+                //set cursor invisible
+                device->getCursorControl()->setVisible(false);
+
+                // generate obstacles
+                obstacleGenerator->generate(plane->getNode().getPosition());
+
+                if (eventReceiver->checkKeyPressed(KEY_ESCAPE))
+                    gui->initialize(PAUSE_MENU);
+
+                explosion->setPosition(plane->getPosition());
+                sceneManager->drawAll(); // draw scene
+
                 if (plane->getExploded()) {
                     explosion->explode();
                     plane->setExploded(false);
                 }
-
-                explosion->setPosition(plane->getPosition());
-                sceneManager->drawAll(); // draw scene
 
                 time_physics_curr = timer->getTime();
                 // physics simulation
@@ -615,7 +524,6 @@ void Game::run()
                 #if DEBUG_DRAWER_ENABLED
                     dynamicsWorld->debugDrawWorld();
                 #endif // DEBUG_DRAWER_ENABLED
-
                 u64 dt = timer->getTime() - time_gameclock;
 
                 while (dt >= TickMs) {
@@ -625,36 +533,28 @@ void Game::run()
                     planeControl->handle(*eventReceiver); // handle plane controls
                 }
 
-                if (eventReceiver->IsKeyDown(KEY_LEFT))
-                {
-                    if ((!eventReceiver->leftPressed))
-                    {
-                        eventReceiver->leftPressed = true;
-                    }
-                } else
-                    eventReceiver->leftPressed = false;
-
                 #if DEBUG_OUTPUT
                     std::cout << "=== END_SIMULATION ===" << std::endl << std::endl;
                 #endif
+                break;
+            }
+            default:
+                break;
             }
 
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
-            if (!pause) {
-                pause = true;
-                gui->initialize(INGAME_MENU);
-            }
-
-            time_physics_curr = time_physics_prev = timer->getTime();
-            device->yield();
+            if (gui->getState() == PAUSE_MENU) {
+                time_physics_curr = time_physics_prev = timer->getTime();
+                device->yield();
+            } else
+                gui->initialize(PAUSE_MENU);
         }
     }
-    pause = false;
 
     terminateScene();
-    gui->terminate();
+    return false;
 }
 
 void Game::updateHUD()
@@ -739,78 +639,35 @@ void Game::updateCamera()
 
 bool Game::handlePause(video::SColor &color)
 {
-    // catch window resize
-    if (configuration.resolution != driver->getScreenSize())
-    {
-        configuration.resolution = driver->getScreenSize();
-        gui->resizeGUI();
-    }
 
-    // screen size
-    {
-        core::stringw scrs = _w("Screen size: ");
-        scrs += configuration.resolution.Width;
-        scrs += "x";
-        scrs += configuration.resolution.Height;
-        gui->textScreenSize->setText(scrs.c_str());
-    }
+}
 
-    // set cursor visible
-    device->getCursorControl()->setVisible(true);
-
-    // if need to toggle GUI
-    if (eventReceiver->toggleGUI) {
-        pause = !pause;
-        gui->initialize(HUD);
-        eventReceiver->toggleGUI = false;
-    }
-
-    if (guiEnvironment->getFocus() && eventReceiver->tabPressed) {
+void Game::handleSelecting()
+{
+    if (guiEnvironment->getFocus() && eventReceiver->isKeyDown(KEY_TAB))
         gui->selectWithTab();
-        eventReceiver->tabPressed = false;
-    }
 
-    if (eventReceiver->downPressed) {
+    if (eventReceiver->checkKeyPressed(KEY_DOWN)) {
         if (!guiEnvironment->getFocus())
             gui->selectElement(0);
         else
             gui->selectNextElement();
-        eventReceiver->downPressed = false;
     }
 
-    if (eventReceiver->upPressed) {
+    if (eventReceiver->checkKeyPressed(KEY_UP)) {
         if (!guiEnvironment->getFocus())
             gui->selectElement(0);
         else
             gui->selectPreviousElement();
-        eventReceiver->upPressed = false;
     }
 
-    if (eventReceiver->IsKeyDown(KEY_RIGHT)) {
-        if (!eventReceiver->rightPressed && guiEnvironment->getFocus())
-        {
+    if (eventReceiver->checkKeyPressed(KEY_RIGHT))
+        if (guiEnvironment->getFocus() && guiEnvironment->getFocus()->getType() == gui::EGUIET_BUTTON) {
             SEvent event;
             event.EventType = EET_GUI_EVENT;
             event.GUIEvent.Caller = guiEnvironment->getFocus();
             event.GUIEvent.Element = guiEnvironment->getFocus();
             event.GUIEvent.EventType = gui::EGET_BUTTON_CLICKED;
             device->postEventFromUser(event);
-            eventReceiver->rightPressed = true;
         }
-    } else
-        eventReceiver->rightPressed = false;
-
-    if (eventReceiver->IsKeyDown(KEY_LEFT))
-        {
-            if ((!eventReceiver->leftPressed))
-            {
-                eventReceiver->desiredState = MENU;
-                eventReceiver->toggleGUI = true;
-                eventReceiver->leftPressed = true;
-                return false;
-            }
-        } else
-                eventReceiver->leftPressed = false;
-
-    return true;
 }

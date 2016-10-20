@@ -20,136 +20,36 @@ using namespace irr;
 
 EventReceiver::EventReceiver()
 {
-    for (u32 i = 0; i < KEY_KEY_CODES_COUNT; i++)
-        pressedKeys[i] = false;
+    pressedKeys.fill(false);
+    checkedKeys.fill(false);
+    guiEvents.fill(false);
 }
 
 bool EventReceiver::OnEvent(const SEvent &event)
 {
     // if the event is related to keys
     if (event.EventType == EET_KEY_INPUT_EVENT) {
-        if (!(changingControlUp || changingControlDown || changingControlLeft ||
-              changingControlRight || changingControlCwRoll || changingControlCcwRoll))
-        {
-            pressedKeys[event.KeyInput.Key] = event.KeyInput.PressedDown;
-            if (pressedKeys[KEY_TAB])
-                tabPressed = true;
-            if (pressedKeys[KEY_UP])
-                upPressed = true;
-            if (pressedKeys[KEY_DOWN])
-                downPressed = true;
+        pressedKeys[event.KeyInput.Key] = event.KeyInput.PressedDown;
+        if (!event.KeyInput.PressedDown)
+            checkedKeys[event.KeyInput.Key] = false;
 
-            return escapePressed;
-        } else
+        if (catchingKey)
             lastKey = event.KeyInput.Key;
+
+        return pressedKeys[KEY_ESCAPE];
     }
 
     // if the event is related to GUI
-    else if (event.EventType == EET_GUI_EVENT) {
+    if (event.EventType == EET_GUI_EVENT) {
         s32 id = event.GUIEvent.Caller->getID();
 
         switch (event.GUIEvent.EventType) {
         case gui::EGET_BUTTON_CLICKED:
-            if (id == ID_BUTTON_START) {
-                desiredState = HUD;
-                return true;
-            }
-            else if (id == ID_BUTTON_SETTINGS) {
-                desiredState = SETTINGS;
-                toggleGUI = true;
-                changingControlUp = false;
-                changingControlDown = false;
-                changingControlLeft = false;
-                changingControlRight = false;
-                changingControlCwRoll = false;
-                changingControlCcwRoll = false;
-                return true;
-            }
-            else if (id == ID_BUTTON_RESUME) {
-                desiredState = HUD;
-                toggleGUI = true;
-                return true;
-            }
-            else if (id == ID_BUTTON_QUIT) {
-                quit = true;
-                return true;
-            }
-            else if (id == ID_BUTTON_MENU) {
-                desiredState = MENU;
-                toggleGUI = true;
-                return true;
-            }
-            else if (id == ID_BUTTON_TOGGLE_FULLSCREEN) {
-                toggleFullscreen = true;
-                return true;
-            }
-            else if (id == ID_BUTTON_CONTROL_SETTINGS) {
-                desiredState = CONTROL_SETTINGS;
-                toggleGUI = true;
-                return true;
-            }
-            else if (id == ID_BUTTON_CONTROL_UP) {
-                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
-                    changingControlUp = true;
-                }
-                return true;
-            }
-            else if (id == ID_BUTTON_CONTROL_DOWN) {
-                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
-                    changingControlDown = true;
-                }
-                return true;
-            }
-            else if (id == ID_BUTTON_CONTROL_LEFT) {
-                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
-                    changingControlLeft = true;
-                }
-                return true;
-            }
-            else if (id == ID_BUTTON_CONTROL_RIGHT) {
-                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
-                    changingControlRight = true;
-                }
-                return true;
-            }
-            else if (id == ID_BUTTON_CONTROL_CW_ROLL) {
-                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
-                    changingControlCwRoll = true;
-                }
-                return true;
-            }
-            else if (id == ID_BUTTON_CONTROL_CCW_ROLL) {
-                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
-                    changingControlCcwRoll = true;
-                }
-                return true;
-            }
-            else if (id == ID_BUTTON_DEFUALT_CONTROLS){
-                defaultControls = true;
-                return true;
-            }
-            break;
         case gui::EGET_COMBO_BOX_CHANGED:
-            if (id == ID_COMBOBOX_LANGUAGE)
-            {
-                toggleLanguage = true;
-                break;
-            }
-            else if (id == ID_COMBOBOX_RESOLUTION)
-            {
-                toggleResolution = true;
-                return true;
-            }
         case gui::EGET_CHECKBOX_CHANGED:
-            {
-                toggleGraphicMode = true;
-                return true;
-            }
         case gui::EGET_SPINBOX_CHANGED:
-            {
-                toggleGraphicMode = true;
-                return true;
-            }
+            guiEvents[id] = true;
+            break;
         default:
             {
                 break;
@@ -160,7 +60,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
 }
 
 // returns true if keyCode is pressed
-bool EventReceiver::IsKeyDown(EKEY_CODE keyCode) const
+bool EventReceiver::isKeyDown(EKEY_CODE keyCode) const
 {
     return pressedKeys[keyCode];
 }
@@ -175,7 +75,29 @@ bool EventReceiver::lastKeyAvailable() const
     return lastKey != KEY_KEY_CODES_COUNT;
 }
 
-void EventReceiver::clearLastKey()
+bool EventReceiver::checkEvent(GUI_ID id)
 {
+    bool result = guiEvents[id];
+    guiEvents[id] = false;
+
+    return result;
+}
+
+bool EventReceiver::checkKeyPressed(EKEY_CODE keyCode)
+{
+    bool result = pressedKeys[keyCode] && !checkedKeys[keyCode];
+    checkedKeys[keyCode] = pressedKeys[keyCode];
+
+    return result;
+}
+
+void EventReceiver::startCatchingKey()
+{
+    catchingKey = true;
+}
+
+void EventReceiver::stopCatchingKey()
+{
+    catchingKey = false;
     lastKey = KEY_KEY_CODES_COUNT;
 }
