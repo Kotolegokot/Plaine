@@ -274,6 +274,15 @@ void Game::mainMenu()
                         configuration.resizable = true;
                         break;
                 }
+
+                terminateDevice();
+                if (!initializeDevice())
+                    return;
+                initializeGUI();
+                initialized = true;
+                oldConfiguration = configuration;
+
+                gui->initialize(SETTINGS);
             }
             if (eventReceiver->checkEvent(ID_BUTTON_CONTROL_SETTINGS)) {
                 gui->initialize(CONTROL_SETTINGS);
@@ -281,11 +290,15 @@ void Game::mainMenu()
             if (eventReceiver->checkEvent(ID_BUTTON_TOGGLE_FULLSCREEN)) {
                 configuration.fullscreen = !configuration.fullscreen;
 
-                // sets default resolution (ignored if fullscreen is on)
-                configuration.resolution = core::dimension2d<u32>(640, 480);
-                configuration.resizable = false;
+                terminateDevice();
+                if (!initializeDevice())
+                    return;
+                initializeGUI();
+                initialized = true;
+                oldConfiguration = configuration;
 
-                gui->reload();
+                gui->initialize(SETTINGS);
+
             }
             if (eventReceiver->checkEvent(ID_SPINBOX_RENDER_DISTANCE)) {
                 configuration.renderDistance = gui->spinBoxRenderDistance->getValue();
@@ -312,7 +325,6 @@ void Game::mainMenu()
                 gui->initialize(MAIN_MENU);
             }
             if (eventReceiver->checkEvent(ID_BUTTON_QUIT)) {
-                configuration = configuration;
                 return;
             }
 
@@ -368,7 +380,7 @@ void Game::mainMenu()
 
         // catch window resize
         if (configuration.resolution != driver->getScreenSize()) {
-            configuration.resolution = driver->getScreenSize();
+            oldConfiguration.resolution = configuration.resolution = driver->getScreenSize();
             gui->resizeGUI();
         }
 
