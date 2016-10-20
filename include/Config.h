@@ -37,12 +37,12 @@ class Controls {
 public:
     Controls()
     {
-        this->operator[](CONTROL::UP) = KEY_KEY_W;
-        this->operator[](CONTROL::LEFT) = KEY_KEY_S;
-        this->operator[](CONTROL::DOWN) = KEY_KEY_A;
-        this->operator[](CONTROL::RIGHT) = KEY_KEY_D;
-        this->operator[](CONTROL::CW_ROLL) = KEY_KEY_E;
-        this->operator[](CONTROL::CCW_ROLL) = KEY_KEY_Q;
+        keyCodes[CONTROL::UP] = KEY_KEY_W;
+        keyCodes[CONTROL::LEFT] = KEY_KEY_S;
+        keyCodes[CONTROL::DOWN] = KEY_KEY_A;
+        keyCodes[CONTROL::RIGHT] = KEY_KEY_D;
+        keyCodes[CONTROL::CW_ROLL] = KEY_KEY_E;
+        keyCodes[CONTROL::CCW_ROLL] = KEY_KEY_Q;
     }
 
     EKEY_CODE &operator[](size_t i)

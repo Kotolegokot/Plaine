@@ -207,9 +207,9 @@ void Game::mainMenu()
     //sets cursor visible
     device->getCursorControl()->setVisible(true);
 
-    std::array<bool, CONTROLS_COUNT> catching;
-    for (auto &b : catching)
-        b = false;
+    size_t catchingControlID = CONTROLS_COUNT;
+
+    bool escapeHandled = false;
 
     while (device->run()) {
         // handle gui events
@@ -219,7 +219,8 @@ void Game::mainMenu()
                 run();
             if (eventReceiver->checkEvent(ID_BUTTON_SETTINGS))
                 gui->initialize(SETTINGS);
-            if (eventReceiver->checkEvent(ID_BUTTON_QUIT))
+            if (eventReceiver->checkEvent(ID_BUTTON_QUIT) ||
+                eventReceiver->IsKeyDown(KEY_ESCAPE) && !escapeHandled)
                 return;
             break;
 
@@ -302,48 +303,53 @@ void Game::mainMenu()
             if (eventReceiver->checkEvent(ID_BUTTON_QUIT)) {
                 return;
             }
+
+            if (eventReceiver->IsKeyDown(KEY_ESCAPE) && !escapeHandled) {
+                escapeHandled = true;
+                gui->initialize(MAIN_MENU);
+            }
             break;
 
         case CONTROL_SETTINGS:
             for (size_t i = 0; i < CONTROLS_COUNT; i++)
                 if (eventReceiver->checkEvent(static_cast<GUI_ID>(gui->buttonsControl[i]->getID()))) {
                     eventReceiver->startCatchingKey();
-                    catching.fill(false);
-                    catching[i] = true;
+                    catchingControlID = i;
+                    gui->reload();
                     gui->buttonsControl[i]->setText(_wp("Press a key"));
                 }
             if (eventReceiver->checkEvent(ID_BUTTON_DEFAULT_CONTROLS)) {
                 eventReceiver->stopCatchingKey();
-                for (auto &b : catching)
-                    b = false;
+                catchingControlID = CONTROLS_COUNT;
                 configuration.controls = Controls();
                 gui->reload();
             }
             if (eventReceiver->checkEvent(ID_BUTTON_SETTINGS)) {
                 eventReceiver->stopCatchingKey();
-                catching.fill(false);
+                catchingControlID = CONTROLS_COUNT;
                 gui->initialize(SETTINGS);
             }
             if (eventReceiver->checkEvent(ID_BUTTON_QUIT)) {
                 return;
             }
 
-            if (std::any_of(catching.begin(), catching.end(), [](bool b){ return b; })) {
-                if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
+            if (catchingControlID != CONTROLS_COUNT) {
+                if (eventReceiver->lastKeyAvailable() && !keyCodeName(eventReceiver->getLastKey()).empty()) {
+                    if (!eventReceiver->IsKeyDown(KEY_ESCAPE)) {
+                        for (size_t i = 0; i < CONTROLS_COUNT; i++)
+                            if (configuration.controls[i] == eventReceiver->getLastKey())
+                                configuration.controls[i] = KEY_KEY_CODES_COUNT;
+                        configuration.controls[catchingControlID] = eventReceiver->getLastKey();
+                    }
+
                     eventReceiver->stopCatchingKey();
-                    catching.fill(false);
+                    catchingControlID = CONTROLS_COUNT;
                     gui->reload();
-                } else if (eventReceiver->lastKeyAvailable() && !keyCodeName(eventReceiver->getLastKey()).empty()) {
-                    for (size_t i = 0; i < CONTROLS_COUNT; i++)
-                        if (catching[i]) {
-                            for (size_t j = 0; j < CONTROLS_COUNT; j++)
-                                if (configuration.controls[j] == eventReceiver->getLastKey())
-                                    configuration.controls[j] = KEY_KEY_CODES_COUNT;
-                            configuration.controls[i] = eventReceiver->getLastKey();
-                        }
-                    eventReceiver->stopCatchingKey();
-                    catching.fill(false);
-                    gui->reload();
+                }
+            } else {
+                if (eventReceiver->IsKeyDown(KEY_ESCAPE) && !escapeHandled) {
+                    escapeHandled = true;
+                    gui->initialize(SETTINGS);
                 }
             }
 
@@ -357,25 +363,10 @@ void Game::mainMenu()
             gui->resizeGUI();
         }
 
-       /* // escape key reactions in different GUI states
-        if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
-            if (!eventReceiver->escapePressed)
-            {
-                eventReceiver->escapePressed = true;
-                if (eventReceiver->desiredState == MAIN_MENU)
-                    return;
-                else if (eventReceiver->desiredState == SETTINGS)
-                    {
-                        eventReceiver->desiredState = MAIN_MENU;
-                        eventReceiver->toggleGUI = true;
-                    }
-                else if (eventReceiver->desiredState == CONTROL_SETTINGS)
-                    {
-                        eventReceiver->desiredState = SETTINGS;
-                        eventReceiver->toggleGUI = true;
-                    }
-            }
-        }
+        if (!eventReceiver->IsKeyDown(KEY_ESCAPE))
+            escapeHandled = false;
+
+       /*
         else if (!eventReceiver->IsKeyDown(KEY_ESCAPE))
             eventReceiver->escapePressed = false;
         // if window need restart to implement new graphic settings
