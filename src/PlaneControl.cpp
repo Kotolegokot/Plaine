@@ -108,13 +108,15 @@ void PlaneControl::handle(EventReceiver &eventReceiver)
     }
     if (plane.getAngularVelocity().length() < 0.05f)
         plane.setAngularVelocity(btVector3(0, 0, 0));
+
     turnImpulse = turnImpulse.rotate(axis, angle);
     yawImpulse = yawImpulse.rotate(axis, angle);
     pitchImpulse = pitchImpulse.rotate(axis, angle);
     turnImpulse.setZ(0);
+
     plane.getRigidBody().applyCentralImpulse(turnImpulse);
     plane.getRigidBody().applyTorqueImpulse(rollImpulse);
     plane.getRigidBody().applyTorqueImpulse(pitchImpulse);
     plane.getRigidBody().applyTorqueImpulse(yawImpulse);
-    plane.getRigidBody().applyForce(btVector3(0, 0, 900), btVector3(0, 0, 0));
+    plane.getRigidBody().applyForce(btVector3(0, 0, 3000), btVector3(0, 0, 0));
 }
