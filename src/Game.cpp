@@ -463,6 +463,8 @@ bool Game::run()
                     terminateScene();
                     return false;
                 }
+
+                time_physics_curr = time_physics_prev = timer->getTime();
                 break;
             case HUD: {
                 #if DEBUG_OUTPUT
@@ -531,9 +533,10 @@ bool Game::run()
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
-            if (gui->getState() == PAUSE_MENU)
+            if (gui->getState() == PAUSE_MENU) {
+                time_physics_curr = time_physics_prev = timer->getTime();
                 device->yield();
-            else
+            } else
                 gui->initialize(PAUSE_MENU);
         }
     }
