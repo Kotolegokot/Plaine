@@ -212,6 +212,7 @@ void Game::mainMenu()
         b = false;
 
     while (device->run()) {
+        // handle gui events
         switch (gui->getState()) {
         case MAIN_MENU:
             if (eventReceiver->checkEvent(ID_BUTTON_START))
@@ -350,6 +351,12 @@ void Game::mainMenu()
             break;
         }
 
+        // catch window resize
+        if (configuration.resolution != driver->getScreenSize()) {
+            configuration.resolution = driver->getScreenSize();
+            gui->resizeGUI();
+        }
+
        /* // escape key reactions in different GUI states
         if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
             if (!eventReceiver->escapePressed)
@@ -381,17 +388,9 @@ void Game::mainMenu()
                 initialized = true;
                 gui->initialize(MAIN_MENU);
                 eventReceiver->needRestartInMenu = false;
-            }
+            }*/
 
-
-        // catch a resize of window
-        if (configuration.resolution != driver->getScreenSize())
-        {
-            configuration.resolution = driver->getScreenSize();
-            gui->resizeGUI();
-        }
-
-        // screen size
+        /*// screen size
         {
             core::stringw scrs = _w("Screen size: ");
             scrs += configuration.resolution.Width;
