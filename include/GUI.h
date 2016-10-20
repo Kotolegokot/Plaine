@@ -22,7 +22,7 @@
 #include "Config.h"
 #include "util.h"
 
-enum GUIState { MAIN_MENU, INGAME_MENU, HUD, SETTINGS, CONTROL_SETTINGS, TERMINATED };
+enum GUIState { MAIN_MENU, PAUSE_MENU, HUD, SETTINGS, CONTROL_SETTINGS, TERMINATED };
 
 class GUI
 {

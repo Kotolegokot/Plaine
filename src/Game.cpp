@@ -215,8 +215,12 @@ void Game::mainMenu()
         // handle gui events
         switch (gui->getState()) {
         case MAIN_MENU:
-            if (eventReceiver->checkEvent(ID_BUTTON_START))
-                run();
+            if (eventReceiver->checkEvent(ID_BUTTON_START)) {
+                if (run())
+                    gui->initialize(MAIN_MENU);
+                else
+                    return;
+            }
             if (eventReceiver->checkEvent(ID_BUTTON_SETTINGS)) {
                 oldConfiguration = configuration;
                 gui->initialize(SETTINGS);
@@ -372,36 +376,7 @@ void Game::mainMenu()
             gui->textScreenSize->setText(scrs.c_str());
         }
 
-        if (guiEnvironment->getFocus() && eventReceiver->isKeyDown(KEY_TAB))
-        {
-            gui->selectWithTab();
-        }
-        if (eventReceiver->checkKeyPressed(KEY_DOWN))
-        {
-            if (!guiEnvironment->getFocus())
-                gui->selectElement(0);
-            else
-                gui->selectNextElement();
-        }
-        if (eventReceiver->checkKeyPressed(KEY_UP))
-        {
-            if (!guiEnvironment->getFocus())
-                gui->selectElement(0);
-            else
-                gui->selectPreviousElement();
-        }
-        if (eventReceiver->checkKeyPressed(KEY_RIGHT))
-        {
-            if (guiEnvironment->getFocus() && guiEnvironment->getFocus()->getType() == gui::EGUIET_BUTTON)
-            {
-                    SEvent event;
-                    event.EventType = EET_GUI_EVENT;
-                    event.GUIEvent.Caller = guiEnvironment->getFocus();
-                    event.GUIEvent.Element = guiEnvironment->getFocus();
-                    event.GUIEvent.EventType = gui::EGET_BUTTON_CLICKED;
-                    device->postEventFromUser(event);
-            }
-        }
+        handleSelecting();
 
         if (device->isWindowActive()) {
             if (IRIDESCENT_BACKGROUND)
@@ -417,9 +392,10 @@ void Game::mainMenu()
 }
 
 // start the game itself
-void Game::run()
+// returns false if quit is pressed
+bool Game::run()
 {
-  /*  gui->initialize(HUD);
+    gui->initialize(HUD);
     initializeScene();
 
     video::SLight lightData;
@@ -433,60 +409,7 @@ void Game::run()
 
     while (device->run())
     {
-        // if we exit to menu or quit the game, then stop
-        if (eventReceiver->desiredState == MAIN_MENU || eventReceiver->quitClicked) {
-            break;
-        }
-
         color = iridescentColor(timer->getTime());
-        if (pause) {
-            if (!handlePause(color))
-                break;
-        } else {
-            #if DEBUG_OUTPUT
-                std::cout << "=== BEGIN SIMULATION ===" << std::endl;;
-            #endif // DEBUG_OUTPUT
-
-            // set fog color
-            #if FOG_ENABLED && IRIDESCENT_FOG
-                driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300,
-                    configuration.renderDistance, 0.01f, true, true);
-            #endif // FOG_ENABLED && IRIDESCENT_FOG
-
-            // set light color
-            #if IRIDESCENT_LIGHT
-                lightData = light->getLightData();
-                lightData.DiffuseColor = color;
-                lightData.AmbientColor = color;
-                light->setLightData(lightData);
-            #endif // IRIDESCENT_LIGHT
-
-            updateHUD();
-            updateCamera(); // update camera position, target, and rotation
-
-            //set cursor invisible
-            device->getCursorControl()->setVisible(false);
-
-            // generate obstacles
-            obstacleGenerator->generate(plane->getNode().getPosition());
-
-            // if toggling gui is needed
-            if (eventReceiver->toggleGUI) {
-                pause = !pause;
-                gui->initialize(INGAME_MENU);
-                eventReceiver->toggleGUI = false;
-            }
-        }
-
-        // if escape is pressed (what kind of magic is that??)
-        if (eventReceiver->IsKeyDown(KEY_ESCAPE)) {
-            if (!eventReceiver->escapePressed) {
-                eventReceiver->toggleGUI = true;
-                eventReceiver->escapePressed = true;
-            }
-        } else {
-            eventReceiver->escapePressed = false;
-        }
 
         if (device->isWindowActive()) {
             #if IRIDESCENT_BACKGROUND
@@ -495,14 +418,85 @@ void Game::run()
                 driver->beginScene(true, true, DEFAULT_COLOR);
             #endif // IRIDESCENT_BACKGROUND
 
-            if (!pause) {
+
+            switch (gui->getState()) {
+            case PAUSE_MENU:
+                // catch window resize
+                if (configuration.resolution != driver->getScreenSize()) {
+                    configuration.resolution = driver->getScreenSize();
+                    gui->resizeGUI();
+                }
+
+                // screen size
+                {
+                    core::stringw scrs = _w("Screen size: ");
+                    scrs += configuration.resolution.Width;
+                    scrs += "x";
+                    scrs += configuration.resolution.Height;
+                    gui->textScreenSize->setText(scrs.c_str());
+                }
+
+                // set cursor visible
+                device->getCursorControl()->setVisible(true);
+
+                if (eventReceiver->checkEvent(ID_BUTTON_RESUME) ||
+                    eventReceiver->checkKeyPressed(KEY_ESCAPE))
+                {
+                    gui->initialize(HUD);
+                }
+
+                handleSelecting();
+
+                if (eventReceiver->checkKeyPressed(KEY_LEFT) ||
+                    eventReceiver->checkEvent(ID_BUTTON_MENU))
+                {
+                    terminateScene();
+                    return true;
+                }
+
+                if (eventReceiver->checkEvent(ID_BUTTON_QUIT)) {
+                    terminateScene();
+                    return false;
+                }
+                break;
+            case HUD: {
+                #if DEBUG_OUTPUT
+                    std::cout << "=== BEGIN SIMULATION ===" << std::endl;;
+                #endif // DEBUG_OUTPUT
+
+                // set fog color
+                #if FOG_ENABLED && IRIDESCENT_FOG
+                    driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300,
+                        configuration.renderDistance, 0.01f, true, true);
+                #endif // FOG_ENABLED && IRIDESCENT_FOG
+
+                // set light color
+                #if IRIDESCENT_LIGHT
+                    lightData = light->getLightData();
+                    lightData.DiffuseColor = color;
+                    lightData.AmbientColor = color;
+                    light->setLightData(lightData);
+                #endif // IRIDESCENT_LIGHT
+
+                updateHUD();
+                updateCamera(); // update camera position, target, and rotation
+
+                //set cursor invisible
+                device->getCursorControl()->setVisible(false);
+
+                // generate obstacles
+                obstacleGenerator->generate(plane->getNode().getPosition());
+
+                if (eventReceiver->checkKeyPressed(KEY_ESCAPE))
+                    gui->initialize(PAUSE_MENU);
+
+                explosion->setPosition(plane->getPosition());
+                sceneManager->drawAll(); // draw scene
+
                 if (plane->getExploded()) {
                     explosion->explode();
                     plane->setExploded(false);
                 }
-
-                explosion->setPosition(plane->getPosition());
-                sceneManager->drawAll(); // draw scene
 
                 time_physics_curr = timer->getTime();
                 // physics simulation
@@ -511,7 +505,6 @@ void Game::run()
                 #if DEBUG_DRAWER_ENABLED
                     dynamicsWorld->debugDrawWorld();
                 #endif // DEBUG_DRAWER_ENABLED
-
                 u64 dt = timer->getTime() - time_gameclock;
 
                 while (dt >= TickMs) {
@@ -521,36 +514,27 @@ void Game::run()
                     planeControl->handle(*eventReceiver); // handle plane controls
                 }
 
-                if (eventReceiver->IsKeyDown(KEY_LEFT))
-                {
-                    if ((!eventReceiver->leftPressed))
-                    {
-                        eventReceiver->leftPressed = true;
-                    }
-                } else
-                    eventReceiver->leftPressed = false;
-
                 #if DEBUG_OUTPUT
                     std::cout << "=== END_SIMULATION ===" << std::endl << std::endl;
                 #endif
+                break;
+            }
+            default:
+                break;
             }
 
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
-            if (!pause) {
-                pause = true;
-                gui->initialize(INGAME_MENU);
-            }
-
-            time_physics_curr = time_physics_prev = timer->getTime();
-            device->yield();
+            if (gui->getState() == PAUSE_MENU)
+                device->yield();
+            else
+                gui->initialize(PAUSE_MENU);
         }
     }
-    pause = false;
 
     terminateScene();
-    gui->terminate();*/
+    return false;
 }
 
 void Game::updateHUD()
@@ -635,78 +619,35 @@ void Game::updateCamera()
 
 bool Game::handlePause(video::SColor &color)
 {
-    /*// catch window resize
-    if (configuration.resolution != driver->getScreenSize())
-    {
-        configuration.resolution = driver->getScreenSize();
-        gui->resizeGUI();
-    }
 
-    // screen size
-    {
-        core::stringw scrs = _w("Screen size: ");
-        scrs += configuration.resolution.Width;
-        scrs += "x";
-        scrs += configuration.resolution.Height;
-        gui->textScreenSize->setText(scrs.c_str());
-    }
+}
 
-    // set cursor visible
-    device->getCursorControl()->setVisible(true);
-
-    // if need to toggle GUI
-    if (eventReceiver->toggleGUI) {
-        pause = !pause;
-        gui->initialize(HUD);
-        eventReceiver->toggleGUI = false;
-    }
-
-    if (guiEnvironment->getFocus() && eventReceiver->tabPressed) {
+void Game::handleSelecting()
+{
+    if (guiEnvironment->getFocus() && eventReceiver->isKeyDown(KEY_TAB))
         gui->selectWithTab();
-        eventReceiver->tabPressed = false;
-    }
 
-    if (eventReceiver->downPressed) {
+    if (eventReceiver->checkKeyPressed(KEY_DOWN)) {
         if (!guiEnvironment->getFocus())
             gui->selectElement(0);
         else
             gui->selectNextElement();
-        eventReceiver->downPressed = false;
     }
 
-    if (eventReceiver->upPressed) {
+    if (eventReceiver->checkKeyPressed(KEY_UP)) {
         if (!guiEnvironment->getFocus())
             gui->selectElement(0);
         else
             gui->selectPreviousElement();
-        eventReceiver->upPressed = false;
     }
 
-    if (eventReceiver->IsKeyDown(KEY_RIGHT)) {
-        if (!eventReceiver->rightPressed && guiEnvironment->getFocus())
-        {
+    if (eventReceiver->checkKeyPressed(KEY_RIGHT))
+        if (guiEnvironment->getFocus() && guiEnvironment->getFocus()->getType() == gui::EGUIET_BUTTON) {
             SEvent event;
             event.EventType = EET_GUI_EVENT;
             event.GUIEvent.Caller = guiEnvironment->getFocus();
             event.GUIEvent.Element = guiEnvironment->getFocus();
             event.GUIEvent.EventType = gui::EGET_BUTTON_CLICKED;
             device->postEventFromUser(event);
-            eventReceiver->rightPressed = true;
         }
-    } else
-        eventReceiver->rightPressed = false;
-
-    if (eventReceiver->IsKeyDown(KEY_LEFT))
-        {
-            if ((!eventReceiver->leftPressed))
-            {
-                eventReceiver->desiredState = MAIN_MENU;
-                eventReceiver->toggleGUI = true;
-                eventReceiver->leftPressed = true;
-                return false;
-            }
-        } else
-                eventReceiver->leftPressed = false;
-*/
-    return true;
 }

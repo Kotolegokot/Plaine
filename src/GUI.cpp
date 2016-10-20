@@ -57,7 +57,7 @@ void GUI::initialize(GUIState state)
     case(MAIN_MENU):
         initializeMenuGUI();
         break;
-    case(INGAME_MENU):
+    case(PAUSE_MENU):
         initializeInGameGUI();
         break;
     case(HUD):
@@ -328,7 +328,7 @@ void GUI::updateSelection()
             buttonSettings->setText(_wp("Settings"));
             buttonQuit->setText(_wp("Quit"));
             break;
-    case(INGAME_MENU):
+    case(PAUSE_MENU):
             buttonResume->setText(_wp("Resume"));
             buttonMenu->setText(_wp("Menu"));
             buttonQuit->setText(_wp("Quit"));
@@ -413,7 +413,7 @@ void GUI::terminate()
     case(MAIN_MENU):
             terminateMenuGUI();
             break;
-    case(INGAME_MENU):
+    case(PAUSE_MENU):
             terminateInGameGUI();
             break;
         case(HUD):
@@ -431,6 +431,8 @@ void GUI::terminate()
 
     this->state = TERMINATED;
     selectableElements.clear();
+    guiEnvironment.setFocus(0);
+    selectedElement = 0;
 }
 
 void GUI::setVisible(bool visible)
@@ -445,7 +447,7 @@ void GUI::setVisible(bool visible)
             buttonQuit->setVisible(visible);
             break;
         }
-    case (INGAME_MENU):
+    case (PAUSE_MENU):
         {
             buttonResume->setVisible(visible);
             buttonMenu->setVisible(visible);
@@ -509,7 +511,7 @@ void GUI::resizeGUI()
             buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE));
             break;
         }
-    case (INGAME_MENU):
+    case (PAUSE_MENU):
         {
             buttonResume->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 3*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 3*SPACE));
             buttonMenu->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 2*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - buttonHeight - 2*SPACE));

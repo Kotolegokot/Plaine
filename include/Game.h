@@ -45,12 +45,13 @@ class Game
 public:
     Game(const struct ConfigData &data = ConfigData());
     ~Game();
-    void run();
     void mainMenu();
 
 private:
     bool initialized = false;
     bool pause = false;
+
+    bool run();
 
     ConfigData configuration;
     GUI *gui = nullptr;
@@ -94,6 +95,7 @@ private:
     void updateCamera();
     // returns false if need to quit pause menu
     bool handlePause(video::SColor &color);
+    void handleSelecting();
 };
 
 #endif // GAME_H
