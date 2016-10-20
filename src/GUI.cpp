@@ -271,26 +271,26 @@ void GUI::terminateSettingsGUI()
 void GUI::initializeControlSettingsGUI()
 {
     textScreenSize = guiEnvironment.addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
-    textControlUp = guiEnvironment.addStaticText(_wp("Up: "), core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 9*buttonHeight - 9*SPACE, configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 9*SPACE), false);
-    buttonsControl[CONTROL::UP] = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 9*buttonHeight - 9*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 9*SPACE),
-        0, ID_BUTTON_CONTROL_UP, keyCodeName(configuration.controls[CONTROL::UP]).c_str(), _wp("Click to change"));
-    textControlLeft = guiEnvironment.addStaticText(_wp("Left: "), core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 8*SPACE, configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 7*buttonHeight - 8*SPACE), false);
-    buttonsControl[CONTROL::LEFT] = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 8*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 7*buttonHeight - 8*SPACE),
-        0, ID_BUTTON_CONTROL_LEFT, keyCodeName(configuration.controls[CONTROL::LEFT]).c_str(), _wp("Click to change"));
-    textControlDown = guiEnvironment.addStaticText(_wp("Down: "), core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 7*buttonHeight - 7*SPACE, configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 6*buttonHeight - 7*SPACE), false);
-    buttonsControl[CONTROL::DOWN] = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 7*buttonHeight - 7*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 6*buttonHeight - 7*SPACE),
-        0, ID_BUTTON_CONTROL_DOWN, keyCodeName(configuration.controls[CONTROL::DOWN]).c_str(), _wp("Click to change"));
-    textControlRight = guiEnvironment.addStaticText(_wp("Right: "), core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 6*buttonHeight - 6*SPACE, configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 5*buttonHeight - 6*SPACE), false);
-    buttonsControl[CONTROL::RIGHT] = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 6*buttonHeight - 6*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 5*buttonHeight - 6*SPACE),
-        0, ID_BUTTON_CONTROL_RIGHT, keyCodeName(configuration.controls[CONTROL::RIGHT]).c_str(), _wp("Click to change"));
-    textControlCcwRoll = guiEnvironment.addStaticText(_wp("CCW roll: "), core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 5*buttonHeight - 5*SPACE,
-        configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 4*buttonHeight - 5*SPACE), false);
-    buttonsControl[CONTROL::CCW_ROLL] = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 5*buttonHeight - 5*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 4*buttonHeight - 5*SPACE),
-        0, ID_BUTTON_CONTROL_CCW_ROLL, keyCodeName(configuration.controls[CONTROL::CCW_ROLL]).c_str(), _wp("Click to change"));
-    textControlCwRoll = guiEnvironment.addStaticText(_wp("CW roll: "), core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 4*buttonHeight - 4*SPACE,
-        configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 4*SPACE), false);
-    buttonsControl[CONTROL::CW_ROLL] = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 4*buttonHeight - 4*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 4*SPACE),
-        0, ID_BUTTON_CONTROL_CW_ROLL, keyCodeName(configuration.controls[CONTROL::CW_ROLL]).c_str(), _wp("Click to change"));
+
+    static constexpr std::array<const char *, CONTROLS_COUNT> texts = { "Up: ", "Left: ", "Down: ", "Right: ", "CW roll", "CCW roll" };
+    static constexpr std::array<u32, CONTROLS_COUNT> ids = { ID_BUTTON_CONTROL_UP, ID_BUTTON_CONTROL_LEFT,
+                                                             ID_BUTTON_CONTROL_DOWN, ID_BUTTON_CONTROL_RIGHT,
+                                                             ID_BUTTON_CONTROL_CW_ROLL, ID_BUTTON_CONTROL_CCW_ROLL };
+    for (size_t i = 0; i < CONTROLS_COUNT; i++) {
+        textsControl[i] = guiEnvironment.addStaticText(_wp(texts[i]),
+                                                       core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                                       configuration.resolution.Height - (9 - i) * (buttonHeight + SPACE),
+                                                                       configuration.resolution.Width - buttonWidth / 2 - 2 * SPACE,
+                                                                       configuration.resolution.Height - (8 - i) * buttonHeight - (9 - i) * SPACE),
+                                                       false);
+
+        buttonsControl[i] = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth / 2 - 2 * SPACE,
+                                                                     configuration.resolution.Height - (9 - i) * (buttonHeight + SPACE),
+                                                                     configuration.resolution.Width - 2 * SPACE,
+                                                                     configuration.resolution.Height - (8 - i) * buttonHeight - (9 - i) * SPACE),
+                                                     0, ids[i], keyCodeName(configuration.controls[i]).c_str(), _wp("Click to change"));
+    }
+
     buttonDefaultControls = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 3*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 3*SPACE),
         0, ID_BUTTON_DEFAULT_CONTROLS, _wp("Default"), _wp("Default control settings"));
     buttonSettings = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 2*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - buttonHeight - 2*SPACE),
@@ -308,18 +308,10 @@ void GUI::initializeControlSettingsGUI()
 void GUI::terminateControlSettingsGUI()
 {
     // TODO
-    textControlUp->remove();
-    buttonsControl[CONTROL::UP]->remove();
-    textControlLeft->remove();
-    buttonsControl[CONTROL::LEFT]->remove();
-    textControlDown->remove();
-    buttonsControl[CONTROL::DOWN]->remove();
-    textControlRight->remove();
-    buttonsControl[CONTROL::RIGHT]->remove();
-    textControlCcwRoll->remove();
-    buttonsControl[CONTROL::CCW_ROLL]->remove();
-    textControlCwRoll->remove();
-    buttonsControl[CONTROL::CW_ROLL]->remove();
+    for (size_t i = 0; i < CONTROLS_COUNT; i++) {
+        textsControl[i]->remove();
+        buttonsControl[i]->remove();
+    }
     buttonDefaultControls->remove();
     buttonSettings->remove();
     buttonQuit->remove();
@@ -489,18 +481,10 @@ void GUI::setVisible(bool visible)
     case (CONTROL_SETTINGS):
         {
             textScreenSize->setVisible(visible);
-            textControlUp->setVisible(visible);
-            buttonsControl[CONTROL::UP]->setVisible(visible);
-            textControlLeft->setVisible(visible);
-            buttonsControl[CONTROL::LEFT]->setVisible(visible);
-            textControlDown->setVisible(visible);
-            buttonsControl[CONTROL::DOWN]->setVisible(visible);
-            textControlRight->setVisible(visible);
-            buttonsControl[CONTROL::RIGHT]->setVisible(visible);
-            textControlCcwRoll->setVisible(visible);
-            buttonsControl[CONTROL::CCW_ROLL]->setVisible(visible);
-            textControlCwRoll->setVisible(visible);
-            buttonsControl[CONTROL::CW_ROLL]->setVisible(visible);
+            for (size_t i = 0; i < CONTROLS_COUNT; i++) {
+                textsControl[i]->setVisible(visible);
+                buttonsControl[i]->setVisible(visible);
+            }
             buttonDefaultControls->setVisible(visible);
             buttonSettings->setVisible(visible);
             buttonQuit->setVisible(visible);
@@ -570,30 +554,17 @@ void GUI::resizeGUI()
         }
     case (CONTROL_SETTINGS):
         {
-            textControlUp->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 9*buttonHeight - 9*SPACE,
-                        configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 9*SPACE));
-            buttonsControl[CONTROL::UP]->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth/2 - 2*SPACE,
-                        configuration.resolution.Height - 9*buttonHeight - 9*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 9*SPACE));
-            textControlLeft->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 8*buttonHeight - 8*SPACE,
-                        configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 7*buttonHeight - 8*SPACE));
-            buttonsControl[CONTROL::LEFT]->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth/2 - 2*SPACE,
-                        configuration.resolution.Height - 8*buttonHeight - 8*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 7*buttonHeight - 8*SPACE));
-            textControlDown->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 7*buttonHeight - 7*SPACE,
-                        configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 6*buttonHeight - 7*SPACE));
-            buttonsControl[CONTROL::DOWN]->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth/2 - 2*SPACE,
-                        configuration.resolution.Height - 7*buttonHeight - 7*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 6*buttonHeight - 7*SPACE));
-            textControlRight->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 6*buttonHeight - 6*SPACE,
-                        configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 5*buttonHeight - 6*SPACE));
-            buttonsControl[CONTROL::RIGHT]->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth/2 - 2*SPACE,
-                        configuration.resolution.Height - 6*buttonHeight - 6*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 5*buttonHeight - 6*SPACE));
-            textControlCcwRoll->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 5*buttonHeight - 5*SPACE,
-                        configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 4*buttonHeight - 5*SPACE));
-            buttonsControl[CONTROL::CCW_ROLL]->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth/2 - 2*SPACE,
-                        configuration.resolution.Height - 5*buttonHeight - 5*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 4*buttonHeight - 5*SPACE));
-            textControlCwRoll->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 4*buttonHeight - 4*SPACE,
-                        configuration.resolution.Width - buttonWidth/2 - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 4*SPACE));
-            buttonsControl[CONTROL::CW_ROLL]->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth/2 - 2*SPACE,
-                        configuration.resolution.Height - 4*buttonHeight - 4*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 4*SPACE));
+            for (size_t i = 0; i < CONTROLS_COUNT; i++) {
+                textsControl[i]->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                                     configuration.resolution.Height - (9 - i) * (buttonHeight + SPACE),
+                                                                     configuration.resolution.Width - buttonWidth / 2 - 2 * SPACE,
+                                                                     configuration.resolution.Height - (8 - i) * buttonHeight - (9 - i) * SPACE));
+
+                buttonsControl[i]->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth / 2 - 2 * SPACE,
+                                                                       configuration.resolution.Height - (9 - i) * (buttonHeight + SPACE),
+                                                                       configuration.resolution.Width - 2 * SPACE,
+                                                                       configuration.resolution.Height - (8 - i) * buttonHeight - (9 - i) * SPACE));
+            }
             buttonDefaultControls->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 3*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 3*SPACE));
             buttonSettings->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 2*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - buttonHeight - 2*SPACE));
             buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE));

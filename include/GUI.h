@@ -53,12 +53,7 @@ public:
     gui::IGUIStaticText *textRenderDistance = nullptr;
     gui::IGUIStaticText *textLanguage = nullptr;
     gui::IGUIStaticText *textCameraPos = nullptr;
-    gui::IGUIStaticText *textControlUp = nullptr;
-    gui::IGUIStaticText *textControlDown = nullptr;
-    gui::IGUIStaticText *textControlLeft = nullptr;
-    gui::IGUIStaticText *textControlRight = nullptr;
-    gui::IGUIStaticText *textControlCwRoll = nullptr;
-    gui::IGUIStaticText *textControlCcwRoll = nullptr;
+    std::array<gui::IGUIStaticText *, CONTROLS_COUNT> textsControl;
     gui::IGUICheckBox *checkBoxVSync = nullptr;
     gui::IGUICheckBox *checkBoxStencilBuffer = nullptr;
     gui::IGUISpinBox *spinBoxRenderDistance = nullptr;
