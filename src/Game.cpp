@@ -289,7 +289,6 @@ void Game::mainMenu()
                 escapeHandled = true;
 
                 bool needRestart = configuration.needRestart(oldConfiguration);
-
                 if (needRestart) {
                     terminateDevice();
                     if (!initializeDevice())
@@ -365,22 +364,7 @@ void Game::mainMenu()
         if (!eventReceiver->IsKeyDown(KEY_ESCAPE))
             escapeHandled = false;
 
-       /*
-        else if (!eventReceiver->IsKeyDown(KEY_ESCAPE))
-            eventReceiver->escapePressed = false;
-        // if window need restart to implement new graphic settings
-        if (gui->getState() == SETTINGS && eventReceiver->desiredState == MAIN_MENU && eventReceiver->needRestartInMenu)
-            {
-                terminateDevice();
-                if (!initializeDevice())
-                    return;
-                initializeGUI();
-                initialized = true;
-                gui->initialize(MAIN_MENU);
-                eventReceiver->needRestartInMenu = false;
-            }*/
-
-        /*// screen size
+        // screen size
         {
             core::stringw scrs = _w("Screen size: ");
             scrs += configuration.resolution.Width;
@@ -389,7 +373,7 @@ void Game::mainMenu()
             gui->textScreenSize->setText(scrs.c_str());
         }
 
-        if (guiEnvironment->getFocus() && eventReceiver->tabPressed)
+/*        if (guiEnvironment->getFocus() && eventReceiver->tabPressed)
         {
             gui->selectWithTab();
             eventReceiver->tabPressed = false;
