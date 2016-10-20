@@ -21,6 +21,7 @@ using namespace irr;
 GUI::GUI(ConfigData &data, gui::IGUIEnvironment &guiEnvironment) :
     configuration(data), guiEnvironment(guiEnvironment)
 {
+    textsControl.fill(nullptr);
     buttonsControl.fill(nullptr);
 }
 
