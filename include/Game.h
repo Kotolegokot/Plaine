@@ -45,13 +45,14 @@ class Game
 public:
     Game(const struct ConfigData &data = ConfigData());
     ~Game();
-    void mainMenu();
+    void start();
 
 private:
     bool initialized = false;
     bool pause = false;
 
     bool run();
+    void mainMenu();
 
     ConfigData configuration;
     GUI *gui = nullptr;

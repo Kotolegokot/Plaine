@@ -33,6 +33,11 @@ Game::~Game()
     terminateDevice();
 }
 
+void Game::start()
+{
+    mainMenu();
+}
+
 void Game::initializeGUI()
 {
     // load font
