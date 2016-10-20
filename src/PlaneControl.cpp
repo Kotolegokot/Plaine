@@ -37,12 +37,12 @@ void PlaneControl::handle(EventReceiver &eventReceiver)
         pitchImpulse += btVector3(-1, 0, 0);
     }
         // down
-    if (eventReceiver.isKeyDown(controls[CONTROL::DOWN])) {
+    if (eventReceiver.isKeyDown(controls[CONTROL::LEFT])) {
         turnImpulse += btVector3(0, -1, 0);
         pitchImpulse += btVector3(1, 0, 0);
     }
         // left
-    if (eventReceiver.isKeyDown(controls[CONTROL::LEFT])) {
+    if (eventReceiver.isKeyDown(controls[CONTROL::DOWN])) {
         turnImpulse += btVector3(-1, 0, 0);
         yawImpulse += btVector3(0, -1, 0);
     }
