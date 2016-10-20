@@ -32,33 +32,33 @@ void PlaneControl::handle(EventReceiver &eventReceiver)
     btVector3 yawImpulse(0, 0, 0);
 
         // up
-    if (eventReceiver.IsKeyDown(controls[CONTROL::UP])) {
+    if (eventReceiver.isKeyDown(controls[CONTROL::UP])) {
         turnImpulse += btVector3(0, 1, 0);
         pitchImpulse += btVector3(-1, 0, 0);
     }
         // down
-    if (eventReceiver.IsKeyDown(controls[CONTROL::DOWN])) {
+    if (eventReceiver.isKeyDown(controls[CONTROL::DOWN])) {
         turnImpulse += btVector3(0, -1, 0);
         pitchImpulse += btVector3(1, 0, 0);
     }
         // left
-    if (eventReceiver.IsKeyDown(controls[CONTROL::LEFT])) {
+    if (eventReceiver.isKeyDown(controls[CONTROL::LEFT])) {
         turnImpulse += btVector3(-1, 0, 0);
         yawImpulse += btVector3(0, -1, 0);
     }
         // right
-    if (eventReceiver.IsKeyDown(controls[CONTROL::RIGHT])) {
+    if (eventReceiver.isKeyDown(controls[CONTROL::RIGHT])) {
         turnImpulse += btVector3(1, 0, 0);
         yawImpulse += btVector3(0, 1, 0);
     }
 
         // rotation
     // counterclockwise roll
-    if (eventReceiver.IsKeyDown(controls[CONTROL::CCW_ROLL])) {
+    if (eventReceiver.isKeyDown(controls[CONTROL::CCW_ROLL])) {
         rollImpulse += btVector3(0, 0, 1);
     }
     // clockwise roll
-    if (eventReceiver.IsKeyDown(controls[CONTROL::CW_ROLL])) {
+    if (eventReceiver.isKeyDown(controls[CONTROL::CW_ROLL])) {
         rollImpulse += btVector3(0, 0, -1);
     }
 

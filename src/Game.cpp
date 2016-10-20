@@ -209,7 +209,6 @@ void Game::mainMenu()
 
     size_t catchingControlID = CONTROLS_COUNT;
 
-    bool escapeHandled = false;
     ConfigData oldConfiguration = configuration;
 
     while (device->run()) {
@@ -218,10 +217,13 @@ void Game::mainMenu()
         case MAIN_MENU:
             if (eventReceiver->checkEvent(ID_BUTTON_START))
                 run();
-            if (eventReceiver->checkEvent(ID_BUTTON_SETTINGS))
+            if (eventReceiver->checkEvent(ID_BUTTON_SETTINGS)) {
+                oldConfiguration = configuration;
                 gui->initialize(SETTINGS);
+            }
             if (eventReceiver->checkEvent(ID_BUTTON_QUIT) ||
-                (eventReceiver->IsKeyDown(KEY_ESCAPE) && !escapeHandled))
+                eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
+                eventReceiver->checkKeyPressed(KEY_LEFT))
                 return;
             break;
 
@@ -284,10 +286,9 @@ void Game::mainMenu()
                 configuration.stencilBuffer = gui->checkBoxStencilBuffer->isChecked();
             }
             if (eventReceiver->checkEvent(ID_BUTTON_MENU) ||
-                (eventReceiver->IsKeyDown(KEY_ESCAPE) && !escapeHandled))
+                eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
+                eventReceiver->checkKeyPressed(KEY_LEFT))
             {
-                escapeHandled = true;
-
                 bool needRestart = configuration.needRestart(oldConfiguration);
                 if (needRestart) {
                     terminateDevice();
@@ -326,27 +327,26 @@ void Game::mainMenu()
                 gui->initialize(SETTINGS);
             }
             if (eventReceiver->checkEvent(ID_BUTTON_QUIT)) {
-                configuration = configuration;
                 return;
             }
 
             if (catchingControlID != CONTROLS_COUNT) {
-                if (eventReceiver->lastKeyAvailable() && !keyCodeName(eventReceiver->getLastKey()).empty()) {
-                    if (!eventReceiver->IsKeyDown(KEY_ESCAPE)) {
+                if (eventReceiver->lastKeyAvailable() &&
+                    (!keyCodeName(eventReceiver->getLastKey()).empty() || eventReceiver->getLastKey() == KEY_ESCAPE)) {
+                    if (!eventReceiver->checkKeyPressed(KEY_ESCAPE)) {
                         for (size_t i = 0; i < CONTROLS_COUNT; i++)
                             if (configuration.controls[i] == eventReceiver->getLastKey())
                                 configuration.controls[i] = KEY_KEY_CODES_COUNT;
                         configuration.controls[catchingControlID] = eventReceiver->getLastKey();
                     }
-                    configuration = configuration;
 
                     eventReceiver->stopCatchingKey();
                     catchingControlID = CONTROLS_COUNT;
                     gui->reload();
                 }
             } else {
-                if (eventReceiver->IsKeyDown(KEY_ESCAPE) && !escapeHandled) {
-                    escapeHandled = true;
+                if (eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
+                    eventReceiver->checkKeyPressed(KEY_LEFT)) {
                     gui->initialize(SETTINGS);
                 }
             }
@@ -361,9 +361,6 @@ void Game::mainMenu()
             gui->resizeGUI();
         }
 
-        if (!eventReceiver->IsKeyDown(KEY_ESCAPE))
-            escapeHandled = false;
-
         // screen size
         {
             core::stringw scrs = _w("Screen size: ");
@@ -373,34 +370,27 @@ void Game::mainMenu()
             gui->textScreenSize->setText(scrs.c_str());
         }
 
-/*        if (guiEnvironment->getFocus() && eventReceiver->tabPressed)
+        if (guiEnvironment->getFocus() && eventReceiver->checkKeyPressed(KEY_TAB))
         {
             gui->selectWithTab();
-            eventReceiver->tabPressed = false;
         }
-        if (eventReceiver->downPressed)
+        if (eventReceiver->checkKeyPressed(KEY_DOWN))
         {
-            if (guiEnvironment->getFocus() == nullptr)
+            if (!guiEnvironment->getFocus())
                 gui->selectElement(0);
             else
-            {
                 gui->selectNextElement();
-            }
-            eventReceiver->downPressed = false;
         }
-        if (eventReceiver->upPressed)
+        if (eventReceiver->checkKeyPressed(KEY_UP))
         {
-            if (guiEnvironment->getFocus() == nullptr)
+            if (!guiEnvironment->getFocus())
                 gui->selectElement(0);
             else
-            {
                 gui->selectPreviousElement();
-            }
-            eventReceiver->upPressed = false;
         }
-        if (eventReceiver->IsKeyDown(KEY_RIGHT))
+        if (eventReceiver->checkKeyPressed(KEY_RIGHT))
         {
-            if ((!eventReceiver->rightPressed) && (guiEnvironment->getFocus()->getType() == gui::EGUIET_BUTTON) && (guiEnvironment->getFocus() != nullptr))
+            if (guiEnvironment->getFocus() && guiEnvironment->getFocus()->getType() == gui::EGUIET_BUTTON)
             {
                     SEvent event;
                     event.EventType = EET_GUI_EVENT;
@@ -408,28 +398,8 @@ void Game::mainMenu()
                     event.GUIEvent.Element = guiEnvironment->getFocus();
                     event.GUIEvent.EventType = gui::EGET_BUTTON_CLICKED;
                     device->postEventFromUser(event);
-                    eventReceiver->rightPressed = true;
             }
-        } else
-                eventReceiver->rightPressed = false;
-        if (eventReceiver->IsKeyDown(KEY_LEFT))
-        {
-            if ((!eventReceiver->leftPressed))
-            {
-                if (eventReceiver->desiredState == SETTINGS)
-                {
-                    eventReceiver->desiredState = MAIN_MENU;
-                    eventReceiver->toggleGUI = true;
-                }
-                else if (eventReceiver->desiredState == CONTROL_SETTINGS)
-                {
-                    eventReceiver->desiredState = SETTINGS;
-                    eventReceiver->toggleGUI = true;
-                }
-                eventReceiver->leftPressed = true;
-            }
-        } else
-                eventReceiver->leftPressed = false;*/
+        }
 
         if (device->isWindowActive()) {
             if (IRIDESCENT_BACKGROUND)

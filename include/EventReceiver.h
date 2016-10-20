@@ -31,27 +31,7 @@ class EventReceiver : public IEventReceiver
 public:
     EventReceiver();
     virtual bool OnEvent(const SEvent &event) override;
-    bool IsKeyDown(EKEY_CODE keyCode) const;
-
-    bool changingControlUp = false;
-    bool changingControlDown = false;
-    bool changingControlLeft = false;
-    bool changingControlRight = false;
-    bool changingControlCwRoll = false;
-    bool changingControlCcwRoll = false;
-    bool defaultControls = false;
-    bool toggleGUI = false;
-    bool toggleGraphicMode = false;
-    bool toggleFullscreen = false;
-    bool needRestartInMenu = false;
-    bool toggleResolution = false;
-    bool toggleLanguage = false;
-    bool escapePressed = false;
-    bool tabPressed = false;
-    bool upPressed = false;
-    bool leftPressed = false;
-    bool downPressed = false;
-    bool rightPressed = false;
+    bool isKeyDown(EKEY_CODE keyCode) const;
 
     EKEY_CODE getLastKey() const;
     bool lastKeyAvailable() const;
@@ -59,8 +39,10 @@ public:
     void stopCatchingKey();
 
     bool checkEvent(GUI_ID id);
+    bool checkKeyPressed(EKEY_CODE keyCode);
 private:
     std::array<bool, KEY_KEY_CODES_COUNT> pressedKeys; // this array shows which keys are pressed and which are not
+    std::array<bool, KEY_KEY_CODES_COUNT> checkedKeys;
     std::array<bool, GUI_IDS_COUNT> guiEvents; // this array shows if a button is clicked or a combobox is changed etc.
     EKEY_CODE lastKey = KEY_KEY_CODES_COUNT; // last pressed key (only works in Controls menu)
 

@@ -21,6 +21,7 @@ using namespace irr;
 EventReceiver::EventReceiver()
 {
     pressedKeys.fill(false);
+    checkedKeys.fill(false);
     guiEvents.fill(false);
 }
 
@@ -28,22 +29,18 @@ bool EventReceiver::OnEvent(const SEvent &event)
 {
     // if the event is related to keys
     if (event.EventType == EET_KEY_INPUT_EVENT) {
-        if (!catchingKey) {
-            pressedKeys[event.KeyInput.Key] = event.KeyInput.PressedDown;
-            if (pressedKeys[KEY_TAB])
-                tabPressed = true;
-            if (pressedKeys[KEY_UP])
-                upPressed = true;
-            if (pressedKeys[KEY_DOWN])
-                downPressed = true;
+        pressedKeys[event.KeyInput.Key] = event.KeyInput.PressedDown;
+        if (!event.KeyInput.PressedDown)
+            checkedKeys[event.KeyInput.Key] = false;
 
-            return escapePressed;
-        } else
+        if (catchingKey)
             lastKey = event.KeyInput.Key;
+
+        return pressedKeys[KEY_ESCAPE];
     }
 
     // if the event is related to GUI
-    else if (event.EventType == EET_GUI_EVENT) {
+    if (event.EventType == EET_GUI_EVENT) {
         s32 id = event.GUIEvent.Caller->getID();
 
         switch (event.GUIEvent.EventType) {
@@ -53,129 +50,6 @@ bool EventReceiver::OnEvent(const SEvent &event)
         case gui::EGET_SPINBOX_CHANGED:
             guiEvents[id] = true;
             break;
-
-        /*case gui::EGET_BUTTON_CLICKED:
-            if (id == ID_BUTTON_START) {
-                startClicked = true;
-                desiredState = HUD;
-                return true;
-            }
-            else if (id == ID_BUTTON_SETTINGS) {
-                settingsClicked = true;
-                desiredState = SETTINGS;
-                toggleGUI = true;
-                changingControlUp = false;
-                changingControlDown = false;
-                changingControlLeft = false;
-                changingControlRight = false;
-                changingControlCwRoll = false;
-                changingControlCcwRoll = false;
-                return true;
-            }
-            else if (id == ID_BUTTON_RESUME) {
-                resumeClicked = true;
-                desiredState = HUD;
-                toggleGUI = true;
-                return true;
-            }
-            else if (id == ID_BUTTON_QUIT) {
-                quitClicked = true;
-                return true;
-            }
-            else if (id == ID_BUTTON_MENU) {
-                menuClicked = true;
-                desiredState = MENU;
-                toggleGUI = true;
-                return true;
-            }
-            else if (id == ID_BUTTON_TOGGLE_FULLSCREEN) {
-                toggleFullscreenClicked = true;
-                toggleFullscreen = true;
-                return true;
-            }
-            else if (id == ID_BUTTON_CONTROL_SETTINGS) {
-                controlSettingsClicked = true;
-                desiredState = CONTROL_SETTINGS;
-                toggleGUI = true;
-                return true;
-            }
-            else if (id == ID_BUTTON_CONTROL_UP) {
-                controlUpClicked = true;
-                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
-                    changingControlUp = true;
-                }
-                return true;
-            }
-            else if (id == ID_BUTTON_CONTROL_DOWN) {
-                controlDownClicked = true;
-                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
-                    changingControlDown = true;
-                }
-                return true;
-            }
-            else if (id == ID_BUTTON_CONTROL_LEFT) {
-                controlLeftClicked = true;
-                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
-                    changingControlLeft = true;
-                }
-                return true;
-            }
-            else if (id == ID_BUTTON_CONTROL_RIGHT) {
-                controlRightClicked = true;
-                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
-                    changingControlRight = true;
-                }
-                return true;
-            }
-            else if (id == ID_BUTTON_CONTROL_CW_ROLL) {
-                controlCWClicked = true;
-                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
-                    changingControlCwRoll = true;
-                }
-                return true;
-            }
-            else if (id == ID_BUTTON_CONTROL_CCW_ROLL) {
-                controlCCWClicked = true;
-                if (!(changingControlUp || changingControlDown || changingControlLeft || changingControlRight || changingControlCwRoll || changingControlCcwRoll)) {
-                    changingControlCcwRoll = true;
-                }
-                return true;
-            }
-            else if (id == ID_BUTTON_DEFUALT_CONTROLS) {
-                defaultControlsClicked = true;
-                defaultControls = true;
-                return true;
-            }
-            break;
-        case gui::EGET_COMBO_BOX_CHANGED:
-            if (id == ID_COMBOBOX_LANGUAGE)
-            {
-                languageChanged = true;
-                toggleLanguage = true;
-                break;
-            }
-            else if (id == ID_COMBOBOX_RESOLUTION)
-            {
-                resolutionChanged = true;
-                toggleResolution = true;
-                return true;
-            }
-        case gui::EGET_CHECKBOX_CHANGED:
-            if (id == ID_CHECKBOX_VSYNC) {
-                vSyncChanged = true;
-                toggleGraphicMode = true;
-                return true;
-            } else if (id == ID_CHECKBOX_STENCILBUFFER) {
-                stencilBufferChanged = true;
-                toggleGraphicMode = true;
-                return true;
-            }
-        case gui::EGET_SPINBOX_CHANGED:
-            if (id == ID_SPINBOX_RENDER_DISTANCE) {
-                renderDistanceChanged = true;
-                toggleGraphicMode = true;
-                return true;
-            }*/
         default:
             {
                 break;
@@ -186,7 +60,7 @@ bool EventReceiver::OnEvent(const SEvent &event)
 }
 
 // returns true if keyCode is pressed
-bool EventReceiver::IsKeyDown(EKEY_CODE keyCode) const
+bool EventReceiver::isKeyDown(EKEY_CODE keyCode) const
 {
     return pressedKeys[keyCode];
 }
@@ -205,6 +79,14 @@ bool EventReceiver::checkEvent(GUI_ID id)
 {
     bool result = guiEvents[id];
     guiEvents[id] = false;
+
+    return result;
+}
+
+bool EventReceiver::checkKeyPressed(EKEY_CODE keyCode)
+{
+    bool result = pressedKeys[keyCode] && !checkedKeys[keyCode];
+    checkedKeys[keyCode] = pressedKeys[keyCode];
 
     return result;
 }
