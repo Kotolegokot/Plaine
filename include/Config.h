@@ -38,8 +38,8 @@ public:
     Controls()
     {
         keyCodes[CONTROL::UP] = KEY_KEY_W;
-        keyCodes[CONTROL::LEFT] = KEY_KEY_S;
-        keyCodes[CONTROL::DOWN] = KEY_KEY_A;
+        keyCodes[CONTROL::LEFT] = KEY_KEY_A;
+        keyCodes[CONTROL::DOWN] = KEY_KEY_S;
         keyCodes[CONTROL::RIGHT] = KEY_KEY_D;
         keyCodes[CONTROL::CW_ROLL] = KEY_KEY_E;
         keyCodes[CONTROL::CCW_ROLL] = KEY_KEY_Q;
