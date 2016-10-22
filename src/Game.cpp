@@ -509,6 +509,8 @@ bool Game::run()
 
                 if (eventReceiver->checkKeyPressed(KEY_ESCAPE))
                     gui->initialize(PAUSE_MENU);
+                if (eventReceiver->checkKeyPressed(KEY_F3))
+                    gui->setHUDInfoVisible(!gui->getHUDInfoVisible());
 
                 explosion->setPosition(plane->getPosition());
                 sceneManager->drawAll(); // draw scene

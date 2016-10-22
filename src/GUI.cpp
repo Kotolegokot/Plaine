@@ -138,6 +138,14 @@ void GUI::initializeHUD()
     textVelocity->setBackgroundColor(video::SColor(120, 255, 255, 255));
     textPoints = guiEnvironment.addStaticText(L"Points", core::rect<s32>(10, 10 + 24 + 24 + 24 + 24, 400, 30 + 24 + 24 + 24 + 24), false);
     textPoints->setBackgroundColor(video::SColor(120, 255, 255, 255));
+
+    if (!HUDInfoVisible) {
+        textCameraPos->setVisible(false);
+        textCubeCount->setVisible(false);
+        textFPS->setVisible(false);
+        textVelocity->setVisible(false);
+        textPoints->setVisible(false);
+    }
 }
 
 void GUI::terminateHUD()
@@ -578,4 +586,17 @@ void GUI::resizeGUI()
     case (TERMINATED):
         break;
     }
+}
+
+void GUI::setHUDInfoVisible(bool visible)
+{
+    HUDInfoVisible = visible;
+
+    if (state == HUD)
+        reload();
+}
+
+bool GUI::getHUDInfoVisible() const
+{
+    return HUDInfoVisible;
 }

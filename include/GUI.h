@@ -68,6 +68,9 @@ public:
     void selectPreviousElement();
     void selectWithTab();
 
+    void setHUDInfoVisible(bool visible);
+    bool getHUDInfoVisible() const;
+
     GUIState getState() const;
 private:
     GUIState state = TERMINATED;
@@ -91,6 +94,8 @@ private:
     void terminateHUD();
     void terminateControlSettingsGUI();
     void terminateInGameGUI();
+
+    bool HUDInfoVisible = true;
 };
 
 #endif // GUI_H
