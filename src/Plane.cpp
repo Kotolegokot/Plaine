@@ -170,14 +170,17 @@ void Plane::setAxisAngleRotation(const btVector3 &axis, btScalar angle)
     rigidBody->getMotionState()->setWorldTransform(transform);
 }
 
- long Plane::getScore() const
+long Plane::getScore() const
 {
     return score;
 }
 
 void Plane::addScore(long addScore)
 {
-    score += addScore;
+    if (addScore > 0)
+        score += positiveMultiplier * addScore;
+    else
+        score += negativeMultiplier * addScore;
 
     if (score < 0)
         score = 0;
@@ -186,4 +189,24 @@ void Plane::addScore(long addScore)
 void Plane::clearScore()
 {
     score = 0;
+}
+
+int Plane::getPositiveMultiplier() const
+{
+    return positiveMultiplier;
+}
+
+void Plane::setPositiveMultiplier(int positiveMultiplier)
+{
+    this->positiveMultiplier = positiveMultiplier;
+}
+
+int Plane::getNegativeMultiplier() const
+{
+    return negativeMultiplier;
+}
+
+void Plane::setNegativeMultiplier(int negativeMultiplier)
+{
+    this->negativeMultiplier = negativeMultiplier;
 }

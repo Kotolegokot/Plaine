@@ -72,6 +72,11 @@ public:
     void addScore(long addScore);
     void clearScore();
 
+    int getPositiveMultiplier() const;
+    void setPositiveMultiplier(int positiveMultiplier);
+
+    int getNegativeMultiplier() const;
+    void setNegativeMultiplier(int negativeMultiplier);
 protected:
     virtual std::unique_ptr<scene::ISceneNode> createNode() override;
     virtual void createMotionState(std::unique_ptr<scene::ISceneNode> node) override;
@@ -81,6 +86,8 @@ protected:
 private:
     bool exploded = false;
     long score = 0;
+    int positiveMultiplier = 1;
+    int negativeMultiplier = 1;
 };
 
 #endif // PLANE_H
