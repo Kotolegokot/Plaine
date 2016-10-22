@@ -36,7 +36,6 @@ bool Plane::getExploded() const
     return exploded;
 }
 
-
 std::unique_ptr<scene::ISceneNode> Plane::createNode()
 {
     std::unique_ptr<scene::IMesh> mesh(device.getSceneManager()->getMesh(PLANE_MODEL));
@@ -171,12 +170,12 @@ void Plane::setAxisAngleRotation(const btVector3 &axis, btScalar angle)
     rigidBody->getMotionState()->setWorldTransform(transform);
 }
 
-unsigned long Plane::getScore() const
+ long Plane::getScore() const
 {
-    return (unsigned long) getPosition().z() / 100 + score;
+    return score;
 }
 
-void Plane::addScore(unsigned long addScore)
+void Plane::addScore(long addScore)
 {
     score += addScore;
 

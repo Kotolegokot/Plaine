@@ -17,6 +17,7 @@
 #ifndef PLANE_H
 #define PLANE_H
 
+#include <algorithm>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
@@ -67,8 +68,8 @@ public:
     void getAxisAngleRotation(btVector3 &axis, btScalar &angle) const;
     void setAxisAngleRotation(const btVector3 &axis, btScalar angle);
 
-    unsigned long getScore() const;
-    void addScore(unsigned long addScore);
+    long getScore() const;
+    void addScore(long addScore);
     void clearScore();
 
 protected:
@@ -79,7 +80,7 @@ protected:
 
 private:
     bool exploded = false;
-    unsigned long score = 0;
+    long score = 0;
 };
 
 #endif // PLANE_H

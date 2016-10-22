@@ -117,6 +117,7 @@ void Game::initializeBullet()
                     std::swap(obj0, obj1);
 
                 Plane &plane = *static_cast<Plane *>(obj0->getUserPointer());
+                plane.addScore(-cp.getAppliedImpulse());
 
                 if (cp.getAppliedImpulse() > 400)
                     plane.setExploded(true);
@@ -531,6 +532,7 @@ bool Game::run()
                     time_gameclock += TickMs;
 
                     planeControl->handle(*eventReceiver); // handle plane controls
+                    plane->addScore(2);
                 }
 
                 #if DEBUG_OUTPUT
