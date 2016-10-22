@@ -620,7 +620,7 @@ void Game::updateHUD()
         gui->textPoints->setText(score.c_str());
 
         #if DEBUG_OUTPUT
-            std::cout << "Score: " << (int) plane->getNode().getPosition().Z * 0.01f << std::endl;
+            std::cout << "Score: " << plane->getScore() << std::endl;
         #endif // DEBUG_OUTPUT
     }
 }
