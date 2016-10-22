@@ -155,7 +155,7 @@ void Game::initializeScene()
 
     // add some light
     {
-        light = sceneManager->addLightSceneNode(camera, core::vector3df(0, 0, -100), DEFAULT_LIGHT_COLOR, 300);
+        light = sceneManager->addLightSceneNode(0, core::vector3df(0, 0, 0), DEFAULT_LIGHT_COLOR, 300);
         light->setLightType(video::ELT_DIRECTIONAL);
         video::SLight lightData;
         lightData = light->getLightData();
