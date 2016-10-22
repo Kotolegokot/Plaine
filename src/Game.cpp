@@ -613,15 +613,15 @@ void Game::updateHUD()
         #endif // DEBUG_OUTPUT
     }
 
-    // points counter
+    // score counter
     {
-         core::stringw points = _w("Points: ");
-         points += (int) (plane ->getNode().getPosition().Z *0.01f);
-         gui->textPoints->setText(points.c_str());
+        core::stringw score = _w("Score: ");
+        score += plane->getScore();
+        gui->textPoints->setText(score.c_str());
 
-         #if DEBUG_OUTPUT
+        #if DEBUG_OUTPUT
             std::cout << "Score: " << (int) plane->getNode().getPosition().Z * 0.01f << std::endl;
-         #endif // DEBUG_OUTPUT
+        #endif // DEBUG_OUTPUT
     }
 }
 
@@ -635,11 +635,6 @@ void Game::updateCamera()
     camera->setUpVector(upVector);
 
     camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
-}
-
-bool Game::handlePause(video::SColor &color)
-{
-
 }
 
 void Game::handleSelecting()

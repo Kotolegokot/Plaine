@@ -170,3 +170,21 @@ void Plane::setAxisAngleRotation(const btVector3 &axis, btScalar angle)
 
     rigidBody->getMotionState()->setWorldTransform(transform);
 }
+
+unsigned long Plane::getScore() const
+{
+    return (unsigned long) getPosition().z() / 100 + score;
+}
+
+void Plane::addScore(unsigned long addScore)
+{
+    score += addScore;
+
+    if (score < 0)
+        score = 0;
+}
+
+void Plane::clearScore()
+{
+    score = 0;
+}

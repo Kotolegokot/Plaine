@@ -94,8 +94,6 @@ private:
 
     void updateHUD();
     void updateCamera();
-    // returns false if need to quit pause menu
-    bool handlePause(video::SColor &color);
     void handleSelecting();
 };
 

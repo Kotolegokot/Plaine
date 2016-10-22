@@ -67,6 +67,10 @@ public:
     void getAxisAngleRotation(btVector3 &axis, btScalar &angle) const;
     void setAxisAngleRotation(const btVector3 &axis, btScalar angle);
 
+    unsigned long getScore() const;
+    void addScore(unsigned long addScore);
+    void clearScore();
+
 protected:
     virtual std::unique_ptr<scene::ISceneNode> createNode() override;
     virtual void createMotionState(std::unique_ptr<scene::ISceneNode> node) override;
@@ -75,6 +79,7 @@ protected:
 
 private:
     bool exploded = false;
+    unsigned long score = 0;
 };
 
 #endif // PLANE_H
