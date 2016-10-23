@@ -82,7 +82,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
         case 3:
             {
                 std::unique_ptr<IObstacle> obstacle =
-                    std::make_unique<Icosahedron>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
+                    std::make_unique<Icosahedron>(world, device, btVector3(newX, newY, newZ), getRandomf(150.f, 350.f));
                 obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
                 #if DEBUG_OUTPUT
@@ -104,7 +104,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
         case 5:
             {
                 std::unique_ptr<IObstacle> obstacle =
-                    std::make_unique<Tetrahedron>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 250.f));
+                    std::make_unique<Tetrahedron>(world, device, btVector3(newX, newY, newZ), getRandomf(200.f, 400.f));
                 obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
                 #if DEBUG_OUTPUT
