@@ -16,9 +16,9 @@
 
 #include "ObjMesh.h"
 
-ObjMesh::ObjMesh(const std::string &filename)
+ObjMesh::ObjMesh(const std::string &filename, btScalar scale)
 {
-    loadMesh(filename);
+    loadMesh(filename, scale);
 }
 
 std::vector<ObjMesh::Item> ObjMesh::parse(const std::string &filename)
@@ -157,7 +157,7 @@ EXPECT(_expected) {\
     }\
 }
 
-void ObjMesh::loadMesh(const std::string &filename)
+void ObjMesh::loadMesh(const std::string &filename, btScalar scale)
 {
     vertices.clear();
     polygons.clear();
@@ -226,7 +226,7 @@ void ObjMesh::loadMesh(const std::string &filename)
                         ++i;
                     EXPECT(Item::NEWLINE);
 
-                    vertices.push_back(vertex);
+                    vertices.push_back(vertex * scale);
 
                     state = NONE;
                 }

@@ -42,6 +42,7 @@ std::unique_ptr<scene::ISceneNode> Plane::createNode()
 
     std::unique_ptr<scene::ISceneNode> node(device.getSceneManager()->addMeshSceneNode(mesh.release()));
     node->setMaterialTexture(0, device.getVideoDriver()->getTexture("media/textures/plane.png"));
+    node->setScale(core::vector3df(15, 15, 15));
 
     return node;
 }
@@ -53,7 +54,7 @@ void Plane::createMotionState(std::unique_ptr<scene::ISceneNode> node)
 
 void Plane::createShape()
 {
-    ObjMesh objMesh(PLANE_MODEL);
+    ObjMesh objMesh(PLANE_MODEL, 15);
 
     shape = std::make_unique<btConvexTriangleMeshShape>(objMesh.getTriangleMesh().release());
 }

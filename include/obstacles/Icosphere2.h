@@ -48,7 +48,7 @@ protected:
 
         std::unique_ptr<scene::ISceneNode> node(device.getSceneManager()->addMeshSceneNode(mesh.release()));
         node->setScale(core::vector3df(radius, radius, radius) * 2);
-        node->setMaterialTexture(0, device.getVideoDriver()->getTexture("media/textures/lsd.png"));
+        node->setMaterialTexture(0, device.getVideoDriver()->getTexture("media/textures/icosphere2.png"));
         node->setVisible(TEXTURES_ENABLED);
         if (FOG_ENABLED)
             node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
