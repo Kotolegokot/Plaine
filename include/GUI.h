@@ -27,12 +27,13 @@ enum GUIState { MAIN_MENU, PAUSE_MENU, HUD, SETTINGS, CONTROL_SETTINGS, TERMINAT
 class GUI
 {
 public:
-    GUI(ConfigData &data, gui::IGUIEnvironment &guiEnvironment);
+    GUI(ConfigData &data, gui::IGUIEnvironment &guiEnvironment, video::IVideoDriver *driver);
     ~GUI();
     ConfigData &configuration;
     int buttonWidth, buttonHeight;
 
     // GUI
+    video::IVideoDriver *driver = nullptr;
     gui::IGUIButton *buttonStart = nullptr;
     gui::IGUIButton *buttonSettings = nullptr;
     gui::IGUIButton *buttonToggleFullscreen = nullptr;
@@ -70,6 +71,8 @@ public:
 
     void setHUDInfoVisible(bool visible);
     bool getHUDInfoVisible() const;
+
+    void setCustomButton(char src[], gui::IGUIButton *button);
 
     GUIState getState() const;
 private:

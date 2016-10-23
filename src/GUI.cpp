@@ -18,8 +18,8 @@
 
 using namespace irr;
 
-GUI::GUI(ConfigData &data, gui::IGUIEnvironment &guiEnvironment) :
-    configuration(data), guiEnvironment(guiEnvironment)
+GUI::GUI(ConfigData &data, gui::IGUIEnvironment &guiEnvironment, video::IVideoDriver *driver) :
+    configuration(data), guiEnvironment(guiEnvironment), driver(driver)
 {
     textsControl.fill(nullptr);
     buttonsControl.fill(nullptr);
@@ -90,6 +90,9 @@ void GUI::initializeMenuGUI()
         0, ID_BUTTON_SETTINGS, _wp("Settings"), _wp("Game settings"));
     buttonQuit = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE),
         0, ID_BUTTON_QUIT, _wp("Quit"), _wp("Exit game"));
+    setCustomButton("media/textures/button_pinkish.png", buttonStart);
+    setCustomButton("media/textures/button_blueish.png", buttonSettings);
+    setCustomButton("media/textures/button_greenish.png", buttonQuit);
     selectableElements.push_back(buttonStart);
     selectableElements.push_back(buttonSettings);
     selectableElements.push_back(buttonQuit);
@@ -112,6 +115,9 @@ void GUI::initializeInGameGUI()
         0, ID_BUTTON_MENU, _wp("Menu"), _wp("Exit to Main menu"));
     buttonQuit = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE),
         0, ID_BUTTON_QUIT, _wp("Quit"), _wp("Exit game"));
+    setCustomButton("media/textures/button_blueish.png",  buttonMenu);
+	setCustomButton("media/textures/button_pinkish.png", buttonResume);
+    setCustomButton("media/textures/button_greenish.png", buttonQuit);
     selectableElements.push_back(buttonResume);
     selectableElements.push_back(buttonMenu);
     selectableElements.push_back(buttonQuit);
@@ -252,6 +258,10 @@ void GUI::initializeSettingsGUI()
         0, ID_BUTTON_MENU, _wp("Back"), _wp("Exit to Main menu"));
     buttonQuit = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE),
         0, ID_BUTTON_QUIT, _wp("Quit"), _wp("Exit game"));
+    setCustomButton("media/textures/button_pinkish.png", buttonToggleFullscreen);
+    setCustomButton("media/textures/button_blueish.png", buttonControlSettings);
+    setCustomButton("media/textures/button_greenish.png", buttonMenu);
+    setCustomButton("media/textures/button_greenish.png", buttonQuit);
     selectableElements.push_back(checkBoxVSync);
     selectableElements.push_back(checkBoxStencilBuffer);
     selectableElements.push_back(buttonToggleFullscreen);
@@ -298,6 +308,7 @@ void GUI::initializeControlSettingsGUI()
                                                                      configuration.resolution.Width - 2 * SPACE,
                                                                      configuration.resolution.Height - (8 - i) * buttonHeight - (9 - i) * SPACE),
                                                      0, ids[i], keyCodeName(configuration.controls[i]).c_str(), _wp("Click to change"));
+        setCustomButton("media/textures/button_pinkish.png", buttonsControl[i]);
     }
 
     buttonDefaultControls = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - 3*buttonHeight - 3*SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - 2*buttonHeight - 3*SPACE),
@@ -307,8 +318,11 @@ void GUI::initializeControlSettingsGUI()
     buttonQuit = guiEnvironment.addButton(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2*SPACE, configuration.resolution.Height - buttonHeight - SPACE, configuration.resolution.Width - 2*SPACE, configuration.resolution.Height - SPACE),
         0, ID_BUTTON_QUIT, _wp("Quit"), _wp("Exit game"));
     state = CONTROL_SETTINGS;
+    setCustomButton("media/textures/button_pinkish.png", buttonDefaultControls);
+    setCustomButton("media/textures/button_blueish.png", buttonSettings);
+    setCustomButton("media/textures/button_greenish.png", buttonQuit);
     for (auto buttonControl : buttonsControl)
-        selectableElements.push_back(buttonControl);
+    selectableElements.push_back(buttonControl);
     selectableElements.push_back(buttonDefaultControls);
     selectableElements.push_back(buttonSettings);
     selectableElements.push_back(buttonQuit);
@@ -599,4 +613,12 @@ void GUI::setHUDInfoVisible(bool visible)
 bool GUI::getHUDInfoVisible() const
 {
     return HUDInfoVisible;
+}
+
+void GUI::setCustomButton(char src[], gui::IGUIButton *button)
+{
+    button->setImage(driver->getTexture(src));
+    button->setUseAlphaChannel(true);
+    button->setDrawBorder(0);
+    button->setScaleImage(true);
 }
