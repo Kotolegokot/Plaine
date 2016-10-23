@@ -47,7 +47,7 @@ protected:
 
         std::unique_ptr<scene::ISceneNode> node(device.getSceneManager()->addMeshSceneNode(mesh.release()));
         node->setScale(core::vector3df(radius * 2, height, radius * 2));
-        node->setMaterialTexture(0, device.getVideoDriver()->getTexture("media/textures/triangle4.png"));
+        node->setMaterialTexture(0, device.getVideoDriver()->getTexture("media/textures/cone.png"));
         node->setVisible(TEXTURES_ENABLED);
         if (FOG_ENABLED)
             node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
