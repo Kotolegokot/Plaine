@@ -70,3 +70,11 @@ std::vector<std::weak_ptr<gui::IGUIElement>> MainMenuScreen::getSelectableElemen
 {
     return { buttonStart, buttonSettings, buttonQuit };
 }
+
+void MainMenuScreen::setVisible(bool visible)
+{
+    textScreenSize->setVisible(visible);
+    buttonStart->setVisible(visible);
+    buttonSettings->setVisible(visible);
+    buttonQuit->setVisible(visible);
+}

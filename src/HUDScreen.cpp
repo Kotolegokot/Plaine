@@ -65,3 +65,12 @@ std::vector<std::weak_ptr<gui::IGUIElement>> HUDScreen::getSelectableElements()
 {
     return {};
 }
+
+void HUDScreen::setVisible(bool visible)
+{
+    textCameraPosition->setVisible(visible);
+    textObstaclesCount->setVisible(visible);
+    textFPS->setVisible(visible);
+    textVelocity->setVisible(visible);
+    textScore->setVisible(visible);
+}

@@ -68,3 +68,11 @@ std::vector<std::weak_ptr<gui::IGUIElement>> PauseMenuScreen::getSelectableEleme
 {
     return { buttonResume, buttonMenu, buttonQuit };
 }
+
+void PauseMenuScreen::setVisible(bool visible)
+{
+    textScreenSize->setVisible(visible);
+    buttonResume->setVisible(visible);
+    buttonMenu->setVisible(visible);
+    buttonQuit->setVisible(visible);
+}

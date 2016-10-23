@@ -17,6 +17,7 @@ public:
     virtual void terminate() override;
     virtual void resize(s32 buttonWidth, s32 buttonHeight) override;
     virtual std::vector<std::weak_ptr<gui::IGUIElement>> getSelectableElements() override;
+    virtual void setVisible(bool visible) override;
 
 private:
     std::shared_ptr<gui::IGUIStaticText> textScreenSize;
