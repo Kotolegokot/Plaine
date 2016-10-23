@@ -111,6 +111,7 @@
 		<Unit filename="include/Explosion.h" />
 		<Unit filename="include/GUI.h" />
 		<Unit filename="include/Game.h" />
+		<Unit filename="include/HUDScreen.h" />
 		<Unit filename="include/IBody.h" />
 		<Unit filename="include/IGUIScreen.h" />
 		<Unit filename="include/IObstacle.h" />
@@ -140,6 +141,7 @@
 		<Unit filename="src/Explosion.cpp" />
 		<Unit filename="src/GUI.cpp" />
 		<Unit filename="src/Game.cpp" />
+		<Unit filename="src/HUDScreen.cpp" />
 		<Unit filename="src/MainMenuScreen.cpp" />
 		<Unit filename="src/MotionState.cpp" />
 		<Unit filename="src/ObjMesh.cpp" />
