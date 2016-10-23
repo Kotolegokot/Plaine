@@ -27,6 +27,7 @@
 #include "MotionState.h"
 #include "IObstacle.h"
 #include "IBody.h"
+#include "Randomizer.h"
 #include "obstacles/Box.h"
 #include "obstacles/Tetrahedron.h"
 #include "obstacles/Icosahedron.h"

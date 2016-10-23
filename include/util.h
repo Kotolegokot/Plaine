@@ -21,9 +21,9 @@
 #include <cstdlib>
 #include <irrlicht.h>
 #include <libintl.h>
-#include <random>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
+#include "Randomizer.h"
 
 #ifndef _WIN32
 #include <iconv.h>
@@ -43,7 +43,6 @@ core::stringw utf8_to_irrwide(const std::string &input);
 std::string wide_to_utf8(const std::wstring &input);
 core::stringw keyCodeName(const EKEY_CODE &keyCode);
 void setLanguage(std::string language, bool replace);
-f32 getRandomf(f32 min = 0, f32 max = 1);
 video::SColor iridescentColor(const u32 &currentTime);
 
 // number of GUI elements that have an id

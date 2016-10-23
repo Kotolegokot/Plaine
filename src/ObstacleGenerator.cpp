@@ -40,15 +40,15 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
     auto handleCell =  [this](btScalar x, btScalar y, btScalar z)
     #endif // DEBUG_OUTPUT
     {
-        btScalar newX = x + getRandomf(-100, 100);
-        btScalar newY = y + getRandomf(-100, 100);
-        btScalar newZ = z + getRandomf(-100, 100);
+        btScalar newX = x + Randomizer::getFloat(-100, 100);
+        btScalar newY = y + Randomizer::getFloat(-100, 100);
+        btScalar newZ = z + Randomizer::getFloat(-100, 100);
 
         // create obstacles and add them to the deque
-        switch(int(getRandomf(0, 7))) {
+        switch (Randomizer::getInt(0, 6)) {
         case 0:
             {
-                Tunnel tunnel(world, device, btVector3(newX, newY, newZ), getRandomf(100, 200), getRandomf(300, 600));
+                Tunnel tunnel(world, device, btVector3(newX, newY, newZ), Randomizer::getFloat(100, 200), Randomizer::getFloat(300, 600));
                 tunnel.addObstaclesToList(obstacles);
                 obstacleCount += tunnel.getObstacleCount();
                 #if DEBUG_OUTPUT
@@ -58,7 +58,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
             }
         case 1:
             {
-                Crystal crystal(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 100.f), getRandomf(300.f, 600.f));
+                Crystal crystal(world, device, btVector3(newX, newY, newZ), Randomizer::getFloat(50.f, 100.f), Randomizer::getFloat(300.f, 600.f));
                 crystal.addObstaclesToList(obstacles);
                 obstacleCount += crystal.getObstacleCount();
                 #if DEBUG_OUTPUT
@@ -71,7 +71,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
                 /*
                 std::unique_ptr<IObstacle> obstacle =
                     std::make_unique<Box>(world, device, btVector3(newX, newY, newZ),
-                        btVector3(getRandomf(50.0f, 250.0f), getRandomf(50.f, 250.f), getRandomf(50.f, 250.f)));
+                        btVector3(Randomizer::getFloat(50.0f, 250.0f), Randomizer::getFloat(50.f, 250.f), Randomizer::getFloat(50.f, 250.f)));
                 obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
                 #if DEBUG_OUTPUT
@@ -82,7 +82,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
         case 3:
             {
                 std::unique_ptr<IObstacle> obstacle =
-                    std::make_unique<Icosahedron>(world, device, btVector3(newX, newY, newZ), getRandomf(150.f, 350.f));
+                    std::make_unique<Icosahedron>(world, device, btVector3(newX, newY, newZ), Randomizer::getFloat(150.f, 350.f));
                 obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
                 #if DEBUG_OUTPUT
@@ -93,7 +93,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
         case 4:
             {
                 std::unique_ptr<IObstacle> obstacle =
-                    std::make_unique<Icosphere2>(world, device, btVector3(newX, newY, newZ), getRandomf(50.f, 200.f));
+                    std::make_unique<Icosphere2>(world, device, btVector3(newX, newY, newZ), Randomizer::getFloat(50.f, 200.f));
                 obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
                 #if DEBUG_OUTPUT
@@ -104,7 +104,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
         case 5:
             {
                 std::unique_ptr<IObstacle> obstacle =
-                    std::make_unique<Tetrahedron>(world, device, btVector3(newX, newY, newZ), getRandomf(200.f, 400.f));
+                    std::make_unique<Tetrahedron>(world, device, btVector3(newX, newY, newZ), Randomizer::getFloat(200.f, 400.f));
                 obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
                 #if DEBUG_OUTPUT
@@ -122,10 +122,10 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
             break;
         }
 
-        //if (int(getRandomf(1, 1)) == 1)
-        //    body->getRigidBody()->applyTorqueImpulse(btVector3(getRandomf(-10000, 10000), getRandomf(-10000, 10000), getRandomf(-10000, 10000))*body->getMass());
-        //if (int(getRandomf(1, 1)) == 1)
-        //    body->getRigidBody()->applyCentralImpulse(btVector3(getRandomf(-100, 100), getRandomf(-100, 100), getRandomf(-100, 100))*body->getMass());
+        //if (int(Randomizer::getFloat(1, 1)) == 1)
+        //    body->getRigidBody()->applyTorqueImpulse(btVector3(Randomizer::getFloat(-10000, 10000), Randomizer::getFloat(-10000, 10000), Randomizer::getFloat(-10000, 10000))*body->getMass());
+        //if (int(Randomizer::getFloat(1, 1)) == 1)
+        //    body->getRigidBody()->applyCentralImpulse(btVector3(Randomizer::getFloat(-100, 100), Randomizer::getFloat(-100, 100), Randomizer::getFloat(-100, 100))*body->getMass());
     };
 
     // The Z loop must be the first here, because the obstacle deque must be sorted by obstacle' Z coordinate

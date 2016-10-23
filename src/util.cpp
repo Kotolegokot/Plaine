@@ -16,7 +16,6 @@
 
 #include "util.h"
 
-
 using namespace irr;
 
 #ifndef _WIN32
@@ -154,16 +153,6 @@ std::string wide_to_utf8(const std::wstring &input) {
 }
 #endif // _WIN32
 
-// returns a random float number
-f32 getRandomf(f32 min, f32 max)
-{
-    static std::random_device rd;
-    static std::default_random_engine engine(rd());
-    std::uniform_real_distribution<f32> distribution(min, max);
-
-    return distribution(engine);
-}
-
 // takes a key code and returns its name
 core::stringw keyCodeName(const EKEY_CODE &keyCode)
 {
@@ -250,7 +239,7 @@ core::stringw keyCodeName(const EKEY_CODE &keyCode)
 
 video::SColor iridescentColor(const u32 &currentTime)
 {
-    static video::SColor color = video::SColor(0, getRandomf(100, 255), getRandomf(100, 255), getRandomf(100, 255));
+    static video::SColor color = video::SColor(0, Randomizer::getFloat(100, 255), Randomizer::getFloat(100, 255), Randomizer::getFloat(100, 255));
     static video::SColor oldColor = color;
     static f32 diff = 0;
     static u32 time = 0;
@@ -259,7 +248,7 @@ video::SColor iridescentColor(const u32 &currentTime)
     if (currentTime >= time)
         {
             oldColor = color;
-            color = video::SColor(0, getRandomf(100, 255), getRandomf(100, 255), getRandomf(100, 255));
+            color = video::SColor(0, Randomizer::getFloat(100, 255), Randomizer::getFloat(100, 255), Randomizer::getFloat(100, 255));
             time = currentTime + COLOR_CHANGE_INTERVAL;
         }
     diff = (time - currentTime)/COLOR_CHANGE_INTERVAL;
