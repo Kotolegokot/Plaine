@@ -30,8 +30,8 @@ class ObjMesh
 {
 public:
     ObjMesh() = default;
-    ObjMesh(const std::string &filename);
-    void loadMesh(const std::string &filename);
+    ObjMesh(const std::string &filename, btScalar scale = 1.0f);
+    void loadMesh(const std::string &filename, btScalar scale = 1.0f);
     std::unique_ptr<btTriangleMesh> getTriangleMesh();
     void setPoints(btConvexHullShape &shape);
 
