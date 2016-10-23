@@ -1,26 +1,35 @@
-#ifndef GUISCREEN_H
-#define GUISCREEN_H
+#ifndef IGUISCREEN_H
+#define IGUISCREEN_H
 
 #include <string>
+#include <vector>
+#include <memory>
 #include <irrlicht.h>
+#include "Config.h"
 
 using namespace irr;
 
-class GUIScreen
+class IGUIScreen
 {
 public:
-    GUIScreen();
-    virtual ~GUIScreen();
+    IGUIScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment) :
+        configuration(configuration), guiEnvironment(guiEnvironment) {}
+    virtual ~IGUIScreen() {}
 
-    virtual unsigned getIndex() const = 0;
     virtual void initialize(s32 buttonWidth, s32 buttonHeight) = 0;
-    virtual void reload(s32 buttonWidth, s32 buttonHeight) = 0;
+    virtual void reload(s32 buttonWidth, s32 buttonHeight)
+    {
+        initialize(buttonWidth, buttonHeight);
+    }
     virtual void terminate() = 0;
     virtual void resize(s32 buttonWidth, s32 buttonHeight) = 0;
+    virtual std::vector<std::weak_ptr<gui::IGUIElement>> getSelectableElements() = 0;
 
 protected:
+    const ConfigData &configuration;
+    gui::IGUIEnvironment &guiEnvironment;
 
-private:
+    static constexpr s32 space = 10;
 };
 
-#endif // GUISCREEN_H
+#endif // IGUISCREEN_H
