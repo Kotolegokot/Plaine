@@ -250,7 +250,7 @@ core::stringw keyCodeName(const EKEY_CODE &keyCode)
 
 video::SColor iridescentColor(const u32 &currentTime)
 {
-    static video::SColor color = video::SColor(0, getRandomf(0, 255), getRandomf(0, 255), getRandomf(0, 255));
+    static video::SColor color = video::SColor(0, getRandomf(100, 255), getRandomf(100, 255), getRandomf(100, 255));
     static video::SColor oldColor = color;
     static f32 diff = 0;
     static u32 time = 0;
@@ -259,7 +259,7 @@ video::SColor iridescentColor(const u32 &currentTime)
     if (currentTime >= time)
         {
             oldColor = color;
-            color = video::SColor(0, getRandomf(0, 255), getRandomf(0, 255), getRandomf(0, 255));
+            color = video::SColor(0, getRandomf(100, 255), getRandomf(100, 255), getRandomf(100, 255));
             time = currentTime + COLOR_CHANGE_INTERVAL;
         }
     diff = (time - currentTime)/COLOR_CHANGE_INTERVAL;
