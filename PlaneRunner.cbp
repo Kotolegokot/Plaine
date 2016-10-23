@@ -119,6 +119,7 @@
 		<Unit filename="include/MotionState.h" />
 		<Unit filename="include/ObjMesh.h" />
 		<Unit filename="include/ObstacleGenerator.h" />
+		<Unit filename="include/PauseMenuScreen.h" />
 		<Unit filename="include/Plane.h" />
 		<Unit filename="include/PlaneControl.h" />
 		<Unit filename="include/Randomizer.h" />
@@ -143,6 +144,7 @@
 		<Unit filename="src/MotionState.cpp" />
 		<Unit filename="src/ObjMesh.cpp" />
 		<Unit filename="src/ObstacleGenerator.cpp" />
+		<Unit filename="src/PauseMenuScreen.cpp" />
 		<Unit filename="src/Plane.cpp" />
 		<Unit filename="src/PlaneControl.cpp" />
 		<Unit filename="src/Randomizer.cpp" />

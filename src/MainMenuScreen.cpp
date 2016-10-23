@@ -13,7 +13,7 @@ MainMenuScreen::~MainMenuScreen()
 void MainMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
     textScreenSize = std::shared_ptr<gui::IGUIStaticText>
-        (guiEnvironment.addStaticText(L"SCREEN_SIZE",core::rect<s32>(10, 10, 200, 30), false));
+        (guiEnvironment.addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false));
 
     buttonStart = std::shared_ptr<gui::IGUIButton>(guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0)));
     buttonStart->setID(ID_BUTTON_START);
