@@ -43,7 +43,7 @@
 #endif // DEFAULT_COLOR
 
 #ifndef DEFAULT_LIGHT_COLOR
-    #define DEFAULT_LIGHT_COLOR video::SColor(0, 0, 0, 0)
+    #define DEFAULT_LIGHT_COLOR video::SColor(0, 180, 180, 180)
 #endif // DEFAULT_LIGHT_COLOR
 
 #ifndef DEBUG_OUTPUT
