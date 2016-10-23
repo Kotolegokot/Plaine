@@ -189,7 +189,7 @@ void ObstacleGenerator::removeLeftBehind(btScalar playerZ)
 {
     size_t count = 0;
     for (auto it = obstacles.begin();
-        it != obstacles.end(), count < 100; count++)
+        it != obstacles.end() && count < 100; count++)
     {
         if ((*it)->getPosition().z() < playerZ - buffer ||
             (*it)->getPosition().z() > playerZ + farValueWithBuffer() * 2)
