@@ -45,7 +45,7 @@ void Game::initializeGUI()
     if (font)
         skin->setFont(font);
 
-    gui = new GUI(configuration, *guiEnvironment);
+    gui = new GUI(*guiEnvironment);
 }
 
 bool Game::initializeDevice()
@@ -209,7 +209,7 @@ void Game::mainMenu()
     // set resolution to actual screen size
     configuration.resolution = driver->getScreenSize();
     // initialize menu
-    gui->initialize(MAIN_MENU);
+    gui->initialize(Screen::MAIN_MENU);
     //sets cursor visible
     device->getCursorControl()->setVisible(true);
 
@@ -219,17 +219,17 @@ void Game::mainMenu()
 
     while (device->run()) {
         // handle gui events
-        switch (gui->getState()) {
-        case MAIN_MENU:
+        switch (gui->getCurrentScreenIndex()) {
+        case Screen::MAIN_MENU:
             if (eventReceiver->checkEvent(ID_BUTTON_START)) {
                 if (run())
-                    gui->initialize(MAIN_MENU);
+                    gui->initialize(Screen::MAIN_MENU);
                 else
                     return;
             }
             if (eventReceiver->checkEvent(ID_BUTTON_SETTINGS)) {
                 oldConfiguration = configuration;
-                gui->initialize(SETTINGS);
+                gui->initialize(Screen::SETTINGS);
             }
             if (eventReceiver->checkEvent(ID_BUTTON_QUIT) ||
                 eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
@@ -237,9 +237,9 @@ void Game::mainMenu()
                 return;
             break;
 
-        case SETTINGS:
+        case Screen::SETTINGS:
             if (eventReceiver->checkEvent(ID_COMBOBOX_LANGUAGE)) {
-                switch (gui->comboBoxLanguage->getSelected()) {
+                switch (static_cast<SettingsScreen &>(gui->getCurrentScreen()).comboBoxLanguage->getSelected()) {
                 case 0:
                     configuration.language = "";
                     break;
@@ -283,10 +283,10 @@ void Game::mainMenu()
                 initialized = true;
                 oldConfiguration = configuration;
 
-                gui->initialize(SETTINGS);
+                gui->initialize(Screen::SETTINGS);
             }
-            if (eventReceiver->checkEvent(ID_BUTTON_CONTROL_SETTINGS)) {
-                gui->initialize(CONTROL_SETTINGS);
+            if (eventReceiver->checkEvent(ID_BUTTON_CONTROL_Screen::SETTINGS)) {
+                gui->initialize(CONTROL_Screen::SETTINGS);
             }
             if (eventReceiver->checkEvent(ID_BUTTON_TOGGLE_FULLSCREEN)) {
                 configuration.fullscreen = !configuration.fullscreen;
@@ -298,7 +298,7 @@ void Game::mainMenu()
                 initialized = true;
                 oldConfiguration = configuration;
 
-                gui->initialize(SETTINGS);
+                gui->initialize(Screen::SETTINGS);
 
             }
             if (eventReceiver->checkEvent(ID_SPINBOX_RENDER_DISTANCE)) {
@@ -323,7 +323,7 @@ void Game::mainMenu()
                     initialized = true;
                 }
 
-                gui->initialize(MAIN_MENU);
+                gui->initialize(Screen::MAIN_MENU);
             }
             if (eventReceiver->checkEvent(ID_BUTTON_QUIT)) {
                 return;
@@ -331,7 +331,7 @@ void Game::mainMenu()
 
             break;
 
-        case CONTROL_SETTINGS:
+        case CONTROL_Screen::SETTINGS:
             for (size_t i = 0; i < CONTROLS_COUNT; i++)
                 if (eventReceiver->checkEvent(static_cast<GUI_ID>(gui->buttonsControl[i]->getID()))) {
                     eventReceiver->startCatchingKey();
@@ -345,10 +345,10 @@ void Game::mainMenu()
                 configuration.controls = Controls();
                 gui->reload();
             }
-            if (eventReceiver->checkEvent(ID_BUTTON_SETTINGS)) {
+            if (eventReceiver->checkEvent(ID_BUTTON_Screen::SETTINGS)) {
                 eventReceiver->stopCatchingKey();
                 catchingControlID = CONTROLS_COUNT;
-                gui->initialize(SETTINGS);
+                gui->initialize(Screen::SETTINGS);
             }
             if (eventReceiver->checkEvent(ID_BUTTON_QUIT)) {
                 return;
@@ -371,7 +371,7 @@ void Game::mainMenu()
             } else {
                 if (eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
                     eventReceiver->checkKeyPressed(KEY_LEFT)) {
-                    gui->initialize(SETTINGS);
+                    gui->initialize(Screen::SETTINGS);
                 }
             }
 
@@ -437,7 +437,7 @@ bool Game::run()
             #endif // IRIDESCENT_BACKGROUND
 
 
-            switch (gui->getState()) {
+            switch (gui->getCurrentScreenIndex()) {
             case PAUSE_MENU:
                 // catch window resize
                 if (configuration.resolution != driver->getScreenSize()) {
@@ -549,7 +549,7 @@ bool Game::run()
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
-            if (gui->getState() == PAUSE_MENU) {
+            if (gui->getCurrentScreenIndex() == PAUSE_MENU) {
                 time_physics_curr = time_physics_prev = timer->getTime();
                 device->yield();
             } else

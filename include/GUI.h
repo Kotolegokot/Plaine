@@ -17,85 +17,49 @@
 #ifndef GUI_H
 #define GUI_H
 
+#include <unordered_map>
 #include <vector>
-#include <array>
-#include "Config.h"
+#include <memory>
+#include "IGUIScreen.h"
 #include "util.h"
 
-enum GUIState { MAIN_MENU, PAUSE_MENU, HUD, SETTINGS, CONTROL_SETTINGS, TERMINATED };
+struct Screen {
+    enum { TERMINATED, MAIN_MENU, SETTINGS, CONTROL_SETTINGS, PAUSE_MENU, HUD };
+};
 
 class GUI
 {
 public:
-    GUI(ConfigData &data, gui::IGUIEnvironment &guiEnvironment);
+    GUI(gui::IGUIEnvironment &guiEnvironment);
     ~GUI();
-    ConfigData &configuration;
-    int buttonWidth, buttonHeight;
 
-    // GUI
-    gui::IGUIButton *buttonStart = nullptr;
-    gui::IGUIButton *buttonSettings = nullptr;
-    gui::IGUIButton *buttonToggleFullscreen = nullptr;
-    gui::IGUIButton *buttonControlSettings = nullptr;
-    gui::IGUIButton *buttonDefaultControls = nullptr;
-    std::array<gui::IGUIButton *, CONTROLS_COUNT> buttonsControl;
-    gui::IGUIButton *buttonResume = nullptr;
-    gui::IGUIButton *buttonMenu = nullptr;
-    gui::IGUIButton *buttonQuit = nullptr;
-    gui::IGUIComboBox *comboBoxResolution = nullptr;
-    gui::IGUIComboBox *comboBoxLanguage = nullptr;
-    gui::IGUIStaticText *textScreenSize = nullptr;
-    gui::IGUIStaticText *textCubeCount = nullptr;
-    gui::IGUIStaticText *textFPS = nullptr;
-    gui::IGUIStaticText *textVelocity = nullptr;
-    gui::IGUIStaticText *textPoints = nullptr;
-    gui::IGUIStaticText *textResolution = nullptr;
-    gui::IGUIStaticText *textRenderDistance = nullptr;
-    gui::IGUIStaticText *textLanguage = nullptr;
-    gui::IGUIStaticText *textCameraPos = nullptr;
-    std::array<gui::IGUIStaticText *, CONTROLS_COUNT> textsControl;
-    gui::IGUICheckBox *checkBoxVSync = nullptr;
-    gui::IGUICheckBox *checkBoxStencilBuffer = nullptr;
-    gui::IGUISpinBox *spinBoxRenderDistance = nullptr;
+    bool addScreen(std::unique_ptr<IGUIScreen> screen, unsigned index);
+    bool removeScreen(unsigned screenIndex);
+    unsigned getCurrentScreenIndex() const;
+    IGUIScreen &getCurrentScreen();
 
-    void initialize(GUIState state);
+    void initialize(unsigned screenIndex);
     void reload();
     void terminate();
     void resizeGUI();
     void setVisible(bool visible);
+private:
+    unsigned currentScreenIndex = 0;
+    std::unordered_map<unsigned, std::unique_ptr<IGUIScreen>> screens;
+
+    std::vector<std::weak_ptr<gui::IGUIElement>> selectableElements;
+    size_t selectedElement = 0;
     void selectElement(int num);
     void selectNextElement();
     void selectPreviousElement();
     void selectWithTab();
 
-    void setHUDInfoVisible(bool visible);
-    bool getHUDInfoVisible() const;
-
-    GUIState getState() const;
-private:
-    GUIState state = TERMINATED;
-    std::vector<gui::IGUIElement*> selectableElements;
-    size_t selectedElement;
-    const int SPACE = 10;
+    s32 buttonWidth, buttonHeight;
 
     gui::IGUIEnvironment &guiEnvironment;
 
     void updateSelection();
     void recalculateButtonProportions();
-
-    void initializeMenuGUI();
-    void initializeInGameGUI();
-    void initializeHUD();
-    void initializeSettingsGUI();
-    void initializeControlSettingsGUI();
-
-    void terminateMenuGUI();
-    void terminateSettingsGUI();
-    void terminateHUD();
-    void terminateControlSettingsGUI();
-    void terminateInGameGUI();
-
-    bool HUDInfoVisible = true;
 };
 
 #endif // GUI_H
