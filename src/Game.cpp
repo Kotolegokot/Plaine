@@ -46,6 +46,12 @@ void Game::initializeGUI()
         skin->setFont(font);
 
     gui = new GUI(configuration, *guiEnvironment);
+    gui->addScreen(std::make_unique<MainMenuScreen>(configuration, *guiEnvironment), Screen::MAIN_MENU);
+    gui->addScreen(std::make_unique<SettingsScreen>(configuration, *guiEnvironment), Screen::SETTINGS);
+    gui->addScreen(std::make_unique<ControlSettingsScreen>(configuration, *guiEnvironment), Screen::CONTROL_SETTINGS);
+    gui->addScreen(std::make_unique<PauseMenuScreen>(configuration, *guiEnvironment), Screen::PAUSE_MENU);
+    gui->addScreen(std::make_unique<HUDScreen>(configuration, *guiEnvironment), Screen::HUD);
+    gui->addScreen(std::make_unique<GameOverScreen>(configuration, *guiEnvironment), Screen::GAME_OVER);
 }
 
 bool Game::initializeDevice()
@@ -117,10 +123,10 @@ void Game::initializeBullet()
                     std::swap(obj0, obj1);
 
                 Plane &plane = *static_cast<Plane *>(obj0->getUserPointer());
-                plane.addScore(-cp.getAppliedImpulse());
-
                 if (cp.getAppliedImpulse() > 400)
                     plane.setExploded(true);
+                else if (!plane.getExploded())
+                    plane.addScore(-cp.getAppliedImpulse());
             }
 
             return true;
@@ -501,6 +507,12 @@ bool Game::run()
                 if (configuration.resolution != driver->getScreenSize()) {
                     configuration.resolution = driver->getScreenSize();
                     gui->resize();
+                }
+
+                {
+                    core::stringw score(_w("Your score: "));
+                    score += plane->getScore();
+                    gui->getCurrentScreenAsGameOver().textScore->setText(score.c_str());
                 }
 
                 // set cursor visible

@@ -25,7 +25,12 @@
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include <CGUITTFont.h>
 #include <ITimer.h>
+#include "screens/ControlSettingsScreen.h"
+#include "screens/HUDScreen.h"
+#include "screens/MainMenuScreen.h"
+#include "screens/PauseMenuScreen.h"
 #include "screens/SettingsScreen.h"
+#include "screens/GameOverScreen.h"
 #include "EventReceiver.h"
 #include "util.h"
 #include "Config.h"
@@ -72,6 +77,7 @@ private:
     btCollisionDispatcher *dispatcher = nullptr;
     btSequentialImpulseConstraintSolver *solver = nullptr;
     btDiscreteDynamicsWorld *dynamicsWorld = nullptr;
+    Explosion *explosion = nullptr;
 
     #if DEBUG_DRAWER_ENABLED
         btIDebugDraw *debugDrawer = nullptr;
@@ -83,7 +89,6 @@ private:
     ObstacleGenerator *obstacleGenerator = nullptr;
     Plane *plane = nullptr;
     PlaneControl *planeControl = nullptr;
-    Explosion *explosion = nullptr;
 
     void error(const core::stringw &str) const;
     bool initializeDevice();

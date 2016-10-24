@@ -29,6 +29,7 @@ GameOverScreen::~GameOverScreen()
 void GameOverScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
     textMessage = guiEnvironment.addStaticText(L"LOSER!!1", core::rect<s32>(0, 0, 0, 0));
+    textScore = guiEnvironment.addStaticText(L"SCORE", core::rect<s32>(0, 0, 0, 0));
 
     buttonOK = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonOK->setID(ID_BUTTON_MENU);
@@ -46,15 +47,21 @@ void GameOverScreen::reload(s32 buttonWidth, s32 buttonHeight)
 void GameOverScreen::terminate()
 {
     textMessage->remove();
+    textScore->remove();
     buttonOK->remove();
 }
 
 void GameOverScreen::resize(s32 buttonWidth, s32 buttonHeight)
 {
-    textMessage->setRelativePosition(core::rect<s32>(configuration.resolution.Width / 2 - 200,
+    textMessage->setRelativePosition(core::rect<s32>(configuration.resolution.Width / 2 - 100,
                                                      configuration.resolution.Height / 2,
-                                                     configuration.resolution.Width / 2 + 200,
+                                                     configuration.resolution.Width / 2 + 100,
                                                      configuration.resolution.Height / 2 + 20));
+
+    textScore->setRelativePosition(core::rect<s32>(configuration.resolution.Width / 2 - 100,
+                                                   configuration.resolution.Height / 2 + 24,
+                                                   configuration.resolution.Width / 2 + 100,
+                                                   configuration.resolution.Height / 2 + 20 + 24));
 
     buttonOK->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
                                                     configuration.resolution.Height - buttonHeight - space,
@@ -70,5 +77,6 @@ std::vector<gui::IGUIElement *> GameOverScreen::getSelectableElements()
 void GameOverScreen::setVisible(bool visible)
 {
     textMessage->setVisible(visible);
+    textScore->setVisible(visible);
     buttonOK->setVisible(visible);
 }

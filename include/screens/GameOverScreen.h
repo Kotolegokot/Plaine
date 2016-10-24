@@ -20,6 +20,7 @@
 #include <irrlicht.h>
 #include <IGUIScreen.h>
 #include "Config.h"
+#include "Plane.h"
 #include "util.h"
 
 using namespace irr;
@@ -38,6 +39,7 @@ public:
     virtual void setVisible(bool visible) override;
 
     gui::IGUIStaticText *textMessage;
+    gui::IGUIStaticText *textScore;
     gui::IGUIButton *buttonOK;
 };
 

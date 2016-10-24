@@ -37,12 +37,6 @@ GUI::GUI(ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment) :
     configuration(configuration), guiEnvironment(guiEnvironment)
 {
     addScreen(std::make_unique<TerminatedScreen>(configuration, guiEnvironment), Screen::TERMINATED);
-    addScreen(std::make_unique<MainMenuScreen>(configuration, guiEnvironment), Screen::MAIN_MENU);
-    addScreen(std::make_unique<SettingsScreen>(configuration, guiEnvironment), Screen::SETTINGS);
-    addScreen(std::make_unique<ControlSettingsScreen>(configuration, guiEnvironment), Screen::CONTROL_SETTINGS);
-    addScreen(std::make_unique<PauseMenuScreen>(configuration, guiEnvironment), Screen::PAUSE_MENU);
-    addScreen(std::make_unique<HUDScreen>(configuration, guiEnvironment), Screen::HUD);
-    addScreen(std::make_unique<GameOverScreen>(configuration, guiEnvironment), Screen::GAME_OVER);
 }
 
 GUI::~GUI()
