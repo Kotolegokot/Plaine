@@ -435,7 +435,7 @@ bool Game::run()
     video::SLight lightData;
     video::SColor color;
 
-    const unsigned int TickMs = 32;
+    constexpr unsigned int TickMs = 32;
     u32 time_physics_prev, time_physics_curr;
     u64 time_gameclock;
 
@@ -494,6 +494,7 @@ bool Game::run()
                 }
 
                 time_physics_curr = time_physics_prev = timer->getTime();
+                time_gameclock = timer->getTime() - timer->getTime() % TickMs;
                 break;
             case Screen::GAME_OVER:
                 // catch window resize
@@ -558,13 +559,20 @@ bool Game::run()
 
                 time_physics_curr = timer->getTime();
                 // physics simulation
-                dynamicsWorld->stepSimulation(((float)(time_physics_curr - time_physics_prev) / 1000.0), 10);
+                const float step = time_physics_curr - time_physics_prev;
+                dynamicsWorld->stepSimulation((step / 1000.0), 10);
+                #if DEBUG_OUTPUT
+                    std::cout << "Simulation step: " << step << "ms" << std::endl;
+                #endif // DEBUG_OUTPUT
                 time_physics_prev = time_physics_curr;
                 #if DEBUG_DRAWER_ENABLED
                     dynamicsWorld->debugDrawWorld();
                 #endif // DEBUG_DRAWER_ENABLED
                 u64 dt = timer->getTime() - time_gameclock;
 
+                #if DEBUG_OUTPUT
+                    std::cout << "Control handling delta: " << dt << "ms" << std::endl;
+                #endif // DEBUG_OUTPUT
                 while (dt >= TickMs) {
                     dt -= TickMs;
                     time_gameclock += TickMs;
@@ -587,6 +595,7 @@ bool Game::run()
         } else {
             if (gui->getCurrentScreenIndex() == Screen::PAUSE_MENU) {
                 time_physics_curr = time_physics_prev = timer->getTime();
+                time_gameclock = timer->getTime() - timer->getTime() % TickMs;
                 device->yield();
             } else
                 gui->initialize(Screen::PAUSE_MENU);

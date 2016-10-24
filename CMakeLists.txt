@@ -14,7 +14,7 @@ find_package(Irrlicht)
 find_package(Bullet)
 find_package(Freetype)
 
-file(GLOB CPPs src/*.cpp src/obstacles/*.cpp)
+file(GLOB CPPs src/*.cpp src/obstacles/*.cpp src/screens/*.cpp)
 file(GLOB Hs include/*.h)
 add_executable(${PROJECT_NAME} main.cpp ${CPPs} ${Hs})
 
