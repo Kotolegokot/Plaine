@@ -495,6 +495,24 @@ bool Game::run()
 
                 time_physics_curr = time_physics_prev = timer->getTime();
                 break;
+            case Screen::GAME_OVER:
+                // catch window resize
+                if (configuration.resolution != driver->getScreenSize()) {
+                    configuration.resolution = driver->getScreenSize();
+                    gui->resize();
+                }
+
+                // set cursor visible
+                device->getCursorControl()->setVisible(true);
+
+                handleSelecting();
+
+                if (eventReceiver->checkEvent(ID_BUTTON_MENU)) {
+                    terminateScene();
+                    return true;
+                }
+
+                break;
             case Screen::HUD: {
                 #if DEBUG_OUTPUT
                     std::cout << "=== BEGIN SIMULATION ===" << std::endl;;
@@ -534,6 +552,8 @@ bool Game::run()
                 if (plane->getExploded()) {
                     explosion->explode();
                     plane->setExploded(false);
+
+                    gui->initialize(Screen::GAME_OVER);
                 }
 
                 time_physics_curr = timer->getTime();
