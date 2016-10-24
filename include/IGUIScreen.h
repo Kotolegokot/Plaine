@@ -24,7 +24,7 @@ public:
     }
     virtual void terminate() = 0;
     virtual void resize(s32 buttonWidth, s32 buttonHeight) = 0;
-    virtual std::vector<std::weak_ptr<gui::IGUIElement>> getSelectableElements() = 0;
+    virtual std::vector<gui::IGUIElement *> getSelectableElements() = 0;
     virtual void setVisible(bool visible) = 0;
 
 protected:

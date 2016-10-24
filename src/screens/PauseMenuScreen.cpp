@@ -1,4 +1,4 @@
-#include "PauseMenuScreen.h"
+#include "screens/PauseMenuScreen.h"
 
 PauseMenuScreen::PauseMenuScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment) :
     IGUIScreen(configuration, guiEnvironment) {}
@@ -10,20 +10,19 @@ PauseMenuScreen::~PauseMenuScreen()
 
 void PauseMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
-    textScreenSize = std::shared_ptr<gui::IGUIStaticText>
-        (guiEnvironment.addStaticText(L"SCREEN_SIZE",core::rect<s32>(10, 10, 200, 30), false));
+    textScreenSize = guiEnvironment.addStaticText(L"SCREEN_SIZE",core::rect<s32>(10, 10, 200, 30), false);
 
-    buttonResume = std::shared_ptr<gui::IGUIButton>(guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0)));
+    buttonResume = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonResume->setID(ID_BUTTON_RESUME);
     buttonResume->setText(_wp("Resume"));
     buttonResume->setToolTipText(_wp("Resume game"));
 
-    buttonMenu = std::shared_ptr<gui::IGUIButton>(guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0)));
+    buttonMenu = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonMenu->setID(ID_BUTTON_MENU);
     buttonMenu->setText(_wp("Menu"));
     buttonMenu->setToolTipText(_wp("Exit to main menu"));
 
-    buttonQuit = std::shared_ptr<gui::IGUIButton>(guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0)));
+    buttonQuit = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonQuit->setID(ID_BUTTON_QUIT);
     buttonQuit->setText(_wp("Quit"));
     buttonQuit->setToolTipText(_wp("Exit game"));
@@ -34,16 +33,9 @@ void PauseMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 void PauseMenuScreen::terminate()
 {
     textScreenSize->remove();
-    textScreenSize.reset();
-
     buttonResume->remove();
-    buttonResume.reset();
-
     buttonMenu->remove();
-    buttonMenu.reset();
-
     buttonQuit->remove();
-    buttonQuit.reset();
 }
 
 void PauseMenuScreen::resize(s32 buttonWidth, s32 buttonHeight)
@@ -64,7 +56,7 @@ void PauseMenuScreen::resize(s32 buttonWidth, s32 buttonHeight)
                                                     configuration.resolution.Height - space));
 }
 
-std::vector<std::weak_ptr<gui::IGUIElement>> PauseMenuScreen::getSelectableElements()
+std::vector<gui::IGUIElement *> PauseMenuScreen::getSelectableElements()
 {
     return { buttonResume, buttonMenu, buttonQuit };
 }

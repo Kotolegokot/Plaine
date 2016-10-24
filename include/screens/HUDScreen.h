@@ -16,17 +16,17 @@ public:
     virtual void initialize(s32 buttonWidth, s32 buttonHeight) override;
     virtual void terminate() override;
     virtual void resize(s32 buttonWidth, s32 buttonHeight) override;
-    virtual std::vector<std::weak_ptr<gui::IGUIElement>> getSelectableElements() override;
+    virtual std::vector<gui::IGUIElement *> getSelectableElements() override;
     virtual void setVisible(bool visible) override;
 
     void setInfoVisible(bool visible);
     bool getInfoVisible() const;
 
-    std::shared_ptr<gui::IGUIStaticText> textCameraPosition;
-    std::shared_ptr<gui::IGUIStaticText> textObstaclesCount;
-    std::shared_ptr<gui::IGUIStaticText> textFPS;
-    std::shared_ptr<gui::IGUIStaticText> textVelocity;
-    std::shared_ptr<gui::IGUIStaticText> textScore;
+    gui::IGUIStaticText *textCameraPosition;
+    gui::IGUIStaticText *textObstaclesCount;
+    gui::IGUIStaticText *textFPS;
+    gui::IGUIStaticText *textVelocity;
+    gui::IGUIStaticText *textScore;
 
 private:
     bool infoVisible = true;

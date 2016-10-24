@@ -21,6 +21,11 @@
 #include <vector>
 #include <memory>
 #include "IGUIScreen.h"
+#include "screens/ControlSettingsScreen.h"
+#include "screens/HUDScreen.h"
+#include "screens/MainMenuScreen.h"
+#include "screens/PauseMenuScreen.h"
+#include "screens/SettingsScreen.h"
 #include "util.h"
 
 struct Screen {
@@ -30,7 +35,7 @@ struct Screen {
 class GUI
 {
 public:
-    GUI(gui::IGUIEnvironment &guiEnvironment);
+    GUI(ConfigData &configuration,  gui::IGUIEnvironment &guiEnvironment);
     ~GUI();
 
     bool addScreen(std::unique_ptr<IGUIScreen> screen, unsigned index);
@@ -38,24 +43,51 @@ public:
     unsigned getCurrentScreenIndex() const;
     IGUIScreen &getCurrentScreen();
 
+    ControlSettingsScreen &getCurrentScreenAsControlSettings()
+    {
+        return static_cast<ControlSettingsScreen &>(getCurrentScreen());
+    }
+
+    HUDScreen &getCurrentScreenAsHUD()
+    {
+        return static_cast<HUDScreen &>(getCurrentScreen());
+    }
+
+    MainMenuScreen &getCurrentScreenAsMainMenu()
+    {
+        return static_cast<MainMenuScreen &>(getCurrentScreen());
+    }
+
+    PauseMenuScreen &getCurrentScreenAsPauseMenu()
+    {
+        return static_cast<PauseMenuScreen &>(getCurrentScreen());
+    }
+
+    SettingsScreen &getCurrentScreenAsSettings()
+    {
+        return static_cast<SettingsScreen &>(getCurrentScreen());
+    }
+
+    void selectElement(size_t num);
+    void selectNextElement();
+    void selectPreviousElement();
+    void selectWithTab();
+
     void initialize(unsigned screenIndex);
     void reload();
     void terminate();
-    void resizeGUI();
+    void resize();
     void setVisible(bool visible);
 private:
     unsigned currentScreenIndex = 0;
     std::unordered_map<unsigned, std::unique_ptr<IGUIScreen>> screens;
 
-    std::vector<std::weak_ptr<gui::IGUIElement>> selectableElements;
+    std::vector<gui::IGUIElement *> selectableElements;
     size_t selectedElement = 0;
-    void selectElement(int num);
-    void selectNextElement();
-    void selectPreviousElement();
-    void selectWithTab();
 
     s32 buttonWidth, buttonHeight;
 
+    ConfigData &configuration;
     gui::IGUIEnvironment &guiEnvironment;
 
     void updateSelection();

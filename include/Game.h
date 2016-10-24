@@ -25,6 +25,7 @@
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include <CGUITTFont.h>
 #include <ITimer.h>
+#include "screens/SettingsScreen.h"
 #include "EventReceiver.h"
 #include "util.h"
 #include "Config.h"

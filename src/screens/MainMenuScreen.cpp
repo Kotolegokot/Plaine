@@ -1,4 +1,4 @@
-#include "MainMenuScreen.h"
+#include "screens/MainMenuScreen.h"
 
 using namespace irr;
 
@@ -12,20 +12,19 @@ MainMenuScreen::~MainMenuScreen()
 
 void MainMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
-    textScreenSize = std::shared_ptr<gui::IGUIStaticText>
-        (guiEnvironment.addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false));
+    textScreenSize = guiEnvironment.addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
 
-    buttonStart = std::shared_ptr<gui::IGUIButton>(guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0)));
+    buttonStart = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonStart->setID(ID_BUTTON_START);
     buttonStart->setText(_wp("Start"));
     buttonStart->setToolTipText(_wp("Start game"));
 
-    buttonSettings = std::shared_ptr<gui::IGUIButton>(guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0)));
+    buttonSettings = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonSettings->setID(ID_BUTTON_SETTINGS);
     buttonSettings->setText(_wp("Settings"));
     buttonSettings->setToolTipText(_wp("Game settings"));
 
-    buttonQuit = std::shared_ptr<gui::IGUIButton>(guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0)));
+    buttonQuit = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonQuit->setID(ID_BUTTON_QUIT);
     buttonQuit->setText(_wp("Quit"));
     buttonQuit->setToolTipText(_wp("Exit game"));
@@ -36,16 +35,9 @@ void MainMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 void MainMenuScreen::terminate()
 {
     textScreenSize->remove();
-    textScreenSize.reset();
-
     buttonStart->remove();
-    buttonStart.reset();
-
     buttonSettings->remove();
-    buttonSettings.reset();
-
     buttonQuit->remove();
-    buttonQuit.reset();
 }
 
 void MainMenuScreen::resize(s32 buttonWidth, s32 buttonHeight)
@@ -66,7 +58,7 @@ void MainMenuScreen::resize(s32 buttonWidth, s32 buttonHeight)
                                                     configuration.resolution.Height - space));
 }
 
-std::vector<std::weak_ptr<gui::IGUIElement>> MainMenuScreen::getSelectableElements()
+std::vector<gui::IGUIElement *> MainMenuScreen::getSelectableElements()
 {
     return { buttonStart, buttonSettings, buttonQuit };
 }

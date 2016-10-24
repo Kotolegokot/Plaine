@@ -16,13 +16,13 @@ public:
     virtual void initialize(s32 buttonWidth, s32 buttonHeight) override;
     virtual void terminate() override;
     virtual void resize(s32 buttonWidth, s32 buttonHeight) override;
-    virtual std::vector<std::weak_ptr<gui::IGUIElement>> getSelectableElements() override;
+    virtual std::vector<gui::IGUIElement *> getSelectableElements() override;
     virtual void setVisible(bool visible) override;
 
-    std::shared_ptr<gui::IGUIStaticText> textScreenSize;
-    std::shared_ptr<gui::IGUIButton> buttonResume;
-    std::shared_ptr<gui::IGUIButton> buttonMenu;
-    std::shared_ptr<gui::IGUIButton> buttonQuit;
+    gui::IGUIStaticText *textScreenSize;
+    gui::IGUIButton *buttonResume;
+    gui::IGUIButton *buttonMenu;
+    gui::IGUIButton *buttonQuit;
 };
 
 #endif // PAUSEMENUSCREEN_H

@@ -45,7 +45,7 @@ void Game::initializeGUI()
     if (font)
         skin->setFont(font);
 
-    gui = new GUI(*guiEnvironment);
+    gui = new GUI(configuration, *guiEnvironment);
 }
 
 bool Game::initializeDevice()
@@ -235,11 +235,27 @@ void Game::mainMenu()
                 eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
                 eventReceiver->checkKeyPressed(KEY_LEFT))
                 return;
+
+            {
+                core::stringw scrs = _w("Screen size: ");
+                scrs += configuration.resolution.Width;
+                scrs += "x";
+                scrs += configuration.resolution.Height;
+                gui->getCurrentScreenAsMainMenu().textScreenSize->setText(scrs.c_str());
+            }
             break;
+
+            {
+                core::stringw scrs = _w("Screen size: ");
+                scrs += configuration.resolution.Width;
+                scrs += "x";
+                scrs += configuration.resolution.Height;
+                gui->getCurrentScreenAsMainMenu().textScreenSize->setText(scrs.c_str());
+            }
 
         case Screen::SETTINGS:
             if (eventReceiver->checkEvent(ID_COMBOBOX_LANGUAGE)) {
-                switch (static_cast<SettingsScreen &>(gui->getCurrentScreen()).comboBoxLanguage->getSelected()) {
+                switch (gui->getCurrentScreenAsSettings().comboBoxLanguage->getSelected()) {
                 case 0:
                     configuration.language = "";
                     break;
@@ -262,7 +278,7 @@ void Game::mainMenu()
                 gui->reload();
             }
             if (eventReceiver->checkEvent(ID_COMBOBOX_RESOLUTION)) {
-                switch (gui->comboBoxResolution->getSelected()) {
+                switch (gui->getCurrentScreenAsSettings().comboBoxResolution->getSelected()) {
                 case 0:
                         configuration.resolution = core::dimension2d<u32>(640, 480);
                         configuration.resizable = false;
@@ -285,8 +301,8 @@ void Game::mainMenu()
 
                 gui->initialize(Screen::SETTINGS);
             }
-            if (eventReceiver->checkEvent(ID_BUTTON_CONTROL_Screen::SETTINGS)) {
-                gui->initialize(CONTROL_Screen::SETTINGS);
+            if (eventReceiver->checkEvent(ID_BUTTON_CONTROL_SETTINGS)) {
+                gui->initialize(Screen::CONTROL_SETTINGS);
             }
             if (eventReceiver->checkEvent(ID_BUTTON_TOGGLE_FULLSCREEN)) {
                 configuration.fullscreen = !configuration.fullscreen;
@@ -302,13 +318,13 @@ void Game::mainMenu()
 
             }
             if (eventReceiver->checkEvent(ID_SPINBOX_RENDER_DISTANCE)) {
-                configuration.renderDistance = gui->spinBoxRenderDistance->getValue();
+                configuration.renderDistance = gui->getCurrentScreenAsSettings().spinBoxRenderDistance->getValue();
             }
             if (eventReceiver->checkEvent(ID_CHECKBOX_VSYNC)) {
-                configuration.vsync = gui->checkBoxVSync->isChecked();
+                configuration.vsync = gui->getCurrentScreenAsSettings().checkBoxVSync->isChecked();
             }
             if (eventReceiver->checkEvent(ID_CHECKBOX_STENCILBUFFER)) {
-                configuration.stencilBuffer = gui->checkBoxStencilBuffer->isChecked();
+                configuration.stencilBuffer = gui->getCurrentScreenAsSettings().checkBoxStencilBuffer->isChecked();
             }
             if (eventReceiver->checkEvent(ID_BUTTON_MENU) ||
                 eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
@@ -329,15 +345,23 @@ void Game::mainMenu()
                 return;
             }
 
+            {
+                core::stringw scrs = _w("Screen size: ");
+                scrs += configuration.resolution.Width;
+                scrs += "x";
+                scrs += configuration.resolution.Height;
+                gui->getCurrentScreenAsSettings().textScreenSize->setText(scrs.c_str());
+            }
+
             break;
 
-        case CONTROL_Screen::SETTINGS:
+        case Screen::CONTROL_SETTINGS:
             for (size_t i = 0; i < CONTROLS_COUNT; i++)
-                if (eventReceiver->checkEvent(static_cast<GUI_ID>(gui->buttonsControl[i]->getID()))) {
+                if (eventReceiver->checkEvent(static_cast<GUI_ID>(gui->getCurrentScreenAsControlSettings().buttonsControl[i]->getID()))) {
                     eventReceiver->startCatchingKey();
                     catchingControlID = i;
                     gui->reload();
-                    gui->buttonsControl[i]->setText(_wp("Press a key"));
+                    gui->getCurrentScreenAsControlSettings().buttonsControl[i]->setText(_wp("Press a key"));
                 }
             if (eventReceiver->checkEvent(ID_BUTTON_DEFAULT_CONTROLS)) {
                 eventReceiver->stopCatchingKey();
@@ -345,7 +369,7 @@ void Game::mainMenu()
                 configuration.controls = Controls();
                 gui->reload();
             }
-            if (eventReceiver->checkEvent(ID_BUTTON_Screen::SETTINGS)) {
+            if (eventReceiver->checkEvent(ID_BUTTON_SETTINGS)) {
                 eventReceiver->stopCatchingKey();
                 catchingControlID = CONTROLS_COUNT;
                 gui->initialize(Screen::SETTINGS);
@@ -375,6 +399,14 @@ void Game::mainMenu()
                 }
             }
 
+            {
+                core::stringw scrs = _w("Screen size: ");
+                scrs += configuration.resolution.Width;
+                scrs += "x";
+                scrs += configuration.resolution.Height;
+                gui->getCurrentScreenAsControlSettings().textScreenSize->setText(scrs.c_str());
+            }
+
         default:
             break;
         }
@@ -382,16 +414,7 @@ void Game::mainMenu()
         // catch window resize
         if (configuration.resolution != driver->getScreenSize()) {
             oldConfiguration.resolution = configuration.resolution = driver->getScreenSize();
-            gui->resizeGUI();
-        }
-
-        // screen size
-        {
-            core::stringw scrs = _w("Screen size: ");
-            scrs += configuration.resolution.Width;
-            scrs += "x";
-            scrs += configuration.resolution.Height;
-            gui->textScreenSize->setText(scrs.c_str());
+            gui->resize();
         }
 
         handleSelecting();
@@ -413,7 +436,7 @@ void Game::mainMenu()
 // returns false if quit is pressed
 bool Game::run()
 {
-    gui->initialize(HUD);
+    gui->initialize(Screen::HUD);
     initializeScene();
 
     video::SLight lightData;
@@ -438,11 +461,11 @@ bool Game::run()
 
 
             switch (gui->getCurrentScreenIndex()) {
-            case PAUSE_MENU:
+            case Screen::PAUSE_MENU:
                 // catch window resize
                 if (configuration.resolution != driver->getScreenSize()) {
                     configuration.resolution = driver->getScreenSize();
-                    gui->resizeGUI();
+                    gui->resize();
                 }
 
                 // screen size
@@ -451,7 +474,7 @@ bool Game::run()
                     scrs += configuration.resolution.Width;
                     scrs += "x";
                     scrs += configuration.resolution.Height;
-                    gui->textScreenSize->setText(scrs.c_str());
+                    gui->getCurrentScreenAsPauseMenu().textScreenSize->setText(scrs.c_str());
                 }
 
                 // set cursor visible
@@ -460,7 +483,7 @@ bool Game::run()
                 if (eventReceiver->checkEvent(ID_BUTTON_RESUME) ||
                     eventReceiver->checkKeyPressed(KEY_ESCAPE))
                 {
-                    gui->initialize(HUD);
+                    gui->initialize(Screen::HUD);
                 }
 
                 handleSelecting();
@@ -479,7 +502,7 @@ bool Game::run()
 
                 time_physics_curr = time_physics_prev = timer->getTime();
                 break;
-            case HUD: {
+            case Screen::HUD: {
                 #if DEBUG_OUTPUT
                     std::cout << "=== BEGIN SIMULATION ===" << std::endl;;
                 #endif // DEBUG_OUTPUT
@@ -508,9 +531,9 @@ bool Game::run()
                 obstacleGenerator->generate(plane->getNode().getPosition());
 
                 if (eventReceiver->checkKeyPressed(KEY_ESCAPE))
-                    gui->initialize(PAUSE_MENU);
+                    gui->initialize(Screen::PAUSE_MENU);
                 if (eventReceiver->checkKeyPressed(KEY_F3))
-                    gui->setHUDInfoVisible(!gui->getHUDInfoVisible());
+                    gui->getCurrentScreenAsHUD().setInfoVisible(!gui->getCurrentScreenAsHUD().getInfoVisible());
 
                 explosion->setPosition(plane->getPosition());
                 sceneManager->drawAll(); // draw scene
@@ -549,11 +572,11 @@ bool Game::run()
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
-            if (gui->getCurrentScreenIndex() == PAUSE_MENU) {
+            if (gui->getCurrentScreenIndex() == Screen::PAUSE_MENU) {
                 time_physics_curr = time_physics_prev = timer->getTime();
                 device->yield();
             } else
-                gui->initialize(PAUSE_MENU);
+                gui->initialize(Screen::PAUSE_MENU);
         }
     }
 
@@ -573,7 +596,7 @@ void Game::updateHUD()
         cameraPosition += ", ";
         cameraPosition += position.Z;
         cameraPosition += ")";
-        gui->textCameraPos->setText(cameraPosition.c_str());
+        gui->getCurrentScreenAsHUD().textCameraPosition->setText(cameraPosition.c_str());
 
         #if DEBUG_OUTPUT
             std::cout << "Plane position: (" << position.X << ", " << position.Y
@@ -583,9 +606,9 @@ void Game::updateHUD()
 
     // cube counter
     {
-        core::stringw cubeCount = _w("Obstacles: ");
-        cubeCount += obstacleGenerator->getCubeCount();
-        gui->textCubeCount->setText(cubeCount.c_str());
+        core::stringw obstacles = _w("Obstacles: ");
+        obstacles += obstacleGenerator->getCubeCount();
+        gui->getCurrentScreenAsHUD().textObstaclesCount->setText(obstacles.c_str());
 
         #if DEBUG_OUTPUT
             std::cout << "Obstacles: " << obstacleGenerator->getCubeCount() << std::endl;
@@ -596,7 +619,7 @@ void Game::updateHUD()
     {
         core::stringw fps = _w("FPS: ");
         fps += driver->getFPS();
-        gui->textFPS->setText(fps.c_str());
+        gui->getCurrentScreenAsHUD().textFPS->setText(fps.c_str());
 
         #if DEBUG_OUTPUT
             std::cout << "FPS: " << driver->getFPS() << std::endl;
@@ -609,7 +632,7 @@ void Game::updateHUD()
         velocity += (int) plane->getRigidBody().getLinearVelocity().length();
         velocity += _w(", angular velocity: ");
         velocity += plane->getRigidBody().getAngularVelocity().length();
-        gui->textVelocity->setText(velocity.c_str());
+        gui->getCurrentScreenAsHUD().textVelocity->setText(velocity.c_str());
 
         #if DEBUG_OUTPUT
             std::cout << "Linear velocity: " << plane->getRigidBody().getLinearVelocity().length() << std::endl;
@@ -621,7 +644,7 @@ void Game::updateHUD()
     {
         core::stringw score = _w("Score: ");
         score += plane->getScore();
-        gui->textPoints->setText(score.c_str());
+        gui->getCurrentScreenAsHUD().textScore->setText(score.c_str());
 
         #if DEBUG_OUTPUT
             std::cout << "Score: " << plane->getScore() << std::endl;

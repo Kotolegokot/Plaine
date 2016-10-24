@@ -18,21 +18,42 @@
 
 using namespace irr;
 
-GUI::GUI(ConfigData &data, gui::IGUIEnvironment &guiEnvironment) :
-    configuration(data), guiEnvironment(guiEnvironment)
-{}
+class TerminatedScreen : public IGUIScreen
+{
+public:
+    TerminatedScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment) :
+        IGUIScreen(configuration, guiEnvironment) {}
+    virtual ~TerminatedScreen() {}
+
+    virtual void initialize(s32, s32) override {}
+    virtual void terminate() override {}
+    virtual void resize(s32, s32) override {}
+    virtual std::vector<gui::IGUIElement *> getSelectableElements() override { return {}; }
+    virtual void setVisible(bool) override {}
+};
+
+GUI::GUI(ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment) :
+    configuration(configuration), guiEnvironment(guiEnvironment)
+{
+    addScreen(std::make_unique<TerminatedScreen>(configuration, guiEnvironment), Screen::TERMINATED);
+    addScreen(std::make_unique<MainMenuScreen>(configuration, guiEnvironment), Screen::MAIN_MENU);
+    addScreen(std::make_unique<SettingsScreen>(configuration, guiEnvironment), Screen::SETTINGS);
+    addScreen(std::make_unique<ControlSettingsScreen>(configuration, guiEnvironment), Screen::CONTROL_SETTINGS);
+    addScreen(std::make_unique<PauseMenuScreen>(configuration, guiEnvironment), Screen::PAUSE_MENU);
+    addScreen(std::make_unique<HUDScreen>(configuration, guiEnvironment), Screen::HUD);
+}
 
 GUI::~GUI()
 {
     terminate();
 }
 
-GUIState GUI::getCurrentScreenIndex() const
+unsigned GUI::getCurrentScreenIndex() const
 {
     return currentScreenIndex;
 }
 
-bool addScreen(std::unique_ptr<IGUIScreen> screen, unsigned index)
+bool GUI::addScreen(std::unique_ptr<IGUIScreen> screen, unsigned index)
 {
     if (screens.find(index) != screens.end())
         return false;
@@ -41,16 +62,16 @@ bool addScreen(std::unique_ptr<IGUIScreen> screen, unsigned index)
     return true;
 }
 
-bool removeScreen(unsigned screenIndex)
+bool GUI::removeScreen(unsigned screenIndex)
 {
-    if (screens.find(index) != screens.end())
+    if (screens.find(screenIndex) != screens.end())
         return false;
 
     screens.erase(screenIndex);
     return true;
 }
 
-IGUIScreen &getcurrentScreen()
+IGUIScreen &GUI::getCurrentScreen()
 {
     return *screens[currentScreenIndex];
 }
@@ -74,16 +95,17 @@ void GUI::initialize(unsigned screenIndex)
     getCurrentScreen().terminate();
     currentScreenIndex = screenIndex;
     getCurrentScreen().initialize(buttonWidth, buttonHeight);
+    selectableElements = getCurrentScreen().getSelectableElements();
 }
 
 void GUI::reload()
 {
-    getCurrentScreen().reload();
+    getCurrentScreen().reload(buttonWidth, buttonHeight);
 }
 
 void GUI::updateSelection()
 {
-    getCurrentScreen().reload();
+    getCurrentScreen().reload(buttonWidth, buttonHeight);
 
     if (guiEnvironment.getFocus()->getType() != gui::EGUIET_EDIT_BOX &&
         guiEnvironment.getFocus()->getType() != gui::EGUIET_COMBO_BOX)
@@ -98,22 +120,16 @@ void GUI::updateSelection()
 void GUI::selectWithTab()
 {
     for (size_t i = 0; i < selectableElements.size(); i++)
-        if (auto element = selectableElements[i].lock()) {
-            if (guiEnvironment.getFocus() == element.get())
-                selectedElement = i;
-        } else {
-            return;
-        }
+        if (guiEnvironment.getFocus() == selectableElements[i])
+            selectedElement = i;
     updateSelection();
 }
 
 void GUI::selectElement(size_t index)
 {
-    if (auto element = selectableElements[i].lock()) {
-        guiEnvironment.setFocus(selectableElements[index].get());
-        selectedElement = index;
-        updateSelection();
-    }
+    guiEnvironment.setFocus(selectableElements[index]);
+    selectedElement = index;
+    updateSelection();
 }
 
 void GUI::selectNextElement()
@@ -123,10 +139,8 @@ void GUI::selectNextElement()
     else
         selectedElement = 0;
 
-    if (auto element = selectableElements[selectedElement].lock()) {
-        guiEnvironment.setFocus(selectableElements[selectedElement].get());
-        updateSelection();
-    }
+    guiEnvironment.setFocus(selectableElements[selectedElement]);
+    updateSelection();
 }
 
 void GUI::selectPreviousElement()
@@ -136,21 +150,16 @@ void GUI::selectPreviousElement()
     else
         selectedElement = selectableElements.size() - 1;
 
-    if (auto element = selectableElements[selectedElement].lock()) {
-        guiEnvironment.setFocus(selectableElements[selectedElement].get());
-        updateSelection();
-    }
+    guiEnvironment.setFocus(selectableElements[selectedElement]);
+    updateSelection();
 }
 
 void GUI::terminate()
 {
-    selectableElements.clear();
+    initialize(Screen::TERMINATED);
+
     guiEnvironment.setFocus(0);
     selectedElement = 0;
-
-    getCurrentScreen().terminate();
-    currentScreenIndex = TERMINATED;
-    getCurrentScreen().initialize(buttonWidth, buttonHeight);
 }
 
 void GUI::setVisible(bool visible)
@@ -158,7 +167,7 @@ void GUI::setVisible(bool visible)
     getCurrentScreen().setVisible(visible);
 }
 
-void GUI::resizeGUI()
+void GUI::resize()
 {
     //changing gui position and size when window is resizing
     recalculateButtonProportions();

@@ -1,4 +1,4 @@
-#include "SettingsScreen.h"
+#include "screens/SettingsScreen.h"
 
 SettingsScreen::SettingsScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment) :
     IGUIScreen(configuration, guiEnvironment) {}
@@ -10,12 +10,10 @@ SettingsScreen::~SettingsScreen()
 
 void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
-    textScreenSize = std::shared_ptr<gui::IGUIStaticText>
-        (guiEnvironment.addStaticText(L"SCREEN_SIZE", core::rect<s32>(0, 0, 0, 0)));
-    textLanguage = std::shared_ptr<gui::IGUIStaticText>
-        (guiEnvironment.addStaticText(_wp("Language:"), core::rect<s32>(0, 0, 0, 0)));
+    textScreenSize = guiEnvironment.addStaticText(L"SCREEN_SIZE", core::rect<s32>(0, 0, 0, 0));
+    textLanguage = guiEnvironment.addStaticText(_wp("Language:"), core::rect<s32>(0, 0, 0, 0));
 
-    comboBoxLanguage = std::shared_ptr<gui::IGUIComboBox>(guiEnvironment.addComboBox(core::rect<s32>(0, 0, 0, 0)));
+    comboBoxLanguage = guiEnvironment.addComboBox(core::rect<s32>(0, 0, 0, 0));
     comboBoxLanguage->setID(ID_COMBOBOX_LANGUAGE);
     comboBoxLanguage->addItem(_wp("System language"), 0);
     comboBoxLanguage->addItem(L"English", 1);
@@ -33,10 +31,9 @@ void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
     else if (configuration.language == "crh@cyrillic")
         comboBoxLanguage->setSelected(4);
 
-    textResolution = std::shared_ptr<gui::IGUIStaticText>
-        (guiEnvironment.addStaticText(_wp("Resolution:"), core::rect<s32>(0, 0, 0, 0)));
+    textResolution = guiEnvironment.addStaticText(_wp("Resolution:"), core::rect<s32>(0, 0, 0, 0));
 
-    comboBoxResolution = std::shared_ptr<gui::IGUIComboBox>(guiEnvironment.addComboBox(core::rect<s32>(0, 0, 0, 0)));
+    comboBoxResolution = guiEnvironment.addComboBox(core::rect<s32>(0, 0, 0, 0));
     comboBoxResolution->setID(ID_COMBOBOX_RESOLUTION);
     if (configuration.fullscreen)
     {
@@ -77,24 +74,20 @@ void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
         }
     }
 
-    textRenderDistance = std::shared_ptr<gui::IGUIStaticText>
-        (guiEnvironment.addStaticText(_wp("Render distance:"), core::rect<s32>(0, 0, 0, 0)));
-    spinBoxRenderDistance = std::shared_ptr<gui::IGUISpinBox>
-        (guiEnvironment.addSpinBox(_wp("Render distance"), core::rect<s32>(0, 0, 0, 0)));
+    textRenderDistance = guiEnvironment.addStaticText(_wp("Render distance:"), core::rect<s32>(0, 0, 0, 0));
+    spinBoxRenderDistance = guiEnvironment.addSpinBox(_wp("Render distance"), core::rect<s32>(0, 0, 0, 0));
     spinBoxRenderDistance->setID(ID_SPINBOX_RENDER_DISTANCE);
     spinBoxRenderDistance->setRange(500, 5000);
     spinBoxRenderDistance->setStepSize(100);
     spinBoxRenderDistance->setValue(configuration.renderDistance);
 
-    checkBoxVSync = std::shared_ptr<gui::IGUICheckBox>
-        (guiEnvironment.addCheckBox(_wp("VSync"), core::rect<s32>(0, 0, 0, 0)));
+    checkBoxVSync = guiEnvironment.addCheckBox(_wp("VSync"), core::rect<s32>(0, 0, 0, 0));
     checkBoxVSync->setID(ID_CHECKBOX_VSYNC);
 
-    checkBoxStencilBuffer = std::shared_ptr<gui::IGUICheckBox>
-        (guiEnvironment.addCheckBox(_wp("Stencil buffer"), core::rect<s32>(0, 0, 0, 0)));
+    checkBoxStencilBuffer = guiEnvironment.addCheckBox(_wp("Stencil buffer"), core::rect<s32>(0, 0, 0, 0));
     checkBoxStencilBuffer->setID(ID_CHECKBOX_STENCILBUFFER);
 
-    buttonToggleFullscreen = std::shared_ptr<gui::IGUIButton>(guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0)));
+    buttonToggleFullscreen = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonToggleFullscreen->setID(ID_BUTTON_TOGGLE_FULLSCREEN);
     if (configuration.fullscreen) {
         buttonToggleFullscreen->setText(_wp("Windowed"));
@@ -104,17 +97,17 @@ void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
         buttonToggleFullscreen->setToolTipText(_wp("To fullscreen mode"));
     }
 
-    buttonControlSettings = std::shared_ptr<gui::IGUIButton>(guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0)));
+    buttonControlSettings = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonControlSettings->setID(ID_BUTTON_CONTROL_SETTINGS);
     buttonControlSettings->setText(_wp("Controls"));
     buttonControlSettings->setToolTipText(_wp("Edit control settings"));
 
-    buttonMenu = std::shared_ptr<gui::IGUIButton>(guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0)));
+    buttonMenu = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonMenu->setID(ID_BUTTON_MENU);
     buttonMenu->setText(_wp("Back"));
     buttonMenu->setToolTipText(_wp("Exit to main menu"));
 
-    buttonQuit = std::shared_ptr<gui::IGUIButton>(guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0)));
+    buttonQuit = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonQuit->setID(ID_BUTTON_QUIT);
     buttonQuit->setText(_wp("Quit"));
     buttonQuit->setToolTipText(_wp("Exit game"));
@@ -125,43 +118,18 @@ void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 void SettingsScreen::terminate()
 {
     textScreenSize->remove();
-    textScreenSize.reset();
-
     textLanguage->remove();
-    textLanguage.reset();
-
     textResolution->remove();
-    textResolution.reset();
-
     textRenderDistance->remove();
-    textRenderDistance.reset();
-
     comboBoxLanguage->remove();
-    comboBoxLanguage.reset();
-
     comboBoxResolution->remove();
-    comboBoxResolution.reset();
-
     spinBoxRenderDistance->remove();
-    spinBoxRenderDistance.reset();
-
     checkBoxVSync->remove();
-    checkBoxVSync.reset();
-
     checkBoxStencilBuffer->remove();
-    checkBoxStencilBuffer.reset();
-
     buttonToggleFullscreen->remove();
-    buttonToggleFullscreen.reset();
-
     buttonControlSettings->remove();
-    buttonControlSettings.reset();
-
     buttonMenu->remove();
-    buttonMenu.reset();
-
     buttonQuit->remove();
-    buttonQuit.reset();
 }
 
 void SettingsScreen::resize(s32 buttonWidth, s32 buttonHeight)
@@ -237,7 +205,7 @@ void SettingsScreen::resize(s32 buttonWidth, s32 buttonHeight)
     comboBoxResolution->setSelected(2);
 }
 
-std::vector<std::weak_ptr<gui::IGUIElement>> SettingsScreen::getSelectableElements()
+std::vector<gui::IGUIElement *> SettingsScreen::getSelectableElements()
 {
     return { checkBoxVSync, checkBoxStencilBuffer, buttonToggleFullscreen,
         buttonControlSettings, buttonMenu, buttonMenu };
