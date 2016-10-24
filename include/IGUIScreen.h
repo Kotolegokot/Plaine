@@ -17,9 +17,7 @@
 #ifndef IGUISCREEN_H
 #define IGUISCREEN_H
 
-#include <string>
 #include <vector>
-#include <memory>
 #include <irrlicht.h>
 #include "Config.h"
 
