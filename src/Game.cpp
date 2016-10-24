@@ -245,14 +245,6 @@ void Game::mainMenu()
             }
             break;
 
-            {
-                core::stringw scrs = _w("Screen size: ");
-                scrs += configuration.resolution.Width;
-                scrs += "x";
-                scrs += configuration.resolution.Height;
-                gui->getCurrentScreenAsMainMenu().textScreenSize->setText(scrs.c_str());
-            }
-
         case Screen::SETTINGS:
             if (eventReceiver->checkEvent(ID_COMBOBOX_LANGUAGE)) {
                 switch (gui->getCurrentScreenAsSettings().comboBoxLanguage->getSelected()) {
@@ -406,6 +398,7 @@ void Game::mainMenu()
                 scrs += configuration.resolution.Height;
                 gui->getCurrentScreenAsControlSettings().textScreenSize->setText(scrs.c_str());
             }
+            break;
 
         default:
             break;

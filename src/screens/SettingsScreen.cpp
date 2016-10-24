@@ -81,11 +81,13 @@ void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
     spinBoxRenderDistance->setStepSize(100);
     spinBoxRenderDistance->setValue(configuration.renderDistance);
 
-    checkBoxVSync = guiEnvironment.addCheckBox(_wp("VSync"), core::rect<s32>(0, 0, 0, 0));
+    checkBoxVSync = guiEnvironment.addCheckBox(configuration.vsync, core::rect<s32>(0, 0, 0, 0));
     checkBoxVSync->setID(ID_CHECKBOX_VSYNC);
+    checkBoxVSync->setText(_wp("VSync"));
 
-    checkBoxStencilBuffer = guiEnvironment.addCheckBox(_wp("Stencil buffer"), core::rect<s32>(0, 0, 0, 0));
+    checkBoxStencilBuffer = guiEnvironment.addCheckBox(configuration.stencilBuffer, core::rect<s32>(0, 0, 0, 0));
     checkBoxStencilBuffer->setID(ID_CHECKBOX_STENCILBUFFER);
+    checkBoxStencilBuffer->setText(_wp("Stencil buffer"));
 
     buttonToggleFullscreen = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonToggleFullscreen->setID(ID_BUTTON_TOGGLE_FULLSCREEN);
