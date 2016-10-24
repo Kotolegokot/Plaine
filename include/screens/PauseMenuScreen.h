@@ -19,7 +19,6 @@ public:
     virtual std::vector<std::weak_ptr<gui::IGUIElement>> getSelectableElements() override;
     virtual void setVisible(bool visible) override;
 
-private:
     std::shared_ptr<gui::IGUIStaticText> textScreenSize;
     std::shared_ptr<gui::IGUIButton> buttonResume;
     std::shared_ptr<gui::IGUIButton> buttonMenu;
