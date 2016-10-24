@@ -549,6 +549,9 @@ bool Game::run()
                 #endif // DEBUG_DRAWER_ENABLED
                 u64 dt = timer->getTime() - time_gameclock;
 
+                #if DEBUG_OUTPUT
+                    std::cout << "Control handling delta: " << dt << "ms" << std::endl;
+                #endif // DEBUG_OUTPUT
                 while (dt >= TickMs) {
                     dt -= TickMs;
                     time_gameclock += TickMs;
