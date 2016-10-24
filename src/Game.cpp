@@ -219,6 +219,8 @@ void Game::mainMenu()
 
     while (device->run()) {
         // handle gui events
+        handleSelecting();
+
         switch (gui->getCurrentScreenIndex()) {
         case Screen::MAIN_MENU:
             if (eventReceiver->checkEvent(ID_BUTTON_START)) {
@@ -409,8 +411,6 @@ void Game::mainMenu()
             oldConfiguration.resolution = configuration.resolution = driver->getScreenSize();
             gui->resize();
         }
-
-        handleSelecting();
 
         if (device->isWindowActive()) {
             if (IRIDESCENT_BACKGROUND)

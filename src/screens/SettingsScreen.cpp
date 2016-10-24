@@ -15,6 +15,42 @@ void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
     comboBoxLanguage = guiEnvironment.addComboBox(core::rect<s32>(0, 0, 0, 0));
     comboBoxLanguage->setID(ID_COMBOBOX_LANGUAGE);
+
+    textResolution = guiEnvironment.addStaticText(_wp("Resolution:"), core::rect<s32>(0, 0, 0, 0));
+
+    comboBoxResolution = guiEnvironment.addComboBox(core::rect<s32>(0, 0, 0, 0));
+    comboBoxResolution->setID(ID_COMBOBOX_RESOLUTION);
+
+    textRenderDistance = guiEnvironment.addStaticText(_wp("Render distance:"), core::rect<s32>(0, 0, 0, 0));
+
+    spinBoxRenderDistance = guiEnvironment.addSpinBox(_wp("Render distance"), core::rect<s32>(0, 0, 0, 0));
+    spinBoxRenderDistance->setID(ID_SPINBOX_RENDER_DISTANCE);
+
+    checkBoxVSync = guiEnvironment.addCheckBox(configuration.vsync, core::rect<s32>(0, 0, 0, 0));
+    checkBoxVSync->setID(ID_CHECKBOX_VSYNC);
+
+    checkBoxStencilBuffer = guiEnvironment.addCheckBox(configuration.stencilBuffer, core::rect<s32>(0, 0, 0, 0));
+    checkBoxStencilBuffer->setID(ID_CHECKBOX_STENCILBUFFER);
+
+    buttonToggleFullscreen = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
+    buttonToggleFullscreen->setID(ID_BUTTON_TOGGLE_FULLSCREEN);
+
+    buttonControlSettings = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
+    buttonControlSettings->setID(ID_BUTTON_CONTROL_SETTINGS);
+
+    buttonMenu = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
+    buttonMenu->setID(ID_BUTTON_MENU);
+
+    buttonQuit = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
+    buttonQuit->setID(ID_BUTTON_MENU);
+
+    reload(buttonWidth, buttonHeight);
+    resize(buttonWidth, buttonHeight);
+}
+
+void SettingsScreen::reload(s32 buttonWidth, s32 buttonHeight)
+{
+
     comboBoxLanguage->addItem(_wp("System language"), 0);
     comboBoxLanguage->addItem(L"English", 1);
     comboBoxLanguage->addItem(L"Русский", 2);
@@ -31,10 +67,6 @@ void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
     else if (configuration.language == "crh@cyrillic")
         comboBoxLanguage->setSelected(4);
 
-    textResolution = guiEnvironment.addStaticText(_wp("Resolution:"), core::rect<s32>(0, 0, 0, 0));
-
-    comboBoxResolution = guiEnvironment.addComboBox(core::rect<s32>(0, 0, 0, 0));
-    comboBoxResolution->setID(ID_COMBOBOX_RESOLUTION);
     if (configuration.fullscreen)
     {
         core::stringw scrs;
@@ -74,23 +106,14 @@ void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
         }
     }
 
-    textRenderDistance = guiEnvironment.addStaticText(_wp("Render distance:"), core::rect<s32>(0, 0, 0, 0));
-    spinBoxRenderDistance = guiEnvironment.addSpinBox(_wp("Render distance"), core::rect<s32>(0, 0, 0, 0));
-    spinBoxRenderDistance->setID(ID_SPINBOX_RENDER_DISTANCE);
     spinBoxRenderDistance->setRange(500, 5000);
     spinBoxRenderDistance->setStepSize(100);
     spinBoxRenderDistance->setValue(configuration.renderDistance);
 
-    checkBoxVSync = guiEnvironment.addCheckBox(configuration.vsync, core::rect<s32>(0, 0, 0, 0));
-    checkBoxVSync->setID(ID_CHECKBOX_VSYNC);
     checkBoxVSync->setText(_wp("VSync"));
 
-    checkBoxStencilBuffer = guiEnvironment.addCheckBox(configuration.stencilBuffer, core::rect<s32>(0, 0, 0, 0));
-    checkBoxStencilBuffer->setID(ID_CHECKBOX_STENCILBUFFER);
     checkBoxStencilBuffer->setText(_wp("Stencil buffer"));
 
-    buttonToggleFullscreen = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
-    buttonToggleFullscreen->setID(ID_BUTTON_TOGGLE_FULLSCREEN);
     if (configuration.fullscreen) {
         buttonToggleFullscreen->setText(_wp("Windowed"));
         buttonToggleFullscreen->setToolTipText(_wp("To windowed mode"));
@@ -99,22 +122,14 @@ void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
         buttonToggleFullscreen->setToolTipText(_wp("To fullscreen mode"));
     }
 
-    buttonControlSettings = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
-    buttonControlSettings->setID(ID_BUTTON_CONTROL_SETTINGS);
     buttonControlSettings->setText(_wp("Controls"));
     buttonControlSettings->setToolTipText(_wp("Edit control settings"));
 
-    buttonMenu = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
-    buttonMenu->setID(ID_BUTTON_MENU);
     buttonMenu->setText(_wp("Back"));
     buttonMenu->setToolTipText(_wp("Exit to main menu"));
 
-    buttonQuit = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
-    buttonQuit->setID(ID_BUTTON_QUIT);
     buttonQuit->setText(_wp("Quit"));
     buttonQuit->setToolTipText(_wp("Exit game"));
-
-    resize(buttonWidth, buttonHeight);
 }
 
 void SettingsScreen::terminate()

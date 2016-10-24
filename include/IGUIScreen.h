@@ -17,11 +17,7 @@ public:
     virtual ~IGUIScreen() {}
 
     virtual void initialize(s32 buttonWidth, s32 buttonHeight) = 0;
-    virtual void reload(s32 buttonWidth, s32 buttonHeight)
-    {
-        terminate();
-        initialize(buttonWidth, buttonHeight);
-    }
+    virtual void reload(s32 buttonWidth, s32 buttonHeight) = 0;
     virtual void terminate() = 0;
     virtual void resize(s32 buttonWidth, s32 buttonHeight) = 0;
     virtual std::vector<gui::IGUIElement *> getSelectableElements() = 0;

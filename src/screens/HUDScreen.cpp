@@ -25,6 +25,12 @@ void HUDScreen::initialize(s32 buttonWidth, s32 buttonHeight)
     textScore = guiEnvironment.addStaticText(L"POINTS", core::rect<s32>(10, 10 + 24 + 24 + 24 + 24, 400, 30 + 24 + 24 + 24 + 24), false);
     textScore->setBackgroundColor(video::SColor(120, 255, 255, 255));
 
+    reload(buttonWidth, buttonHeight);
+    resize(buttonWidth, buttonHeight);
+}
+
+void HUDScreen::reload(s32 buttonWidth, s32 buttonHeight)
+{
     if (!infoVisible) {
         textCameraPosition->setVisible(false);
         textObstaclesCount->setVisible(false);
@@ -32,8 +38,6 @@ void HUDScreen::initialize(s32 buttonWidth, s32 buttonHeight)
         textVelocity->setVisible(false);
         textScore->setVisible(false);
     }
-
-    resize(buttonWidth, buttonHeight);
 }
 
 void HUDScreen::terminate()

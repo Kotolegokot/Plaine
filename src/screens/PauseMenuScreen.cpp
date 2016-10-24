@@ -14,20 +14,27 @@ void PauseMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
     buttonResume = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonResume->setID(ID_BUTTON_RESUME);
-    buttonResume->setText(_wp("Resume"));
-    buttonResume->setToolTipText(_wp("Resume game"));
 
     buttonMenu = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonMenu->setID(ID_BUTTON_MENU);
-    buttonMenu->setText(_wp("Menu"));
-    buttonMenu->setToolTipText(_wp("Exit to main menu"));
 
     buttonQuit = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonQuit->setID(ID_BUTTON_QUIT);
+
+    reload(buttonWidth, buttonHeight);
+    resize(buttonWidth, buttonHeight);
+}
+
+void PauseMenuScreen::reload(s32 buttonWidth, s32 buttonHeight)
+{
+    buttonResume->setText(_wp("Resume"));
+    buttonResume->setToolTipText(_wp("Resume game"));
+
+    buttonMenu->setText(_wp("Menu"));
+    buttonMenu->setToolTipText(_wp("Exit to main menu"));
+
     buttonQuit->setText(_wp("Quit"));
     buttonQuit->setToolTipText(_wp("Exit game"));
-
-    resize(buttonWidth, buttonHeight);
 }
 
 void PauseMenuScreen::terminate()

@@ -14,6 +14,7 @@ public:
     ~PauseMenuScreen();
 
     virtual void initialize(s32 buttonWidth, s32 buttonHeight) override;
+    virtual void reload(s32 buttonWidth, s32 buttonHeight) override;
     virtual void terminate() override;
     virtual void resize(s32 buttonWidth, s32 buttonHeight) override;
     virtual std::vector<gui::IGUIElement *> getSelectableElements() override;

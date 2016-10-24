@@ -12,34 +12,45 @@ void ControlSettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
     textScreenSize = guiEnvironment.addStaticText(L"SCREEN_SIZE", core::rect<s32>(0, 0, 0, 0));
 
-    static constexpr std::array<const char *, CONTROLS_COUNT> texts = { "Up: ", "Left: ", "Down: ", "Right: ", "CW roll", "CCW roll" };
     static constexpr std::array<u32, CONTROLS_COUNT> ids = { ID_BUTTON_CONTROL_UP, ID_BUTTON_CONTROL_LEFT,
                                                              ID_BUTTON_CONTROL_DOWN, ID_BUTTON_CONTROL_RIGHT,
                                                              ID_BUTTON_CONTROL_CW_ROLL, ID_BUTTON_CONTROL_CCW_ROLL };
     for (size_t i = 0; i < CONTROLS_COUNT; i++) {
-        textsControl[i] = guiEnvironment.addStaticText(_wp(texts[i]), core::rect<s32>(0, 0, 0, 0));
+        textsControl[i] = guiEnvironment.addStaticText(L"CONTROL", core::rect<s32>(0, 0, 0, 0));
 
         buttonsControl[i] = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
         buttonsControl[i]->setID(ids[i]);
-        buttonsControl[i]->setText(keyCodeName(configuration.controls[i]).c_str());
     }
 
     buttonDefaultControls = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonDefaultControls->setID(ID_BUTTON_DEFAULT_CONTROLS);
-    buttonDefaultControls->setText(_wp("Default"));
-    buttonDefaultControls->setToolTipText(_wp("Default control settings"));
 
     buttonSettings = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonSettings->setID(ID_BUTTON_SETTINGS);
-    buttonSettings->setText(_wp("Settings"));
-    buttonSettings->setToolTipText(_wp("Back to game settings"));
 
     buttonQuit = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonQuit->setID(ID_BUTTON_QUIT);
+
+    reload(buttonWidth, buttonHeight);
+    resize(buttonWidth, buttonHeight);
+}
+
+void ControlSettingsScreen::reload(s32 buttonWidth, s32 buttonHeight)
+{
+    static constexpr std::array<const char *, CONTROLS_COUNT> texts = { "Up: ", "Left: ", "Down: ", "Right: ", "CW roll", "CCW roll" };
+    for (size_t i = 0; i < CONTROLS_COUNT; i++) {
+        textsControl[i]->setText(_wp(texts[i]));
+        buttonsControl[i]->setText(keyCodeName(configuration.controls[i]).c_str());
+    }
+
+    buttonDefaultControls->setText(_wp("Default"));
+    buttonDefaultControls->setToolTipText(_wp("Default control settings"));
+
+    buttonSettings->setText(_wp("Settings"));
+    buttonSettings->setToolTipText(_wp("Back to game settings"));
+
     buttonQuit->setText(_wp("Quit"));
     buttonQuit->setToolTipText(_wp("Exit game"));
-
-    resize(buttonWidth, buttonHeight);
 }
 
 void ControlSettingsScreen::terminate()

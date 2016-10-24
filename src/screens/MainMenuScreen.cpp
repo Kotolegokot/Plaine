@@ -16,20 +16,27 @@ void MainMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
     buttonStart = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonStart->setID(ID_BUTTON_START);
-    buttonStart->setText(_wp("Start"));
-    buttonStart->setToolTipText(_wp("Start game"));
 
     buttonSettings = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonSettings->setID(ID_BUTTON_SETTINGS);
-    buttonSettings->setText(_wp("Settings"));
-    buttonSettings->setToolTipText(_wp("Game settings"));
 
     buttonQuit = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonQuit->setID(ID_BUTTON_QUIT);
+
+    reload(buttonWidth, buttonHeight);
+    resize(buttonWidth, buttonHeight);
+}
+
+void MainMenuScreen::reload(s32 buttonWidth, s32 buttonHeight)
+{
+    buttonStart->setText(_wp("Start"));
+    buttonStart->setToolTipText(_wp("Start game"));
+
+    buttonSettings->setText(_wp("Settings"));
+    buttonSettings->setToolTipText(_wp("Game settings"));
+
     buttonQuit->setText(_wp("Quit"));
     buttonQuit->setToolTipText(_wp("Exit game"));
-
-    resize(buttonWidth, buttonHeight);
 }
 
 void MainMenuScreen::terminate()

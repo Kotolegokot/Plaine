@@ -26,6 +26,7 @@ public:
     virtual ~TerminatedScreen() {}
 
     virtual void initialize(s32, s32) override {}
+    virtual void reload(s32, s32) override {}
     virtual void terminate() override {}
     virtual void resize(s32, s32) override {}
     virtual std::vector<gui::IGUIElement *> getSelectableElements() override { return {}; }
@@ -120,8 +121,10 @@ void GUI::updateSelection()
 void GUI::selectWithTab()
 {
     for (size_t i = 0; i < selectableElements.size(); i++)
-        if (guiEnvironment.getFocus() == selectableElements[i])
+        if (guiEnvironment.getFocus() == selectableElements[i]) {
             selectedElement = i;
+            break;
+        }
     updateSelection();
 }
 
