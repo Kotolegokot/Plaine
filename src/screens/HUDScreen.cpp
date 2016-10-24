@@ -10,19 +10,19 @@ HUDScreen::~HUDScreen()
 
 void HUDScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
-    textCameraPosition = guiEnvironment.addStaticText(L"CAMERA_POS", core::rect<s32>(10, 10, 400, 30), false);
+    textCameraPosition = guiEnvironment.addStaticText(L"CAMERA_POS", core::rect<s32>(10, 10, 400, 30));
     textCameraPosition->setBackgroundColor(video::SColor(120, 255, 255, 255));
 
-    textObstaclesCount = guiEnvironment.addStaticText(L"CUBE_COUNT", core::rect<s32>(10, 10 + 24, 400, 30 + 24), false);
+    textObstaclesCount = guiEnvironment.addStaticText(L"CUBE_COUNT", core::rect<s32>(10, 10 + 24, 400, 30 + 24));
     textObstaclesCount->setBackgroundColor(video::SColor(120, 255, 255, 255));
 
-    textFPS = guiEnvironment.addStaticText(L"FPS", core::rect<s32>(10, 10 + 24 + 24, 400, 30 + 24 + 24), false);
+    textFPS = guiEnvironment.addStaticText(L"FPS", core::rect<s32>(10, 10 + 24 + 24, 400, 30 + 24 + 24));
     textFPS->setBackgroundColor(video::SColor(120, 255, 255, 255));
 
-    textVelocity = guiEnvironment.addStaticText(L"VELOCITY", core::rect<s32>(10, 10 + 24 + 24 + 24, 400, 30 + 24 + 24 + 24), false);
+    textVelocity = guiEnvironment.addStaticText(L"VELOCITY", core::rect<s32>(10, 10 + 24 + 24 + 24, 400, 30 + 24 + 24 + 24));
     textVelocity->setBackgroundColor(video::SColor(120, 255, 255, 255));
 
-    textScore = guiEnvironment.addStaticText(L"POINTS", core::rect<s32>(10, 10 + 24 + 24 + 24 + 24, 400, 30 + 24 + 24 + 24 + 24), false);
+    textScore = guiEnvironment.addStaticText(L"POINTS", core::rect<s32>(10, 10 + 24 + 24 + 24 + 24, 400, 30 + 24 + 24 + 24 + 24));
     textScore->setBackgroundColor(video::SColor(120, 255, 255, 255));
 
     reload(buttonWidth, buttonHeight);

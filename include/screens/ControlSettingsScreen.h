@@ -2,11 +2,12 @@
 #define CONTROLSETTINGSSCREEN_H
 
 #include <array>
-#include <memory>
 #include <irrlicht.h>
 #include <IGUIScreen.h>
 #include "Config.h"
 #include "util.h"
+
+using namespace irr;
 
 class ControlSettingsScreen : public IGUIScreen
 {

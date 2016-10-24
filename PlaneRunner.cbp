@@ -22,6 +22,7 @@
 					<Add option='-isystem&quot;deps/include/bullet&quot;' />
 					<Add directory="include" />
 					<Add directory="include/obstacles" />
+					<Add directory="include/screens" />
 				</Compiler>
 			</Target>
 			<Target title="Linux-Release">
@@ -42,6 +43,7 @@
 					<Add option="-DFAR_CAMERA_DISTANCE=false" />
 					<Add directory="include" />
 					<Add directory="include/obstacles" />
+					<Add directory="include/screens" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -61,6 +63,7 @@
 					<Add option='-isystem&quot;deps\include\bullet&quot;' />
 					<Add directory="include" />
 					<Add directory="include/obstacles" />
+					<Add directory="include/screens" />
 				</Compiler>
 				<Linker>
 					<Add library="intl" />
@@ -82,6 +85,7 @@
 					<Add option="-DFAR_CAMERA_DISTANCE=false" />
 					<Add directory="include" />
 					<Add directory="include/obstacles" />
+					<Add directory="include/screens" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -130,6 +134,7 @@
 		<Unit filename="include/patterns/Crystal.h" />
 		<Unit filename="include/patterns/Tunnel.h" />
 		<Unit filename="include/screens/ControlSettingsScreen.h" />
+		<Unit filename="include/screens/GameOverScreen.h" />
 		<Unit filename="include/screens/HUDScreen.h" />
 		<Unit filename="include/screens/MainMenuScreen.h" />
 		<Unit filename="include/screens/PauseMenuScreen.h" />
@@ -154,6 +159,7 @@
 		<Unit filename="src/obstacles/Icosphere2.cpp" />
 		<Unit filename="src/obstacles/Tetrahedron.cpp" />
 		<Unit filename="src/screens/ControlSettingsScreen.cpp" />
+		<Unit filename="src/screens/GameOverScreen.cpp" />
 		<Unit filename="src/screens/HUDScreen.cpp" />
 		<Unit filename="src/screens/MainMenuScreen.cpp" />
 		<Unit filename="src/screens/PauseMenuScreen.cpp" />

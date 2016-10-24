@@ -1,5 +1,5 @@
-#ifndef PAUSEMENUSCREEN_H
-#define PAUSEMENUSCREEN_H
+#ifndef GAMEOVERSCREEN_H
+#define GAMEOVERSCREEN_H
 
 #include <irrlicht.h>
 #include <IGUIScreen.h>
@@ -8,11 +8,11 @@
 
 using namespace irr;
 
-class PauseMenuScreen : public IGUIScreen
+class GameOverScreen : public IGUIScreen
 {
 public:
-    PauseMenuScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment);
-    ~PauseMenuScreen();
+    GameOverScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment);
+    ~GameOverScreen();
 
     virtual void initialize(s32 buttonWidth, s32 buttonHeight) override;
     virtual void reload(s32 buttonWidth, s32 buttonHeight) override;
@@ -21,10 +21,8 @@ public:
     virtual std::vector<gui::IGUIElement *> getSelectableElements() override;
     virtual void setVisible(bool visible) override;
 
-    gui::IGUIStaticText *textScreenSize;
-    gui::IGUIButton *buttonResume;
-    gui::IGUIButton *buttonMenu;
-    gui::IGUIButton *buttonQuit;
+    gui::IGUIStaticText *textMessage;
+    gui::IGUIButton *buttonOK;
 };
 
-#endif // PAUSEMENUSCREEN_H
+#endif // GAMEOVERSCREEN_H

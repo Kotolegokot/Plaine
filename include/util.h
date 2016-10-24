@@ -45,11 +45,7 @@ core::stringw keyCodeName(const EKEY_CODE &keyCode);
 void setLanguage(std::string language, bool replace);
 video::SColor iridescentColor(const u32 &currentTime);
 
-// number of GUI elements that have an id
-constexpr size_t GUI_IDS_COUNT = 19;
-
 // GUI IDs
-// !! don't forget to change GUI_IDS_COUNT if you change this enumeration !!
 enum GUI_ID {
     ID_BUTTON_QUIT,
     ID_BUTTON_START,
@@ -69,7 +65,9 @@ enum GUI_ID {
     ID_COMBOBOX_LANGUAGE,
     ID_CHECKBOX_VSYNC,
     ID_CHECKBOX_STENCILBUFFER,
-    ID_SPINBOX_RENDER_DISTANCE };
+    ID_SPINBOX_RENDER_DISTANCE,
+
+    GUI_IDS_COUNT};
 
 constexpr f32 COLOR_CHANGE_INTERVAL = 3000.0f;
 

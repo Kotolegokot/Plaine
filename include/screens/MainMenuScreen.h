@@ -1,7 +1,6 @@
 #ifndef MAINMENUSCREEN_H
 #define MAINMENUSCREEN_H
 
-#include <memory>
 #include <irrlicht.h>
 #include <IGUIScreen.h>
 #include "Config.h"

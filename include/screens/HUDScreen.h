@@ -1,11 +1,12 @@
 #ifndef HUDSCREEN_H
 #define HUDSCREEN_H
 
-#include <memory>
 #include <irrlicht.h>
 #include <IGUIScreen.h>
 #include "Config.h"
 #include "util.h"
+
+using namespace irr;
 
 class HUDScreen : public IGUIScreen
 {

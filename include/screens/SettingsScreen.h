@@ -1,11 +1,12 @@
 #ifndef SETTINGSSCREEN_H
 #define SETTINGSSCREEN_H
 
-#include <memory>
 #include <irrlicht.h>
 #include <IGUIScreen.h>
 #include "Config.h"
 #include "util.h"
+
+using namespace irr;
 
 class SettingsScreen : public IGUIScreen
 {

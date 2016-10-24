@@ -12,7 +12,7 @@ MainMenuScreen::~MainMenuScreen()
 
 void MainMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
-    textScreenSize = guiEnvironment.addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30), false);
+    textScreenSize = guiEnvironment.addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30));
 
     buttonStart = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonStart->setID(ID_BUTTON_START);
