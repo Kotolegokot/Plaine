@@ -74,3 +74,13 @@ void HUDScreen::setVisible(bool visible)
     textVelocity->setVisible(visible);
     textScore->setVisible(visible);
 }
+
+void HUDScreen::setInfoVisible(bool visible)
+{
+    infoVisible = visible;
+}
+
+bool HUDScreen::getInfoVisible() const
+{
+    return infoVisible;
+}

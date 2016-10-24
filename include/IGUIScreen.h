@@ -31,7 +31,6 @@ protected:
     const ConfigData &configuration;
     gui::IGUIEnvironment &guiEnvironment;
 
-    bool infoVisible = true;
     static constexpr s32 space = 10;
 };
 

@@ -19,12 +19,17 @@ public:
     virtual std::vector<std::weak_ptr<gui::IGUIElement>> getSelectableElements() override;
     virtual void setVisible(bool visible) override;
 
+    void setInfoVisible(bool visible);
+    bool getInfoVisible() const;
+
 private:
     std::shared_ptr<gui::IGUIStaticText> textCameraPosition;
     std::shared_ptr<gui::IGUIStaticText> textObstaclesCount;
     std::shared_ptr<gui::IGUIStaticText> textFPS;
     std::shared_ptr<gui::IGUIStaticText> textVelocity;
     std::shared_ptr<gui::IGUIStaticText> textScore;
+
+    bool infoVisible = true;
 };
 
 #endif // HUDSCREEN_H
