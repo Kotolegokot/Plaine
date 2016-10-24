@@ -112,6 +112,7 @@
 		<Unit filename="include/GUI.h" />
 		<Unit filename="include/Game.h" />
 		<Unit filename="include/IBody.h" />
+		<Unit filename="include/IGUIScreen.h" />
 		<Unit filename="include/IObstacle.h" />
 		<Unit filename="include/IObstaclePattern.h" />
 		<Unit filename="include/MotionState.h" />
@@ -128,6 +129,11 @@
 		<Unit filename="include/options.h" />
 		<Unit filename="include/patterns/Crystal.h" />
 		<Unit filename="include/patterns/Tunnel.h" />
+		<Unit filename="include/screens/ControlSettingsScreen.h" />
+		<Unit filename="include/screens/HUDScreen.h" />
+		<Unit filename="include/screens/MainMenuScreen.h" />
+		<Unit filename="include/screens/PauseMenuScreen.h" />
+		<Unit filename="include/screens/SettingsScreen.h" />
 		<Unit filename="include/util.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/CGUITTFont.cpp" />
@@ -147,6 +153,11 @@
 		<Unit filename="src/obstacles/Icosahedron.cpp" />
 		<Unit filename="src/obstacles/Icosphere2.cpp" />
 		<Unit filename="src/obstacles/Tetrahedron.cpp" />
+		<Unit filename="src/screens/ControlSettingsScreen.cpp" />
+		<Unit filename="src/screens/HUDScreen.cpp" />
+		<Unit filename="src/screens/MainMenuScreen.cpp" />
+		<Unit filename="src/screens/PauseMenuScreen.cpp" />
+		<Unit filename="src/screens/SettingsScreen.cpp" />
 		<Unit filename="src/util.cpp" />
 		<Extensions>
 			<code_completion />
