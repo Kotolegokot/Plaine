@@ -63,10 +63,10 @@ void GameOverScreen::resize(s32 buttonWidth, s32 buttonHeight)
                                                    configuration.resolution.Width / 2 + 100,
                                                    configuration.resolution.Height / 2 + 20 + 24));
 
-    buttonOK->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                    configuration.resolution.Height - buttonHeight - space,
-                                                    configuration.resolution.Width - 2 * space,
-                                                    configuration.resolution.Height - space));
+    buttonOK->setRelativePosition(core::rect<s32>(configuration.resolution.Width / 2- buttonWidth / 2,
+                                                    configuration.resolution.Height / 2 + 20*2 + 24*2,
+                                                    configuration.resolution.Width / 2 + buttonWidth / 2,
+                                                    configuration.resolution.Height / 2 + 20*2 + 24*2 + buttonHeight));
 }
 
 std::vector<gui::IGUIElement *> GameOverScreen::getSelectableElements()
