@@ -316,7 +316,6 @@ void GUI::initializeControlSettingsGUI()
 
 void GUI::terminateControlSettingsGUI()
 {
-    // TODO
     for (size_t i = 0; i < CONTROLS_COUNT; i++) {
         textsControl[i]->remove();
         buttonsControl[i]->remove();

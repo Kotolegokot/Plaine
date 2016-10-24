@@ -106,6 +106,7 @@
 		</Linker>
 		<Unit filename="include/CGUITTFont.h" />
 		<Unit filename="include/Config.h" />
+		<Unit filename="include/ControlSettingsScreen.h" />
 		<Unit filename="include/DebugDrawer.h" />
 		<Unit filename="include/EventReceiver.h" />
 		<Unit filename="include/Explosion.h" />
@@ -137,6 +138,7 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="src/CGUITTFont.cpp" />
 		<Unit filename="src/Config.cpp" />
+		<Unit filename="src/ControlSettingsScreen.cpp" />
 		<Unit filename="src/DebugDrawer.cpp" />
 		<Unit filename="src/EventReceiver.cpp" />
 		<Unit filename="src/Explosion.cpp" />
