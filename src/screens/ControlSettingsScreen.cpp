@@ -21,6 +21,7 @@ void ControlSettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
         buttonsControl[i] = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
         buttonsControl[i]->setID(ids[i]);
+        buttonsControl[i]->setText(keyCodeName(configuration.controls[i]).c_str());
     }
 
     buttonDefaultControls = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
