@@ -494,6 +494,7 @@ bool Game::run()
                 }
 
                 time_physics_curr = time_physics_prev = timer->getTime();
+                time_gameclock = timer->getTime() - timer->getTime() % TickMs;
                 break;
             case Screen::HUD: {
                 #if DEBUG_OUTPUT
@@ -574,6 +575,7 @@ bool Game::run()
         } else {
             if (gui->getCurrentScreenIndex() == Screen::PAUSE_MENU) {
                 time_physics_curr = time_physics_prev = timer->getTime();
+                time_gameclock = timer->getTime() - timer->getTime() % TickMs;
                 device->yield();
             } else
                 gui->initialize(Screen::PAUSE_MENU);
