@@ -47,13 +47,11 @@ void HUDScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
 void HUDScreen::reload(s32 buttonWidth, s32 buttonHeight)
 {
-    if (!infoVisible) {
-        textCameraPosition->setVisible(false);
-        textObstaclesCount->setVisible(false);
-        textFPS->setVisible(false);
-        textVelocity->setVisible(false);
-        textScore->setVisible(false);
-    }
+    textCameraPosition->setVisible(allVisible && infoVisible);
+    textObstaclesCount->setVisible(allVisible && infoVisible);
+    textFPS->setVisible(allVisible && infoVisible);
+    textVelocity->setVisible(allVisible && infoVisible);
+    textScore->setVisible(allVisible && infoVisible);
 }
 
 void HUDScreen::terminate()
@@ -74,11 +72,7 @@ std::vector<gui::IGUIElement *> HUDScreen::getSelectableElements()
 
 void HUDScreen::setVisible(bool visible)
 {
-    textCameraPosition->setVisible(visible);
-    textObstaclesCount->setVisible(visible);
-    textFPS->setVisible(visible);
-    textVelocity->setVisible(visible);
-    textScore->setVisible(visible);
+    allVisible = visible;
 }
 
 void HUDScreen::setInfoVisible(bool visible)

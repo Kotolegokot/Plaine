@@ -48,6 +48,7 @@ public:
 
 private:
     bool infoVisible = true;
+    bool allVisible = true;
 };
 
 #endif // HUDSCREEN_H

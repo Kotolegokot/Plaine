@@ -544,8 +544,10 @@ bool Game::run()
                     gui->initialize(Screen::PAUSE_MENU);
                     break;
                 }
-                if (eventReceiver->checkKeyPressed(KEY_F3))
+                if (eventReceiver->checkKeyPressed(KEY_F3)) {
                     gui->getCurrentScreenAsHUD().setInfoVisible(!gui->getCurrentScreenAsHUD().getInfoVisible());
+                    gui->reload();
+                }
 
                 explosion->setPosition(plane->getPosition());
 
