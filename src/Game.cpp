@@ -441,11 +441,11 @@ bool Game::run()
     video::SLight lightData;
     video::SColor color;
 
-    constexpr unsigned int TickMs = 32;
-    u32 time_physics_prev, time_physics_curr;
-    u64 time_gameclock;
+    constexpr unsigned int tick = 1000.0f / 60.0f;
+    u32 timePrevious, timeCurrent;
+    u64 accumulator, deltaTime = 0;
 
-    time_physics_prev = time_physics_curr = time_gameclock = timer->getTime();
+    timePrevious = timeCurrent = accumulator = timer->getTime();
 
     while (device->run())
     {
@@ -499,8 +499,8 @@ bool Game::run()
                     return false;
                 }
 
-                time_physics_curr = time_physics_prev = timer->getTime();
-                time_gameclock = timer->getTime() - timer->getTime() % TickMs;
+                timeCurrent = timePrevious = timer->getTime();
+                accumulator = timer->getTime() - deltaTime;
                 break;
             case Screen::GAME_OVER:
                 // catch window resize
@@ -531,13 +531,56 @@ bool Game::run()
                     std::cout << "=== BEGIN SIMULATION ===" << std::endl;;
                 #endif // DEBUG_OUTPUT
 
-                // set fog color
+                // physics simulation
+                timeCurrent = timer->getTime();
+                const float step = timeCurrent - timePrevious;
+                dynamicsWorld->stepSimulation((step / 1000.0), 10, tick / 1000.0f);
+                #if DEBUG_OUTPUT
+                    std::cout << "Simulation step: " << step << "ms" << std::endl;
+                #endif // DEBUG_OUTPUT
+                timePrevious = timeCurrent;
+
+                if (eventReceiver->checkKeyPressed(KEY_ESCAPE)) {
+                    gui->initialize(Screen::PAUSE_MENU);
+                    break;
+                }
+                if (eventReceiver->checkKeyPressed(KEY_F3))
+                    gui->getCurrentScreenAsHUD().setInfoVisible(!gui->getCurrentScreenAsHUD().getInfoVisible());
+
+                explosion->setPosition(plane->getPosition());
+
+                if (plane->getExploded()) {
+                    explosion->explode();
+                    plane->setExploded(false);
+
+                    gui->initialize(Screen::GAME_OVER);
+                    break;
+                }
+
+
+                deltaTime = timer->getTime() - accumulator;
+                #if DEBUG_OUTPUT
+                    std::cout << "Control handling delta: " << deltaTime << "ms" << std::endl;
+                #endif // DEBUG_OUTPUT
+                while (deltaTime >= tick) {
+                    deltaTime -= tick;
+                    accumulator += tick;
+
+                    obstacleGenerator->generate(plane->getNode().getPosition()); // generate obstacles
+                    planeControl->handle(*eventReceiver); // handle plane controls
+                    plane->addScore(2);
+                }
+
+                #if DEBUG_OUTPUT
+                    std::cout << "=== END_SIMULATION ===" << std::endl << std::endl;
+                #endif
+
+                // rendering
                 #if FOG_ENABLED && IRIDESCENT_FOG
                     driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300,
                         configuration.renderDistance, 0.01f, true, true);
                 #endif // FOG_ENABLED && IRIDESCENT_FOG
 
-                // set light color
                 #if IRIDESCENT_LIGHT
                     lightData = light->getLightData();
                     lightData.DiffuseColor = color;
@@ -548,54 +591,14 @@ bool Game::run()
                 updateHUD();
                 updateCamera(); // update camera position, target, and rotation
 
-                //set cursor invisible
-                device->getCursorControl()->setVisible(false);
+                device->getCursorControl()->setVisible(false); //set cursor invisible
 
-                // generate obstacles
-                obstacleGenerator->generate(plane->getNode().getPosition());
-
-                if (eventReceiver->checkKeyPressed(KEY_ESCAPE))
-                    gui->initialize(Screen::PAUSE_MENU);
-                if (eventReceiver->checkKeyPressed(KEY_F3))
-                    gui->getCurrentScreenAsHUD().setInfoVisible(!gui->getCurrentScreenAsHUD().getInfoVisible());
-
-                explosion->setPosition(plane->getPosition());
-                sceneManager->drawAll(); // draw scene
-
-                if (plane->getExploded()) {
-                    explosion->explode();
-                    plane->setExploded(false);
-
-                    gui->initialize(Screen::GAME_OVER);
-                }
-
-                time_physics_curr = timer->getTime();
-                // physics simulation
-                const float step = time_physics_curr - time_physics_prev;
-                dynamicsWorld->stepSimulation((step / 1000.0), 10);
-                #if DEBUG_OUTPUT
-                    std::cout << "Simulation step: " << step << "ms" << std::endl;
-                #endif // DEBUG_OUTPUT
-                time_physics_prev = time_physics_curr;
                 #if DEBUG_DRAWER_ENABLED
                     dynamicsWorld->debugDrawWorld();
                 #endif // DEBUG_DRAWER_ENABLED
-                u64 dt = timer->getTime() - time_gameclock;
 
-                #if DEBUG_OUTPUT
-                    std::cout << "Control handling delta: " << dt << "ms" << std::endl;
-                #endif // DEBUG_OUTPUT
-                while (dt >= TickMs) {
-                    dt -= TickMs;
-                    time_gameclock += TickMs;
+                sceneManager->drawAll(); // draw scene
 
-                    planeControl->handle(*eventReceiver); // handle plane controls
-                    plane->addScore(2);
-                }
-
-                #if DEBUG_OUTPUT
-                    std::cout << "=== END_SIMULATION ===" << std::endl << std::endl;
-                #endif
                 break;
             }
             default:
@@ -606,8 +609,8 @@ bool Game::run()
             driver->endScene();
         } else {
             if (gui->getCurrentScreenIndex() == Screen::PAUSE_MENU) {
-                time_physics_curr = time_physics_prev = timer->getTime();
-                time_gameclock = timer->getTime() - timer->getTime() % TickMs;
+                timeCurrent = timePrevious = timer->getTime();
+                accumulator = timer->getTime() - deltaTime;
                 device->yield();
             } else
                 gui->initialize(Screen::PAUSE_MENU);

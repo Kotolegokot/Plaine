@@ -19,7 +19,6 @@
 
 #include <list>
 #include <memory>
-#include <functional>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
