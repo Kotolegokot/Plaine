@@ -14,7 +14,7 @@
  * along with PlaneRunner. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "GameOverScreen.h"
+#include "screens/GameOverScreen.h"
 
 using namespace irr;
 
