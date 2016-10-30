@@ -18,6 +18,7 @@
 #define ICOSAHEDRON_H
 
 #include <cmath>
+#include "BulletCollision/CollisionShapes/btConvexPointCloudShape.h"
 #include "ObjMesh.h"
 #include "IBody.h"
 
@@ -66,12 +67,8 @@ protected:
 
     virtual void createShape() override
     {
-        if (!objMesh)
-            objMesh = new ObjMesh(ICOSAHEDRON_MODEL);
-
-        shape = std::make_unique<btConvexHullShape>();
-        objMesh->setPoints((btConvexHullShape &) *shape);
-        shape->setLocalScaling(btVector3(edge, edge, edge));
+        shape = std::make_unique<btConvexPointCloudShape>(objMesh->getPoints(), objMesh->getPointsCount(),
+                                                          btVector3(edge, edge, edge));
     }
 
 

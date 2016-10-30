@@ -16,4 +16,4 @@
 
 #include "obstacles/Cone.h"
 
-ObjMesh *Cone::objMesh = nullptr;
+ObjMesh *Cone::objMesh = new ObjMesh(CONE_MODEL);

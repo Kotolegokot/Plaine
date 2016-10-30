@@ -16,4 +16,4 @@
 
 #include "obstacles/Tetrahedron.h"
 
-ObjMesh *Tetrahedron::objMesh = nullptr;
+ObjMesh *Tetrahedron::objMesh = new ObjMesh(TETRAHEDRON_MODEL);

@@ -16,4 +16,4 @@
 
 #include "obstacles/Icosphere2.h"
 
-ObjMesh *Icosphere2::objMesh = nullptr;
+ObjMesh *Icosphere2::objMesh = new ObjMesh(ICOSPHERE2_MODEL);

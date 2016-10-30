@@ -17,6 +17,7 @@
 #ifndef ICOSPHERE2_H
 #define ICOSPHERE2_H
 
+#include "BulletCollision/CollisionShapes/btConvexPointCloudShape.h"
 #include "ObjMesh.h"
 #include "IBody.h"
 #include <cmath>
@@ -66,12 +67,8 @@ protected:
 
     virtual void createShape() override
     {
-        if (!objMesh)
-            objMesh = new ObjMesh(ICOSPHERE2_MODEL);
-
-        shape = std::make_unique<btConvexHullShape>();
-        objMesh->setPoints((btConvexHullShape &) *shape);
-        shape->setLocalScaling(btVector3(radius, radius, radius) * 2);
+        shape = std::make_unique<btConvexPointCloudShape>(objMesh->getPoints(), objMesh->getPointsCount(),
+                                                          btVector3(radius, radius, radius) * 2);
     }
 
 

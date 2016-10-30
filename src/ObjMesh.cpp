@@ -286,7 +286,7 @@ void ObjMesh::loadMesh(const std::string &filename, btScalar scale)
     }*/
 }
 
-std::unique_ptr<btTriangleMesh> ObjMesh::getTriangleMesh()
+std::unique_ptr<btTriangleMesh> ObjMesh::getTriangleMesh() const
 {
     auto triangleMesh = std::make_unique<btTriangleMesh>();
     for (const std::vector<size_t> &polygon : polygons)
@@ -294,6 +294,16 @@ std::unique_ptr<btTriangleMesh> ObjMesh::getTriangleMesh()
             triangleMesh->addTriangle(vertices[polygon[0]], vertices[polygon[i]], vertices[polygon[i + 1]]);
 
     return triangleMesh;
+}
+
+btVector3 *ObjMesh::getPoints()
+{
+    return vertices.data();
+}
+
+size_t ObjMesh::getPointsCount() const
+{
+    return vertices.size();
 }
 
 void ObjMesh::setPoints(btConvexHullShape &shape)

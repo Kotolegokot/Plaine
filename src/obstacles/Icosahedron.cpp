@@ -16,4 +16,4 @@
 
 #include "obstacles/Icosahedron.h"
 
-ObjMesh *Icosahedron::objMesh = nullptr;
+ObjMesh *Icosahedron::objMesh = new ObjMesh(ICOSAHEDRON_MODEL);
