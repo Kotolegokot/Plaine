@@ -458,13 +458,13 @@ bool Game::run()
                 driver->beginScene(true, true, DEFAULT_COLOR);
             #endif // IRIDESCENT_BACKGROUND
 
-
             // catch window resize
             if (configuration.resolution != driver->getScreenSize()) {
                 configuration.resolution = driver->getScreenSize();
                 gui->resize();
                 camera->setAspectRatio((f32) configuration.resolution.Width / configuration.resolution.Height);
             }
+
             switch (gui->getCurrentScreenIndex()) {
             case Screen::PAUSE_MENU:
                 // screen size
@@ -478,6 +478,23 @@ bool Game::run()
 
                 // set cursor visible
                 device->getCursorControl()->setVisible(true);
+
+                // rendering
+                #if FOG_ENABLED && IRIDESCENT_FOG
+                    driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300,
+                        configuration.renderDistance, 0.01f, true, true);
+                #endif // FOG_ENABLED && IRIDESCENT_FOG
+                #if IRIDESCENT_LIGHT
+                    lightData = light->getLightData();
+                    lightData.DiffuseColor = color;
+                    lightData.AmbientColor = color;
+                    light->setLightData(lightData);
+                #endif // IRIDESCENT_LIGHT
+                updateCamera(); // update camera position, target, and rotation
+                #if DEBUG_DRAWER_ENABLED
+                    dynamicsWorld->debugDrawWorld();
+                #endif // DEBUG_DRAWER_ENABLED
+                sceneManager->drawAll(); // draw scene
 
                 if (eventReceiver->checkEvent(ID_BUTTON_RESUME) ||
                     eventReceiver->checkKeyPressed(KEY_ESCAPE))
@@ -501,7 +518,9 @@ bool Game::run()
 
                 timeCurrent = timePrevious = timer->getTime();
                 accumulator = timer->getTime() - deltaTime;
+
                 break;
+
             case Screen::GAME_OVER: {
                 {
                     core::stringw score(_w("Your score: "));
@@ -527,6 +546,20 @@ bool Game::run()
                     std::cout << "=== END_SIMULATION ===" << std::endl << std::endl;
                 #endif
 
+                // rendering
+                #if FOG_ENABLED && IRIDESCENT_FOG
+                    driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300,
+                        configuration.renderDistance, 0.01f, true, true);
+                #endif // FOG_ENABLED && IRIDESCENT_FOG
+                #if IRIDESCENT_LIGHT
+                    lightData = light->getLightData();
+                    lightData.DiffuseColor = color;
+                    lightData.AmbientColor = color;
+                    light->setLightData(lightData);
+                #endif // IRIDESCENT_LIGHT
+                #if DEBUG_DRAWER_ENABLED
+                    dynamicsWorld->debugDrawWorld();
+                #endif // DEBUG_DRAWER_ENABLED
                 sceneManager->drawAll(); // draw scene
 
                 handleSelecting();
@@ -554,7 +587,7 @@ bool Game::run()
 
                 if (eventReceiver->checkKeyPressed(KEY_ESCAPE)) {
                     gui->initialize(Screen::PAUSE_MENU);
-                    break;
+                    continue;
                 }
                 if (eventReceiver->checkKeyPressed(KEY_F3)) {
                     gui->getCurrentScreenAsHUD().setInfoVisible(!gui->getCurrentScreenAsHUD().getInfoVisible());
