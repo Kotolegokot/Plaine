@@ -45,6 +45,9 @@ public:
 
     void setExploded(bool exploded);
     bool getExploded() const;
+
+    // be careful with because plane becomes completely
+    //     useless after calling this method
     void disappear();
 
     // some convenient

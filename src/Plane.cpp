@@ -38,6 +38,9 @@ bool Plane::getExploded() const
 
 void Plane::disappear()
 {
+    if (!rigidBody)
+        return;
+
     static_cast<MotionState *>(rigidBody->getMotionState())->getNode().setVisible(false);
     world.removeRigidBody(rigidBody.get());
     rigidBody.reset();
