@@ -601,7 +601,7 @@ bool Game::run()
                     plane->disappear();
 
                     gui->initialize(Screen::GAME_OVER);
-                    break;
+                    continue;
                 }
 
                 deltaTime = timer->getTime() - accumulator;
