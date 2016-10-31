@@ -33,6 +33,4 @@ target_link_libraries(${PROJECT_NAME}
 
 if(DEBUG)
 	set(CMAKE_BUILD_TYPE "Debug")
-else()
-	set(CMAKE_BUILD_TYPE "Release") # default build type
 endif()
