@@ -502,7 +502,7 @@ bool Game::run()
                 timeCurrent = timePrevious = timer->getTime();
                 accumulator = timer->getTime() - deltaTime;
                 break;
-            case Screen::GAME_OVER:
+            case Screen::GAME_OVER: {
                 {
                     core::stringw score(_w("Your score: "));
                     score += plane->getScore();
@@ -512,6 +512,23 @@ bool Game::run()
                 // set cursor visible
                 device->getCursorControl()->setVisible(true);
 
+                // still continue simulation as we wanna see plane blowing up when we lose
+                #if DEBUG_OUTPUT
+                    std::cout << "=== BEGIN SIMULATION ===" << std::endl;;
+                #endif // DEBUG_OUTPUT
+                timeCurrent = timer->getTime();
+                const float step = timeCurrent - timePrevious;
+                dynamicsWorld->stepSimulation((step / 1000.0), 10, tick / 1000.0f);
+                #if DEBUG_OUTPUT
+                    std::cout << "Simulation step: " << step << "ms" << std::endl;
+                #endif // DEBUG_OUTPUT
+                timePrevious = timeCurrent;
+                #if DEBUG_OUTPUT
+                    std::cout << "=== END_SIMULATION ===" << std::endl << std::endl;
+                #endif
+
+                sceneManager->drawAll(); // draw scene
+
                 handleSelecting();
 
                 if (eventReceiver->checkEvent(ID_BUTTON_MENU)) {
@@ -520,6 +537,7 @@ bool Game::run()
                 }
 
                 break;
+            }
             case Screen::HUD: {
                 #if DEBUG_OUTPUT
                     std::cout << "=== BEGIN SIMULATION ===" << std::endl;;
@@ -547,12 +565,11 @@ bool Game::run()
 
                 if (plane->getExploded()) {
                     explosion->explode();
-                    plane->setExploded(false);
+                    plane->disappear();
 
                     gui->initialize(Screen::GAME_OVER);
                     break;
                 }
-
 
                 deltaTime = timer->getTime() - accumulator;
                 #if DEBUG_OUTPUT

@@ -34,7 +34,8 @@ public:
 
     virtual ~IBody()
     {
-        world.removeRigidBody(rigidBody.get());
+        if (rigidBody)
+            world.removeRigidBody(rigidBody.get());
     }
 
     btRigidBody &getRigidBody()

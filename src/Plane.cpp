@@ -36,6 +36,13 @@ bool Plane::getExploded() const
     return exploded;
 }
 
+void Plane::disappear()
+{
+    static_cast<MotionState *>(rigidBody->getMotionState())->getNode().setVisible(false);
+    world.removeRigidBody(rigidBody.get());
+    rigidBody.reset();
+}
+
 std::unique_ptr<scene::ISceneNode> Plane::createNode()
 {
     std::unique_ptr<scene::IMesh> mesh(device.getSceneManager()->getMesh(PLANE_MODEL));

@@ -45,6 +45,7 @@ public:
 
     void setExploded(bool exploded);
     bool getExploded() const;
+    void disappear();
 
     // some convenient
     btVector3 getLinearVelocity() const;
