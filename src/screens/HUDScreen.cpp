@@ -45,7 +45,7 @@ void HUDScreen::initialize(s32 buttonWidth, s32 buttonHeight)
     resize(buttonWidth, buttonHeight);
 }
 
-void HUDScreen::reload(s32 buttonWidth, s32 buttonHeight)
+void HUDScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 {
     textCameraPosition->setVisible(allVisible && infoVisible);
     textObstaclesCount->setVisible(allVisible && infoVisible);

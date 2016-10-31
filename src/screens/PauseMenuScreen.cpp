@@ -41,7 +41,7 @@ void PauseMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
     resize(buttonWidth, buttonHeight);
 }
 
-void PauseMenuScreen::reload(s32 buttonWidth, s32 buttonHeight)
+void PauseMenuScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 {
     buttonResume->setText(_wp("Resume"));
     buttonResume->setToolTipText(_wp("Resume game"));

@@ -28,9 +28,10 @@ void ControlSettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
     textScreenSize = guiEnvironment.addStaticText(L"SCREEN_SIZE", core::rect<s32>(0, 0, 0, 0));
 
-    static constexpr std::array<u32, CONTROLS_COUNT> ids = { ID_BUTTON_CONTROL_UP, ID_BUTTON_CONTROL_LEFT,
-                                                             ID_BUTTON_CONTROL_DOWN, ID_BUTTON_CONTROL_RIGHT,
-                                                             ID_BUTTON_CONTROL_CW_ROLL, ID_BUTTON_CONTROL_CCW_ROLL };
+    static constexpr std::array<u32, CONTROLS_COUNT>
+            ids { { ID_BUTTON_CONTROL_UP, ID_BUTTON_CONTROL_LEFT,
+                    ID_BUTTON_CONTROL_DOWN, ID_BUTTON_CONTROL_RIGHT,
+                    ID_BUTTON_CONTROL_CW_ROLL, ID_BUTTON_CONTROL_CCW_ROLL } };
     for (size_t i = 0; i < CONTROLS_COUNT; i++) {
         textsControl[i] = guiEnvironment.addStaticText(L"CONTROL", core::rect<s32>(0, 0, 0, 0));
 
@@ -51,9 +52,10 @@ void ControlSettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
     resize(buttonWidth, buttonHeight);
 }
 
-void ControlSettingsScreen::reload(s32 buttonWidth, s32 buttonHeight)
+void ControlSettingsScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 {
-    static constexpr std::array<const char *, CONTROLS_COUNT> texts = { "Up: ", "Left: ", "Down: ", "Right: ", "CW roll", "CCW roll" };
+    static constexpr std::array<const char *, CONTROLS_COUNT>
+            texts { { "Up: ", "Left: ", "Down: ", "Right: ", "CW roll", "CCW roll" } };
     for (size_t i = 0; i < CONTROLS_COUNT; i++) {
         textsControl[i]->setText(_wp(texts[i]));
         buttonsControl[i]->setText(keyCodeName(configuration.controls[i]).c_str());

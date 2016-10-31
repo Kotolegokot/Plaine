@@ -55,7 +55,6 @@ public:
 
 private:
     bool initialized = false;
-    bool pause = false;
 
     bool run();
     void mainMenu();

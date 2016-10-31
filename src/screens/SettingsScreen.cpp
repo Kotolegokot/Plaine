@@ -64,9 +64,8 @@ void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
     resize(buttonWidth, buttonHeight);
 }
 
-void SettingsScreen::reload(s32 buttonWidth, s32 buttonHeight)
+void SettingsScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 {
-
     comboBoxLanguage->addItem(_wp("System language"), 0);
     comboBoxLanguage->addItem(L"English", 1);
     comboBoxLanguage->addItem(L"Русский", 2);

@@ -43,7 +43,7 @@ void MainMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
     resize(buttonWidth, buttonHeight);
 }
 
-void MainMenuScreen::reload(s32 buttonWidth, s32 buttonHeight)
+void MainMenuScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 {
     buttonStart->setText(_wp("Start"));
     buttonStart->setToolTipText(_wp("Start game"));

@@ -38,7 +38,7 @@ void GameOverScreen::initialize(s32 buttonWidth, s32 buttonHeight)
     resize(buttonWidth, buttonHeight);
 }
 
-void GameOverScreen::reload(s32 buttonWidth, s32 buttonHeight)
+void GameOverScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 {
     textMessage->setText(_wp("Losing is fun!"));
     buttonOK->setText(_wp("OK"));
