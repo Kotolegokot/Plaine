@@ -459,14 +459,14 @@ bool Game::run()
             #endif // IRIDESCENT_BACKGROUND
 
 
+            // catch window resize
+            if (configuration.resolution != driver->getScreenSize()) {
+                configuration.resolution = driver->getScreenSize();
+                gui->resize();
+                camera->setAspectRatio((f32) configuration.resolution.Width / configuration.resolution.Height);
+            }
             switch (gui->getCurrentScreenIndex()) {
             case Screen::PAUSE_MENU:
-                // catch window resize
-                if (configuration.resolution != driver->getScreenSize()) {
-                    configuration.resolution = driver->getScreenSize();
-                    gui->resize();
-                }
-
                 // screen size
                 {
                     core::stringw scrs = _w("Screen size: ");
@@ -503,12 +503,6 @@ bool Game::run()
                 accumulator = timer->getTime() - deltaTime;
                 break;
             case Screen::GAME_OVER:
-                // catch window resize
-                if (configuration.resolution != driver->getScreenSize()) {
-                    configuration.resolution = driver->getScreenSize();
-                    gui->resize();
-                }
-
                 {
                     core::stringw score(_w("Your score: "));
                     score += plane->getScore();
