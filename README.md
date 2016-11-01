@@ -19,6 +19,7 @@ Also you can use `cmake` to build the project (doesn't work on Windows yet (mb))
 * `make [-jN]` where N is the number of your processor cores
 
 You can change the compiler used by specifying the CXX variable.
+
 QtCreator works fine, too.
 
 ### Compiler
