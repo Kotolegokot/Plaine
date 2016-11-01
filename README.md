@@ -23,4 +23,4 @@ You can change the compiler used by specifying the `CXX` variable.
 `QtCreator` works fine, too.
 
 ### Compiler
-`TDM-GCC` (Windows), `gcc` (linux), `clang` (linux) have been tested to successfully bulid the project.
+`TDM-GCC` (Windows), `gcc` (linux), `clang` (linux) have been tested to successfully bulid the project. Make sure your compiler supports `C++14`.
