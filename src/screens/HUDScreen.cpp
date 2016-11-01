@@ -32,13 +32,16 @@ void HUDScreen::initialize(s32 buttonWidth, s32 buttonHeight)
     textObstaclesCount = guiEnvironment.addStaticText(L"CUBE_COUNT", core::rect<s32>(10, 10 + 24, 400, 30 + 24));
     textObstaclesCount->setBackgroundColor(video::SColor(120, 255, 255, 255));
 
-    textFPS = guiEnvironment.addStaticText(L"FPS", core::rect<s32>(10, 10 + 24 + 24, 400, 30 + 24 + 24));
+    textFPS = guiEnvironment.addStaticText(L"FPS", core::rect<s32>(10, 10 + 24*2, 400, 30 + 24*2));
     textFPS->setBackgroundColor(video::SColor(120, 255, 255, 255));
 
-    textVelocity = guiEnvironment.addStaticText(L"VELOCITY", core::rect<s32>(10, 10 + 24 + 24 + 24, 400, 30 + 24 + 24 + 24));
+    textVelocity = guiEnvironment.addStaticText(L"VELOCITY", core::rect<s32>(10, 10 + 24*3, 400, 30 + 24*3));
     textVelocity->setBackgroundColor(video::SColor(120, 255, 255, 255));
 
-    textScore = guiEnvironment.addStaticText(L"POINTS", core::rect<s32>(10, 10 + 24 + 24 + 24 + 24, 400, 30 + 24 + 24 + 24 + 24));
+    textAngle = guiEnvironment.addStaticText(L"ANGLE", core::rect<s32>(10, 10 + 24*4, 400, 30 + 24*4));
+    textAngle->setBackgroundColor(video::SColor(120, 255, 255, 255));
+
+    textScore = guiEnvironment.addStaticText(L"POINTS", core::rect<s32>(10, 10 + 24*5, 400, 30 + 24*5));
     textScore->setBackgroundColor(video::SColor(120, 255, 255, 255));
 
     reload(buttonWidth, buttonHeight);
@@ -51,6 +54,7 @@ void HUDScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
     textObstaclesCount->setVisible(allVisible && infoVisible);
     textFPS->setVisible(allVisible && infoVisible);
     textVelocity->setVisible(allVisible && infoVisible);
+    textAngle->setVisible(allVisible && infoVisible);
     textScore->setVisible(allVisible && infoVisible);
 }
 
@@ -60,6 +64,7 @@ void HUDScreen::terminate()
     textObstaclesCount->remove();
     textFPS->remove();
     textVelocity->remove();
+    textAngle->remove();
     textScore->remove();
 }
 

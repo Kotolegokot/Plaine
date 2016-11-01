@@ -713,13 +713,32 @@ void Game::updateHUD()
     {
         core::stringw velocity = _w("Linear velocity: ");
         velocity += (int) plane->getRigidBody().getLinearVelocity().length();
-        velocity += _w(", angular velocity: ");
+        velocity += _w("; Angular velocity: ");
         velocity += plane->getRigidBody().getAngularVelocity().length();
         gui->getCurrentScreenAsHUD().textVelocity->setText(velocity.c_str());
 
         #if DEBUG_OUTPUT
             std::cout << "Linear velocity: " << plane->getRigidBody().getLinearVelocity().length() << std::endl;
             std::cout << "Angular velocity: " << plane->getRigidBody().getAngularVelocity().length() << std::endl;
+        #endif // DEBUG_OUTPUT
+    }
+
+    // rotation counter
+    {
+        btVector3 rotation = plane->getEulerRotation();
+
+        core::stringw rotation_str = _w("Pitch: ");
+        rotation_str += rotation.x();
+        rotation_str += _w("; Yaw: ");
+        rotation_str += rotation.y();
+        rotation_str += _w("; Roll: ");
+        rotation_str += rotation.z();
+        gui->getCurrentScreenAsHUD().textAngle->setText(rotation_str.c_str());
+
+        #if DEBUG_OUTPUT
+            std::cout << "Pitch: " << rotation.x() << std::endl;
+            std::cout << "Yaw: " << rotation.y() << std::endl;
+            std::cout << "Roll: " << rotation.z() << std::endl;
         #endif // DEBUG_OUTPUT
     }
 
