@@ -48,7 +48,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
         btScalar newZ = z + Randomizer::getFloat(-100, 100);
 
         // create obstacles and add them to the deque
-        switch (Randomizer::getInt(0, 6)) {
+        switch (Randomizer::getInt(0, 7)) {
         case 0:
             {
                 Tunnel tunnel(world, device, btVector3(newX, newY, newZ), Randomizer::getFloat(100, 200), Randomizer::getFloat(300, 600));
@@ -71,15 +71,12 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
             }
         case 2:
             {
-                /*
-                std::unique_ptr<IObstacle> obstacle =
-                    std::make_unique<Box>(world, device, btVector3(newX, newY, newZ),
-                        btVector3(Randomizer::getFloat(50.0f, 250.0f), Randomizer::getFloat(50.f, 250.f), Randomizer::getFloat(50.f, 250.f)));
-                obstacles.push_back(std::move(obstacle));
-                obstacleCount++;
+                Valley<5> valley(world, device, btVector3(newX, newY, newZ), 600);
+                valley.addObstaclesToList(obstacles);
+                obstacleCount += valley.getObstacleCount();
                 #if DEBUG_OUTPUT
-                    obstacleGenerated++;
-                #endif // DEBUG_OUTPUT*/
+                    obstacleGenerated += valley.getObstacleCount();
+                #endif
                 break;
             }
         case 3:
@@ -125,9 +122,9 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
             break;
         }
 
-        //if (int(Randomizer::getFloat(1, 1)) == 1)
+        //if (Randomizer::getInt(1, 1) == 1)
         //    body->getRigidBody()->applyTorqueImpulse(btVector3(Randomizer::getFloat(-10000, 10000), Randomizer::getFloat(-10000, 10000), Randomizer::getFloat(-10000, 10000))*body->getMass());
-        //if (int(Randomizer::getFloat(1, 1)) == 1)
+        //if (Randomizer::getInt(1, 1) == 1)
         //    body->getRigidBody()->applyCentralImpulse(btVector3(Randomizer::getFloat(-100, 100), Randomizer::getFloat(-100, 100), Randomizer::getFloat(-100, 100))*body->getMass());
     };
 
@@ -167,7 +164,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
             }
 
     #if DEBUG_OUTPUT
-    std::cout << obstacleGenerated << " obstacles generated" << std::endl;
+        std::cout << obstacleGenerated << " obstacles generated" << std::endl;
     #endif // DEBUG_OUTPUT
 
     // these are the edges of the generated zone

@@ -34,16 +34,11 @@
 #include "obstacles/Cone.h"
 #include "patterns/Crystal.h"
 #include "patterns/Tunnel.h"
-
-// average distance between obstacles
-constexpr btScalar STEP = 800;
-constexpr btScalar START = 3000;
+#include "patterns/Valley.h"
 
 using namespace irr;
 
 // this class is responsible for generating obstacles on the fly
-//
-// don't forget that this class is just a sample
 class ObstacleGenerator
 {
 public:
@@ -58,6 +53,9 @@ public:
     btScalar getBuffer() const;
 
 private:
+    static constexpr btScalar STEP = 800;
+    static constexpr btScalar START = 3000;
+
     btScalar preciseEdge(btScalar edge) const;
     void removeLeftBehind(btScalar playerZ);
     btScalar farValueWithBuffer() const;
