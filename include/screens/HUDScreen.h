@@ -44,6 +44,7 @@ public:
     gui::IGUIStaticText *textObstaclesCount;
     gui::IGUIStaticText *textFPS;
     gui::IGUIStaticText *textVelocity;
+    gui::IGUIStaticText *textAngle;
     gui::IGUIStaticText *textScore;
 
 private:
