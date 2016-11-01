@@ -40,6 +40,9 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
     auto handleCell =  [this](btScalar x, btScalar y, btScalar z)
     #endif // DEBUG_OUTPUT
     {
+        if (z < START)
+            return;
+
         btScalar newX = x + Randomizer::getFloat(-100, 100);
         btScalar newY = y + Randomizer::getFloat(-100, 100);
         btScalar newZ = z + Randomizer::getFloat(-100, 100);

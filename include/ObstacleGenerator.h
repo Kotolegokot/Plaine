@@ -36,7 +36,8 @@
 #include "patterns/Tunnel.h"
 
 // average distance between obstacles
-#define STEP 800
+constexpr btScalar STEP = 800;
+constexpr btScalar START = 3000;
 
 using namespace irr;
 
