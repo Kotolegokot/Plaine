@@ -92,6 +92,10 @@ void GUI::initialize(unsigned screenIndex)
     currentScreenIndex = screenIndex;
     getCurrentScreen().initialize(buttonWidth, buttonHeight);
     selectableElements = getCurrentScreen().getSelectableElements();
+
+    guiEnvironment.setFocus(selectableElements.empty() ? 0 : selectableElements.front());
+    selectedElement = 0;
+    updateSelection();
 }
 
 void GUI::reload()
@@ -101,6 +105,9 @@ void GUI::reload()
 
 void GUI::updateSelection()
 {
+    if (selectableElements.empty())
+        return;
+
     getCurrentScreen().reload(buttonWidth, buttonHeight);
 
     if (guiEnvironment.getFocus()->getType() != gui::EGUIET_EDIT_BOX &&
@@ -115,6 +122,9 @@ void GUI::updateSelection()
 
 void GUI::selectWithTab()
 {
+    if (selectableElements.empty())
+        return;
+
     for (size_t i = 0; i < selectableElements.size(); i++)
         if (guiEnvironment.getFocus() == selectableElements[i]) {
             selectedElement = i;
@@ -125,6 +135,9 @@ void GUI::selectWithTab()
 
 void GUI::selectElement(size_t index)
 {
+    if (selectableElements.empty())
+        return;
+
     guiEnvironment.setFocus(selectableElements[index]);
     selectedElement = index;
     updateSelection();
@@ -132,6 +145,9 @@ void GUI::selectElement(size_t index)
 
 void GUI::selectNextElement()
 {
+    if (selectableElements.empty())
+        return;
+
     if (selectedElement < selectableElements.size() - 1)
         selectedElement++;
     else
@@ -143,6 +159,9 @@ void GUI::selectNextElement()
 
 void GUI::selectPreviousElement()
 {
+    if (selectableElements.empty())
+        return;
+
     if (selectedElement > 0)
         selectedElement--;
     else
@@ -155,9 +174,6 @@ void GUI::selectPreviousElement()
 void GUI::terminate()
 {
     initialize(Screen::TERMINATED);
-
-    guiEnvironment.setFocus(0);
-    selectedElement = 0;
 }
 
 void GUI::setVisible(bool visible)

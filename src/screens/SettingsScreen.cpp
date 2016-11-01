@@ -58,7 +58,7 @@ void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
     buttonMenu->setID(ID_BUTTON_MENU);
 
     buttonQuit = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
-    buttonQuit->setID(ID_BUTTON_MENU);
+    buttonQuit->setID(ID_BUTTON_QUIT);
 
     reload(buttonWidth, buttonHeight);
     resize(buttonWidth, buttonHeight);
@@ -240,7 +240,7 @@ void SettingsScreen::resize(s32 buttonWidth, s32 buttonHeight)
 std::vector<gui::IGUIElement *> SettingsScreen::getSelectableElements()
 {
     return { checkBoxVSync, checkBoxStencilBuffer, buttonToggleFullscreen,
-        buttonControlSettings, buttonMenu, buttonMenu };
+        buttonControlSettings, buttonMenu, buttonQuit };
 }
 
 void SettingsScreen::setVisible(bool visible)
