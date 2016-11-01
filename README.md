@@ -16,9 +16,10 @@ Also you can use `cmake` to build the project (doesn't work on Windows yet (mb))
 * `mkdir build`
 * `cd build`
 * `cmake .. [-DDEBUG=1]`
-* `make`
+* `make [-jN]` where N is the number of your processor cores
 
 You can change the compiler used by specifying the CXX variable.
+QtCreator works fine, too.
 
 ### Compiler
 TDM-GCC (Windows), gcc (linux), clang (linux) have been tested to successfully bulid the project.
