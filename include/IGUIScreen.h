@@ -41,7 +41,7 @@ protected:
     const ConfigData &configuration;
     gui::IGUIEnvironment &guiEnvironment;
 
-    static constexpr s32 space = 10;
+    static constexpr s32 SPACE = 10;
 };
 
 #endif // IGUISCREEN_H

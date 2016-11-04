@@ -30,19 +30,19 @@ public:
     void handle(EventReceiver &eventReceiver);
 
 private:
-    const btScalar maxPitchAngle = 0.3f;
-    const btScalar maxPitchVelocity = 1.0f;
+    static constexpr btScalar MAX_PITCH_ANGLE = 0.3f;
+    static constexpr btScalar MAX_PITCH_VELOCITY = 1.0f;
 
-    const btScalar maxYawAngle = 0.30f;
-    const btScalar maxYawVelocity = 1.0f;
+    static constexpr btScalar MAX_YAW_ANGLE = 0.30f;
+    static constexpr btScalar MAX_YAW_VELOCITY = 1.0f;
 
-    const btScalar maxRollVelocity = 3.0f;
-    const btScalar rollVelocityStep = 0.2f;
+    static constexpr btScalar MAX_ROLL_VELOCITY = 3.0f;
+    static constexpr btScalar ROLL_VELOCITY_STEP = 0.2f;
 
-    const btScalar leftImpulse = 50.0f;
-    const btScalar rightImpulse = 50.0f;
-    const btScalar upImpulse = 50.0f;
-    const btScalar downImpulse = 50.0f;
+    static constexpr btScalar LEFT_IMPULSE = 50.0f;
+    static constexpr btScalar RIGHT_IMPULSE = 50.0f;
+    static constexpr btScalar UP_IMPULSE = 50.0f;
+    static constexpr btScalar DOWN_IMPULSE = 50.0f;
 
     Plane &plane;
     const Controls &controls;

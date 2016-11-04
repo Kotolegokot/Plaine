@@ -20,6 +20,9 @@
 
 using namespace irr;
 
+constexpr btScalar ObstacleGenerator::STEP;
+constexpr btScalar ObstacleGenerator::START;
+
 ObstacleGenerator::ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, btScalar farValue, btScalar buffer) :
     device(device), farValue(farValue), buffer(buffer), world(world) {}
 
@@ -71,6 +74,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
             }
         case 2:
             {
+                break;
                 Valley<5> valley(world, device, btVector3(newX, newY, newZ), 600);
                 valley.addObstaclesToList(obstacles);
                 obstacleCount += valley.getObstacleCount();

@@ -65,20 +65,20 @@ void MainMenuScreen::terminate()
 
 void MainMenuScreen::resize(s32 buttonWidth, s32 buttonHeight)
 {
-    buttonStart->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                     configuration.resolution.Height - 3 * buttonHeight - 3 * space,
-                                                     configuration.resolution.Width - 2 * space,
-                                                     configuration.resolution.Height - 2 * buttonHeight - 3 * space));
+    buttonStart->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                     configuration.resolution.Height - 3 * buttonHeight - 3 * SPACE,
+                                                     configuration.resolution.Width - 2 * SPACE,
+                                                     configuration.resolution.Height - 2 * buttonHeight - 3 * SPACE));
 
-    buttonSettings->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                        configuration.resolution.Height - 2 * buttonHeight - 2 * space,
-                                                        configuration.resolution.Width - 2 * space,
-                                                        configuration.resolution.Height - buttonHeight - 2 * space));
+    buttonSettings->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                        configuration.resolution.Height - 2 * buttonHeight - 2 * SPACE,
+                                                        configuration.resolution.Width - 2 * SPACE,
+                                                        configuration.resolution.Height - buttonHeight - 2 * SPACE));
 
-    buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                    configuration.resolution.Height - buttonHeight - space,
-                                                    configuration.resolution.Width - 2 * space,
-                                                    configuration.resolution.Height - space));
+    buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                    configuration.resolution.Height - buttonHeight - SPACE,
+                                                    configuration.resolution.Width - 2 * SPACE,
+                                                    configuration.resolution.Height - SPACE));
 }
 
 std::vector<gui::IGUIElement *> MainMenuScreen::getSelectableElements()

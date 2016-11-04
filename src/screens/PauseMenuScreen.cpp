@@ -63,20 +63,20 @@ void PauseMenuScreen::terminate()
 
 void PauseMenuScreen::resize(s32 buttonWidth, s32 buttonHeight)
 {
-    buttonResume->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                      configuration.resolution.Height - 3 * buttonHeight - 3 * space,
-                                                      configuration.resolution.Width - 2 * space,
-                                                      configuration.resolution.Height - 2 * buttonHeight - 3 * space));
+    buttonResume->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                      configuration.resolution.Height - 3 * buttonHeight - 3 * SPACE,
+                                                      configuration.resolution.Width - 2 * SPACE,
+                                                      configuration.resolution.Height - 2 * buttonHeight - 3 * SPACE));
 
-    buttonMenu->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                    configuration.resolution.Height - 2 * buttonHeight - 2 * space,
-                                                    configuration.resolution.Width - 2 * space,
-                                                    configuration.resolution.Height - buttonHeight - 2 * space));
+    buttonMenu->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                    configuration.resolution.Height - 2 * buttonHeight - 2 * SPACE,
+                                                    configuration.resolution.Width - 2 * SPACE,
+                                                    configuration.resolution.Height - buttonHeight - 2 * SPACE));
 
-    buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                    configuration.resolution.Height - buttonHeight - space,
-                                                    configuration.resolution.Width - 2 * space,
-                                                    configuration.resolution.Height - space));
+    buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                    configuration.resolution.Height - buttonHeight - SPACE,
+                                                    configuration.resolution.Width - 2 * SPACE,
+                                                    configuration.resolution.Height - SPACE));
 }
 
 std::vector<gui::IGUIElement *> PauseMenuScreen::getSelectableElements()

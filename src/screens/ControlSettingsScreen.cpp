@@ -87,31 +87,31 @@ void ControlSettingsScreen::terminate()
 void ControlSettingsScreen::resize(s32 buttonWidth, s32 buttonHeight)
 {
     for (size_t i = 0; i < CONTROLS_COUNT; i++) {
-        textsControl[i]->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                             configuration.resolution.Height - (9 - i) * (buttonHeight + space),
-                                                             configuration.resolution.Width - buttonWidth / 2 - 2 * space,
-                                                             configuration.resolution.Height - (8 - i) * buttonHeight - (9 - i) * space));
+        textsControl[i]->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                             configuration.resolution.Height - (9 - i) * (buttonHeight + SPACE),
+                                                             configuration.resolution.Width - buttonWidth / 2 - 2 * SPACE,
+                                                             configuration.resolution.Height - (8 - i) * buttonHeight - (9 - i) * SPACE));
 
-        buttonsControl[i]->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth / 2 - 2 * space,
-                                                               configuration.resolution.Height - (9 - i) * (buttonHeight + space),
-                                                               configuration.resolution.Width - 2 * space,
-                                                               configuration.resolution.Height - (8 - i) * buttonHeight - (9 - i) * space));
+        buttonsControl[i]->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth / 2 - 2 * SPACE,
+                                                               configuration.resolution.Height - (9 - i) * (buttonHeight + SPACE),
+                                                               configuration.resolution.Width - 2 * SPACE,
+                                                               configuration.resolution.Height - (8 - i) * buttonHeight - (9 - i) * SPACE));
     }
 
-    buttonDefaultControls->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                               configuration.resolution.Height - 3 * buttonHeight - 3 * space,
-                                                               configuration.resolution.Width - 2 * space,
-                                                               configuration.resolution.Height - 2 * buttonHeight - 3 * space));
+    buttonDefaultControls->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                               configuration.resolution.Height - 3 * buttonHeight - 3 * SPACE,
+                                                               configuration.resolution.Width - 2 * SPACE,
+                                                               configuration.resolution.Height - 2 * buttonHeight - 3 * SPACE));
 
-    buttonSettings->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                        configuration.resolution.Height - 2 * buttonHeight - 2 * space,
-                                                        configuration.resolution.Width - 2 * space,
-                                                        configuration.resolution.Height - buttonHeight - 2 * space));
+    buttonSettings->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                        configuration.resolution.Height - 2 * buttonHeight - 2 * SPACE,
+                                                        configuration.resolution.Width - 2 * SPACE,
+                                                        configuration.resolution.Height - buttonHeight - 2 * SPACE));
 
-    buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                    configuration.resolution.Height - buttonHeight - space,
-                                                    configuration.resolution.Width - 2 * space,
-                                                    configuration.resolution.Height - space));
+    buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                    configuration.resolution.Height - buttonHeight - SPACE,
+                                                    configuration.resolution.Width - 2 * SPACE,
+                                                    configuration.resolution.Height - SPACE));
 }
 
 std::vector<gui::IGUIElement *> ControlSettingsScreen::getSelectableElements()

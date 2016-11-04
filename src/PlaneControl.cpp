@@ -16,6 +16,17 @@
 
 #include "PlaneControl.h"
 
+constexpr btScalar PlaneControl::MAX_PITCH_ANGLE;
+constexpr btScalar PlaneControl::MAX_PITCH_VELOCITY;
+constexpr btScalar PlaneControl::MAX_YAW_ANGLE;
+constexpr btScalar PlaneControl::MAX_YAW_VELOCITY;
+constexpr btScalar PlaneControl::MAX_ROLL_VELOCITY;
+constexpr btScalar PlaneControl::ROLL_VELOCITY_STEP;
+constexpr btScalar PlaneControl::LEFT_IMPULSE;
+constexpr btScalar PlaneControl::RIGHT_IMPULSE;
+constexpr btScalar PlaneControl::UP_IMPULSE;
+constexpr btScalar PlaneControl::DOWN_IMPULSE;
+
 PlaneControl::PlaneControl(Plane &plane, const Controls &controls) :
     plane(plane), controls(controls) {}
 
@@ -39,23 +50,23 @@ void PlaneControl::handle(EventReceiver &eventReceiver)
 
         if (!(up && down)) {
             if (up) {
-                sideImpulse += btVector3(0, upImpulse, 0);
+                sideImpulse += btVector3(0, UP_IMPULSE, 0);
 
-                if (angularVelocity.x() - 0.3f >= -maxPitchVelocity)
+                if (angularVelocity.x() - 0.3f >= -MAX_PITCH_VELOCITY)
                     angularVelocity.setX(angularVelocity.x() - 0.3f);
             }
 
             if (down) {
-                sideImpulse += btVector3(0, -downImpulse, 0);
+                sideImpulse += btVector3(0, -DOWN_IMPULSE, 0);
 
-                if (angularVelocity.x() + 0.3f <= maxPitchVelocity)
+                if (angularVelocity.x() + 0.3f <= MAX_PITCH_VELOCITY)
                     angularVelocity.setX(angularVelocity.x() + 0.3f);
             }
         }
 
-        if (rotation.x() < -maxPitchAngle)
+        if (rotation.x() < -MAX_PITCH_ANGLE)
             angularVelocity.setX(0);
-        else if (rotation.x() > maxPitchAngle)
+        else if (rotation.x() > MAX_PITCH_ANGLE)
             angularVelocity.setX(0);
 
         if (!up && !down) {
@@ -74,23 +85,23 @@ void PlaneControl::handle(EventReceiver &eventReceiver)
 
         if (!(left && right)) {
             if (left) {
-                sideImpulse += btVector3(-leftImpulse, 0, 0);
+                sideImpulse += btVector3(-LEFT_IMPULSE, 0, 0);
 
-                if (angularVelocity.y() - 0.3f >= -maxYawVelocity)
+                if (angularVelocity.y() - 0.3f >= -MAX_YAW_VELOCITY)
                     angularVelocity.setY(angularVelocity.y() - 0.3f);
             }
 
             if (right) {
-                sideImpulse += btVector3(rightImpulse, 0, 0);
+                sideImpulse += btVector3(RIGHT_IMPULSE, 0, 0);
 
-                if (angularVelocity.y() + 0.3f <= maxYawVelocity)
+                if (angularVelocity.y() + 0.3f <= MAX_YAW_VELOCITY)
                     angularVelocity.setY(angularVelocity.y() + 0.3f);
             }
         }
 
-        if (rotation.y() < -maxYawAngle)
+        if (rotation.y() < -MAX_YAW_ANGLE)
             angularVelocity.setY(0);
-        if (rotation.y() > maxYawAngle)
+        if (rotation.y() > MAX_YAW_ANGLE)
             angularVelocity.setY(0);
 
         if (!left && !right) {
@@ -111,24 +122,24 @@ void PlaneControl::handle(EventReceiver &eventReceiver)
 
         if (!(ccw && cw)) {
             if (ccw)
-                if (angularVelocity.z() + rollVelocityStep <= maxRollVelocity)
-                    angularVelocity.setZ(angularVelocity.z() + rollVelocityStep);
+                if (angularVelocity.z() + ROLL_VELOCITY_STEP <= MAX_ROLL_VELOCITY)
+                    angularVelocity.setZ(angularVelocity.z() + ROLL_VELOCITY_STEP);
 
             if (cw)
-                if (angularVelocity.z() - rollVelocityStep >= -maxRollVelocity)
-                    angularVelocity.setZ(angularVelocity.z() - rollVelocityStep);
+                if (angularVelocity.z() - ROLL_VELOCITY_STEP >= -MAX_ROLL_VELOCITY)
+                    angularVelocity.setZ(angularVelocity.z() - ROLL_VELOCITY_STEP);
         }
 
         if (!ccw && !cw) {
             if (angularVelocity.z() > 0) {
-                angularVelocity.setZ(angularVelocity.z() - rollVelocityStep);
+                angularVelocity.setZ(angularVelocity.z() - ROLL_VELOCITY_STEP);
 
                 if (angularVelocity.z() < 0)
                     angularVelocity.setZ(0);
             }
 
             if (angularVelocity.z() < 0) {
-                angularVelocity.setZ(angularVelocity.z() + rollVelocityStep);
+                angularVelocity.setZ(angularVelocity.z() + ROLL_VELOCITY_STEP);
 
                 if (angularVelocity.z() > 0)
                     angularVelocity.setZ(0);

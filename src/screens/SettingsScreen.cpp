@@ -166,65 +166,65 @@ void SettingsScreen::terminate()
 
 void SettingsScreen::resize(s32 buttonWidth, s32 buttonHeight)
 {
-    textLanguage->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3 * buttonWidth / 2 - 2 * space,
-                                                      configuration.resolution.Height - 9 * buttonHeight - 9 * space,
-                                                      configuration.resolution.Width - buttonWidth - 2 * space,
-                                                      configuration.resolution.Height - 8 * buttonHeight - 9 * space));
+    textLanguage->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3 * buttonWidth / 2 - 2 * SPACE,
+                                                      configuration.resolution.Height - 9 * buttonHeight - 9 * SPACE,
+                                                      configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                      configuration.resolution.Height - 8 * buttonHeight - 9 * SPACE));
 
-    comboBoxLanguage->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                          configuration.resolution.Height - 9 * buttonHeight - 9 * space,
-                                                          configuration.resolution.Width - 2 * space,
-                                                          configuration.resolution.Height - 8 * buttonHeight - 9 * space));
+    comboBoxLanguage->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                          configuration.resolution.Height - 9 * buttonHeight - 9 * SPACE,
+                                                          configuration.resolution.Width - 2 * SPACE,
+                                                          configuration.resolution.Height - 8 * buttonHeight - 9 * SPACE));
 
-    textResolution->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3 * buttonWidth / 2 - 2 * space,
-                                                        configuration.resolution.Height - 8 * buttonHeight - 8 * space,
-                                                        configuration.resolution.Width - buttonWidth - 2 * space,
-                                                        configuration.resolution.Height - 7 * buttonHeight - 8 * space));
+    textResolution->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3 * buttonWidth / 2 - 2 * SPACE,
+                                                        configuration.resolution.Height - 8 * buttonHeight - 8 * SPACE,
+                                                        configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                        configuration.resolution.Height - 7 * buttonHeight - 8 * SPACE));
 
-    comboBoxResolution->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                            configuration.resolution.Height - 8 * buttonHeight - 8 * space,
-                                                            configuration.resolution.Width - 2 * space,
-                                                            configuration.resolution.Height - 7 * buttonHeight - 8 * space));
+    comboBoxResolution->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                            configuration.resolution.Height - 8 * buttonHeight - 8 * SPACE,
+                                                            configuration.resolution.Width - 2 * SPACE,
+                                                            configuration.resolution.Height - 7 * buttonHeight - 8 * SPACE));
 
-    textRenderDistance->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3 * buttonWidth / 2 - 2 * space,
-                                                            configuration.resolution.Height - 7 * buttonHeight - 7 * space,
-                                                            configuration.resolution.Width - buttonWidth - 2 * space,
-                                                            configuration.resolution.Height - 6 * buttonHeight - 7*space));
+    textRenderDistance->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3 * buttonWidth / 2 - 2 * SPACE,
+                                                            configuration.resolution.Height - 7 * buttonHeight - 7 * SPACE,
+                                                            configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                            configuration.resolution.Height - 6 * buttonHeight - 7*SPACE));
 
-    spinBoxRenderDistance->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                            configuration.resolution.Height - 7 * buttonHeight - 7 * space,
-                                                            configuration.resolution.Width - 2 * space,
-                                                            configuration.resolution.Height - 6 * buttonHeight - 7 * space));
+    spinBoxRenderDistance->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                            configuration.resolution.Height - 7 * buttonHeight - 7 * SPACE,
+                                                            configuration.resolution.Width - 2 * SPACE,
+                                                            configuration.resolution.Height - 6 * buttonHeight - 7 * SPACE));
 
-    checkBoxVSync->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                       configuration.resolution.Height - 6 * buttonHeight - 6 * space,
-                                                       configuration.resolution.Width - 2 * space,
-                                                       configuration.resolution.Height - 5 * buttonHeight - 6 * space));
+    checkBoxVSync->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                       configuration.resolution.Height - 6 * buttonHeight - 6 * SPACE,
+                                                       configuration.resolution.Width - 2 * SPACE,
+                                                       configuration.resolution.Height - 5 * buttonHeight - 6 * SPACE));
 
-    checkBoxStencilBuffer->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                               configuration.resolution.Height - 5 * buttonHeight - 5 * space,
-                                                               configuration.resolution.Width - 2 * space,
-                                                               configuration.resolution.Height - 4 * buttonHeight - 5 * space));
+    checkBoxStencilBuffer->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                               configuration.resolution.Height - 5 * buttonHeight - 5 * SPACE,
+                                                               configuration.resolution.Width - 2 * SPACE,
+                                                               configuration.resolution.Height - 4 * buttonHeight - 5 * SPACE));
 
-    buttonToggleFullscreen->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                                configuration.resolution.Height - 4 * buttonHeight - 4 * space,
-                                                                configuration.resolution.Width - 2 * space,
-                                                                configuration.resolution.Height - 3 * buttonHeight - 4 * space));
+    buttonToggleFullscreen->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                                configuration.resolution.Height - 4 * buttonHeight - 4 * SPACE,
+                                                                configuration.resolution.Width - 2 * SPACE,
+                                                                configuration.resolution.Height - 3 * buttonHeight - 4 * SPACE));
 
-    buttonControlSettings->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                               configuration.resolution.Height - 3 * buttonHeight - 3 * space,
-                                                               configuration.resolution.Width - 2 * space,
-                                                               configuration.resolution.Height - 2 * buttonHeight - 3 * space));
+    buttonControlSettings->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                               configuration.resolution.Height - 3 * buttonHeight - 3 * SPACE,
+                                                               configuration.resolution.Width - 2 * SPACE,
+                                                               configuration.resolution.Height - 2 * buttonHeight - 3 * SPACE));
 
-    buttonMenu->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                    configuration.resolution.Height - 2 * buttonHeight - 2 * space,
-                                                    configuration.resolution.Width - 2 * space,
-                                                    configuration.resolution.Height - buttonHeight - 2 * space));
+    buttonMenu->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                    configuration.resolution.Height - 2 * buttonHeight - 2 * SPACE,
+                                                    configuration.resolution.Width - 2 * SPACE,
+                                                    configuration.resolution.Height - buttonHeight - 2 * SPACE));
 
-    buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * space,
-                                                    configuration.resolution.Height - buttonHeight - space,
-                                                    configuration.resolution.Width - 2 * space,
-                                                    configuration.resolution.Height - space));
+    buttonQuit->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                    configuration.resolution.Height - buttonHeight - SPACE,
+                                                    configuration.resolution.Width - 2 * SPACE,
+                                                    configuration.resolution.Height - SPACE));
 
     //if window size has changed, its resolution is not standard
     comboBoxResolution->removeItem(2);
