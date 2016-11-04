@@ -143,6 +143,8 @@ void PlaneControl::handle(EventReceiver &eventReceiver)
     sideImpulse.setZ(0);
     plane.getRigidBody().applyCentralImpulse(sideImpulse);
 
+    plane.getRigidBody().applyCentralImpulse(btVector3(0, 0, 50));
+
     // air resistance simulation
     btVector3 linearVelocity = -plane.getRigidBody().getLinearVelocity();
     linearVelocity *= 0.00001f*linearVelocity.length();
