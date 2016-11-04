@@ -23,6 +23,7 @@
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "IBody.h"
 #include "ObjMesh.h"
+#include "util.h"
 
 #define PLANE_MODEL "media/models/plane.obj"
 
@@ -46,9 +47,8 @@ public:
     void setExploded(bool exploded);
     bool getExploded() const;
 
-    // be careful with because plane becomes completely
-    //     useless after calling this method
     void disappear();
+    void appear();
 
     // some convenient
     btVector3 getLinearVelocity() const;

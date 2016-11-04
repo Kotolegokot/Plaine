@@ -20,6 +20,7 @@
 #include "obstacles/Cone.h"
 #include "IObstacle.h"
 #include "IObstaclePattern.h"
+#include "util.h"
 
 class Crystal : public IObstaclePattern
 {
@@ -34,7 +35,7 @@ public:
         // turn cone2 upside down
         btTransform transform;
         cone2->getRigidBody().getMotionState()->getWorldTransform(transform);
-        btQuaternion rotation(0, 0, core::PI);
+        btQuaternion rotation(0, 0, PI<btScalar>);
         transform.setRotation(rotation);
         cone2->getRigidBody().setCenterOfMassTransform(transform);
     }

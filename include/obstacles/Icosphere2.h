@@ -20,7 +20,7 @@
 #include "BulletCollision/CollisionShapes/btConvexPointCloudShape.h"
 #include "ObjMesh.h"
 #include "IBody.h"
-#include <cmath>
+#include "util.h"
 
 using namespace irr;
 
@@ -38,7 +38,7 @@ public:
 
     virtual btScalar getMass() override
     {
-        btScalar k = 4.0f / 3.0f * core::PI;
+        static constexpr btScalar k = 4.0f / 3.0f * PI<btScalar>;
         return radius*radius*radius*k*MASS_COEFFICIENT;
     }
 

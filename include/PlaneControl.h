@@ -17,6 +17,7 @@
 #ifndef PLANECONTROL_H
 #define PLANECONTROL_H
 
+#include <algorithm>
 #include "EventReceiver.h"
 #include "Config.h"
 #include "Plane.h"
@@ -29,6 +30,20 @@ public:
     void handle(EventReceiver &eventReceiver);
 
 private:
+    const btScalar maxPitchAngle = 0.3f;
+    const btScalar maxPitchVelocity = 1.0f;
+
+    const btScalar maxYawAngle = 0.30f;
+    const btScalar maxYawVelocity = 1.0f;
+
+    const btScalar maxRollVelocity = 3.0f;
+    const btScalar rollVelocityStep = 0.2f;
+
+    const btScalar leftImpulse = 50.0f;
+    const btScalar rightImpulse = 50.0f;
+    const btScalar upImpulse = 50.0f;
+    const btScalar downImpulse = 50.0f;
+
     Plane &plane;
     const Controls &controls;
 };

@@ -24,6 +24,7 @@ Plane::Plane(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &po
     createBody();
     rigidBody->setUserIndex(1);
     rigidBody->setUserPointer(this);
+    rigidBody->setActivationState(DISABLE_DEACTIVATION);
 }
 
 void Plane::setExploded(bool exploded)
@@ -38,12 +39,14 @@ bool Plane::getExploded() const
 
 void Plane::disappear()
 {
-    if (!rigidBody)
-        return;
-
     static_cast<MotionState *>(rigidBody->getMotionState())->getNode().setVisible(false);
-    world.removeRigidBody(rigidBody.get());
-    rigidBody.reset();
+    rigidBody->setActivationState(DISABLE_SIMULATION);
+}
+
+void Plane::appear()
+{
+    static_cast<MotionState *>(rigidBody->getMotionState())->getNode().setVisible(true);
+    rigidBody->setActivationState(DISABLE_DEACTIVATION);
 }
 
 std::unique_ptr<scene::ISceneNode> Plane::createNode()

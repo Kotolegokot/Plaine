@@ -26,97 +26,125 @@ void PlaneControl::handle(EventReceiver &eventReceiver)
     btScalar angle;
     plane.getAxisAngleRotation(axis, angle);
 
-    btVector3 turnImpulse(0, 0, 0);
-    btVector3 rollImpulse(0, 0, 0);
-    btVector3 pitchImpulse(0, 0, 0);
-    btVector3 yawImpulse(0, 0, 0);
+    btVector3 rotation = plane.getEulerRotation();
 
-        // up
-    if (eventReceiver.isKeyDown(controls[CONTROL::UP])) {
-        turnImpulse += btVector3(0, 1, 0);
-        pitchImpulse += btVector3(-1, 0, 0);
-    }
-        // down
-    if (eventReceiver.isKeyDown(controls[CONTROL::DOWN])) {
-        turnImpulse += btVector3(0, -1, 0);
-        pitchImpulse += btVector3(1, 0, 0);
-    }
-        // left
-    if (eventReceiver.isKeyDown(controls[CONTROL::LEFT])) {
-        turnImpulse += btVector3(-1, 0, 0);
-        yawImpulse += btVector3(0, -1, 0);
-    }
-        // right
-    if (eventReceiver.isKeyDown(controls[CONTROL::RIGHT])) {
-        turnImpulse += btVector3(1, 0, 0);
-        yawImpulse += btVector3(0, 1, 0);
+    btVector3 angularVelocity = plane.getAngularVelocity();
+
+    btVector3 sideImpulse(0, 0, 0);
+
+    // turn up and down
+    {
+        bool up = eventReceiver.isKeyDown(controls[CONTROL::UP]);
+        bool down = eventReceiver.isKeyDown(controls[CONTROL::DOWN]);
+
+        if (!(up && down)) {
+            if (up) {
+                sideImpulse += btVector3(0, upImpulse, 0);
+
+                if (angularVelocity.x() - 0.3f >= -maxPitchVelocity)
+                    angularVelocity.setX(angularVelocity.x() - 0.3f);
+            }
+
+            if (down) {
+                sideImpulse += btVector3(0, -downImpulse, 0);
+
+                if (angularVelocity.x() + 0.3f <= maxPitchVelocity)
+                    angularVelocity.setX(angularVelocity.x() + 0.3f);
+            }
+        }
+
+        if (rotation.x() < -maxPitchAngle)
+            angularVelocity.setX(0);
+        else if (rotation.x() > maxPitchAngle)
+            angularVelocity.setX(0);
+
+        if (!up && !down) {
+            if (rotation.x() < 0.0f)
+                angularVelocity.setX(rotation.absolute().x() * 2.0f);
+
+            if (rotation.x() > 0.0f)
+                angularVelocity.setX(rotation.absolute().x() * -2.0f);
+        }
     }
 
-        // rotation
-    // counterclockwise roll
-    if (eventReceiver.isKeyDown(controls[CONTROL::CCW_ROLL])) {
-        rollImpulse += btVector3(0, 0, 1);
+    // turn left and right
+    {
+        bool left = eventReceiver.isKeyDown(controls[CONTROL::LEFT]);
+        bool right = eventReceiver.isKeyDown(controls[CONTROL::RIGHT]);
+
+        if (!(left && right)) {
+            if (left) {
+                sideImpulse += btVector3(-leftImpulse, 0, 0);
+
+                if (angularVelocity.y() - 0.3f >= -maxYawVelocity)
+                    angularVelocity.setY(angularVelocity.y() - 0.3f);
+            }
+
+            if (right) {
+                sideImpulse += btVector3(rightImpulse, 0, 0);
+
+                if (angularVelocity.y() + 0.3f <= maxYawVelocity)
+                    angularVelocity.setY(angularVelocity.y() + 0.3f);
+            }
+        }
+
+        if (rotation.y() < -maxYawAngle)
+            angularVelocity.setY(0);
+        if (rotation.y() > maxYawAngle)
+            angularVelocity.setY(0);
+
+        if (!left && !right) {
+            if (rotation.y() < 0.0f) {
+                angularVelocity.setY(rotation.absolute().y() * 2.0f);
+            }
+
+            if (rotation.y() > 0.0f) {
+                angularVelocity.setY(rotation.absolute().y() * -2.0f);
+            }
+        }
     }
-    // clockwise roll
-    if (eventReceiver.isKeyDown(controls[CONTROL::CW_ROLL])) {
-        rollImpulse += btVector3(0, 0, -1);
+
+    // rool ccw and cw
+    {
+        bool ccw = eventReceiver.isKeyDown(controls[CONTROL::CCW_ROLL]);
+        bool cw = eventReceiver.isKeyDown(controls[CONTROL::CW_ROLL]);
+
+        if (!(ccw && cw)) {
+            if (ccw)
+                if (angularVelocity.z() + rollVelocityStep <= maxRollVelocity)
+                    angularVelocity.setZ(angularVelocity.z() + rollVelocityStep);
+
+            if (cw)
+                if (angularVelocity.z() - rollVelocityStep >= -maxRollVelocity)
+                    angularVelocity.setZ(angularVelocity.z() - rollVelocityStep);
+        }
+
+        if (!ccw && !cw) {
+            if (angularVelocity.z() > 0) {
+                angularVelocity.setZ(angularVelocity.z() - rollVelocityStep);
+
+                if (angularVelocity.z() < 0)
+                    angularVelocity.setZ(0);
+            }
+
+            if (angularVelocity.z() < 0) {
+                angularVelocity.setZ(angularVelocity.z() + rollVelocityStep);
+
+                if (angularVelocity.z() > 0)
+                    angularVelocity.setZ(0);
+            }
+        }
     }
+
+    angularVelocity = angularVelocity.rotate(axis, angle);
+    plane.setAngularVelocity(angularVelocity);
+
+    sideImpulse = sideImpulse.rotate(axis, angle);
+    sideImpulse.setZ(0);
+    plane.getRigidBody().applyCentralImpulse(sideImpulse);
 
     // air resistance simulation
-    btVector3 planeVelosity = -plane.getRigidBody().getLinearVelocity();
-    btScalar planeVelocityLength = planeVelosity.length();
-    planeVelosity.safeNormalize();
-    planeVelosity *= 0.001f*planeVelocityLength*planeVelocityLength;
-    plane.getRigidBody().applyForce(planeVelosity, btVector3(0, 0, 0));
-
-    btVector3 angularVelocity = plane.getRigidBody().getAngularVelocity();
-    btScalar angularVelocityLength = angularVelocity.length();
-    angularVelocity.safeNormalize();
-    angularVelocity *= std::fabs(angularVelocityLength - 0.1f*angularVelocityLength*angularVelocityLength);
-    plane.getRigidBody().setAngularVelocity(angularVelocity);
-
-    turnImpulse *= 50;
-    rollImpulse *= 150;
-    //std::cout << "X:" << plane->getEulerRotation().getX() << " Y:" << plane->getEulerRotation().getY() << " Z:" << plane->getEulerRotation().getZ() << std::endl;
-    if ((yawImpulse.getY() == 1) && (plane.getEulerRotation().getY() < 0.15f))
-        yawImpulse *= 300;
-    else if ((yawImpulse.getY() == -1) && (plane.getEulerRotation().getY() > -0.15f))
-        yawImpulse *= 300;
-    else if ((yawImpulse.getY() == 0) && (plane.getEulerRotation().getY() > 0.0f))
-    {
-        yawImpulse = btVector3(0, -1, 0);
-        yawImpulse *= fabs(plane.getEulerRotation().getY())*fabs(plane.getEulerRotation().getY())*2000;
-    }
-    else if ((yawImpulse.getY() == 0) && (plane.getEulerRotation().getY() < 0.0f))
-    {
-        yawImpulse += btVector3(0, 1, 0);
-        yawImpulse *= fabs(plane.getEulerRotation().getY())*fabs(plane.getEulerRotation().getY())*2000;
-    }
-    if ((pitchImpulse.getX() == 1) && (plane.getEulerRotation().getX() < 0.15f))
-        pitchImpulse *= 100;
-    else if ((pitchImpulse.getX() == -1) && (plane.getEulerRotation().getX() > -0.15f))
-        pitchImpulse *= 100;
-    else if ((pitchImpulse.getX() == 0) && (plane.getEulerRotation().getX() > 0.0f))
-    {
-        pitchImpulse = btVector3(-1, 0, 0);
-        pitchImpulse *= fabs(plane.getEulerRotation().getX())*fabs(plane.getEulerRotation().getX())*2000;
-    }
-    else if ((pitchImpulse.getX() == 0) && (plane.getEulerRotation().getX() < 0.0f))
-    {
-        pitchImpulse = btVector3(1, 0, 0);
-        pitchImpulse *= fabs(plane.getEulerRotation().getX())*fabs(plane.getEulerRotation().getX())*2000;
-    }
-    if (plane.getAngularVelocity().length() < 0.05f)
-        plane.setAngularVelocity(btVector3(0, 0, 0));
-
-    turnImpulse = turnImpulse.rotate(axis, angle);
-    yawImpulse = yawImpulse.rotate(axis, angle);
-    pitchImpulse = pitchImpulse.rotate(axis, angle);
-    turnImpulse.setZ(0);
-
-    plane.getRigidBody().applyCentralImpulse(turnImpulse);
-    plane.getRigidBody().applyTorqueImpulse(rollImpulse);
-    plane.getRigidBody().applyTorqueImpulse(pitchImpulse);
-    plane.getRigidBody().applyTorqueImpulse(yawImpulse);
-    plane.getRigidBody().applyForce(btVector3(0, 0, 3000), btVector3(0, 0, 0));
+    btVector3 linearVelocity = -plane.getRigidBody().getLinearVelocity();
+    linearVelocity *= 0.00001f*linearVelocity.length();
+    plane.getRigidBody().applyCentralImpulse(linearVelocity);
 }

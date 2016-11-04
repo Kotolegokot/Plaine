@@ -61,6 +61,15 @@ void MotionState::getWorldTransform(btTransform &worldTrans) const
 void MotionState::setWorldTransform(const btTransform &worldTrans)
 {
     transform = worldTrans;
+    #if NAN_ASSERT
+        assert(!std::isnan(worldTrans.getOrigin().getX()));
+        assert(!std::isnan(worldTrans.getOrigin().getY()));
+        assert(!std::isnan(worldTrans.getOrigin().getZ()));
+        assert(!std::isnan(worldTrans.getRotation().getX()));
+        assert(!std::isnan(worldTrans.getRotation().getY()));
+        assert(!std::isnan(worldTrans.getRotation().getZ()));
+        assert(!std::isnan(worldTrans.getRotation().getW()));
+    #endif // NAN_ASSERT
 
     if (node) {
         // rotation
