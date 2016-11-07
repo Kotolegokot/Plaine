@@ -232,18 +232,18 @@ void ObstacleGenerator::stickToGrid(const core::vector3df &playerPosition,
                                     std::size_t &edgeBottom, std::size_t &edgeTop,
                                     std::size_t &edgeBack, std::size_t &edgeFront) const
 {
-    // TODO
+    edgeLeft = std::floor((playerPosition.X - farValueWithBuffer()) / CHUNK_SIZE) * CHUNK_SIZE;
+    edgeRight = std::ceil((playerPosition.X + farValueWithBuffer()) / CHUNK_SIZE) * CHUNK_SIZE;
+    edgeBottom = std::floor((playerPosition.Y - farValueWithBuffer()) / CHUNK_SIZE) * CHUNK_SIZE;
+    edgeTop = std::ceil((playerPosition.Y + farValueWithBuffer()) / CHUNK_SIZE) * CHUNK_SIZE;
+    edgeBack = std::floor(playerPosition.Z / CHUNK_SIZE) * CHUNK_SIZE;
+    edgeFront = std::ceil((playerPosition.Z + farValueWithBuffer()) / CHUNK_SIZE) * CHUNK_SIZE;
 }
 
 unsigned long ObstacleGenerator::generateChunk(std::size_t x, std::size_t y, std::size_t z)
 {
     // TODO
     return 0;
-}
-
-btScalar ObstacleGenerator::preciseEdge(btScalar edge) const
-{
-    return floor(edge / STEP)*STEP;
 }
 
 // removes obstacles behind the player

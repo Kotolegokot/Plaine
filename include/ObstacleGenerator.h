@@ -56,7 +56,6 @@ private:
     static constexpr btScalar STEP = 800;
     static constexpr btScalar CHUNK_SIZE = 1000;
 
-    btScalar preciseEdge(btScalar edge) const;
     void stickToGrid(const core::vector3df &playerPosition,
                      std::size_t &edgeLeft, std::size_t &edgeRight,
                      std::size_t &edgeBottom, std::size_t &edgeTop,
