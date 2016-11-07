@@ -217,6 +217,14 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
     #if DEBUG_OUTPUT
         std::cout << obstaclesGenerated << " obstacles generated" << std::endl;
     #endif // DEBUG_OUTPUT
+
+    generatedEdgeLeft = edgeLeft;
+    generatedEdgeRight = edgeRight;
+    generatedEdgeTop = edgeTop;
+    generatedEdgeBottom = edgeBottom;
+    generatedEdgeFront = edgeFront;
+
+    removeLeftBehind(playerPosition.Z);
 }
 
 void ObstacleGenerator::stickToGrid(const core::vector3df &playerPosition,
