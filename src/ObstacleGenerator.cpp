@@ -21,7 +21,7 @@
 using namespace irr;
 
 constexpr btScalar ObstacleGenerator::STEP;
-constexpr btScalar ObstacleGenerator::START;
+constexpr btScalar ObstacleGenerator::CHUNK_SIZE;
 
 ObstacleGenerator::ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, btScalar farValue, btScalar buffer) :
     device(device), farValue(farValue), buffer(buffer), world(world) {}
@@ -33,7 +33,7 @@ ObstacleGenerator::~ObstacleGenerator()
         obstacles.pop_front();
 }
 
-void ObstacleGenerator::generate(const core::vector3df &playerPosition)
+/*void ObstacleGenerator::generate(const core::vector3df &playerPosition)
 {
     // number of obstacles generated within this tick
     #if DEBUG_OUTPUT
@@ -181,6 +181,56 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
 
     // remove obstacles behind the player to save some memory
     removeLeftBehind(playerPosition.Z);
+}*/
+
+void ObstacleGenerator::generate(const core::vector3df &playerPosition)
+{
+    #if DEBUG_OUTPUT
+        unsigned long obstaclesGenerated = 0;
+    #endif
+    std::size_t edgeLeft, edgeRight, edgeTop, edgeBottom, edgeBack, edgeFront;
+    stickToGrid(playerPosition, edgeLeft, edgeRight, edgeTop, edgeBottom, edgeBack, edgeFront);
+
+    for (std::size_t z = edgeBack; z <= generatedEdgeFront; z++) {
+        for (std::size_t x = edgeLeft; x < generatedEdgeLeft; x++)
+            for (std::size_t y = edgeBottom; y <= edgeTop; y++)
+                obstaclesGenerated += generateChunk(x, y, z);
+
+        for (std::size_t x = generatedEdgeLeft; x <= generatedEdgeRight; x++) {
+            for (std::size_t y = edgeBottom; y < generatedEdgeBottom; y++)
+                obstaclesGenerated += generateChunk(x, y, z);
+
+            for (std::size_t y = generatedEdgeTop + 1; y <= edgeTop; y++)
+                obstaclesGenerated += generateChunk(x, y, z);
+        }
+
+        for (std::size_t x = generatedEdgeRight + 1; x <= edgeRight; x++)
+            for (std::size_t y = edgeBottom; y <= edgeTop; y++)
+                obstaclesGenerated += generateChunk(x, y, z);
+    }
+
+    for (std::size_t z = generatedEdgeFront + 1; z < edgeFront; z++)
+        for (std::size_t x = edgeLeft; x <= edgeRight; x++)
+            for (std::size_t y = edgeBottom; y <= edgeTop; y++)
+                obstaclesGenerated += generateChunk(x, y, z);
+
+    #if DEBUG_OUTPUT
+        std::cout << obstaclesGenerated << " obstacles generated" << std::endl;
+    #endif // DEBUG_OUTPUT
+}
+
+void ObstacleGenerator::stickToGrid(const core::vector3df &playerPosition,
+                                    std::size_t &edgeLeft, std::size_t &edgeRight,
+                                    std::size_t &edgeBottom, std::size_t &edgeTop,
+                                    std::size_t &edgeBack, std::size_t &edgeFront) const
+{
+    // TODO
+}
+
+unsigned long ObstacleGenerator::generateChunk(std::size_t x, std::size_t y, std::size_t z)
+{
+    // TODO
+    return 0;
 }
 
 btScalar ObstacleGenerator::preciseEdge(btScalar edge) const
