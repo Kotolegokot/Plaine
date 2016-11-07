@@ -24,32 +24,39 @@
 class Tunnel : public IObstaclePattern
 {
 public:
-    Tunnel(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &position, btScalar radius,
-        btScalar length) :
-        IObstaclePattern(world, device, position), radius(radius), length(length)
+    Tunnel(btDynamicsWorld &world, IrrlichtDevice &device, btVector3 position,
+           std::size_t cellSize)
     {
+        const btScalar radius = cellSize * 0.4f;
+        const btScalar length = cellSize * 1.8f;
+        position += { cellSize * 0.5f, cellSize * 0.5f, cellSize };
+
         boxes[0] = std::make_unique<Box>(world, device, position + btVector3(radius, 0, 0), btVector3(radius / 10, radius, length / 2));
-        boxes[1] = std::make_unique<Box>(world, device, position + btVector3(-radius, 0, 0), btVector3(radius /10, radius, length / 2));
+        boxes[1] = std::make_unique<Box>(world, device, position + btVector3(-radius, 0, 0), btVector3(radius / 10, radius, length / 2));
         boxes[2] = std::make_unique<Box>(world, device, position + btVector3(0, radius, 0), btVector3(radius, radius / 10, length / 2));
         boxes[3] = std::make_unique<Box>(world, device, position + btVector3(0, -radius, 0), btVector3(radius, radius / 10, length / 2));
     }
 
-    void addObstaclesToList(std::list<std::unique_ptr<IObstacle>> &list) override
+    void getSize(std::size_t &x, std::size_t &y, std::size_t &z) const override
     {
-        for (int i = 0; i < 4; i++)
-            list.push_back(std::move(boxes[i]));
+        x = 1;
+        y = 1;
+        z = 2;
     }
 
-    size_t getObstacleCount() const override
+    void moveObstaclesToList(std::list<std::unique_ptr<IObstacle>> &list) override
+    {
+        for (auto &boxUPtr : boxes)
+            list.push_back(std::move(boxUPtr));
+    }
+
+    std::size_t getObstacleCount() const override
     {
         return 4;
     }
 
 protected:
-    btScalar radius = 0;
-    btScalar length = 0;
-
-    std::unique_ptr<Box> boxes[4] = { 0, 0, 0, 0 };
+    std::array<std::unique_ptr<Box>, 4> boxes;
 };
 
 #endif // TUNNEL_H

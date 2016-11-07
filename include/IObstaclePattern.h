@@ -29,18 +29,17 @@ using namespace irr;
 class IObstaclePattern
 {
 public:
-    IObstaclePattern(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &position) :
-        world(world), device(device), position(position) {}
+    IObstaclePattern() = default;
+    IObstaclePattern(IObstaclePattern &&) = delete;
+    IObstaclePattern &operator =(IObstaclePattern &&) = delete;
+    IObstaclePattern(const IObstaclePattern &) = delete;
+    IObstaclePattern &operator =(const IObstaclePattern &) = delete;
     virtual ~IObstaclePattern() {}
 
-    virtual void addObstaclesToList(std::list<std::unique_ptr<IObstacle>> &list) = 0;
-    virtual size_t getObstacleCount() const = 0;
+    virtual void getSize(std::size_t &x, std::size_t &y, std::size_t &z) const;
 
-protected:
-    btDynamicsWorld &world;
-    IrrlichtDevice &device;
-    btVector3 position;
-
+    virtual void moveObstaclesToList(std::list<std::unique_ptr<IObstacle>> &list) = 0;
+    virtual std::size_t getObstacleCount() const = 0;
 };
 
 #endif // IOBSTACLEPATTERN_H
