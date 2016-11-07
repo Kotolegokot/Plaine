@@ -48,6 +48,17 @@ core::stringw keyCodeName(const EKEY_CODE &keyCode);
 void setLanguage(std::string language, bool replace);
 video::SColor iridescentColor(const u32 &currentTime);
 
+template <typename Number>
+int sign(Number num)
+{
+    if (num < 0)
+        return -1;
+    else if (num > 0)
+        return 1;
+    else
+        return 0;
+}
+
 // GUI IDs
 enum GUI_ID {
     ID_BUTTON_QUIT,

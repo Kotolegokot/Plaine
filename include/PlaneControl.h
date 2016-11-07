@@ -31,13 +31,11 @@ public:
 
 private:
     static constexpr btScalar MAX_PITCH_ANGLE = 0.3f;
-    static constexpr btScalar MAX_PITCH_VELOCITY = 1.0f;
+    static constexpr btScalar MAX_YAW_ANGLE = 0.40f;
 
-    static constexpr btScalar MAX_YAW_ANGLE = 0.30f;
-    static constexpr btScalar MAX_YAW_VELOCITY = 1.0f;
-
-    static constexpr btScalar MAX_ROLL_VELOCITY = 3.0f;
-    static constexpr btScalar ROLL_VELOCITY_STEP = 0.2f;
+    static constexpr btScalar MAX_ROLL_VELOCITY = 2.0f;
+    static constexpr btScalar ROLL_VELOCITY_ACCELERATION_STEP = 0.1f;
+    static constexpr btScalar ROLL_VELOCITY_DECELERATION_STEP = 0.5f;
 
     static constexpr btScalar LEFT_IMPULSE = 50.0f;
     static constexpr btScalar RIGHT_IMPULSE = 50.0f;

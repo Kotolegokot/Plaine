@@ -109,16 +109,17 @@ void Game::initializeBullet()
 
     gContactProcessedCallback = [](btManifoldPoint &cp, void *obj0p, void *obj1p) -> bool
         {
-            btCollisionObject *obj0 = static_cast<btCollisionObject *>(obj0p);
-            btCollisionObject *obj1 = static_cast<btCollisionObject *>(obj1p);
+            auto obj0 = static_cast<btCollisionObject *>(obj0p);
+            auto obj1 = static_cast<btCollisionObject *>(obj1p);
 
+            // if one of the objects is the place
             if (obj0->getUserIndex() == 1 || obj1->getUserIndex() == 1) {
                 #if DEBUG_OUTPUT
                     std::cout << "Plane collision occured" << std::endl;
                     std::cout << "Collision impulse: " << cp.getAppliedImpulse() << std::endl;
                 #endif // DEBUG_OUTPUT
 
-                // obj0 is always the plane
+                // obj0 must always be the plane
                 if (obj1->getUserIndex() == 1)
                     std::swap(obj0, obj1);
 
@@ -135,8 +136,10 @@ void Game::initializeBullet()
 
 void Game::initializeScene()
 {
-    if (FOG_ENABLED)
-        driver->setFog(DEFAULT_COLOR, video::EFT_FOG_LINEAR, configuration.renderDistance - 300, configuration.renderDistance, .003f, true, false);
+    #if FOG_ENABLED
+        driver->setFog(DEFAULT_COLOR, video::EFT_FOG_LINEAR, configuration.renderDistance - 300,
+                       configuration.renderDistance, .003f, true, false);
+    #endif // FOG_ENABLED
 
     initializeBullet();
 
