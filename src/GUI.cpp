@@ -111,7 +111,8 @@ void GUI::updateSelection()
     getCurrentScreen().reload(buttonWidth, buttonHeight);
 
     if (guiEnvironment.getFocus()->getType() != gui::EGUIET_EDIT_BOX &&
-        guiEnvironment.getFocus()->getType() != gui::EGUIET_COMBO_BOX)
+        guiEnvironment.getFocus()->getType() != gui::EGUIET_COMBO_BOX &&
+        guiEnvironment.getFocus()->getType() != gui::EGUIET_BUTTON)
     {
         core::stringw str = "[";
         str += guiEnvironment.getFocus()->getText();

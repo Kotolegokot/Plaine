@@ -96,6 +96,7 @@ private:
     void initializeScene();
     void terminateScene();
     void terminateDevice();
+    void setSpriteBank(const char (&src)[25]);
 
     void updateHUD();
     void updateCamera();

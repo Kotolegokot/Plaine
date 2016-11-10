@@ -50,15 +50,19 @@ void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
     buttonToggleFullscreen = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonToggleFullscreen->setID(ID_BUTTON_TOGGLE_FULLSCREEN);
+    setCustomButton(buttonToggleFullscreen);
 
     buttonControlSettings = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonControlSettings->setID(ID_BUTTON_CONTROL_SETTINGS);
+    setCustomButton(buttonControlSettings);
 
     buttonMenu = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonMenu->setID(ID_BUTTON_MENU);
+    setCustomButton(buttonMenu);
 
     buttonQuit = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonQuit->setID(ID_BUTTON_QUIT);
+    setCustomButton(buttonQuit);
 
     reload(buttonWidth, buttonHeight);
     resize(buttonWidth, buttonHeight);

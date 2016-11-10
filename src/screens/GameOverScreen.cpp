@@ -33,6 +33,7 @@ void GameOverScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
     buttonOK = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonOK->setID(ID_BUTTON_MENU);
+    setCustomButton(buttonOK);
 
     reload(buttonWidth, buttonHeight);
     resize(buttonWidth, buttonHeight);

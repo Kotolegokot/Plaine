@@ -30,12 +30,15 @@ void PauseMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
     buttonResume = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonResume->setID(ID_BUTTON_RESUME);
+    setCustomButton(buttonResume);
 
     buttonMenu = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonMenu->setID(ID_BUTTON_MENU);
+    setCustomButton(buttonMenu);
 
     buttonQuit = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonQuit->setID(ID_BUTTON_QUIT);
+    setCustomButton(buttonQuit);
 
     reload(buttonWidth, buttonHeight);
     resize(buttonWidth, buttonHeight);

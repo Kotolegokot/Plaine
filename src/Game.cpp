@@ -45,6 +45,8 @@ void Game::initializeGUI()
     if (font)
         skin->setFont(font);
 
+    Game::setSpriteBank("SpritesForRegularButtons");
+    Game::setSpriteBank("SpritesForControlButtons");
     gui = new GUI(configuration, *guiEnvironment);
     gui->addScreen(std::make_unique<MainMenuScreen>(configuration, *guiEnvironment), Screen::MAIN_MENU);
     gui->addScreen(std::make_unique<SettingsScreen>(configuration, *guiEnvironment), Screen::SETTINGS);
@@ -201,6 +203,54 @@ void Game::terminateScene()
     delete collisionConfiguration;
     delete broadphase;
     sceneManager->clear();
+}
+
+void Game::setSpriteBank(const char (&src)[25])
+{
+        // add textures into sprite bank
+        gui::IGUISpriteBank *spriteBank = guiEnvironment->addEmptySpriteBank(src);
+        if (src == "SpritesForRegularButtons")
+        {
+        spriteBank->addTexture(driver->getTexture("media/textures/button_up.png")); // 0
+        spriteBank->addTexture(driver->getTexture("media/textures/button_over.png")); // 1
+        spriteBank->addTexture(driver->getTexture("media/textures/button_down.png")); // 2
+        spriteBank->addTexture(driver->getTexture("media/textures/button_focused.png")); // 3
+        // add sizes
+        spriteBank->getPositions().push_back(core::rect<s32>(core::position2di(0,0),
+                (driver->getTexture("media/textures/button_up.png"))->getOriginalSize()));
+        spriteBank->getPositions().push_back(core::rect<s32>(core::position2di(0,0),
+                (driver->getTexture("media/textures/button_over.png"))->getOriginalSize()));
+        spriteBank->getPositions().push_back(core::rect<s32>(core::position2di(0,0),
+                (driver->getTexture("media/textures/button_down.png"))->getOriginalSize()));
+        spriteBank->getPositions().push_back(core::rect<s32>(core::position2di(0,0),
+                (driver->getTexture("media/textures/button_focused.png"))->getOriginalSize()));
+        }
+        if (src == "SpritesForControlButtons")
+        {
+        spriteBank->addTexture(driver->getTexture("media/textures/cbutton_up.png")); // 0
+        spriteBank->addTexture(driver->getTexture("media/textures/cbutton_over.png")); // 1
+        spriteBank->addTexture(driver->getTexture("media/textures/cbutton_down.png")); // 2
+        spriteBank->addTexture(driver->getTexture("media/textures/cbutton_focused.png")); // 3
+        // add sizes
+        spriteBank->getPositions().push_back(core::rect<s32>(core::position2di(0,0),
+                (driver->getTexture("media/textures/cbutton_up.png"))->getOriginalSize()));
+        spriteBank->getPositions().push_back(core::rect<s32>(core::position2di(0,0),
+                (driver->getTexture("media/textures/cbutton_over.png"))->getOriginalSize()));
+        spriteBank->getPositions().push_back(core::rect<s32>(core::position2di(0,0),
+                (driver->getTexture("media/textures/cbutton_down.png"))->getOriginalSize()));
+        spriteBank->getPositions().push_back(core::rect<s32>(core::position2di(0,0),
+                (driver->getTexture("media/textures/cbutton_focused.png"))->getOriginalSize()));
+        }
+        // add sprites
+        gui::SGUISprite sprite;
+        gui::SGUISpriteFrame sframe;
+        sprite.Frames.push_back(sframe);
+        for (int i = 0; i <= 3; i++)
+            {
+            sprite.Frames[0].rectNumber = i;
+            sprite.Frames[0].textureNumber = i;
+            spriteBank->getSprites().push_back(sprite);
+            }
 }
 
 // show main menu
