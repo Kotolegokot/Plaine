@@ -24,7 +24,6 @@
 #include <string>
 #include <sstream>
 #include <btBulletDynamicsCommon.h>
-#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 
 class ObjMesh
 {

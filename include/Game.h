@@ -20,8 +20,6 @@
 #include <iostream>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
-#include <BulletCollision/CollisionDispatch/btGhostObject.h>
-#include <BulletCollision/CollisionDispatch/btCollisionObject.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include <CGUITTFont.h>
 #include <ITimer.h>

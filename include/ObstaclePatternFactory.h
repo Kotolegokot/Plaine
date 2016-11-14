@@ -4,19 +4,18 @@
 #include <memory>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
-#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "IObstaclePattern.h"
 #include "patterns/Crystal.h"
 #include "patterns/Tunnel.h"
 #include "patterns/Valley.h"
 
 class ObstaclePatternFactory {
-    ObstaclePatternFactory(btDynamicsWorld &world, IrrlichtDevice &device, btScalar cellSize) :
-        IObstaclePattern(world, device, cellSize)
+public:
+    ObstaclePatternFactory(btDynamicsWorld &world, IrrlichtDevice &device, btScalar cellSize)
     {
         patterns[0] = std::make_unique<Crystal>(world, device, cellSize);
         patterns[1] = std::make_unique<Tunnel>(world, device, cellSize);
-        patterns[2] = std::make_unique<Valley>(world, device, cellSize);
+        patterns[2] = std::make_unique<Valley<5>>(world, device, cellSize);
     }
 
     IObstaclePattern &operator [](std::size_t index)

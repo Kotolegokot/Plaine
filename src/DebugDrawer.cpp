@@ -16,9 +16,6 @@
 
 #include "DebugDrawer.h"
 
-#include <GL/gl.h>
-#include <GL/glu.h>
-
 using namespace irr;
 
 DebugDrawer::DebugDrawer(IrrlichtDevice *device)

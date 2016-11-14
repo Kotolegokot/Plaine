@@ -20,7 +20,6 @@
 #include <iostream>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
-#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "Plane.h"
 
 using namespace irr;

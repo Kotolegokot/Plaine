@@ -21,12 +21,12 @@
 #include <memory>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
-#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "options.h"
 #include "MotionState.h"
 #include "IObstacle.h"
 #include "IBody.h"
 #include "Randomizer.h"
+#include "ObstaclePatternFactory.h"
 #include "obstacles/Box.h"
 #include "obstacles/Tetrahedron.h"
 #include "obstacles/Icosahedron.h"
@@ -81,8 +81,9 @@ private:
     std::size_t generatedEdgeTop = 0;
     std::size_t generatedEdgeBottom = 0;
 
-    // physics world
-    btDynamicsWorld &world;
+    btDynamicsWorld &world; // physics world
+
+    ObstaclePatternFactory obstaclePatternFactory;
 };
 
 #endif // OBSTACLEGENERATOR_H

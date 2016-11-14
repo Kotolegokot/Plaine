@@ -23,7 +23,6 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <BulletCollision/CollisionDispatch/btCollisionObject.h>
-#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 
 using namespace irr;
 

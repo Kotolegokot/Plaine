@@ -21,7 +21,6 @@
 #include <cassert>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
-#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "options.h"
 
 using namespace irr;

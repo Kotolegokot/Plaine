@@ -22,7 +22,6 @@
 #include <irrlicht.h>
 #include <libintl.h>
 #include <btBulletDynamicsCommon.h>
-#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "Randomizer.h"
 
 #ifndef _WIN32

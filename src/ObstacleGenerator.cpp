@@ -24,7 +24,9 @@ constexpr btScalar ObstacleGenerator::STEP;
 constexpr btScalar ObstacleGenerator::CHUNK_SIZE;
 
 ObstacleGenerator::ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, btScalar farValue, btScalar buffer) :
-    device(device), farValue(farValue), buffer(buffer), world(world) {}
+    device(device), farValue(farValue), buffer(buffer), world(world),
+    obstaclePatternFactory(world, device, CHUNK_SIZE / 10)
+{}
 
 ObstacleGenerator::~ObstacleGenerator()
 {

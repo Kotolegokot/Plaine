@@ -20,7 +20,6 @@
 #include <memory>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
-#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "IObstacle.h"
 #include "MotionState.h"
 
