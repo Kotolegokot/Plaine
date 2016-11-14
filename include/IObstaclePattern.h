@@ -18,6 +18,7 @@
 #define IOBSTACLEPATTERN_H
 
 #include <list>
+#include <tuple>
 #include <memory>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
@@ -29,17 +30,20 @@ using namespace irr;
 class IObstaclePattern
 {
 public:
-    IObstaclePattern() = default;
-    IObstaclePattern(IObstaclePattern &&) = delete;
-    IObstaclePattern &operator =(IObstaclePattern &&) = delete;
-    IObstaclePattern(const IObstaclePattern &) = delete;
-    IObstaclePattern &operator =(const IObstaclePattern &) = delete;
+    IObstaclePattern(btDynamicsWorld &world, IrrlichtDevice &device, btScalar cellSize) :
+        world(world), device(device), cellSize(cellSize) {}
     virtual ~IObstaclePattern() {}
 
-    virtual void getSize(std::size_t &x, std::size_t &y, std::size_t &z) const;
+    virtual std::tuple<std::size_t, std::size_t, std::size_t> getSize() const = 0;
 
-    virtual void moveObstaclesToList(std::list<std::unique_ptr<IObstacle>> &list) = 0;
-    virtual std::size_t getObstacleCount() const = 0;
+    // create bodies and put them to the list
+    // returns number of the bodies created
+    virtual std::size_t produce(btVector3 position, std::list<std::unique_ptr<IObstacle>> &list) = 0;
+
+protected:
+    btDynamicsWorld &world;
+    IrrlichtDevice &device;
+    btScalar cellSize;
 };
 
 #endif // IOBSTACLEPATTERN_H

@@ -24,39 +24,37 @@
 class Tunnel : public IObstaclePattern
 {
 public:
-    Tunnel(btDynamicsWorld &world, IrrlichtDevice &device, btVector3 position,
-           std::size_t cellSize)
+    Tunnel(btDynamicsWorld &world, IrrlichtDevice &device, btScalar cellSize) :
+        IObstaclePattern(world, device, cellSize)
+    {}
+
+    std::tuple<std::size_t, std::size_t, std::size_t> getSize() const override
+    {
+        return { 1, 1, 2 };
+    }
+
+    std::size_t produce(btVector3 position, std::list<std::unique_ptr<IObstacle>> &list) override
     {
         const btScalar radius = cellSize * 0.4f;
         const btScalar length = cellSize * 1.8f;
         position += { cellSize * 0.5f, cellSize * 0.5f, cellSize };
 
-        boxes[0] = std::make_unique<Box>(world, device, position + btVector3(radius, 0, 0), btVector3(radius / 10, radius, length / 2));
-        boxes[1] = std::make_unique<Box>(world, device, position + btVector3(-radius, 0, 0), btVector3(radius / 10, radius, length / 2));
-        boxes[2] = std::make_unique<Box>(world, device, position + btVector3(0, radius, 0), btVector3(radius, radius / 10, length / 2));
-        boxes[3] = std::make_unique<Box>(world, device, position + btVector3(0, -radius, 0), btVector3(radius, radius / 10, length / 2));
-    }
+        auto box1 = std::make_unique<Box>(world, device, position + btVector3(radius, 0, 0),
+                                          btVector3(radius / 10, radius, length / 2));
+        auto box2 = std::make_unique<Box>(world, device, position + btVector3(-radius, 0, 0),
+                                          btVector3(radius / 10, radius, length / 2));
+        auto box3 = std::make_unique<Box>(world, device, position + btVector3(0, radius, 0),
+                                          btVector3(radius, radius / 10, length / 2));
+        auto box4 = std::make_unique<Box>(world, device, position + btVector3(0, -radius, 0),
+                                          btVector3(radius, radius / 10, length / 2));
 
-    void getSize(std::size_t &x, std::size_t &y, std::size_t &z) const override
-    {
-        x = 1;
-        y = 1;
-        z = 2;
-    }
+        list.push_back(std::move(box1));
+        list.push_back(std::move(box2));
+        list.push_back(std::move(box3));
+        list.push_back(std::move(box4));
 
-    void moveObstaclesToList(std::list<std::unique_ptr<IObstacle>> &list) override
-    {
-        for (auto &boxUPtr : boxes)
-            list.push_back(std::move(boxUPtr));
-    }
-
-    std::size_t getObstacleCount() const override
-    {
         return 4;
     }
-
-protected:
-    std::array<std::unique_ptr<Box>, 4> boxes;
 };
 
 #endif // TUNNEL_H

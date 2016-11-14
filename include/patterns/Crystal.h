@@ -25,43 +25,36 @@
 class Crystal : public IObstaclePattern
 {
 public:
-    Crystal(btDynamicsWorld &world, IrrlichtDevice &device, btVector3 position,
-            std::size_t cellSize)
+    Crystal(btDynamicsWorld &world, IrrlichtDevice &device,  btScalar cellSize) :
+        IObstaclePattern(world, device, cellSize)
+    {}
+
+    std::tuple<std::size_t, std::size_t, std::size_t> getSize() const override
+    {
+        return { 1, 2, 1 };
+    }
+
+    std::size_t produce(btVector3 position, std::list<std::unique_ptr<IObstacle>> &list) override
     {
         const btScalar radius = cellSize * 0.4f;
         const btScalar length = cellSize * 1.8f;
         position += { cellSize * 0.5f, cellSize, cellSize * 0.5f };
 
-        cone1 = std::make_unique<Cone>(world, device, position, radius, length / 2.0f);
-        cone2 = std::make_unique<Cone>(world, device, position + btVector3(0, 50, 0), radius, length / 2.0f);
+        auto cone1 = std::make_unique<Cone>(world, device, position, radius, length / 2.0f);
+        auto cone2 = std::make_unique<Cone>(world, device, position + btVector3(0, 50, 0),
+                                            radius, length / 2.0f);
 
         // turn cone2 upside down
         btTransform transform = cone2->getRigidBody().getCenterOfMassTransform();
         btQuaternion rotation(0, 0, PI<btScalar>);
         transform.setRotation(rotation);
         cone2->getRigidBody().setCenterOfMassTransform(transform);
-    }
 
-    void getSize(std::size_t &x, std::size_t &y, std::size_t &z) const override
-    {
-        x = 1;
-        y = 2;
-        z = 1;
-    }
-
-    void moveObstaclesToList(std::list<std::unique_ptr<IObstacle>> &list) override
-    {
         list.push_back(std::move(cone1));
         list.push_back(std::move(cone2));
-    }
 
-    std::size_t getObstacleCount() const override
-    {
         return 2;
     }
-
-protected:
-    std::unique_ptr<Cone> cone1, cone2;
 };
 
 #endif // CRYSTAL_H

@@ -11,46 +11,40 @@ template <std::size_t length>
 class Valley : public IObstaclePattern
 {
 public:
-    Valley(btDynamicsWorld &world, IrrlichtDevice &device, btVector3 position,
-           std::size_t cellSize)
+    Valley(btDynamicsWorld &world, IrrlichtDevice &device, btScalar cellSize) :
+        IObstaclePattern(world, device, cellSize)
+    {}
+
+    std::tuple<std::size_t, std::size_t, std::size_t> getSize() const override
+    {
+        return { 2, 2, length };
+    }
+
+    std::size_t produce(btVector3 position, std::list<std::unique_ptr<IObstacle> > &list) override
     {
         position += { cellSize, cellSize, 0 };
-        for (size_t i = 0; i < length; i++) {
-            obstacles[i*4] =
+
+        for (std::size_t i = 0; i < length; i++) {
+            auto obstacle1 =
                     std::make_unique<Icosahedron>(world, device, position
                                                   + btVector3(-cellSize / 2, 0, cellSize * i), 100);
-            obstacles[i*4 + 1] =
+            auto obstacle2 =
                     std::make_unique<Icosahedron>(world, device, position
                                                   + btVector3(cellSize / 2, 0, cellSize * i), 100);
-            obstacles[i*4 + 2] =
+            auto obstacle3 =
                     std::make_unique<Icosahedron>(world, device, position
                                                   + btVector3(0, -cellSize / 2, cellSize * i), 100);
-            obstacles[i*4 + 3] =
+            auto obstacle4 =
                     std::make_unique<Icosahedron>(world, device, position
                                                   + btVector3(0, cellSize / 2,  cellSize * i), 100);
+
+            list.push_back(std::move(obstacle1));
+            list.push_back(std::move(obstacle2));
+            list.push_back(std::move(obstacle3));
+            list.push_back(std::move(obstacle4));
         }
-    }
 
-    void getSize(std::size_t &x, std::size_t &y, std::size_t &z) const override
-    {
-        x = 2;
-        y = 2;
-        z = length;
-    }
-
-    void moveObstaclesToList(std::list<std::unique_ptr<IObstacle>> &list) override
-    {
-        for (auto &obstacleUPtr : obstacles)
-            list.push_back(std::move(obstacleUPtr));
-    }
-
-    std::size_t getObstacleCount() const override
-    {
         return length * 4;
     }
-
-protected:
-    std::array<std::unique_ptr<Icosahedron>, length * 4> obstacles;
 };
-
 #endif // VALLEY_H
