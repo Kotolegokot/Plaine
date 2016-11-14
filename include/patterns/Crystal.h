@@ -25,7 +25,7 @@
 class Crystal : public IObstaclePattern
 {
 public:
-    Crystal(btDynamicsWorld &world, IrrlichtDevice &device,  btScalar cellSize) :
+    Crystal(btDynamicsWorld &world, IrrlichtDevice &device, btScalar cellSize) :
         IObstaclePattern(world, device, cellSize)
     {}
 
