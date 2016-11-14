@@ -58,11 +58,9 @@ private:
     static constexpr btScalar CELL_SIZE = 100;
     static constexpr btScalar CHUNK_LENGTH = CHUNK_SIZE * CELL_SIZE;
 
-    void stickToGrid(const core::vector3df &playerPosition,
-                     std::size_t &edgeLeft, std::size_t &edgeRight,
-                     std::size_t &edgeBottom, std::size_t &edgeTop,
-                     std::size_t &edgeBack, std::size_t &edgeFront) const;
-    unsigned long generateChunk(std::size_t x, std::size_t y, std::size_t z);
+    void stickToGrid(const core::vector3df &playerPosition, long &edgeLeft, long &edgeRight,
+                     long &edgeBottom, long &edgeTop, long &edgeBack, long &edgeFront) const;
+    unsigned long generateChunk(long x, long y, long z);
     void removeLeftBehind(btScalar playerZ);
     btScalar farValueWithBuffer() const;
 
@@ -77,11 +75,11 @@ private:
     //      smoothly floating into the view range
     btScalar buffer = 0;
 
-    std::size_t generatedEdgeFront = 1;
-    std::size_t generatedEdgeLeft = 0;
-    std::size_t generatedEdgeRight = 0;
-    std::size_t generatedEdgeTop = 0;
-    std::size_t generatedEdgeBottom = 0;
+    long generatedEdgeFront = 1;
+    long generatedEdgeLeft = 0;
+    long generatedEdgeRight = 0;
+    long generatedEdgeTop = 0;
+    long generatedEdgeBottom = 0;
 
     btDynamicsWorld &world; // physics world
 

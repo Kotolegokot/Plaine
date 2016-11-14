@@ -193,30 +193,30 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
     #if DEBUG_OUTPUT
         unsigned long obstaclesGenerated = 0;
     #endif
-    std::size_t edgeLeft, edgeRight, edgeTop, edgeBottom, edgeBack, edgeFront;
+    long edgeLeft, edgeRight, edgeTop, edgeBottom, edgeBack, edgeFront;
     stickToGrid(playerPosition, edgeLeft, edgeRight, edgeTop, edgeBottom, edgeBack, edgeFront);
 
-    for (std::size_t z = edgeBack; z <= generatedEdgeFront; z++) {
-        for (std::size_t x = edgeLeft; x < generatedEdgeLeft; x++)
-            for (std::size_t y = edgeBottom; y <= edgeTop; y++)
+    for (long z = edgeBack; z <= generatedEdgeFront; z++) {
+        for (long x = edgeLeft; x < generatedEdgeLeft; x++)
+            for (long y = edgeBottom; y <= edgeTop; y++)
                 obstaclesGenerated += generateChunk(x, y, z);
 
-        for (std::size_t x = generatedEdgeLeft; x <= generatedEdgeRight; x++) {
-            for (std::size_t y = edgeBottom; y < generatedEdgeBottom; y++)
+        for (long x = generatedEdgeLeft; x <= generatedEdgeRight; x++) {
+            for (long y = edgeBottom; y < generatedEdgeBottom; y++)
                 obstaclesGenerated += generateChunk(x, y, z);
 
-            for (std::size_t y = generatedEdgeTop + 1; y <= edgeTop; y++)
+            for (long y = generatedEdgeTop + 1; y <= edgeTop; y++)
                 obstaclesGenerated += generateChunk(x, y, z);
         }
 
-        for (std::size_t x = generatedEdgeRight + 1; x <= edgeRight; x++)
-            for (std::size_t y = edgeBottom; y <= edgeTop; y++)
+        for (long x = generatedEdgeRight + 1; x <= edgeRight; x++)
+            for (long y = edgeBottom; y <= edgeTop; y++)
                 obstaclesGenerated += generateChunk(x, y, z);
     }
 
-    for (std::size_t z = generatedEdgeFront + 1; z < edgeFront; z++)
-        for (std::size_t x = edgeLeft; x <= edgeRight; x++)
-            for (std::size_t y = edgeBottom; y <= edgeTop; y++)
+    for (long z = generatedEdgeFront + 1; z < edgeFront; z++)
+        for (long x = edgeLeft; x <= edgeRight; x++)
+            for (long y = edgeBottom; y <= edgeTop; y++)
                 obstaclesGenerated += generateChunk(x, y, z);
 
     #if DEBUG_OUTPUT
@@ -232,10 +232,8 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
     removeLeftBehind(playerPosition.Z);
 }
 
-void ObstacleGenerator::stickToGrid(const core::vector3df &playerPosition,
-                                    std::size_t &edgeLeft, std::size_t &edgeRight,
-                                    std::size_t &edgeBottom, std::size_t &edgeTop,
-                                    std::size_t &edgeBack, std::size_t &edgeFront) const
+void ObstacleGenerator::stickToGrid(const core::vector3df &playerPosition, long &edgeLeft, long &edgeRight,
+                                    long &edgeBottom, long &edgeTop, long &edgeBack, long &edgeFront) const
 {
     edgeLeft = std::floor((playerPosition.X - farValueWithBuffer()) / CHUNK_LENGTH) * CHUNK_LENGTH;
     edgeRight = std::ceil((playerPosition.X + farValueWithBuffer()) / CHUNK_LENGTH) * CHUNK_LENGTH;
@@ -245,7 +243,7 @@ void ObstacleGenerator::stickToGrid(const core::vector3df &playerPosition,
     edgeFront = std::ceil((playerPosition.Z + farValueWithBuffer()) / CHUNK_LENGTH) * CHUNK_LENGTH;
 }
 
-unsigned long ObstacleGenerator::generateChunk(std::size_t x, std::size_t y, std::size_t z)
+unsigned long ObstacleGenerator::generateChunk(long x, long y, long z)
 {
     static Chunk<CHUNK_SIZE> chunk(obstaclePatternFactory);
     chunk.generate();
