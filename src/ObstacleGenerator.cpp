@@ -15,22 +15,25 @@
  */
 
 #include "ObstacleGenerator.h"
+#include "Chunk.h"
 #include "util.h"
 #include "options.h"
 
 using namespace irr;
 
 constexpr btScalar ObstacleGenerator::STEP;
-constexpr btScalar ObstacleGenerator::CHUNK_SIZE;
+constexpr std::size_t ObstacleGenerator::CHUNK_SIZE;
+constexpr btScalar ObstacleGenerator::CELL_SIZE;
+constexpr btScalar ObstacleGenerator::CHUNK_LENGTH;
 
 ObstacleGenerator::ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, btScalar farValue, btScalar buffer) :
     device(device), farValue(farValue), buffer(buffer), world(world),
-    obstaclePatternFactory(world, device, CHUNK_SIZE / 10)
+    obstaclePatternFactory(world, device, CELL_SIZE)
 {}
 
 ObstacleGenerator::~ObstacleGenerator()
 {
-    // remove all stored cubes
+    // remove all stored obstacles
     while (!obstacles.empty())
         obstacles.pop_front();
 }
@@ -234,17 +237,20 @@ void ObstacleGenerator::stickToGrid(const core::vector3df &playerPosition,
                                     std::size_t &edgeBottom, std::size_t &edgeTop,
                                     std::size_t &edgeBack, std::size_t &edgeFront) const
 {
-    edgeLeft = std::floor((playerPosition.X - farValueWithBuffer()) / CHUNK_SIZE) * CHUNK_SIZE;
-    edgeRight = std::ceil((playerPosition.X + farValueWithBuffer()) / CHUNK_SIZE) * CHUNK_SIZE;
-    edgeBottom = std::floor((playerPosition.Y - farValueWithBuffer()) / CHUNK_SIZE) * CHUNK_SIZE;
-    edgeTop = std::ceil((playerPosition.Y + farValueWithBuffer()) / CHUNK_SIZE) * CHUNK_SIZE;
-    edgeBack = std::floor(playerPosition.Z / CHUNK_SIZE) * CHUNK_SIZE;
-    edgeFront = std::ceil((playerPosition.Z + farValueWithBuffer()) / CHUNK_SIZE) * CHUNK_SIZE;
+    edgeLeft = std::floor((playerPosition.X - farValueWithBuffer()) / CHUNK_LENGTH) * CHUNK_LENGTH;
+    edgeRight = std::ceil((playerPosition.X + farValueWithBuffer()) / CHUNK_LENGTH) * CHUNK_LENGTH;
+    edgeBottom = std::floor((playerPosition.Y - farValueWithBuffer()) / CHUNK_LENGTH) * CHUNK_LENGTH;
+    edgeTop = std::ceil((playerPosition.Y + farValueWithBuffer()) / CHUNK_LENGTH) * CHUNK_LENGTH;
+    edgeBack = std::floor(playerPosition.Z / CHUNK_LENGTH) * CHUNK_LENGTH;
+    edgeFront = std::ceil((playerPosition.Z + farValueWithBuffer()) / CHUNK_LENGTH) * CHUNK_LENGTH;
 }
 
 unsigned long ObstacleGenerator::generateChunk(std::size_t x, std::size_t y, std::size_t z)
 {
-    // TODO
+    static Chunk<CHUNK_SIZE> chunk(obstaclePatternFactory);
+    chunk.generate();
+    chunk.produce(obstacles, { x * CHUNK_LENGTH, y * CHUNK_LENGTH, z * CHUNK_LENGTH }, CELL_SIZE);
+
     return 0;
 }
 

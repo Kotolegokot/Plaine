@@ -34,7 +34,7 @@ public:
         return { 1, 2, 1 };
     }
 
-    std::size_t produce(btVector3 position, std::list<std::unique_ptr<IObstacle>> &list) override
+    std::size_t produce(btVector3 position, std::list<std::unique_ptr<IObstacle>> &list) const override
     {
         const btScalar radius = cellSize * 0.4f;
         const btScalar length = cellSize * 1.8f;

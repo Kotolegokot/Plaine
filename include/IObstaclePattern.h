@@ -37,7 +37,7 @@ public:
 
     // create bodies and put them to the list
     // returns number of the bodies created
-    virtual std::size_t produce(btVector3 position, std::list<std::unique_ptr<IObstacle>> &list) = 0;
+    virtual std::size_t produce(btVector3 position, std::list<std::unique_ptr<IObstacle>> &list) const = 0;
 
 protected:
     btDynamicsWorld &world;

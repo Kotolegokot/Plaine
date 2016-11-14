@@ -20,7 +20,7 @@ public:
         return { 2, 2, length };
     }
 
-    std::size_t produce(btVector3 position, std::list<std::unique_ptr<IObstacle> > &list) override
+    std::size_t produce(btVector3 position, std::list<std::unique_ptr<IObstacle> > &list) const override
     {
         position += { cellSize, cellSize, 0 };
 

@@ -54,7 +54,9 @@ public:
 
 private:
     static constexpr btScalar STEP = 800;
-    static constexpr btScalar CHUNK_SIZE = 1000;
+    static constexpr std::size_t CHUNK_SIZE = 10;
+    static constexpr btScalar CELL_SIZE = 100;
+    static constexpr btScalar CHUNK_LENGTH = CHUNK_SIZE * CELL_SIZE;
 
     void stickToGrid(const core::vector3df &playerPosition,
                      std::size_t &edgeLeft, std::size_t &edgeRight,
