@@ -2,6 +2,9 @@
 #define OBSTACLEPATTERNFACTORY_H
 
 #include <memory>
+#include <irrlicht.h>
+#include <btBulletDynamicsCommon.h>
+#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "IObstaclePattern.h"
 #include "patterns/Crystal.h"
 #include "patterns/Tunnel.h"
