@@ -2,29 +2,38 @@
 #define CHUNK_H
 
 #include <array>
+#include <tuple>
+#include <vector>
 #include "ObstaclePatternFactory.h"
+#include "Randomizer.h"
+#include "util.h"
 
-template <std::size_t Size>
+template <int Size>
 class Chunk {
 public:
     /* 0     = empty
-     * 1     = occupied
-     * n > 1 = obstacle patterns
+     * n > 0 = obstacle patterns
      */
     Chunk(const ObstaclePatternFactory &obstaclePatternFactory) :
-        obstaclePatternFactory(obstaclePatternFactory)
+        factory(obstaclePatternFactory)
     {
-        clear();
-    }
-
-    void clear()
-    {
-        data.fill(0);
+        positions.resize(factory.size());
     }
 
     void generate()
     {
-        clear();
+        do {
+            clear();
+
+            for (int i = 0; i < factory.size(); i++) {
+                positions[i] = createRandomPoint(i);
+
+                for (int x = 0; x < factory[i].size().x; x++)
+                for (int y = 0; y < factory[i].size().y; y++)
+                for (int z = 0; z < factory[i].size().z; z++)
+                    get(positions[i] + Point3<int>(x, y, z)) = i + 1;
+            }
+        } while (collisions());
     }
 
     // creates objects and returns number of bodies generated
@@ -33,25 +42,47 @@ public:
     {
         std::size_t generated = 0;
 
-        for (std::size_t x = 0; x < Size; x++)
-            for (std::size_t y = 0; y < Size; y++)
-                for (std::size_t z = 0; z < Size; z++)
-                    if (this->get(x, y, z) > 1)
-                        generated += obstaclePatternFactory[this->get(x, y, z) - 2].produce(
-                                position + btVector3(x * cellSize, y * cellSize, z * cellSize),
-                                list);
+        for (auto &pos : positions)
+            generated += factory[get(pos) - 1].produce(
+                        position + btVector3(pos.x * cellSize, pos.y * cellSize, pos.z * cellSize),
+                        list);
 
         return generated;
     }
 
-private:
-    std::size_t &get(std::size_t x, std::size_t y, std::size_t z)
+    void clear()
     {
-        return data[x + y * Size + z * Size * Size];
+        data.fill(0);
     }
 
-    std::array<std::size_t, Size * Size * Size> data;
-    const ObstaclePatternFactory &obstaclePatternFactory;
+private:
+    bool collisions()
+    {
+        for (int i = 0; i < factory.size(); i++) {
+            for (int z = 0; z < factory[i].size().z; z++)
+            for (int y = 0; y < factory[i].size().y; y++)
+            for (int x = 0; x < factory[i].size().x; x++)
+                if (get(positions[i] + Point3<int>(x, y, z)) != i + 1)
+                    return true;
+        }
+        return false;
+    }
+
+    Point3<int> createRandomPoint(int patternIndex)
+    {
+        return { Randomizer::getInt(0, Size - factory[patternIndex].size().x),
+                 Randomizer::getInt(0, Size - factory[patternIndex].size().y),
+                 Randomizer::getInt(0, Size - factory[patternIndex].size().z) };
+    }
+
+    int &get(Point3<int> coord)
+    {
+        return data[coord.x + coord.y * Size + coord.z * Size * Size];
+    }
+
+    std::array<int, Size * Size * Size> data;
+    std::vector<Point3<int>> positions;
+    const ObstaclePatternFactory &factory;
 };
 
 #endif //CHUNK_H

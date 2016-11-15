@@ -7,7 +7,7 @@
 #include "IObstacle.h"
 #include "IObstaclePattern.h"
 
-template <std::size_t length>
+template <int length>
 class Valley : public IObstaclePattern
 {
 public:
@@ -15,7 +15,7 @@ public:
         IObstaclePattern(world, device, cellSize)
     {}
 
-    std::tuple<std::size_t, std::size_t, std::size_t> getSize() const override
+    Point3<int> size() const override
     {
         return { 2, 2, length };
     }

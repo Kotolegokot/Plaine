@@ -58,6 +58,27 @@ int sign(Number num)
         return 0;
 }
 
+template <typename IntType>
+struct Point3 {
+    Point3() = default;
+    Point3(IntType x, IntType y, IntType z) :
+        x(x), y(y), z(z) {}
+
+    friend Point3 operator +(const Point3 &p1, const Point3 &p2)
+    {
+        return Point3(p1.x + p2.x, p1.y + p2.y, p1.z + p2.z);
+    }
+
+    friend Point3 operator -(const Point3 &p1, const Point3 &p2)
+    {
+        return Point3(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);
+    }
+
+    IntType x = 0;
+    IntType y = 0;
+    IntType z = 0;
+};
+
 // GUI IDs
 enum GUI_ID {
     ID_BUTTON_QUIT,

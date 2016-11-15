@@ -18,11 +18,11 @@
 #define IOBSTACLEPATTERN_H
 
 #include <list>
-#include <tuple>
 #include <memory>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
-#include <IObstacle.h>
+#include "IObstacle.h"
+#include "util.h"
 
 using namespace irr;
 
@@ -33,7 +33,7 @@ public:
         world(world), device(device), cellSize(cellSize) {}
     virtual ~IObstaclePattern() {}
 
-    virtual std::tuple<std::size_t, std::size_t, std::size_t> getSize() const = 0;
+    virtual Point3<int> size() const = 0;
 
     // create bodies and put them to the list
     // returns number of the bodies created

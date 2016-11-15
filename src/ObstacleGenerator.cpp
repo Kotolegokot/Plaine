@@ -193,30 +193,30 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
     #if DEBUG_OUTPUT
         unsigned long obstaclesGenerated = 0;
     #endif
-    long edgeLeft, edgeRight, edgeTop, edgeBottom, edgeBack, edgeFront;
-    stickToGrid(playerPosition, edgeLeft, edgeRight, edgeTop, edgeBottom, edgeBack, edgeFront);
+    long edgeLeft, edgeRight, edgeBottom, edgeTop, edgeBack, edgeFront;
+    stickToGrid(playerPosition, edgeLeft, edgeRight, edgeBottom, edgeTop, edgeBack, edgeFront);
 
-    for (long z = edgeBack; z <= generatedEdgeFront; z++) {
-        for (long x = edgeLeft; x < generatedEdgeLeft; x++)
-            for (long y = edgeBottom; y <= edgeTop; y++)
+    for (long z = edgeBack; z <= generatedEdgeFront; z += CHUNK_LENGTH) {
+        for (long x = edgeLeft; x < generatedEdgeLeft; x += CHUNK_LENGTH)
+            for (long y = edgeBottom; y <= edgeTop; y += CHUNK_LENGTH)
                 obstaclesGenerated += generateChunk(x, y, z);
 
-        for (long x = generatedEdgeLeft; x <= generatedEdgeRight; x++) {
-            for (long y = edgeBottom; y < generatedEdgeBottom; y++)
+        for (long x = generatedEdgeLeft; x <= generatedEdgeRight; x += CHUNK_LENGTH) {
+            for (long y = edgeBottom; y < generatedEdgeBottom; y += CHUNK_LENGTH)
                 obstaclesGenerated += generateChunk(x, y, z);
 
-            for (long y = generatedEdgeTop + 1; y <= edgeTop; y++)
+            for (long y = generatedEdgeTop + 1; y <= edgeTop; y += CHUNK_LENGTH)
                 obstaclesGenerated += generateChunk(x, y, z);
         }
 
-        for (long x = generatedEdgeRight + 1; x <= edgeRight; x++)
-            for (long y = edgeBottom; y <= edgeTop; y++)
+        for (long x = generatedEdgeRight + 1; x <= edgeRight; x += CHUNK_LENGTH)
+            for (long y = edgeBottom; y <= edgeTop; y += CHUNK_LENGTH)
                 obstaclesGenerated += generateChunk(x, y, z);
     }
 
-    for (long z = generatedEdgeFront + 1; z < edgeFront; z++)
-        for (long x = edgeLeft; x <= edgeRight; x++)
-            for (long y = edgeBottom; y <= edgeTop; y++)
+    for (long z = generatedEdgeFront + 1; z < edgeFront; z += CHUNK_LENGTH)
+        for (long x = edgeLeft; x <= edgeRight; x += CHUNK_LENGTH)
+            for (long y = edgeBottom; y <= edgeTop; y += CHUNK_LENGTH)
                 obstaclesGenerated += generateChunk(x, y, z);
 
     #if DEBUG_OUTPUT

@@ -9,6 +9,9 @@
 #include "patterns/Tunnel.h"
 #include "patterns/Valley.h"
 
+// it uses int in interface functions for simplicity
+//   and because we are quite sure there cannot be more than std::numeric_limits<int>::max()
+//   patterns in the factory
 class ObstaclePatternFactory {
 public:
     ObstaclePatternFactory(btDynamicsWorld &world, IrrlichtDevice &device, btScalar cellSize)
@@ -18,19 +21,19 @@ public:
         patterns[2] = std::make_unique<Valley<5>>(world, device, cellSize);
     }
 
-    IObstaclePattern &operator [](std::size_t index)
+    IObstaclePattern &operator [](int index)
     {
-        return *patterns[index];
+        return *patterns[static_cast<std::size_t>(index)];
     }
 
-    const IObstaclePattern &operator [](std::size_t index) const
+    const IObstaclePattern &operator [](int index) const
     {
-        return *patterns[index];
+        return *patterns[static_cast<std::size_t>(index)];
     }
 
-    std::size_t size() const
+    int size() const
     {
-        return patterns.size();
+        return static_cast<int>(patterns.size());
     }
 
 private:
