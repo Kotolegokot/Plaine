@@ -42,23 +42,29 @@ public:
         return *rigidBody;
     }
 
+    const btRigidBody &getRigidBody() const
+    {
+        return *rigidBody;
+    }
+
     scene::ISceneNode &getNode()
     {
-        return ((MotionState *) rigidBody->getMotionState())->getNode();
+        return static_cast<MotionState *>(rigidBody->getMotionState())->getNode();
+    }
+
+    const scene::ISceneNode &getNode() const
+    {
+        return static_cast<MotionState *>(rigidBody->getMotionState())->getNode();
     }
 
     btVector3 getPosition() const override
     {
-        btTransform transform;
-        rigidBody->getMotionState()->getWorldTransform(transform);
-
-        return transform.getOrigin();
+        return rigidBody->getCenterOfMassTransform().getOrigin();
     }
 
     void setPosition(const btVector3 &position) override
     {
-        btTransform transform;
-        rigidBody->getMotionState()->getWorldTransform(transform);
+        btTransform transform = rigidBody->getCenterOfMassTransform();
         transform.setOrigin(position);
 
         rigidBody->setCenterOfMassTransform(transform);
@@ -68,32 +74,30 @@ public:
 
 protected:
     virtual std::unique_ptr<scene::ISceneNode> createNode() = 0;
-    virtual void createMotionState(std::unique_ptr<scene::ISceneNode> node) = 0;
-    virtual void createShape() = 0;
+    virtual std::unique_ptr<btMotionState>
+                createMotionState(std::unique_ptr<scene::ISceneNode> node) = 0;
+    virtual std::unique_ptr<btCollisionShape> createShape() = 0;
 
     // this method must be called in a derived class' constructor
     // creates the node and the body
     //      and add the body to the physics (Bullet) world
     void createBody()
     {
-        std::unique_ptr<scene::ISceneNode> node = createNode();
-        createMotionState(std::move(node));
-        createShape();
+        auto motionState = createMotionState(createNode());
+        auto shape = createShape();
         btScalar mass = getMass();
 
         btVector3 inertia(0, 0, 0);
         if (mass)
             shape->calculateLocalInertia(mass, inertia);
-        btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, motionState.get(), shape.get(), inertia);
+        btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, motionState.release(),
+                                                             shape.release(), inertia);
 
         rigidBody = std::make_unique<btRigidBody>(rigidBodyCI);
         rigidBody->setUserIndex(0); // default index for bodies
         world.addRigidBody(rigidBody.get());
     }
 
-    // created inside, must be deleted in desctructor
-    std::unique_ptr<MotionState> motionState;
-    std::unique_ptr<btCollisionShape> shape;
     std::unique_ptr<btRigidBody> rigidBody;
 };
 

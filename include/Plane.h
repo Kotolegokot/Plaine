@@ -81,10 +81,11 @@ public:
     int getNegativeMultiplier() const;
     void setNegativeMultiplier(int negativeMultiplier);
 protected:
-    virtual std::unique_ptr<scene::ISceneNode> createNode() override;
-    virtual void createMotionState(std::unique_ptr<scene::ISceneNode> node) override;
-    virtual void createShape() override;
-    virtual btScalar getMass() override;
+    std::unique_ptr<scene::ISceneNode> createNode() override;
+    std::unique_ptr<btMotionState>
+        createMotionState(std::unique_ptr<scene::ISceneNode> node) override;
+    std::unique_ptr<btCollisionShape> createShape() override;
+    btScalar getMass() override;
 
 private:
     bool exploded = false;

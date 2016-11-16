@@ -60,16 +60,18 @@ std::unique_ptr<scene::ISceneNode> Plane::createNode()
     return node;
 }
 
-void Plane::createMotionState(std::unique_ptr<scene::ISceneNode> node)
+std::unique_ptr<btMotionState>
+    Plane::createMotionState(std::unique_ptr<scene::ISceneNode> node)
 {
-    motionState = std::make_unique<MotionState>(btTransform(btQuaternion(0, 0, 0, 1), position), node.release());
+    return std::make_unique<MotionState>(btTransform(btQuaternion(0, 0, 0, 1), position),
+                                         node.release());
 }
 
-void Plane::createShape()
+std::unique_ptr<btCollisionShape> Plane::createShape()
 {
     ObjMesh objMesh(PLANE_MODEL, 15);
 
-    shape = std::make_unique<btConvexTriangleMeshShape>(objMesh.getTriangleMesh().release());
+    return std::make_unique<btConvexTriangleMeshShape>(objMesh.getTriangleMesh().release());
 }
 
 btScalar Plane::getMass()

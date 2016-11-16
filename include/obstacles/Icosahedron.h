@@ -36,14 +36,14 @@ public:
         createBody();
     }
 
-    virtual btScalar getMass() override
+    btScalar getMass() override
     {
         btScalar k = 5.0f / 12.0f * (3.0f + std::sqrt(5.0f));
         return edge*edge*edge*k*MASS_COEFFICIENT;
     }
 
 protected:
-    virtual std::unique_ptr<scene::ISceneNode> createNode() override
+    std::unique_ptr<scene::ISceneNode> createNode() override
     {
         std::unique_ptr<scene::IMesh> mesh(device.getSceneManager()->getMesh(ICOSAHEDRON_MODEL));
 
@@ -60,15 +60,16 @@ protected:
         return node;
     }
 
-    virtual void createMotionState(std::unique_ptr<scene::ISceneNode> node) override
+    std::unique_ptr<btMotionState>
+        createMotionState(std::unique_ptr<scene::ISceneNode> node) override
     {
-        motionState = std::make_unique<MotionState>(btTransform(btQuaternion(0, 0, 0, 1), position), node.release());
+        return std::make_unique<MotionState>(btTransform(btQuaternion(0, 0, 0, 1), position), node.release());
     }
 
-    virtual void createShape() override
+    std::unique_ptr<btCollisionShape> createShape() override
     {
-        shape = std::make_unique<btConvexPointCloudShape>(objMesh->getPoints(), objMesh->getPointsCount(),
-                                                          btVector3(edge, edge, edge));
+        return std::make_unique<btConvexPointCloudShape>(objMesh->getPoints(), objMesh->getPointsCount(),
+                                                         btVector3(edge, edge, edge));
     }
 
 

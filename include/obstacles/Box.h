@@ -32,13 +32,13 @@ public:
         createBody();
     }
 
-    virtual btScalar getMass() override
+    btScalar getMass() override
     {
-        return halfExtents.x()*halfExtents.y()*halfExtents.z()*MASS_COEFFICIENT;
+        return 8*halfExtents.x()*halfExtents.y()*halfExtents.z()*MASS_COEFFICIENT;
     }
 
 protected:
-    virtual std::unique_ptr<scene::ISceneNode> createNode() override
+    std::unique_ptr<scene::ISceneNode> createNode() override
     {
         std::unique_ptr<scene::ISceneNode> node(device.getSceneManager()->addCubeSceneNode(1, 0, -1,
             core::vector3df(position.x(), position.y(), position.z())));
@@ -55,15 +55,17 @@ protected:
         return node;
     }
 
-    virtual void createMotionState(std::unique_ptr<scene::ISceneNode> node) override
+    std::unique_ptr<btMotionState>
+        createMotionState(std::unique_ptr<scene::ISceneNode> node) override
     {
-        motionState = std::make_unique<MotionState>(btTransform(btQuaternion(0, 0, 0, 1), position), node.release());
+        return std::make_unique<MotionState>(btTransform(btQuaternion(0, 0, 0, 1), position),
+                                             node.release());
     }
 
-    virtual void createShape() override
+    std::unique_ptr<btCollisionShape> createShape() override
     {
         // create shape for cubes
-        shape = std::make_unique<btBoxShape>(halfExtents);
+        return std::make_unique<btBoxShape>(halfExtents);
     }
 
 private:
