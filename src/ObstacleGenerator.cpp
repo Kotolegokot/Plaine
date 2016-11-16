@@ -29,13 +29,6 @@ constexpr btScalar ObstacleGenerator::CHUNK_LENGTH;
 ObstacleGenerator::ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, btScalar farValue, btScalar buffer) :
     device(device), farValue(farValue), buffer(buffer), world(world) {}
 
-ObstacleGenerator::~ObstacleGenerator()
-{
-    // remove all stored obstacles
-    while (!obstacles.empty())
-        obstacles.pop_front();
-}
-
 /*void ObstacleGenerator::generate(const core::vector3df &playerPosition)
 {
     // number of obstacles generated within this tick

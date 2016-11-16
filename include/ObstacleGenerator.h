@@ -46,7 +46,6 @@ class ObstacleGenerator
 {
 public:
     ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, btScalar farValue = 1500, btScalar buffer = 300);
-    ~ObstacleGenerator();
     void generate(const core::vector3df &playerPosition, const ChunkDB &chunkDB);
     u32 getCubeCount() const;
 
