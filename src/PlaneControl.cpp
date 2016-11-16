@@ -16,6 +16,7 @@
 
 #include "PlaneControl.h"
 
+constexpr btScalar PlaneControl::FORWARD_IMPULSE;
 constexpr btScalar PlaneControl::MAX_PITCH_ANGLE;
 constexpr btScalar PlaneControl::MAX_YAW_ANGLE;
 constexpr btScalar PlaneControl::MAX_ROLL_VELOCITY;
@@ -124,7 +125,7 @@ void PlaneControl::handle(EventReceiver &eventReceiver)
     sideImpulse.setZ(0);
     plane.getRigidBody().applyCentralImpulse(sideImpulse);
 
-    plane.getRigidBody().applyCentralImpulse(btVector3(0, 0, 50));
+    plane.getRigidBody().applyCentralImpulse(btVector3(0, 0, FORWARD_IMPULSE));
 
     // air resistance simulation
     btVector3 linearVelocity = -plane.getRigidBody().getLinearVelocity();

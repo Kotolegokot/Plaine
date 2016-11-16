@@ -39,7 +39,8 @@
 
 using namespace irr;
 
-using ChunkDB = std::array<Chunk<10>, 100000>;
+constexpr std::size_t CHUNK_SIZE = 8;
+using ChunkDB = std::array<Chunk<CHUNK_SIZE>, 10000>;
 
 // this class is responsible for generating obstacles on the fly
 class ObstacleGenerator
@@ -55,9 +56,7 @@ public:
     btScalar getBuffer() const;
 
 private:
-    static constexpr btScalar STEP = 800;
-    static constexpr std::size_t CHUNK_SIZE = 10;
-    static constexpr btScalar CELL_SIZE = 100;
+    static constexpr btScalar CELL_SIZE = 250;
     static constexpr btScalar CHUNK_LENGTH = CHUNK_SIZE * CELL_SIZE;
 
     void stickToGrid(const core::vector3df &playerPosition, long &edgeLeft, long &edgeRight,
