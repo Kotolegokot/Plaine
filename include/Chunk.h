@@ -2,7 +2,6 @@
 #define CHUNK_H
 
 #include <array>
-#include <tuple>
 #include <vector>
 #include "ObstaclePatternFactory.h"
 #include "Randomizer.h"
@@ -23,16 +22,8 @@ public:
     void generate()
     {
         do {
-            clear();
-
-            for (int i = 0; i < factory.size(); i++) {
+            for (int i = 0; i < factory.size(); i++)
                 positions[i] = createRandomPoint(i);
-
-                for (int x = 0; x < factory[i].size().x; x++)
-                for (int y = 0; y < factory[i].size().y; y++)
-                for (int z = 0; z < factory[i].size().z; z++)
-                    get(positions[i] + Point3<int>(x, y, z)) = i + 1;
-            }
         } while (collisions());
     }
 
@@ -42,29 +33,34 @@ public:
     {
         std::size_t generated = 0;
 
-        for (auto &pos : positions)
-            generated += factory[get(pos) - 1].produce(
-                        position + btVector3(pos.x * cellSize, pos.y * cellSize, pos.z * cellSize),
-                        list);
-
+        for (int i = 0; i < factory.size(); i++)
+            generated += factory[i].produce(position +
+                                            btVector3(positions[i].x * cellSize,
+                                                      positions[i].y * cellSize,
+                                                      positions[i].z * cellSize), list);
         return generated;
-    }
-
-    void clear()
-    {
-        data.fill(0);
     }
 
 private:
     bool collisions()
     {
+        Array3<int, Size> data;
+
+        for (int i = 0; i < factory.size(); i++) {
+            for (int x = 0; x < factory[i].size().x; x++)
+            for (int y = 0; y < factory[i].size().y; y++)
+            for (int z = 0; z < factory[i].size().z; z++)
+                data.at(positions[i] + Point3<int>(x, y, z)) = i + 1;
+        }
+
         for (int i = 0; i < factory.size(); i++) {
             for (int z = 0; z < factory[i].size().z; z++)
             for (int y = 0; y < factory[i].size().y; y++)
             for (int x = 0; x < factory[i].size().x; x++)
-                if (get(positions[i] + Point3<int>(x, y, z)) != i + 1)
+                if (data.at(positions[i] + Point3<int>(x, y, z)) != i + 1)
                     return true;
         }
+
         return false;
     }
 
@@ -75,12 +71,6 @@ private:
                  Randomizer::getInt(0, Size - factory[patternIndex].size().z) };
     }
 
-    int &get(Point3<int> coord)
-    {
-        return data[coord.x + coord.y * Size + coord.z * Size * Size];
-    }
-
-    std::array<int, Size * Size * Size> data;
     std::vector<Point3<int>> positions;
     const ObstaclePatternFactory &factory;
 };

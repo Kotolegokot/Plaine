@@ -17,6 +17,7 @@
 #ifndef UTIL_H_INCLUDED
 #define UTIL_H_INCLUDED
 
+#include <array>
 #include <string>
 #include <cstdlib>
 #include <irrlicht.h>
@@ -64,6 +65,10 @@ struct Point3 {
     Point3(IntType x, IntType y, IntType z) :
         x(x), y(y), z(z) {}
 
+    template <typename IntType2>
+    Point3(const Point3<IntType2> &other) :
+        x(other.x), y(other.y), z(other.z) {}
+
     friend Point3 operator +(const Point3 &p1, const Point3 &p2)
     {
         return Point3(p1.x + p2.x, p1.y + p2.y, p1.z + p2.z);
@@ -77,6 +82,24 @@ struct Point3 {
     IntType x = 0;
     IntType y = 0;
     IntType z = 0;
+};
+
+template <typename T, std::size_t N>
+struct Array3 : public std::array<T, N * N * N> {
+    Array3() = default;
+
+    constexpr const T &at(Point3<std::size_t> pos) const
+    {
+        return std::array<T, N * N * N>::at(pos.x + pos.y * N + pos.z * N * N);
+    }
+
+    T &at(Point3<std::size_t> pos)
+    {
+        return std::array<T, N * N * N>::at(pos.x + pos.y * N + pos.z * N * N);
+    }
+
+    constexpr const T &operator [](std::size_t pos) const = delete;
+    T &operator [](std::size_t pos) = delete;
 };
 
 // GUI IDs
