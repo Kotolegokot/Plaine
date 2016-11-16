@@ -21,19 +21,19 @@ public:
         patterns[2] = std::make_unique<Valley<5>>(world, device, cellSize);
     }
 
-    IObstaclePattern &operator [](int index)
+    IObstaclePattern &operator [](std::size_t index)
     {
-        return *patterns[static_cast<std::size_t>(index)];
+        return *patterns[index];
     }
 
-    const IObstaclePattern &operator [](int index) const
+    const IObstaclePattern &operator [](std::size_t index) const
     {
-        return *patterns[static_cast<std::size_t>(index)];
+        return *patterns[index];
     }
 
-    int size() const
+    std::size_t size() const
     {
-        return static_cast<int>(patterns.size());
+        return patterns.size();
     }
 
 private:

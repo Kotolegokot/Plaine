@@ -9,69 +9,78 @@
 
 template <int Size>
 class Chunk {
+private:
+    using PatternPosition = std::pair<int, Point3<int>>;
 public:
-    /* 0     = empty
-     * n > 0 = obstacle patterns
-     */
     Chunk(const ObstaclePatternFactory &obstaclePatternFactory) :
         factory(obstaclePatternFactory)
-    {
-        positions.resize(factory.size());
-    }
+    {}
 
     void generate()
     {
         do {
-            for (int i = 0; i < factory.size(); i++)
-                positions[i] = createRandomPoint(i);
+            positions.resize(Randomizer::getInt(0, 10));
+
+            for (std::size_t i = 0; i < positions.size(); i++)
+                positions[i] = createRandomPosition();
         } while (collisions());
     }
 
     // creates objects and returns number of bodies generated
     std::size_t produce(std::list<std::unique_ptr<IObstacle>> &list,
-                        btVector3 position, btScalar cellSize)
+                        btVector3 chunkPosition, btScalar cellSize)
     {
         std::size_t generated = 0;
 
-        for (int i = 0; i < factory.size(); i++)
-            generated += factory[i].produce(position +
-                                            btVector3(positions[i].x * cellSize,
-                                                      positions[i].y * cellSize,
-                                                      positions[i].z * cellSize), list);
+        for (std::size_t i = 0; i < positions.size(); i++) {
+            int patternIndex = positions[i].first;
+            Point3<int> &pos = positions[i].second;
+
+            generated += factory[patternIndex].produce(
+                        chunkPosition + btVector3(pos.x, pos.y, pos.z) * cellSize, list);
+        }
         return generated;
     }
 
 private:
     bool collisions()
     {
+        /* 0     = empty
+         * n > 0 = obstacle patterns
+         */
         Array3<int, Size> data;
+        data.fill(0);
 
-        for (int i = 0; i < factory.size(); i++) {
-            for (int x = 0; x < factory[i].size().x; x++)
-            for (int y = 0; y < factory[i].size().y; y++)
-            for (int z = 0; z < factory[i].size().z; z++)
-                data.at(positions[i] + Point3<int>(x, y, z)) = i + 1;
-        }
+        for (std::size_t i = 0; i < positions.size(); i++) {
+            int patternIndex = positions[i].first;
+            Point3<int> &pos = positions[i].second;
 
-        for (int i = 0; i < factory.size(); i++) {
-            for (int z = 0; z < factory[i].size().z; z++)
-            for (int y = 0; y < factory[i].size().y; y++)
-            for (int x = 0; x < factory[i].size().x; x++)
-                if (data.at(positions[i] + Point3<int>(x, y, z)) != i + 1)
+            for (int x = 0; x < factory[patternIndex].size().x; x++)
+            for (int y = 0; y < factory[patternIndex].size().y; y++)
+            for (int z = 0; z < factory[patternIndex].size().z; z++) {
+                int &currentCell = data.at(pos + Point3<int>(x, y, z));
+
+                if (currentCell != 0)
                     return true;
+                else
+                    data.at(pos + Point3<int>(x, y, z)) = i + 1;
+            }
         }
 
         return false;
     }
 
-    Point3<int> createRandomPoint(int patternIndex)
+    PatternPosition createRandomPosition()
     {
-        return { Randomizer::getInt(0, Size - factory[patternIndex].size().x),
-                 Randomizer::getInt(0, Size - factory[patternIndex].size().y),
-                 Randomizer::getInt(0, Size - factory[patternIndex].size().z) };
+        int patternIndex = Randomizer::getInt(0, factory.size() - 1);
+        Point3<int> position = { Randomizer::getInt(0, Size - factory[patternIndex].size().x),
+                                 Randomizer::getInt(0, Size - factory[patternIndex].size().y),
+                                 Randomizer::getInt(0, Size - factory[patternIndex].size().z) };
+
+        return { patternIndex, position };
     }
 
-    std::vector<Point3<int>> positions;
+    std::vector<PatternPosition> positions;
     const ObstaclePatternFactory &factory;
 };
 
