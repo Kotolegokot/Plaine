@@ -439,7 +439,7 @@ void Game::mainMenu()
 bool Game::run()
 {
     // generate some chunks
-    std::unique_ptr<ChunkDB> chunkDB = std::make_unique<ChunkDB>(); // use heap instead of heap
+    auto chunkDB = std::make_unique<ChunkDB>(); // use heap instead of stack
     for (auto &chunk : *chunkDB)
         chunk.generate();
 
