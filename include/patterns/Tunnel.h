@@ -24,16 +24,18 @@
 class Tunnel : public IObstaclePattern
 {
 public:
-    Tunnel(btDynamicsWorld &world, IrrlichtDevice &device, btScalar cellSize) :
-        IObstaclePattern(world, device, cellSize)
-    {}
+    Tunnel() = default;
 
     Point3<int> size() const override
     {
         return { 1, 1, 2 };
     }
 
-    std::size_t produce(btVector3 position, std::list<std::unique_ptr<IObstacle>> &list) const override
+    virtual std::size_t produce(btDynamicsWorld &world,
+                                IrrlichtDevice &device,
+                                btScalar cellSize,
+                                btVector3 position,
+                                std::list<std::unique_ptr<IObstacle>> &list) const override
     {
         const btScalar radius = cellSize * 0.4f;
         const btScalar length = cellSize * 1.8f;

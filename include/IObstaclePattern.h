@@ -29,20 +29,18 @@ using namespace irr;
 class IObstaclePattern
 {
 public:
-    IObstaclePattern(btDynamicsWorld &world, IrrlichtDevice &device, btScalar cellSize) :
-        world(world), device(device), cellSize(cellSize) {}
-    virtual ~IObstaclePattern() {}
+    IObstaclePattern() = default;
+    virtual ~IObstaclePattern() = default;
 
     virtual Point3<int> size() const = 0;
 
     // create bodies and put them to the list
     // returns number of the bodies created
-    virtual std::size_t produce(btVector3 position, std::list<std::unique_ptr<IObstacle>> &list) const = 0;
-
-protected:
-    btDynamicsWorld &world;
-    IrrlichtDevice &device;
-    btScalar cellSize;
+    virtual std::size_t produce(btDynamicsWorld &world,
+                                IrrlichtDevice &device,
+                                btScalar cellSize,
+                                btVector3 position,
+                                std::list<std::unique_ptr<IObstacle>> &list) const = 0;
 };
 
 #endif // IOBSTACLEPATTERN_H

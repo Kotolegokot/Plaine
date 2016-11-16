@@ -27,6 +27,7 @@
 #include "IBody.h"
 #include "Randomizer.h"
 #include "ObstaclePatternFactory.h"
+#include "Chunk.h"
 #include "obstacles/Box.h"
 #include "obstacles/Tetrahedron.h"
 #include "obstacles/Icosahedron.h"
@@ -38,13 +39,15 @@
 
 using namespace irr;
 
+using ChunkDB = std::array<Chunk<10>, 100000>;
+
 // this class is responsible for generating obstacles on the fly
 class ObstacleGenerator
 {
 public:
     ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, btScalar farValue = 1500, btScalar buffer = 300);
     ~ObstacleGenerator();
-    void generate(const core::vector3df &playerPosition);
+    void generate(const core::vector3df &playerPosition, const ChunkDB &chunkDB);
     u32 getCubeCount() const;
 
     void setFarValue(btScalar value);
@@ -60,7 +63,7 @@ private:
 
     void stickToGrid(const core::vector3df &playerPosition, long &edgeLeft, long &edgeRight,
                      long &edgeBottom, long &edgeTop, long &edgeBack, long &edgeFront) const;
-    unsigned long generateChunk(long x, long y, long z);
+    unsigned long generateChunk(long x, long y, long z, const ChunkDB &chunkDB);
     void removeLeftBehind(btScalar playerZ);
     btScalar farValueWithBuffer() const;
 
@@ -82,8 +85,6 @@ private:
     long generatedEdgeBottom = 0;
 
     btDynamicsWorld &world; // physics world
-
-    ObstaclePatternFactory obstaclePatternFactory;
 };
 
 #endif // OBSTACLEGENERATOR_H

@@ -11,16 +11,18 @@ template <int length>
 class Valley : public IObstaclePattern
 {
 public:
-    Valley(btDynamicsWorld &world, IrrlichtDevice &device, btScalar cellSize) :
-        IObstaclePattern(world, device, cellSize)
-    {}
+    Valley() = default;
 
     Point3<int> size() const override
     {
         return { 2, 2, length };
     }
 
-    std::size_t produce(btVector3 position, std::list<std::unique_ptr<IObstacle> > &list) const override
+    virtual std::size_t produce(btDynamicsWorld &world,
+                                IrrlichtDevice &device,
+                                btScalar cellSize,
+                                btVector3 position,
+                                std::list<std::unique_ptr<IObstacle>> &list) const override
     {
         position += { cellSize, cellSize, 0 };
 

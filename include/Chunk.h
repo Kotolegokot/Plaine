@@ -12,9 +12,7 @@ class Chunk {
 private:
     using PatternPosition = std::pair<int, Point3<int>>;
 public:
-    Chunk(const ObstaclePatternFactory &obstaclePatternFactory) :
-        factory(obstaclePatternFactory)
-    {}
+    Chunk() = default;
 
     void generate()
     {
@@ -27,16 +25,19 @@ public:
     }
 
     // creates objects and returns number of bodies generated
-    std::size_t produce(std::list<std::unique_ptr<IObstacle>> &list,
-                        btVector3 chunkPosition, btScalar cellSize)
+    std::size_t produce(btDynamicsWorld &world,
+                        IrrlichtDevice &device,
+                        btScalar cellSize,
+                        btVector3 chunkPosition,
+                        std::list<std::unique_ptr<IObstacle>> &list) const
     {
         std::size_t generated = 0;
 
         for (std::size_t i = 0; i < positions.size(); i++) {
             int patternIndex = positions[i].first;
-            Point3<int> &pos = positions[i].second;
+            const Point3<int> &pos = positions[i].second;
 
-            generated += factory[patternIndex].produce(
+            generated += ObstaclePatternFactory::at(patternIndex).produce(world, device, cellSize,
                         chunkPosition + btVector3(pos.x, pos.y, pos.z) * cellSize, list);
         }
         return generated;
@@ -53,11 +54,11 @@ private:
 
         for (std::size_t i = 0; i < positions.size(); i++) {
             int patternIndex = positions[i].first;
-            Point3<int> &pos = positions[i].second;
+            const Point3<int> &pos = positions[i].second;
 
-            for (int x = 0; x < factory[patternIndex].size().x; x++)
-            for (int y = 0; y < factory[patternIndex].size().y; y++)
-            for (int z = 0; z < factory[patternIndex].size().z; z++) {
+            for (int x = 0; x < ObstaclePatternFactory::at(patternIndex).size().x; x++)
+            for (int y = 0; y < ObstaclePatternFactory::at(patternIndex).size().y; y++)
+            for (int z = 0; z < ObstaclePatternFactory::at(patternIndex).size().z; z++) {
                 int &currentCell = data.at(pos + Point3<int>(x, y, z));
 
                 if (currentCell != 0)
@@ -70,18 +71,17 @@ private:
         return false;
     }
 
-    PatternPosition createRandomPosition()
+    static PatternPosition createRandomPosition()
     {
-        int patternIndex = Randomizer::getInt(0, factory.size() - 1);
-        Point3<int> position = { Randomizer::getInt(0, Size - factory[patternIndex].size().x),
-                                 Randomizer::getInt(0, Size - factory[patternIndex].size().y),
-                                 Randomizer::getInt(0, Size - factory[patternIndex].size().z) };
+        int patternIndex = Randomizer::getInt(0, ObstaclePatternFactory::size() - 1);
+        Point3<int> position = { Randomizer::getInt(0, Size - ObstaclePatternFactory::at(patternIndex).size().x),
+                                 Randomizer::getInt(0, Size - ObstaclePatternFactory::at(patternIndex).size().y),
+                                 Randomizer::getInt(0, Size - ObstaclePatternFactory::at(patternIndex).size().z) };
 
         return { patternIndex, position };
     }
 
     std::vector<PatternPosition> positions;
-    const ObstaclePatternFactory &factory;
 };
 
 #endif //CHUNK_H

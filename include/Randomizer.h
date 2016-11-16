@@ -24,14 +24,16 @@ class Randomizer
 public:
     Randomizer() = delete;
 
-    template <typename RealType> static RealType getReal(RealType min = 0, RealType max = 1)
+    template <typename RealType>
+    static RealType getReal(RealType min = 0, RealType max = 1)
     {
         std::uniform_real_distribution<RealType> distribution(min, max);
 
         return distribution(engine);
     }
 
-    template <typename IntType> static IntType getInteger(IntType min = 0, IntType max = std::numeric_limits<IntType>::max())
+    template <typename IntType>
+    static IntType getInteger(IntType min = 0, IntType max = std::numeric_limits<IntType>::max())
     {
         std::uniform_int_distribution<IntType> distribution(min, max);
 

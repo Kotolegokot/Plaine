@@ -438,6 +438,11 @@ void Game::mainMenu()
 // returns false if quit is pressed
 bool Game::run()
 {
+    // generate some chunks
+    std::unique_ptr<ChunkDB> chunkDB = std::make_unique<ChunkDB>(); // use heap instead of heap
+    for (auto &chunk : *chunkDB)
+        chunk.generate();
+
     gui->initialize(Screen::HUD);
     initializeScene();
 
@@ -615,7 +620,7 @@ bool Game::run()
                     deltaTime -= tick;
                     accumulator += tick;
 
-                    obstacleGenerator->generate(plane->getNode().getPosition()); // generate obstacles
+                    obstacleGenerator->generate(plane->getNode().getPosition(), *chunkDB);
                     planeControl->handle(*eventReceiver); // handle plane controls
                     plane->addScore(2);
                 }

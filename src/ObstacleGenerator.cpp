@@ -27,9 +27,7 @@ constexpr btScalar ObstacleGenerator::CELL_SIZE;
 constexpr btScalar ObstacleGenerator::CHUNK_LENGTH;
 
 ObstacleGenerator::ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, btScalar farValue, btScalar buffer) :
-    device(device), farValue(farValue), buffer(buffer), world(world),
-    obstaclePatternFactory(world, device, CELL_SIZE)
-{}
+    device(device), farValue(farValue), buffer(buffer), world(world) {}
 
 ObstacleGenerator::~ObstacleGenerator()
 {
@@ -188,7 +186,8 @@ ObstacleGenerator::~ObstacleGenerator()
     removeLeftBehind(playerPosition.Z);
 }*/
 
-void ObstacleGenerator::generate(const core::vector3df &playerPosition)
+void ObstacleGenerator::generate(const core::vector3df &playerPosition,
+                                 const ChunkDB &chunkDB)
 {
     #if DEBUG_OUTPUT
         unsigned long obstaclesGenerated = 0;
@@ -199,25 +198,25 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
     for (long z = edgeBack; z <= generatedEdgeFront; z += CHUNK_LENGTH) {
         for (long x = edgeLeft; x < generatedEdgeLeft; x += CHUNK_LENGTH)
             for (long y = edgeBottom; y <= edgeTop; y += CHUNK_LENGTH)
-                obstaclesGenerated += generateChunk(x, y, z);
+                obstaclesGenerated += generateChunk(x, y, z, chunkDB);
 
         for (long x = generatedEdgeLeft; x <= generatedEdgeRight; x += CHUNK_LENGTH) {
             for (long y = edgeBottom; y < generatedEdgeBottom; y += CHUNK_LENGTH)
-                obstaclesGenerated += generateChunk(x, y, z);
+                obstaclesGenerated += generateChunk(x, y, z, chunkDB);
 
             for (long y = generatedEdgeTop + 1; y <= edgeTop; y += CHUNK_LENGTH)
-                obstaclesGenerated += generateChunk(x, y, z);
+                obstaclesGenerated += generateChunk(x, y, z, chunkDB);
         }
 
         for (long x = generatedEdgeRight + 1; x <= edgeRight; x += CHUNK_LENGTH)
             for (long y = edgeBottom; y <= edgeTop; y += CHUNK_LENGTH)
-                obstaclesGenerated += generateChunk(x, y, z);
+                obstaclesGenerated += generateChunk(x, y, z, chunkDB);
     }
 
     for (long z = generatedEdgeFront + 1; z < edgeFront; z += CHUNK_LENGTH)
         for (long x = edgeLeft; x <= edgeRight; x += CHUNK_LENGTH)
             for (long y = edgeBottom; y <= edgeTop; y += CHUNK_LENGTH)
-                obstaclesGenerated += generateChunk(x, y, z);
+                obstaclesGenerated += generateChunk(x, y, z, chunkDB);
 
     #if DEBUG_OUTPUT
         std::cout << obstaclesGenerated << " obstacles generated" << std::endl;
@@ -243,11 +242,11 @@ void ObstacleGenerator::stickToGrid(const core::vector3df &playerPosition, long 
     edgeFront = std::ceil((playerPosition.Z + farValueWithBuffer()) / CHUNK_LENGTH) * CHUNK_LENGTH;
 }
 
-unsigned long ObstacleGenerator::generateChunk(long x, long y, long z)
+unsigned long ObstacleGenerator::generateChunk(long x, long y, long z, const ChunkDB &chunkDB)
 {
-    static Chunk<CHUNK_SIZE> chunk(obstaclePatternFactory);
-    chunk.generate();
-    chunk.produce(obstacles, { x * CHUNK_LENGTH, y * CHUNK_LENGTH, z * CHUNK_LENGTH }, CELL_SIZE);
+    std::size_t chunkIndex = Randomizer::getInt(0, chunkDB.size() - 1);
+
+    chunkDB[chunkIndex].produce(world, device, CELL_SIZE, btVector3(x, y, z) * CHUNK_SIZE, obstacles);
 
     return 0;
 }
