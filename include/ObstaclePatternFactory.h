@@ -13,6 +13,8 @@ class ObstaclePatternFactory {
 private:
     static constexpr std::size_t PATTERNS_COUNT = 3;
 public:
+    ObstaclePatternFactory() = delete;
+
     static const IObstaclePattern &at(std::size_t index)
     {
         return *patterns[index];
