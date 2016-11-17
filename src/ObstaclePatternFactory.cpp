@@ -6,5 +6,5 @@ const std::array<std::unique_ptr<IObstaclePattern>, ObstaclePatternFactory::PATT
     ObstaclePatternFactory::patterns = { {
         std::make_unique<Crystal>(),
         std::make_unique<Tunnel>(),
-        std::make_unique<Valley<5>>()
+        std::make_unique<Alley<5>>()
 } };

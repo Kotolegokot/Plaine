@@ -8,10 +8,10 @@
 #include "IObstaclePattern.h"
 
 template <int Length>
-class Valley : public IObstaclePattern
+class Alley : public IObstaclePattern
 {
 public:
-    Valley() = default;
+    Alley() = default;
 
     Point3<int> size() const override
     {

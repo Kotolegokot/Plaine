@@ -7,7 +7,7 @@
 #include "IObstaclePattern.h"
 #include "patterns/Crystal.h"
 #include "patterns/Tunnel.h"
-#include "patterns/Valley.h"
+#include "patterns/Alley.h"
 
 class ObstaclePatternFactory {
 private:

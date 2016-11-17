@@ -28,14 +28,6 @@
 #include "Randomizer.h"
 #include "ObstaclePatternFactory.h"
 #include "Chunk.h"
-#include "obstacles/Box.h"
-#include "obstacles/Tetrahedron.h"
-#include "obstacles/Icosahedron.h"
-#include "obstacles/Icosphere2.h"
-#include "obstacles/Cone.h"
-#include "patterns/Crystal.h"
-#include "patterns/Tunnel.h"
-#include "patterns/Valley.h"
 
 using namespace irr;
 
