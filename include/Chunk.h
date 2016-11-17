@@ -17,7 +17,7 @@ public:
     void generate()
     {
         do {
-            positions.resize(Randomizer::getInt(0, 10));
+            positions.resize(Randomizer::getInt(5, 10));
 
             for (std::size_t i = 0; i < positions.size(); i++)
                 positions[i] = createRandomPosition();
