@@ -7,7 +7,7 @@
 #include "IObstacle.h"
 #include "IObstaclePattern.h"
 
-template <int length>
+template <int Length>
 class Valley : public IObstaclePattern
 {
 public:
@@ -15,7 +15,7 @@ public:
 
     Point3<int> size() const override
     {
-        return { 2, 2, length };
+        return { 3, 3, Length * 2 };
     }
 
     virtual std::size_t produce(btDynamicsWorld &world,
@@ -24,21 +24,39 @@ public:
                                 btVector3 position,
                                 std::list<std::unique_ptr<IObstacle>> &list) const override
     {
-        position += { cellSize, cellSize, 0 };
+        position += { 1.5f * cellSize, 1.5f * cellSize, 0 };
 
-        for (std::size_t i = 0; i < length; i++) {
+        constexpr btScalar cos45 = 0.70710678118;
+        constexpr btScalar radius = 150;
+
+        for (std::size_t i = 0; i < Length; i++) {
             auto obstacle1 =
                     std::make_unique<Icosahedron>(world, device, position
-                                                  + btVector3(-cellSize / 2, 0, cellSize * i), 100);
+                        + (i % 2 == 0 ?
+                            btVector3(-cellSize, 0, cellSize * i * 2) :
+                            btVector3(-cellSize * cos45, cellSize * cos45, cellSize * i * 2)),
+                        radius);
+
             auto obstacle2 =
                     std::make_unique<Icosahedron>(world, device, position
-                                                  + btVector3(cellSize / 2, 0, cellSize * i), 100);
+                        + (i % 2 == 0 ?
+                            btVector3(cellSize, 0, cellSize * i * 2) :
+                            btVector3(cellSize * cos45, -cellSize * cos45, cellSize * i * 2)),
+                        radius);
+
             auto obstacle3 =
                     std::make_unique<Icosahedron>(world, device, position
-                                                  + btVector3(0, -cellSize / 2, cellSize * i), 100);
+                        + (i % 2 == 0 ?
+                            btVector3(0, -cellSize, cellSize * i * 2) :
+                            btVector3(-cellSize * cos45, -cellSize * cos45, cellSize * i * 2)),
+                        radius);
+
             auto obstacle4 =
                     std::make_unique<Icosahedron>(world, device, position
-                                                  + btVector3(0, cellSize / 2,  cellSize * i), 100);
+                        + (i % 2 == 0 ?
+                            btVector3(0, cellSize, cellSize * i * 2) :
+                            btVector3(cellSize * cos45, cellSize * cos45, cellSize * i * 2)),
+                        radius);
 
             list.push_back(std::move(obstacle1));
             list.push_back(std::move(obstacle2));
@@ -46,7 +64,7 @@ public:
             list.push_back(std::move(obstacle4));
         }
 
-        return length * 4;
+        return Length * 4;
     }
 };
 #endif // VALLEY_H
