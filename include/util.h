@@ -98,6 +98,9 @@ struct Array3 : public std::array<T, N * N * N> {
         return std::array<T, N * N * N>::at(pos.x + pos.y * N + pos.z * N * N);
     }
 
+    constexpr const T &at(std::size_t pos) const = delete;
+    T &at(std::size_t pos) = delete;
+
     constexpr const T &operator [](std::size_t pos) const = delete;
     T &operator [](std::size_t pos) = delete;
 };

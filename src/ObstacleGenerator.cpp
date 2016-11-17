@@ -36,7 +36,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition,
     long edgeLeft, edgeRight, edgeBottom, edgeTop, edgeBack, edgeFront;
     stickToGrid(playerPosition, edgeLeft, edgeRight, edgeBottom, edgeTop, edgeBack, edgeFront);
 
-    for (long z = generatedEdgeFront; z <= generatedEdgeFront; z++) {
+    for (long z = edgeBack; z <= generatedEdgeFront; z++) {
         for (long x = edgeLeft; x < generatedEdgeLeft; x++)
             for (long y = edgeBottom; y <= edgeTop; y++)
                 obstaclesGenerated += generateChunk(x, y, z, chunkDB);

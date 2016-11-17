@@ -21,7 +21,7 @@ public:
 
             for (std::size_t i = 0; i < positions.size(); i++)
                 positions[i] = createRandomPosition();
-        } while (collisions());
+        } while (collisions() != positions.size());
     }
 
     // creates objects and returns number of bodies generated
@@ -34,7 +34,7 @@ public:
         std::size_t generated = 0;
 
         for (std::size_t i = 0; i < positions.size(); i++) {
-            int patternIndex = positions[i].first;
+            const int patternIndex = positions[i].first;
             const Point3<int> &pos = positions[i].second;
 
             generated += ObstaclePatternFactory::at(patternIndex).produce(world, device, cellSize,
@@ -44,8 +44,10 @@ public:
     }
 
 private:
-    bool collisions()
+    // returns how many obstacles it managed to fit into the chunk
+    std::size_t collisions()
     {
+        std::size_t result = 0;
         /* 0     = empty
          * n > 0 = obstacle patterns
          */
@@ -53,7 +55,7 @@ private:
         data.fill(0);
 
         for (std::size_t i = 0; i < positions.size(); i++) {
-            int patternIndex = positions[i].first;
+            const int patternIndex = positions[i].first;
             const Point3<int> &pos = positions[i].second;
 
             for (int x = 0; x < ObstaclePatternFactory::at(patternIndex).size().x; x++)
@@ -62,13 +64,15 @@ private:
                 int &currentCell = data.at(pos + Point3<int>(x, y, z));
 
                 if (currentCell != 0)
-                    return true;
+                    return result;
                 else
                     data.at(pos + Point3<int>(x, y, z)) = i + 1;
             }
+
+            result++;
         }
 
-        return false;
+        return result;
     }
 
     static PatternPosition createRandomPosition()
