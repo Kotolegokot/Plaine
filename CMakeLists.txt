@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.1)
 project(PlaneRunner)
 
 set(CMAKE_REQUIRED_FLAGS "-std=c++14")
@@ -10,9 +10,10 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/Modules)
-find_package(Irrlicht)
-find_package(Bullet)
-find_package(Freetype)
+find_package(Irrlicht REQUIRED)
+find_package(Bullet REQUIRED)
+find_package(Freetype REQUIRED)
+find_package(Threads REQUIRED)
 
 file(GLOB CPPs src/*.cpp src/obstacles/*.cpp src/screens/*.cpp)
 file(GLOB Hs include/*.h include/obstacles/*.h include/patterns/*.h include/screens/*.h)
@@ -29,7 +30,8 @@ target_link_libraries(${PROJECT_NAME}
 	${BULLET_COLLISION_LIBRARY}
 	${BULLET_DYNAMICS_LIBRARY}
 	${BULLET_MATH_LIBRARY}
-	${FREETYPE_LIBRARY})
+	${FREETYPE_LIBRARY}
+	Threads::Threads)
 
 if(DEBUG)
 	set(CMAKE_BUILD_TYPE "Debug")

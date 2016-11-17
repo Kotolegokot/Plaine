@@ -439,9 +439,7 @@ void Game::mainMenu()
 bool Game::run()
 {
     // generate some chunks
-    auto chunkDB = std::make_unique<ChunkDB>(); // use heap instead of stack
-    for (auto &chunk : *chunkDB)
-        chunk.generate();
+    auto chunkDB = generateChunkDB();
 
     gui->initialize(Screen::HUD);
     initializeScene();
@@ -802,4 +800,35 @@ void Game::handleSelecting()
             event.GUIEvent.EventType = gui::EGET_BUTTON_CLICKED;
             device->postEventFromUser(event);
         }
+}
+
+
+std::unique_ptr<ChunkDB> Game::generateChunkDB()
+{
+    auto chunkDB = std::make_unique<ChunkDB>();
+
+    constexpr std::size_t THREADS = 8;
+    constexpr std::size_t CHUNKS_PER_THREAD = CHUNK_DB_SIZE / THREADS;
+
+    auto generateRange =
+        [&chunkDB](std::size_t begin, std::size_t end) mutable
+        {
+            for (std::size_t i = begin; i < end; i++)
+                chunkDB->at(i).generate();
+        };
+
+    std::vector<std::thread> threads;
+
+    // first THREADS - 1 pieces
+    for (std::size_t i = 0; i < THREADS - 1; i++)
+        threads.emplace_back(generateRange, i * CHUNKS_PER_THREAD, (i + 1) * CHUNKS_PER_THREAD);
+
+    // last piece
+    threads.emplace_back(generateRange, (THREADS - 1) * CHUNKS_PER_THREAD, chunkDB->size());
+
+    // waiting for all the threads to get done
+    for (auto &thread : threads)
+        thread.join();
+
+    return chunkDB;
 }

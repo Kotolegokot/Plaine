@@ -18,6 +18,7 @@
 #define GAME_H
 
 #include <iostream>
+#include <thread>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
@@ -100,6 +101,8 @@ private:
     void updateHUD();
     void updateCamera();
     void handleSelecting();
+
+    static std::unique_ptr<ChunkDB> generateChunkDB();
 };
 
 #endif // GAME_H

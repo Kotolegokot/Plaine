@@ -24,6 +24,9 @@
 					<Add directory="include/obstacles" />
 					<Add directory="include/screens" />
 				</Compiler>
+				<Linker>
+					<Add library="pthread" />
+				</Linker>
 			</Target>
 			<Target title="Linux-Release">
 				<Option output="bin/Release/PlaneRunner" prefix_auto="1" extension_auto="1" />
@@ -109,6 +112,7 @@
 			<Add directory="deps/lib" />
 		</Linker>
 		<Unit filename="include/CGUITTFont.h" />
+		<Unit filename="include/Chunk.h" />
 		<Unit filename="include/Config.h" />
 		<Unit filename="include/DebugDrawer.h" />
 		<Unit filename="include/EventReceiver.h" />
@@ -122,6 +126,7 @@
 		<Unit filename="include/MotionState.h" />
 		<Unit filename="include/ObjMesh.h" />
 		<Unit filename="include/ObstacleGenerator.h" />
+		<Unit filename="include/ObstaclePatternFactory.h" />
 		<Unit filename="include/Plane.h" />
 		<Unit filename="include/PlaneControl.h" />
 		<Unit filename="include/Randomizer.h" />
@@ -151,6 +156,7 @@
 		<Unit filename="src/MotionState.cpp" />
 		<Unit filename="src/ObjMesh.cpp" />
 		<Unit filename="src/ObstacleGenerator.cpp" />
+		<Unit filename="src/ObstaclePatternFactory.cpp" />
 		<Unit filename="src/Plane.cpp" />
 		<Unit filename="src/PlaneControl.cpp" />
 		<Unit filename="src/Randomizer.cpp" />
