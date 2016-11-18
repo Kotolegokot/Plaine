@@ -32,14 +32,16 @@
 using namespace irr;
 
 constexpr std::size_t CHUNK_SIZE = 16;
-constexpr std::size_t CHUNK_DB_SIZE = 100;
+constexpr std::size_t CHUNK_DB_SIZE = 200;
+constexpr btScalar CELL_SIZE = 250;
+constexpr btScalar CHUNK_LENGTH = CHUNK_SIZE * CELL_SIZE;
 using ChunkDB = std::array<Chunk<CHUNK_SIZE>, CHUNK_DB_SIZE>;
 
 // this class is responsible for generating obstacles on the fly
 class ObstacleGenerator
 {
 public:
-    ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, btScalar farValue = 1500, btScalar buffer = 300);
+    ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, btScalar farValue = 1500, btScalar buffer = CHUNK_LENGTH);
     void generate(const core::vector3df &playerPosition, const ChunkDB &chunkDB);
     u32 getCubeCount() const;
 
@@ -49,9 +51,6 @@ public:
     btScalar getBuffer() const;
 
 private:
-    static constexpr btScalar CELL_SIZE = 250;
-    static constexpr btScalar CHUNK_LENGTH = CHUNK_SIZE * CELL_SIZE;
-
     void stickToGrid(const core::vector3df &playerPosition, long &edgeLeft, long &edgeRight,
                      long &edgeBottom, long &edgeTop, long &edgeBack, long &edgeFront) const;
     unsigned long generateChunk(long x, long y, long z, const ChunkDB &chunkDB);

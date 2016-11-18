@@ -173,7 +173,7 @@ void Game::initializeScene()
         light->setLightData(lightData);
     }
 
-    obstacleGenerator = new ObstacleGenerator(*device, *dynamicsWorld, camera->getFarValue(), 500);
+    obstacleGenerator = new ObstacleGenerator(*device, *dynamicsWorld, camera->getFarValue());
 }
 
 void Game::error(const core::stringw &str) const

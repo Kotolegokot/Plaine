@@ -21,9 +21,6 @@
 
 using namespace irr;
 
-constexpr btScalar ObstacleGenerator::CELL_SIZE;
-constexpr btScalar ObstacleGenerator::CHUNK_LENGTH;
-
 ObstacleGenerator::ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, btScalar farValue, btScalar buffer) :
     device(device), farValue(farValue), buffer(buffer), world(world) {}
 
