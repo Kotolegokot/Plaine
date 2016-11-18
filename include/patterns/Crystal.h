@@ -22,6 +22,7 @@
 #include "IObstaclePattern.h"
 #include "util.h"
 
+template <int Thickness, int Length>
 class Crystal : public IObstaclePattern
 {
 public:
@@ -30,7 +31,7 @@ public:
 
     Point3<int> size() const override
     {
-        return { 1, 2, 1 };
+        return { Thickness, Length, Thickness };
     }
 
     std::size_t produce(btDynamicsWorld &world,
@@ -39,13 +40,14 @@ public:
                                 btVector3 position,
                                 std::list<std::unique_ptr<IObstacle>> &list) const override
     {
-        const btScalar radius = cellSize * 0.4f;
-        const btScalar length = cellSize * 1.8f;
-        position += { cellSize * 0.5f, cellSize, cellSize * 0.5f };
+        const btScalar radius = (Thickness - 0.6f) * cellSize * 0.5f;
+        const btScalar length = (Length - 0.2f) * cellSize;
+        position += { Thickness * cellSize * 0.5f,
+                      Length * cellSize * 0.5f,
+                      Thickness * cellSize * 0.5f };
 
-        auto cone1 = std::make_unique<Cone>(world, device, position, radius, length / 2.0f);
-        auto cone2 = std::make_unique<Cone>(world, device, position + btVector3(0, 50, 0),
-                                            radius, length / 2.0f);
+        auto cone1 = std::make_unique<Cone>(world, device, position, radius, length * 0.5f);
+        auto cone2 = std::make_unique<Cone>(world, device, position, radius, length * 0.5f);
 
         // turn cone2 upside down
         btTransform transform = cone2->getRigidBody().getCenterOfMassTransform();

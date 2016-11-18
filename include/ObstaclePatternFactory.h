@@ -12,13 +12,13 @@
 
 class Patterns {
 private:
-    static constexpr std::size_t ALL = 3;
-    static constexpr std::size_t SMALL = 1;
+    static constexpr std::size_t ALL = 6;
+    static constexpr std::size_t CRYSTALS = 4;
 public:
     Patterns() = delete;
 
     static const std::array<std::shared_ptr<IObstaclePattern>, ALL> all;
-    static const std::array<std::shared_ptr<IObstaclePattern>, SMALL> small;
+    static const std::array<std::shared_ptr<IObstaclePattern>, CRYSTALS> crystals;
 };
 
 #endif // OBSTACLEPATTERNFACTORY_H

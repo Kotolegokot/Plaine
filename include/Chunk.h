@@ -31,16 +31,17 @@ public:
     void generate()
     {
         switch (Randomizer::getInt(0, 1)) {
-        case 0: { // cloud of small bodies
-            const std::size_t patternIndex = Randomizer::getInt(0, Patterns::small.size() - 1);
-
+        case 0: { // cloud of crystals
             std::size_t n;
             do {
                 positions.clear();
 
-                for (std::size_t i = 0; i < 20; i++)
-                    positions.push_back(randomPosition(Patterns::small[patternIndex]));
-            } while ((n = collisions()) < 10);
+                for (std::size_t i = 0; i < Size * Size / 4; i++) {
+                    const int patternIndex = Randomizer::getInt(0, Patterns::crystals.size() - 1);
+
+                    positions.push_back(randomPosition(Patterns::crystals[patternIndex]));
+                }
+            } while ((n = collisions()) < Size * Size / 8);
             positions.resize(n);
             type = ChunkType::CLOUD;
 
