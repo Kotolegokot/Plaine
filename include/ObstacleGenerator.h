@@ -26,7 +26,7 @@
 #include "IObstacle.h"
 #include "IBody.h"
 #include "Randomizer.h"
-#include "ObstaclePatternFactory.h"
+#include "Patterns.h"
 #include "Chunk.h"
 
 using namespace irr;

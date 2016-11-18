@@ -1,4 +1,4 @@
-#include "ObstaclePatternFactory.h"
+#include "Patterns.h"
 
 constexpr std::size_t Patterns::ALL;
 constexpr std::size_t Patterns::CRYSTALS;

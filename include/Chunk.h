@@ -3,7 +3,7 @@
 
 #include <array>
 #include <vector>
-#include "ObstaclePatternFactory.h"
+#include "Patterns.h"
 #include "Randomizer.h"
 #include "util.h"
 

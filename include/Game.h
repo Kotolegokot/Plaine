@@ -40,7 +40,7 @@
 #include "DebugDrawer.h"
 #include "options.h"
 #include "Explosion.h"
-#include "ObstaclePatternFactory.h"
+#include "Patterns.h"
 #include "Chunk.h"
 
 using namespace irr;

@@ -1,5 +1,5 @@
-#ifndef OBSTACLEPATTERNFACTORY_H
-#define OBSTACLEPATTERNFACTORY_H
+#ifndef PATTERNS_H
+#define PATTERNS_H
 
 #include <memory>
 #include <irrlicht.h>
@@ -21,4 +21,4 @@ public:
     static const std::array<std::shared_ptr<IObstaclePattern>, CRYSTALS> crystals;
 };
 
-#endif // OBSTACLEPATTERNFACTORY_H
+#endif // PATTERNS_H
