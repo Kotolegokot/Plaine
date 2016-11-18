@@ -30,7 +30,7 @@ public:
 
     void generate()
     {
-        switch (Randomizer::getInt(0, 1)) {
+        switch (Randomizer::getInt(0, 2)) {
         case 0: { // cloud of crystals
             std::size_t n;
             do {
