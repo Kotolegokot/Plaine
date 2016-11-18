@@ -126,7 +126,6 @@
 		<Unit filename="include/MotionState.h" />
 		<Unit filename="include/ObjMesh.h" />
 		<Unit filename="include/ObstacleGenerator.h" />
-		<Unit filename="include/ObstaclePatternFactory.h" />
 		<Unit filename="include/Patterns.h" />
 		<Unit filename="include/Plane.h" />
 		<Unit filename="include/PlaneControl.h" />
@@ -159,7 +158,6 @@
 		<Unit filename="src/MotionState.cpp" />
 		<Unit filename="src/ObjMesh.cpp" />
 		<Unit filename="src/ObstacleGenerator.cpp" />
-		<Unit filename="src/ObstaclePatternFactory.cpp" />
 		<Unit filename="src/Patterns.cpp" />
 		<Unit filename="src/Plane.cpp" />
 		<Unit filename="src/PlaneControl.cpp" />
