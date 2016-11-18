@@ -17,10 +17,9 @@
 #ifndef CRYSTAL_H
 #define CRYSTAL_H
 
+#include <memory>
 #include "obstacles/Cone.h"
-#include "IObstacle.h"
 #include "IObstaclePattern.h"
-#include "util.h"
 
 template <int Thickness, int Length>
 class Crystal : public IObstaclePattern

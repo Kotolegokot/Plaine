@@ -36,6 +36,7 @@ public:
             do {
                 positions.clear();
 
+                positions.reserve(Size * Size / 4);
                 for (std::size_t i = 0; i < Size * Size / 4; i++) {
                     const int patternIndex = Randomizer::getInt(0, Patterns::crystals.size() - 1);
 
@@ -48,11 +49,30 @@ public:
             break;
         }
 
-        case 1: // absolutely random chunk
+        case 1: { // cloud of cubes
+            std::size_t n;
+            do {
+                positions.clear();
+
+                positions.reserve(Size * Size / 4);
+                for (std::size_t i = 0; i < Size * Size / 4; i++) {
+                    const int patternIndex = Randomizer::getInt(0, Patterns::cubes.size() - 1);
+
+                    positions.push_back(randomPosition(Patterns::cubes[patternIndex]));
+                }
+            } while ((n = collisions()) < Size * Size / 8);
+            positions.resize(n);
+            type = ChunkType::CLOUD;
+
+            break;
+        }
+
+        case 2: // absolutely random chunk
             do {
                 positions.clear();
 
                 const std::size_t count = Randomizer::getInt(5, 10);
+                positions.reserve(count);
                 for (std::size_t i = 0; i < count; i++) {
                     const int patternIndex = Randomizer::getInt(0, Patterns::all.size() - 1);
 
