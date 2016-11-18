@@ -45,8 +45,8 @@ void Game::initializeGUI()
     if (font)
         skin->setFont(font);
 
-    Game::setSpriteBank("SpritesForRegularButtons");
-    Game::setSpriteBank("SpritesForControlButtons");
+    Game::setSpriteBank(false);
+    Game::setSpriteBank(true);
     gui = new GUI(configuration, *guiEnvironment);
     gui->addScreen(std::make_unique<MainMenuScreen>(configuration, *guiEnvironment), Screen::MAIN_MENU);
     gui->addScreen(std::make_unique<SettingsScreen>(configuration, *guiEnvironment), Screen::SETTINGS);
@@ -205,12 +205,13 @@ void Game::terminateScene()
     sceneManager->clear();
 }
 
-void Game::setSpriteBank(const char (&src)[25])
+void Game::setSpriteBank(bool isControlButton)
 {
         // add textures into sprite bank
-        gui::IGUISpriteBank *spriteBank = guiEnvironment->addEmptySpriteBank(src);
-        if (src == "SpritesForRegularButtons")
+        gui::IGUISpriteBank *spriteBank;
+        if (!isControlButton)
         {
+        spriteBank = guiEnvironment->addEmptySpriteBank("SpritesForRegularButtons");
         spriteBank->addTexture(driver->getTexture("media/textures/button_up.png")); // 0
         spriteBank->addTexture(driver->getTexture("media/textures/button_over.png")); // 1
         spriteBank->addTexture(driver->getTexture("media/textures/button_down.png")); // 2
@@ -225,8 +226,9 @@ void Game::setSpriteBank(const char (&src)[25])
         spriteBank->getPositions().push_back(core::rect<s32>(core::position2di(0,0),
                 (driver->getTexture("media/textures/button_focused.png"))->getOriginalSize()));
         }
-        if (src == "SpritesForControlButtons")
+        else
         {
+        spriteBank = guiEnvironment->addEmptySpriteBank("SpritesForControlButtons");
         spriteBank->addTexture(driver->getTexture("media/textures/cbutton_up.png")); // 0
         spriteBank->addTexture(driver->getTexture("media/textures/cbutton_over.png")); // 1
         spriteBank->addTexture(driver->getTexture("media/textures/cbutton_down.png")); // 2

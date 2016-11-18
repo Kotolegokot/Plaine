@@ -37,19 +37,19 @@ public:
     virtual std::vector<gui::IGUIElement *> getSelectableElements() = 0;
     virtual void setVisible(bool visible) = 0;
 
-    void setCustomButton(gui::IGUIButton *button, bool isCSS = false) // CSS = ControlSettingsScreen :D
+    void setCustomButtonSkin(gui::IGUIButton &button, bool isCSS = false) // CSS = ControlSettingsScreen :D
     {
         //use the sprite bank
         gui::IGUISpriteBank *spriteBank;
         if (!isCSS) spriteBank = guiEnvironment.getSpriteBank("SpritesForRegularButtons");
         else spriteBank = guiEnvironment.getSpriteBank("SpritesForControlButtons");
-        button->setSpriteBank(spriteBank);
-        button->setSprite(gui::EGBS_BUTTON_UP, 0, video::SColor(255, 255, 255, 255), false);
-        button->setSprite(gui::EGBS_BUTTON_MOUSE_OVER, 1, video::SColor(255, 255, 255, 255), false);
-        button->setSprite(gui::EGBS_BUTTON_DOWN, 2, video::SColor(255, 255, 255, 255), false);
-        button->setSprite(gui::EGBS_BUTTON_FOCUSED, 3, video::SColor(255, 255, 255, 255), false);
-        button->setUseAlphaChannel(true);
-        button->setDrawBorder(0);
+        button.setSpriteBank(spriteBank);
+        button.setSprite(gui::EGBS_BUTTON_UP, 0, video::SColor(255, 255, 255, 255), false);
+        button.setSprite(gui::EGBS_BUTTON_MOUSE_OVER, 1, video::SColor(255, 255, 255, 255), false);
+        button.setSprite(gui::EGBS_BUTTON_DOWN, 2, video::SColor(255, 255, 255, 255), false);
+        button.setSprite(gui::EGBS_BUTTON_FOCUSED, 3, video::SColor(255, 255, 255, 255), false);
+        button.setUseAlphaChannel(true);
+        button.setDrawBorder(0);
     }
 protected:
     const ConfigData &configuration;
