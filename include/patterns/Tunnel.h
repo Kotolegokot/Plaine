@@ -24,7 +24,8 @@
 class Tunnel : public IObstaclePattern
 {
 public:
-    Tunnel() = default;
+    Tunnel(int id) :
+        IObstaclePattern(id) {}
 
     Point3<int> size() const override
     {

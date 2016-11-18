@@ -9,24 +9,16 @@
 #include "patterns/Tunnel.h"
 #include "patterns/Alley.h"
 
-class ObstaclePatternFactory {
+
+class Patterns {
 private:
-    static constexpr std::size_t PATTERNS_COUNT = 3;
+    static constexpr std::size_t ALL = 3;
+    static constexpr std::size_t SMALL = 1;
 public:
-    ObstaclePatternFactory() = delete;
+    Patterns() = delete;
 
-    static const IObstaclePattern &at(std::size_t index)
-    {
-        return *patterns[index];
-    }
-
-    static std::size_t size()
-    {
-        return patterns.size();
-    }
-
-private:
-    static const std::array<std::unique_ptr<IObstaclePattern>, PATTERNS_COUNT> patterns;
+    static const std::array<std::shared_ptr<IObstaclePattern>, ALL> all;
+    static const std::array<std::shared_ptr<IObstaclePattern>, SMALL> small;
 };
 
 #endif // OBSTACLEPATTERNFACTORY_H

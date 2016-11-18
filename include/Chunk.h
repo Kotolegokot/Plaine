@@ -10,18 +10,61 @@
 template <int Size>
 class Chunk {
 private:
-    using PatternPosition = std::pair<int, Point3<int>>;
+    struct PatternPosition {
+        PatternPosition() = default;
+        PatternPosition(std::shared_ptr<IObstaclePattern> pattern,
+                        Point3<int> position) :
+            pattern(pattern), position(position) {}
+        PatternPosition(const PatternPosition &) = default;
+        PatternPosition &operator =(const PatternPosition &) = default;
+        PatternPosition(PatternPosition &&) noexcept = default;
+        PatternPosition &operator =(PatternPosition &&) noexcept = default;
+
+        std::shared_ptr<IObstaclePattern> pattern;
+        Point3<int> position;
+    };
+
+    enum class ChunkType { CLOUD, RANDOM, NOT_GENERATED };
 public:
     Chunk() = default;
 
     void generate()
     {
-        do {
-            positions.resize(Randomizer::getInt(5, 10));
+        switch (Randomizer::getInt(0, 1)) {
+        case 0: { // cloud of small bodies
+            const std::size_t patternIndex = Randomizer::getInt(0, Patterns::small.size() - 1);
 
-            for (std::size_t i = 0; i < positions.size(); i++)
-                positions[i] = createRandomPosition();
-        } while (collisions() != positions.size());
+            std::size_t n;
+            do {
+                positions.clear();
+
+                for (std::size_t i = 0; i < 20; i++)
+                    positions.push_back(randomPosition(Patterns::small[patternIndex]));
+            } while ((n = collisions()) < 10);
+            positions.resize(n);
+            type = ChunkType::CLOUD;
+
+            break;
+        }
+
+        case 1: // absolutely random chunk
+            do {
+                positions.clear();
+
+                const std::size_t count = Randomizer::getInt(5, 10);
+                for (std::size_t i = 0; i < count; i++) {
+                    const int patternIndex = Randomizer::getInt(0, Patterns::all.size() - 1);
+
+                    positions.push_back(randomPosition(Patterns::all[patternIndex]));
+                }
+            } while (collisions() != positions.size());
+            type = ChunkType::RANDOM;
+
+            break;
+
+        default:
+            break;
+        }
     }
 
     // creates objects and returns number of bodies generated
@@ -31,13 +74,16 @@ public:
                         btVector3 chunkPosition,
                         std::list<std::unique_ptr<IObstacle>> &list) const
     {
+        if (type == ChunkType::NOT_GENERATED)
+            return 0;
+
         std::size_t generated = 0;
 
-        for (std::size_t i = 0; i < positions.size(); i++) {
-            const int patternIndex = positions[i].first;
-            const Point3<int> &pos = positions[i].second;
+        for (const auto &position : positions) {
+            const auto &pattern = position.pattern;
+            const Point3<int> &pos = position.position;
 
-            generated += ObstaclePatternFactory::at(patternIndex).produce(world, device, cellSize,
+            generated += pattern->produce(world, device, cellSize,
                         chunkPosition + btVector3(pos.x, pos.y, pos.z) * cellSize, list);
         }
         return generated;
@@ -54,19 +100,19 @@ private:
         Array3<int, Size> data;
         data.fill(0);
 
-        for (std::size_t i = 0; i < positions.size(); i++) {
-            const int patternIndex = positions[i].first;
-            const Point3<int> &pos = positions[i].second;
+        for (const auto &position : positions) {
+            const auto &pattern = position.pattern;
+            const Point3<int> &pos = position.position;
 
-            for (int x = 0; x < ObstaclePatternFactory::at(patternIndex).size().x; x++)
-            for (int y = 0; y < ObstaclePatternFactory::at(patternIndex).size().y; y++)
-            for (int z = 0; z < ObstaclePatternFactory::at(patternIndex).size().z; z++) {
+            for (int x = 0; x < pattern->size().x; x++)
+            for (int y = 0; y < pattern->size().y; y++)
+            for (int z = 0; z < pattern->size().z; z++) {
                 int &currentCell = data.at(pos + Point3<int>(x, y, z));
 
                 if (currentCell != 0)
                     return result;
                 else
-                    data.at(pos + Point3<int>(x, y, z)) = i + 1;
+                    data.at(pos + Point3<int>(x, y, z)) = pattern->id() + 1;
             }
 
             result++;
@@ -75,17 +121,16 @@ private:
         return result;
     }
 
-    static PatternPosition createRandomPosition()
+    static PatternPosition randomPosition(std::shared_ptr<IObstaclePattern> pattern)
     {
-        int patternIndex = Randomizer::getInt(0, ObstaclePatternFactory::size() - 1);
-        Point3<int> position = { Randomizer::getInt(0, Size - ObstaclePatternFactory::at(patternIndex).size().x),
-                                 Randomizer::getInt(0, Size - ObstaclePatternFactory::at(patternIndex).size().y),
-                                 Randomizer::getInt(0, Size - ObstaclePatternFactory::at(patternIndex).size().z) };
-
-        return { patternIndex, position };
+        return { pattern,
+                 { Randomizer::getInt(0, Size - pattern->size().x),
+                   Randomizer::getInt(0, Size - pattern->size().y),
+                   Randomizer::getInt(0, Size - pattern->size().z) } };
     }
 
     std::vector<PatternPosition> positions;
+    ChunkType type = ChunkType::NOT_GENERATED;
 };
 
 #endif //CHUNK_H

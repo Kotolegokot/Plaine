@@ -25,7 +25,8 @@
 class Crystal : public IObstaclePattern
 {
 public:
-    Crystal() = default;
+    Crystal(int id) :
+        IObstaclePattern(id) {}
 
     Point3<int> size() const override
     {

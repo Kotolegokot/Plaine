@@ -11,7 +11,8 @@ template <int Length>
 class Alley : public IObstaclePattern
 {
 public:
-    Alley() = default;
+    Alley(int id) :
+        IObstaclePattern(id) {}
 
     Point3<int> size() const override
     {
