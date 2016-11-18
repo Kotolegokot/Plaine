@@ -29,9 +29,11 @@ using namespace irr;
 class IObstaclePattern
 {
 public:
-    IObstaclePattern() = default;
+    IObstaclePattern(int id) :
+        m_id(id) {}
     virtual ~IObstaclePattern() = default;
 
+    int id() const { return m_id; }
     virtual Point3<int> size() const = 0;
 
     // create bodies and put them to the list
@@ -41,6 +43,9 @@ public:
                                 btScalar cellSize,
                                 btVector3 position,
                                 std::list<std::unique_ptr<IObstacle>> &list) const = 0;
+
+private:
+    int m_id;
 };
 
 #endif // IOBSTACLEPATTERN_H
