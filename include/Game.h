@@ -96,6 +96,7 @@ private:
     void initializeScene();
     void terminateScene();
     void terminateDevice();
+    void setSpriteBank(bool);
 
     void updateHUD();
     void updateCamera();
