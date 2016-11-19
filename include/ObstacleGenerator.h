@@ -145,7 +145,7 @@ private:
     Edges<btScalar> fieldOfView(const core::vector3df &playerPosition) const;
 
     // takes chunk coordinates and generate its appropriate part
-    std::size_t insertCell(long x, long y, long z, const ChunkDB &chunkDB, Edges<long> cellEdges);
+    std::size_t insertCell(Vector3<int> cell, const ChunkDB &chunkDB);
 
     static Vector3<int> cellToChunk(const Vector3<int> &cell);
     static Vector3<int> relativeCellPos(const Vector3<int> &cell, const Vector3<int> &chunk);

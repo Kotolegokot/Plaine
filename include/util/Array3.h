@@ -1,5 +1,5 @@
 #ifndef ARRAY3_H
-#define ARARY3_H
+#define ARRAY3_H
 
 #include <array>
 
@@ -24,4 +24,4 @@ struct Array3 : public std::array<T, N * N * N> {
     T &operator [](std::size_t pos) = delete;
 };
 
-#endif ARRAY3_H
+#endif // ARRAY3_H

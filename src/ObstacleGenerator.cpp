@@ -33,29 +33,30 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition,
 
 //    const Edges<long> chunkEdges = fieldOfView(playerPosition) / CHUNK_LENGTH;
     const Edges<long> cellEdges = fieldOfView(playerPosition) / CELL_LENGTH;
+    Vector3<int> cell;
 
-    for (long z = cellEdges.back; z <= generatedEdges.front; z++) {
-        for (long x = cellEdges.left; x < generatedEdges.left; x++)
-            for (long y = cellEdges.bottom; y <= cellEdges.top; y++)
-                obstaclesGenerated += insertCell(x, y, z, chunkDB, cellEdges);
+    for (cell.z = cellEdges.back; cell.z <= generatedEdges.front; cell.z++) {
+        for (cell.x = cellEdges.left; cell.x < generatedEdges.left; cell.x++)
+            for (cell.y = cellEdges.bottom; cell.y <= cellEdges.top; cell.y++)
+                obstaclesGenerated += insertCell(cell, chunkDB);
 
-        for (long x = generatedEdges.left; x <= generatedEdges.right; x++) {
-            for (long y = cellEdges.bottom; y < generatedEdges.bottom; y++)
-                obstaclesGenerated += insertCell(x, y, z, chunkDB, cellEdges);
+        for (cell.x = generatedEdges.left; cell.x <= generatedEdges.right; cell.x++) {
+            for (cell.y = cellEdges.bottom; cell.y < generatedEdges.bottom; cell.y++)
+                obstaclesGenerated += insertCell(cell, chunkDB);
 
-            for (long y = generatedEdges.top + 1; y <= cellEdges.top; y++)
-                obstaclesGenerated += insertCell(x, y, z, chunkDB, cellEdges);
+            for (cell.y = generatedEdges.top + 1; cell.y <= cellEdges.top; cell.y++)
+                obstaclesGenerated += insertCell(cell, chunkDB);
         }
 
-        for (long x = generatedEdges.right + 1; x <= cellEdges.right; x++)
-            for (long y = cellEdges.bottom; y <= cellEdges.top; y++)
-                obstaclesGenerated += insertCell(x, y, z, chunkDB, cellEdges);
+        for (cell.x = generatedEdges.right + 1; cell.x <= cellEdges.right; cell.x++)
+            for (cell.y = cellEdges.bottom; cell.y <= cellEdges.top; cell.y++)
+                obstaclesGenerated += insertCell(cell, chunkDB);
     }
 
-    for (long z = generatedEdges.front + 1; z <= cellEdges.front; z++)
-        for (long x = cellEdges.left; x <= cellEdges.right; x++)
-            for (long y = cellEdges.bottom; y <= cellEdges.top; y++)
-                obstaclesGenerated += insertCell(x, y, z, chunkDB, cellEdges);
+    for (cell.z = generatedEdges.front + 1; cell.z <= cellEdges.front; cell.z++)
+        for (cell.x = cellEdges.left; cell.x <= cellEdges.right; cell.x++)
+            for (cell.y = cellEdges.bottom; cell.y <= cellEdges.top; cell.y++)
+                obstaclesGenerated += insertCell(cell, chunkDB);
 
     #if DEBUG_OUTPUT
         std::cout << obstaclesGenerated << " obstacles generated" << std::endl;
@@ -106,17 +107,15 @@ Vector3<int> ObstacleGenerator::relativeCellPos(const Vector3<int> &cell, const 
     return cell - chunk * CHUNK_SIZE;
 }
 
-std::size_t ObstacleGenerator::insertCell(long x, long y, long z, const ChunkDB &chunkDB,
-                                           Edges<long> cellEdges)
+std::size_t ObstacleGenerator::insertCell(Vector3<int> cell, const ChunkDB &chunkDB)
 {
-    Vector3<int> cell(x, y, z);
     Vector3<int> chunk = cellToChunk(cell);
 
     std::size_t chunkIndex = (chunk.x * chunk.y * chunk.z + chunk.x + chunk.y + chunk.z)
             % chunkDB.size();
 
     return chunkDB[chunkIndex].produceCell(world, device, CELL_LENGTH,
-                                           btVector3(chunk.x, chunk.y, chunk.z) * CHUNK_LENGTH,
+                                           chunk.toBulletVector3() * CHUNK_LENGTH,
                                            obstacles, relativeCellPos(cell, chunk));
 }
 

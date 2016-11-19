@@ -1,6 +1,9 @@
 #ifndef VECTOR3_H
 #define VECTOR3_H
 
+#include <bullet/LinearMath/btVector3.h>
+#include <irrlicht.h>
+
 template <typename Num>
 struct Vector3 {
     Vector3() = default;
@@ -12,20 +15,52 @@ struct Vector3 {
     Vector3(const Vector3<Num2> &other) :
         x(other.x), y(other.y), z(other.z) {}
 
-    // move constructors
-    template <typename Num2>
-    Vector3(Vector3<Num2> &&other) :
-        x(other.x), y(other.y), z(other.z) {}
+    Vector3(const btVector3 &other) :
+        x(other.x()), y(other.y()), z(other.z()) {}
 
-    // move assignment operator
     template <typename Num2>
-    Vector3 &operator =(Vector3<Num2> &&other)
+    Vector3(const irr::core::vector3d<Num2> &other) :
+        x(other.X), y(other.Y), z(other.Z) {}
+
+    // copy assignment operators
+    template <typename Num2>
+    Vector3 &operator =(const Vector3<Num2> &other)
     {
         x = other.x;
         y = other.y;
         z = other.z;
 
         return *this;
+    }
+
+    Vector3 &operator =(const btVector3 &other)
+    {
+        x = other.x();
+        y = other.y();
+        z = other.z();
+
+        return *this;
+    }
+
+    template <typename Num2>
+    Vector3 &operator =(const irr::core::vector3df &other)
+    {
+        x = other.X;
+        y = other.Y;
+        z = other.Z;
+
+        return *this;
+    }
+
+    btVector3 toBulletVector3() const
+    {
+        return btVector3(x, y, z);
+    }
+
+    template <typename Num2>
+    irr::core::vector3d<Num2> toIrrlichtVector() const
+    {
+        return irr::core::vector3d<Num2>(x, y, z);
     }
 
     template <typename Num2>
@@ -36,10 +71,10 @@ struct Vector3 {
                 z == other.z;
     }
 
-    template <typename Num2, typename Num3>
-    friend Vector3 operator /(const Vector3<Num2> &p1, Num3 n)
+    template <typename Num2>
+    auto operator /(Num2 n) const
     {
-        return Vector3(p1.x / n, p1.y / n, p1.z / n);
+        return Vector3(x / n, y / n, z / n);
     }
 
     template <typename Num2>
@@ -52,10 +87,10 @@ struct Vector3 {
         return *this;
     }
 
-    template <typename Num2, typename Num3>
-    friend Vector3 operator %(const Vector3<Num2> &p1, Num3 n)
+    template <typename Num2>
+    auto operator %(Num2 n) const
     {
-        return Vector3(p1.x % n, p1.y % n, p1.z % n);
+        return Vector3(x % n, y % n, z % n);
     }
 
     template <typename Num2>
@@ -68,10 +103,10 @@ struct Vector3 {
         return *this;
     }
 
-    template <typename Num2, typename Num3>
-    friend Vector3 operator *(const Vector3<Num2> &p1, Num3 n)
+    template <typename Num2>
+    auto operator *(Num2 n) const
     {
-        return Vector3(p1.x * n, p1.y * n, p1.z * n);
+        return Vector3(x * n, y * n, z * n);
     }
 
     template <typename Num2>
@@ -84,10 +119,10 @@ struct Vector3 {
         return *this;
     }
 
-    template <typename Num2, typename Num3>
-    friend Vector3 operator +(const Vector3<Num2> &p1, const Vector3<Num3> &p2)
+    template <typename Num2>
+    auto operator +(const Vector3<Num2> &other) const
     {
-        return Vector3(p1.x + p2.x, p1.y + p2.y, p1.z + p2.z);
+        return Vector3(x + other.x, y + other.y, z + other.z);
     }
 
     template <typename Num2>
@@ -100,10 +135,10 @@ struct Vector3 {
         return *this;
     }
 
-    template <typename Num2, typename Num3>
-    friend Vector3 operator -(const Vector3<Num2> &p1, const Vector3<Num3> &p2)
+    template <typename Num2>
+    auto operator -(const Vector3<Num2> &other) const
     {
-        return Vector3(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);
+        return Vector3(x - other.x, y - other.y, z - other.z);
     }
 
     template <typename Num2>
