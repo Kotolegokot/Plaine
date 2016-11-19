@@ -78,9 +78,9 @@ ObstacleGenerator::Edges<btScalar>
              playerPosition.Z + farValueWithBuffer() };
 }
 
-Point3<int> ObstacleGenerator::cellToChunk(const Point3<int> &cell)
+Vector3<int> ObstacleGenerator::cellToChunk(const Vector3<int> &cell)
 {
-    Point3<int> result = cell;
+    Vector3<int> result = cell;
 
     if (cell.x < 0)
         result.x++;
@@ -101,7 +101,7 @@ Point3<int> ObstacleGenerator::cellToChunk(const Point3<int> &cell)
     return result;
 }
 
-Point3<int> ObstacleGenerator::relativeCellPos(const Point3<int> &cell, const Point3<int> &chunk)
+Vector3<int> ObstacleGenerator::relativeCellPos(const Vector3<int> &cell, const Vector3<int> &chunk)
 {
     return cell - chunk * CHUNK_SIZE;
 }
@@ -109,8 +109,8 @@ Point3<int> ObstacleGenerator::relativeCellPos(const Point3<int> &cell, const Po
 std::size_t ObstacleGenerator::insertCell(long x, long y, long z, const ChunkDB &chunkDB,
                                            Edges<long> cellEdges)
 {
-    Point3<int> cell(x, y, z);
-    Point3<int> chunk = cellToChunk(cell);
+    Vector3<int> cell(x, y, z);
+    Vector3<int> chunk = cellToChunk(cell);
 
     std::size_t chunkIndex = (chunk.x * chunk.y * chunk.z + chunk.x + chunk.y + chunk.z)
             % chunkDB.size();

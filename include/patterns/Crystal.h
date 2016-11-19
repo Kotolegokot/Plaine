@@ -28,7 +28,7 @@ public:
     Crystal(int id) :
         IObstaclePattern(id) {}
 
-    Point3<int> size() const override
+    Vector3<int> size() const override
     {
         return { Thickness, Length, Thickness };
     }

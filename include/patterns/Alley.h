@@ -14,7 +14,7 @@ public:
     Alley(int id) :
         IObstaclePattern(id) {}
 
-    Point3<int> size() const override
+    Vector3<int> size() const override
     {
         return { 3, 3, Length * 2 };
     }

@@ -34,7 +34,7 @@ public:
     virtual ~IObstaclePattern() = default;
 
     int id() const { return m_id; }
-    virtual Point3<int> size() const = 0;
+    virtual Vector3<int> size() const = 0;
 
     // create bodies and put them to the list
     // returns number of the bodies created

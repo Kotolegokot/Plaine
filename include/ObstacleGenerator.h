@@ -147,8 +147,8 @@ private:
     // takes chunk coordinates and generate its appropriate part
     std::size_t insertCell(long x, long y, long z, const ChunkDB &chunkDB, Edges<long> cellEdges);
 
-    static Point3<int> cellToChunk(const Point3<int> &cell);
-    static Point3<int> relativeCellPos(const Point3<int> &cell, const Point3<int> &chunk);
+    static Vector3<int> cellToChunk(const Vector3<int> &cell);
+    static Vector3<int> relativeCellPos(const Vector3<int> &cell, const Vector3<int> &chunk);
 
     void removeLeftBehind(btScalar playerZ);
     btScalar farValueWithBuffer() const;

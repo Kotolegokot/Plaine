@@ -13,7 +13,7 @@ private:
     struct PatternPosition {
         PatternPosition() = default;
         PatternPosition(std::shared_ptr<IObstaclePattern> pattern,
-                        Point3<int> position) :
+                        Vector3<int> position) :
             pattern(pattern), position(position) {}
         PatternPosition(const PatternPosition &) = default;
         PatternPosition &operator =(const PatternPosition &) = default;
@@ -21,7 +21,7 @@ private:
         PatternPosition &operator =(PatternPosition &&) noexcept = default;
 
         std::shared_ptr<IObstaclePattern> pattern;
-        Point3<int> position;
+        Vector3<int> position;
     };
 
     enum class ChunkType { CLOUD, RANDOM, NOT_GENERATED };
@@ -102,7 +102,7 @@ public:
 
         for (const auto &position : positions) {
             const auto &pattern = position.pattern;
-            const Point3<int> &pos = position.position;
+            const Vector3<int> &pos = position.position;
 
             generated += pattern->produce(world, device, cellSize,
                         chunkPosition + btVector3(pos.x, pos.y, pos.z) * cellSize, list);
@@ -116,7 +116,7 @@ public:
                             btScalar cellSize,
                             btVector3 chunkPosition,
                             std::list<std::unique_ptr<IObstacle>> &list,
-                            Point3<int> cell) const
+                            Vector3<int> cell) const
     {
         if (type == ChunkType::NOT_GENERATED)
             return 0;
@@ -125,7 +125,7 @@ public:
 
         for (const auto &position : positions) {
             const auto &pattern = position.pattern;
-            const Point3<int> &pos = position.position;
+            const Vector3<int> &pos = position.position;
 
             if (pos == cell)
                 return generated += pattern->produce(world, device, cellSize,
@@ -148,17 +148,17 @@ private:
 
         for (const auto &position : positions) {
             const auto &pattern = position.pattern;
-            const Point3<int> &pos = position.position;
+            const Vector3<int> &pos = position.position;
 
             for (int x = 0; x < pattern->size().x; x++)
             for (int y = 0; y < pattern->size().y; y++)
             for (int z = 0; z < pattern->size().z; z++) {
-                int &currentCell = data.at(pos + Point3<int>(x, y, z));
+                int &currentCell = data.at(pos + Vector3<int>(x, y, z));
 
                 if (currentCell != 0)
                     return result;
                 else
-                    data.at(pos + Point3<int>(x, y, z)) = pattern->id() + 1;
+                    data.at(pos + Vector3<int>(x, y, z)) = pattern->id() + 1;
             }
 
             result++;
