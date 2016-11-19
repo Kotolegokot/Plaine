@@ -16,7 +16,7 @@ find_package(Freetype REQUIRED)
 find_package(Threads REQUIRED)
 
 file(GLOB CPPs src/*.cpp src/obstacles/*.cpp src/screens/*.cpp)
-file(GLOB Hs include/*.h include/obstacles/*.h include/patterns/*.h include/screens/*.h)
+file(GLOB Hs include/*.h include/obstacles/*.h include/patterns/*.h include/screens/*.h include/util/*.h)
 add_executable(${PROJECT_NAME} main.cpp ${CPPs} ${Hs})
 
 include_directories("include/")

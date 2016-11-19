@@ -147,6 +147,7 @@
 		<Unit filename="include/screens/PauseMenuScreen.h" />
 		<Unit filename="include/screens/SettingsScreen.h" />
 		<Unit filename="include/util.h" />
+		<Unit filename="include/util/Vector3.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/CGUITTFont.cpp" />
 		<Unit filename="src/Config.cpp" />

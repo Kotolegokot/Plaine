@@ -24,6 +24,7 @@
 #include <libintl.h>
 #include <btBulletDynamicsCommon.h>
 #include "Randomizer.h"
+#include "util/Vector3.h"
 
 #ifndef _WIN32
 #include <iconv.h>
@@ -59,81 +60,6 @@ int sign(Number num)
         return 0;
 }
 
-template <typename Num>
-struct Point3 {
-    Point3() = default;
-    Point3(Num x, Num y, Num z) :
-        x(x), y(y), z(z) {}
-
-    template <typename Num2>
-    Point3(const Point3<Num2> &other) :
-        x(other.x), y(other.y), z(other.z) {}
-
-    template <typename Num2>
-    bool operator ==(const Point3<Num2> &other) const
-    {
-        return x == other.x &&
-                y == other.y &&
-                z == other.z;
-    }
-
-//    Point3<Num> operator
-
-    template <typename Num2>
-    Point3<Num> &operator /=(Num2 n)
-    {
-        x /= n;
-        y /= n;
-        z /= n;
-
-        return *this;
-    }
-
-    template <typename Num2>
-    Point3<Num> &operator %=(Num2 n)
-    {
-        x %= n;
-        y %= n;
-        z %= n;
-
-        return *this;
-    }
-
-    template <typename Num2, typename Num3>
-    friend Point3 operator +(const Point3<Num2> &p1, const Point3<Num3> &p2)
-    {
-        return Point3(p1.x + p2.x, p1.y + p2.y, p1.z + p2.z);
-    }
-
-    template <typename Num2, typename Num3>
-    friend Point3 operator -(const Point3<Num2> &p1, const Point3<Num3> &p2)
-    {
-        return Point3(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);
-    }
-
-    template <typename Num2, typename Num3>
-    friend Point3 operator *(const Point3<Num2> &p1, Num3 n)
-    {
-        return Point3(p1.x * n, p1.y * n, p1.z * n);
-    }
-
-    template <typename Num2, typename Num3>
-    friend Point3 operator /(const Point3<Num2> &p1, Num3 n)
-    {
-        return Point3(p1.x / n, p1.y / n, p1.z / n);
-    }
-
-    template <typename Num2, typename Num3>
-    friend Point3 operator %(const Point3<Num2> &p1, Num3 n)
-    {
-        return Point3(p1.x % n, p1.y % n, p1.z % n);
-    }
-
-    Num x = 0;
-    Num y = 0;
-    Num z = 0;
-};
-
 //template <typename Num>
 //struct Cube {
 //    Cube() = default;
@@ -157,12 +83,12 @@ template <typename T, std::size_t N>
 struct Array3 : public std::array<T, N * N * N> {
     Array3() = default;
 
-    constexpr const T &at(Point3<std::size_t> pos) const
+    constexpr const T &at(Vector3<std::size_t> pos) const
     {
         return std::array<T, N * N * N>::at(pos.x + pos.y * N + pos.z * N * N);
     }
 
-    T &at(Point3<std::size_t> pos)
+    T &at(Vector3<std::size_t> pos)
     {
         return std::array<T, N * N * N>::at(pos.x + pos.y * N + pos.z * N * N);
     }
