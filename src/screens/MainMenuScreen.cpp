@@ -32,12 +32,15 @@ void MainMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
     buttonStart = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonStart->setID(ID_BUTTON_START);
+    setCustomButtonSkin(*buttonStart);
 
     buttonSettings = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonSettings->setID(ID_BUTTON_SETTINGS);
+    setCustomButtonSkin(*buttonSettings);
 
     buttonQuit = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonQuit->setID(ID_BUTTON_QUIT);
+    setCustomButtonSkin(*buttonQuit);
 
     reload(buttonWidth, buttonHeight);
     resize(buttonWidth, buttonHeight);
