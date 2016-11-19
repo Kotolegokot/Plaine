@@ -25,6 +25,7 @@
 #include <btBulletDynamicsCommon.h>
 #include "Randomizer.h"
 #include "util/Vector3.h"
+#include "util/Array3.h"
 
 #ifndef _WIN32
 #include <iconv.h>
@@ -78,27 +79,6 @@ int sign(Number num)
 //    Point3<Num> p1;
 //    Point3<Num> p2;
 //};
-
-template <typename T, std::size_t N>
-struct Array3 : public std::array<T, N * N * N> {
-    Array3() = default;
-
-    constexpr const T &at(Vector3<std::size_t> pos) const
-    {
-        return std::array<T, N * N * N>::at(pos.x + pos.y * N + pos.z * N * N);
-    }
-
-    T &at(Vector3<std::size_t> pos)
-    {
-        return std::array<T, N * N * N>::at(pos.x + pos.y * N + pos.z * N * N);
-    }
-
-    constexpr const T &at(std::size_t pos) const = delete;
-    T &at(std::size_t pos) = delete;
-
-    constexpr const T &operator [](std::size_t pos) const = delete;
-    T &operator [](std::size_t pos) = delete;
-};
 
 // GUI IDs
 enum GUI_ID {
