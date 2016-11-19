@@ -30,64 +30,94 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition,
     #if DEBUG_OUTPUT
         unsigned long obstaclesGenerated = 0;
     #endif
-    long edgeLeft, edgeRight, edgeBottom, edgeTop, edgeBack, edgeFront;
-    stickToGrid(playerPosition, edgeLeft, edgeRight, edgeBottom, edgeTop, edgeBack, edgeFront);
 
-    for (long z = edgeBack; z <= generatedEdgeFront; z++) {
-        for (long x = edgeLeft; x < generatedEdgeLeft; x++)
-            for (long y = edgeBottom; y <= edgeTop; y++)
-                obstaclesGenerated += generateChunk(x, y, z, chunkDB);
+//    const Edges<long> chunkEdges = fieldOfView(playerPosition) / CHUNK_LENGTH;
+    const Edges<long> cellEdges = fieldOfView(playerPosition) / CELL_LENGTH;
 
-        for (long x = generatedEdgeLeft; x <= generatedEdgeRight; x++) {
-            for (long y = edgeBottom; y < generatedEdgeBottom; y++)
-                obstaclesGenerated += generateChunk(x, y, z, chunkDB);
+    for (long z = cellEdges.back; z <= generatedEdges.front; z++) {
+        for (long x = cellEdges.left; x < generatedEdges.left; x++)
+            for (long y = cellEdges.bottom; y <= cellEdges.top; y++)
+                obstaclesGenerated += insertCell(x, y, z, chunkDB, cellEdges);
 
-            for (long y = generatedEdgeTop + 1; y <= edgeTop; y++)
-                obstaclesGenerated += generateChunk(x, y, z, chunkDB);
+        for (long x = generatedEdges.left; x <= generatedEdges.right; x++) {
+            for (long y = cellEdges.bottom; y < generatedEdges.bottom; y++)
+                obstaclesGenerated += insertCell(x, y, z, chunkDB, cellEdges);
+
+            for (long y = generatedEdges.top + 1; y <= cellEdges.top; y++)
+                obstaclesGenerated += insertCell(x, y, z, chunkDB, cellEdges);
         }
 
-        for (long x = generatedEdgeRight + 1; x <= edgeRight; x++)
-            for (long y = edgeBottom; y <= edgeTop; y++)
-                obstaclesGenerated += generateChunk(x, y, z, chunkDB);
+        for (long x = generatedEdges.right + 1; x <= cellEdges.right; x++)
+            for (long y = cellEdges.bottom; y <= cellEdges.top; y++)
+                obstaclesGenerated += insertCell(x, y, z, chunkDB, cellEdges);
     }
 
-    for (long z = generatedEdgeFront + 1; z <= edgeFront; z++)
-        for (long x = edgeLeft; x <= edgeRight; x++)
-            for (long y = edgeBottom; y <= edgeTop; y++)
-                obstaclesGenerated += generateChunk(x, y, z, chunkDB);
+    for (long z = generatedEdges.front + 1; z <= cellEdges.front; z++)
+        for (long x = cellEdges.left; x <= cellEdges.right; x++)
+            for (long y = cellEdges.bottom; y <= cellEdges.top; y++)
+                obstaclesGenerated += insertCell(x, y, z, chunkDB, cellEdges);
 
     #if DEBUG_OUTPUT
         std::cout << obstaclesGenerated << " obstacles generated" << std::endl;
     #endif // DEBUG_OUTPUT
 
     obstacleCount += obstaclesGenerated;
-
-    generatedEdgeLeft = edgeLeft;
-    generatedEdgeRight = edgeRight;
-    generatedEdgeTop = edgeTop;
-    generatedEdgeBottom = edgeBottom;
-    generatedEdgeFront = edgeFront;
+    generatedEdges = cellEdges;
 
     removeLeftBehind(playerPosition.Z);
 }
 
-void ObstacleGenerator::stickToGrid(const core::vector3df &playerPosition, long &edgeLeft, long &edgeRight,
-                                    long &edgeBottom, long &edgeTop, long &edgeBack, long &edgeFront) const
+ObstacleGenerator::Edges<btScalar>
+    ObstacleGenerator::fieldOfView(const core::vector3df &playerPosition) const
 {
-    edgeLeft = (playerPosition.X - farValueWithBuffer()) / CHUNK_LENGTH;
-    edgeRight = (playerPosition.X + farValueWithBuffer()) / CHUNK_LENGTH;
-    edgeBottom = (playerPosition.Y - farValueWithBuffer()) / CHUNK_LENGTH;
-    edgeTop = (playerPosition.Y + farValueWithBuffer()) / CHUNK_LENGTH;
-    edgeBack = playerPosition.Z / CHUNK_LENGTH;
-    edgeFront = (playerPosition.Z + farValueWithBuffer()) / CHUNK_LENGTH;
+    return { playerPosition.X - farValueWithBuffer(),
+             playerPosition.X + farValueWithBuffer(),
+             playerPosition.Y - farValueWithBuffer(),
+             playerPosition.Y + farValueWithBuffer(),
+             playerPosition.Z,
+             playerPosition.Z + farValueWithBuffer() };
 }
 
-unsigned long ObstacleGenerator::generateChunk(long x, long y, long z, const ChunkDB &chunkDB)
+Point3<int> ObstacleGenerator::cellToChunk(const Point3<int> &cell)
 {
-    std::size_t chunkIndex = Randomizer::getInt(0, chunkDB.size() - 1);
+    Point3<int> result = cell;
 
-    return chunkDB[chunkIndex].produce(world, device, CELL_SIZE,
-                                       btVector3(x, y, z) * CHUNK_LENGTH, obstacles);
+    if (cell.x < 0)
+        result.x++;
+    if (cell.y < 0)
+        result.y++;
+    if (cell.z < 0)
+        result.z++;
+
+    result /= (long) CHUNK_SIZE;
+
+    if (cell.x < 0)
+        result.x--;
+    if (cell.y < 0)
+        result.y--;
+    if (cell.z < 0)
+        result.z--;
+
+    return result;
+}
+
+Point3<int> ObstacleGenerator::relativeCellPos(const Point3<int> &cell, const Point3<int> &chunk)
+{
+    return cell - chunk * CHUNK_SIZE;
+}
+
+std::size_t ObstacleGenerator::insertCell(long x, long y, long z, const ChunkDB &chunkDB,
+                                           Edges<long> cellEdges)
+{
+    Point3<int> cell(x, y, z);
+    Point3<int> chunk = cellToChunk(cell);
+
+    std::size_t chunkIndex = (chunk.x * chunk.y * chunk.z + chunk.x + chunk.y + chunk.z)
+            % chunkDB.size();
+
+    return chunkDB[chunkIndex].produceCell(world, device, CELL_LENGTH,
+                                           btVector3(chunk.x, chunk.y, chunk.z) * CHUNK_LENGTH,
+                                           obstacles, relativeCellPos(cell, chunk));
 }
 
 // removes obstacles behind the player

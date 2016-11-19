@@ -110,6 +110,31 @@ public:
         return generated;
     }
 
+    // creates objects and returns number of bodies generated
+    std::size_t produceCell(btDynamicsWorld &world,
+                            IrrlichtDevice &device,
+                            btScalar cellSize,
+                            btVector3 chunkPosition,
+                            std::list<std::unique_ptr<IObstacle>> &list,
+                            Point3<int> cell) const
+    {
+        if (type == ChunkType::NOT_GENERATED)
+            return 0;
+
+        std::size_t generated = 0;
+
+        for (const auto &position : positions) {
+            const auto &pattern = position.pattern;
+            const Point3<int> &pos = position.position;
+
+            if (pos == cell)
+                return generated += pattern->produce(world, device, cellSize,
+                    chunkPosition + btVector3(pos.x, pos.y, pos.z) * cellSize, list);
+        }
+
+        return 0;
+    }
+
 private:
     // returns how many obstacles it managed to fit into the chunk
     std::size_t collisions()

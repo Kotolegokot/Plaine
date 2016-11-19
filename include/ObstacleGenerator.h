@@ -33,8 +33,8 @@ using namespace irr;
 
 constexpr std::size_t CHUNK_SIZE = 16;
 constexpr std::size_t CHUNK_DB_SIZE = 200;
-constexpr btScalar CELL_SIZE = 250;
-constexpr btScalar CHUNK_LENGTH = CHUNK_SIZE * CELL_SIZE;
+constexpr btScalar CELL_LENGTH = 250;
+constexpr btScalar CHUNK_LENGTH = CHUNK_SIZE * CELL_LENGTH;
 using ChunkDB = std::array<Chunk<CHUNK_SIZE>, CHUNK_DB_SIZE>;
 
 // this class is responsible for generating obstacles on the fly
@@ -51,9 +51,105 @@ public:
     btScalar getBuffer() const;
 
 private:
-    void stickToGrid(const core::vector3df &playerPosition, long &edgeLeft, long &edgeRight,
-                     long &edgeBottom, long &edgeTop, long &edgeBack, long &edgeFront) const;
-    unsigned long generateChunk(long x, long y, long z, const ChunkDB &chunkDB);
+    template <typename Num>
+    struct Edges {
+        Edges() = default;
+        Edges(Num left, Num right, Num bottom, Num top, Num back, Num front) :
+            left(left), right(right), bottom(bottom), top(top), back(back), front(front) {}
+
+        template <typename Num2>
+        Edges(const Edges<Num2> &other) :
+            left(other.left), right(other.right), bottom(other.bottom),
+            top(other.top), back(other.back), front(other.front) {}
+
+        template <typename Num2>
+        Edges<Num> &operator =(const Edges<Num2> &other)
+        {
+            left = other.left;
+            right = other.right;
+            bottom = other.bottom;
+            top = other.top;
+            back = other.back;
+            front = other.front;
+        }
+
+        template <typename Num2>
+        Edges(Edges<Num2> &&other) :
+            left(other.left), right(other.right), bottom(other.bottom),
+            top(other.top), back(other.back), front(other.front) {}
+
+        template <typename Num2>
+        Edges<Num> &operator =(Edges<Num2> &&other)
+        {
+            left = other.left;
+            right = other.right;
+            bottom = other.bottom;
+            top = other.top;
+            back = other.back;
+            front = other.front;
+        }
+
+        template <typename Num2>
+        bool operator ==(const Edges<Num2> &other) const
+        {
+            return left == other.left &&
+                   right == other.right &&
+                   bottom == other.bottom &&
+                   top == other.top &&
+                   back == other.back &&
+                   front == other.front;
+        }
+
+        template <typename Num2>
+        Edges<Num> operator /(Num2 n) const
+        {
+            return { left / n, right / n,
+                     bottom / n, top / n,
+                     back / n, front / n };
+        }
+
+        template <typename Num2>
+        Edges<Num> operator /=(Num2 n)
+        {
+            left /= n;
+            right /= n;
+            bottom /= n;
+            top /= n;
+            back /= n;
+            front /= n;
+
+            return *this;
+        }
+
+        template <typename Num2>
+        Edges<Num> operator %=(Num2 n)
+        {
+            left %= n;
+            right %= n;
+            bottom %= n;
+            top %= n;
+            back %= n;
+            front %= n;
+
+            return *this;
+        }
+
+        Num left = 0;
+        Num right = 0;
+        Num bottom = 0;
+        Num top = 0;
+        Num back = 0;
+        Num front = 0;
+    };
+
+    Edges<btScalar> fieldOfView(const core::vector3df &playerPosition) const;
+
+    // takes chunk coordinates and generate its appropriate part
+    std::size_t insertCell(long x, long y, long z, const ChunkDB &chunkDB, Edges<long> cellEdges);
+
+    static Point3<int> cellToChunk(const Point3<int> &cell);
+    static Point3<int> relativeCellPos(const Point3<int> &cell, const Point3<int> &chunk);
+
     void removeLeftBehind(btScalar playerZ);
     btScalar farValueWithBuffer() const;
 
@@ -68,11 +164,8 @@ private:
     //      smoothly floating into the view range
     btScalar buffer = 0;
 
-    long generatedEdgeFront = 1;
-    long generatedEdgeLeft = 0;
-    long generatedEdgeRight = 0;
-    long generatedEdgeTop = 0;
-    long generatedEdgeBottom = 0;
+    // edges denoting generated part of the world in cells
+    Edges<long> generatedEdges;
 
     btDynamicsWorld &world; // physics world
 };

@@ -59,30 +59,99 @@ int sign(Number num)
         return 0;
 }
 
-template <typename IntType>
+template <typename Num>
 struct Point3 {
     Point3() = default;
-    Point3(IntType x, IntType y, IntType z) :
+    Point3(Num x, Num y, Num z) :
         x(x), y(y), z(z) {}
 
-    template <typename IntType2>
-    Point3(const Point3<IntType2> &other) :
+    template <typename Num2>
+    Point3(const Point3<Num2> &other) :
         x(other.x), y(other.y), z(other.z) {}
 
-    friend Point3 operator +(const Point3 &p1, const Point3 &p2)
+    template <typename Num2>
+    bool operator ==(const Point3<Num2> &other) const
+    {
+        return x == other.x &&
+                y == other.y &&
+                z == other.z;
+    }
+
+//    Point3<Num> operator
+
+    template <typename Num2>
+    Point3<Num> &operator /=(Num2 n)
+    {
+        x /= n;
+        y /= n;
+        z /= n;
+
+        return *this;
+    }
+
+    template <typename Num2>
+    Point3<Num> &operator %=(Num2 n)
+    {
+        x %= n;
+        y %= n;
+        z %= n;
+
+        return *this;
+    }
+
+    template <typename Num2, typename Num3>
+    friend Point3 operator +(const Point3<Num2> &p1, const Point3<Num3> &p2)
     {
         return Point3(p1.x + p2.x, p1.y + p2.y, p1.z + p2.z);
     }
 
-    friend Point3 operator -(const Point3 &p1, const Point3 &p2)
+    template <typename Num2, typename Num3>
+    friend Point3 operator -(const Point3<Num2> &p1, const Point3<Num3> &p2)
     {
         return Point3(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);
     }
 
-    IntType x = 0;
-    IntType y = 0;
-    IntType z = 0;
+    template <typename Num2, typename Num3>
+    friend Point3 operator *(const Point3<Num2> &p1, Num3 n)
+    {
+        return Point3(p1.x * n, p1.y * n, p1.z * n);
+    }
+
+    template <typename Num2, typename Num3>
+    friend Point3 operator /(const Point3<Num2> &p1, Num3 n)
+    {
+        return Point3(p1.x / n, p1.y / n, p1.z / n);
+    }
+
+    template <typename Num2, typename Num3>
+    friend Point3 operator %(const Point3<Num2> &p1, Num3 n)
+    {
+        return Point3(p1.x % n, p1.y % n, p1.z % n);
+    }
+
+    Num x = 0;
+    Num y = 0;
+    Num z = 0;
 };
+
+//template <typename Num>
+//struct Cube {
+//    Cube() = default;
+
+//    Cube(const Point3<Num> &p1, const Point3<Num> &p2) :
+//        p1(p1), p2(p2) {}
+
+//    template <typename Num2>
+//    bool has(const Point3<Num2> &p)
+//    {
+//        return (p.x <= std::max(p1.x, p2.x) && p.x >= std::min(p1.x, p2.x)) &&
+//               (p.y <= std::max(p1.y, p2.y) && p.y >= std::min(p1.y, p2.y)) &&
+//               (p.z <= std::max(p1.z, p2.z) && p.z >= std::min(p1.z, p2.z));
+//    }
+
+//    Point3<Num> p1;
+//    Point3<Num> p2;
+//};
 
 template <typename T, std::size_t N>
 struct Array3 : public std::array<T, N * N * N> {
