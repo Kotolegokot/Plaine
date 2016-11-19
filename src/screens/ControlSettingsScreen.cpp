@@ -37,16 +37,20 @@ void ControlSettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
         buttonsControl[i] = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
         buttonsControl[i]->setID(ids[i]);
+        setCustomButtonSkin(*buttonsControl[i], true);
     }
 
     buttonDefaultControls = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonDefaultControls->setID(ID_BUTTON_DEFAULT_CONTROLS);
+    setCustomButtonSkin(*buttonDefaultControls);
 
     buttonSettings = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonSettings->setID(ID_BUTTON_SETTINGS);
+    setCustomButtonSkin(*buttonSettings);
 
     buttonQuit = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonQuit->setID(ID_BUTTON_QUIT);
+    setCustomButtonSkin(*buttonQuit);
 
     reload(buttonWidth, buttonHeight);
     resize(buttonWidth, buttonHeight);
