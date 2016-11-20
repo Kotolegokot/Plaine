@@ -21,11 +21,10 @@
 
 using namespace irr;
 
-ObstacleGenerator::ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, btScalar farValue, btScalar buffer) :
-    device(device), farValue(farValue), buffer(buffer), world(world) {}
+ObstacleGenerator::ObstacleGenerator(btDynamicsWorld &world, IrrlichtDevice &device, btScalar farValue, btScalar buffer) :
+    world(world), device(device), m_farValue(farValue), m_buffer(buffer) {}
 
-void ObstacleGenerator::generate(const core::vector3df &playerPosition,
-                                 const ChunkDB &chunkDB)
+void ObstacleGenerator::generate(const btVector3 &playerPosition, const ChunkDB &chunkDB)
 {
     #if DEBUG_OUTPUT
         unsigned long obstaclesGenerated = 0;
@@ -64,20 +63,20 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition,
     obstacleCount += obstaclesGenerated;
     generatedCuboid = view;
 
-    removeLeftBehind(playerPosition.Z);
+    removeLeftBehind(playerPosition.z());
 }
 
-Cuboid<btScalar> ObstacleGenerator::fieldOfView(const core::vector3df &playerPosition) const
+Cuboid<btScalar> ObstacleGenerator::fieldOfView(const btVector3 &playerPosition) const
 {
     return {
         // left bottom back point
-        { playerPosition.X - farValueWithBuffer(),
-          playerPosition.Y - farValueWithBuffer(),
-          playerPosition.Z },
+        { playerPosition.x() - farValueWithBuffer(),
+          playerPosition.y() - farValueWithBuffer(),
+          playerPosition.z() },
         // right top front point
-        { playerPosition.X + farValueWithBuffer(),
-          playerPosition.Y + farValueWithBuffer(),
-          playerPosition.Z + farValueWithBuffer() }
+        { playerPosition.x() + farValueWithBuffer(),
+          playerPosition.y() + farValueWithBuffer(),
+          playerPosition.z() + farValueWithBuffer() }
     };
 }
 
@@ -118,21 +117,21 @@ std::size_t ObstacleGenerator::insertCell(Vector3<int> cell, const ChunkDB &chun
 
     return chunkDB[chunkIndex].produceCell(world, device, CELL_LENGTH,
                                            chunk.toBulletVector3() * CHUNK_LENGTH,
-                                           obstacles, relativeCellPos(cell, chunk));
+                                           m_obstacles, relativeCellPos(cell, chunk));
 }
 
 // removes obstacles behind the player
 void ObstacleGenerator::removeLeftBehind(btScalar playerZ)
 {
     size_t count = 0;
-    for (auto it = obstacles.begin();
-        it != obstacles.end() && count < 100; count++)
+    for (auto it = m_obstacles.begin();
+        it != m_obstacles.end() && count < 100; count++)
     {
-        if ((*it)->getPosition().z() < playerZ - buffer ||
+        if ((*it)->getPosition().z() < playerZ - m_buffer ||
             (*it)->getPosition().z() > playerZ + farValueWithBuffer() * 2)
         {
             it->reset();
-            it = obstacles.erase(it);
+            it = m_obstacles.erase(it);
             obstacleCount--;
         } else {
             it++;
@@ -140,32 +139,22 @@ void ObstacleGenerator::removeLeftBehind(btScalar playerZ)
     }
 }
 
-u32 ObstacleGenerator::getCubeCount() const
+std::size_t ObstacleGenerator::obstacles() const
 {
     return obstacleCount;
 }
 
 btScalar ObstacleGenerator::farValueWithBuffer() const
 {
-    return farValue + buffer;
+    return m_farValue + m_buffer;
 }
 
-void ObstacleGenerator::setFarValue(btScalar value)
+btScalar ObstacleGenerator::farValue() const
 {
-    farValue = value;
+    return m_farValue;
 }
 
-btScalar ObstacleGenerator::getFarValue() const
+btScalar ObstacleGenerator::buffer() const
 {
-    return farValue;
-}
-
-void ObstacleGenerator::setBuffer(btScalar buffer)
-{
-    this->buffer = buffer;
-}
-
-btScalar ObstacleGenerator::getBuffer() const
-{
-    return buffer;
+    return m_buffer;
 }

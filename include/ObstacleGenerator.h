@@ -41,17 +41,17 @@ using ChunkDB = std::array<Chunk<CHUNK_SIZE>, CHUNK_DB_SIZE>;
 class ObstacleGenerator
 {
 public:
-    ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, btScalar farValue = 1500, btScalar buffer = CHUNK_LENGTH);
-    void generate(const core::vector3df &playerPosition, const ChunkDB &chunkDB);
-    u32 getCubeCount() const;
+    ObstacleGenerator(btDynamicsWorld &world, IrrlichtDevice &device, btScalar farValue = 1500,
+                      btScalar buffer = CHUNK_LENGTH);
 
-    void setFarValue(btScalar value);
-    btScalar getFarValue() const;
-    void setBuffer(btScalar buffer);
-    btScalar getBuffer() const;
+    void generate(const btVector3 &playerPosition, const ChunkDB &chunkDB);
+
+    std::size_t obstacles() const;
+    btScalar farValue() const;
+    btScalar buffer() const;
 
 private:
-    Cuboid<btScalar> fieldOfView(const core::vector3df &playerPosition) const;
+    Cuboid<btScalar> fieldOfView(const btVector3 &playerPosition) const;
 
     // takes chunk coordinates and generate its appropriate part
     std::size_t insertCell(Vector3<int> cell, const ChunkDB &chunkDB);
@@ -69,22 +69,21 @@ private:
     void removeLeftBehind(btScalar playerZ);
     btScalar farValueWithBuffer() const;
 
+    btDynamicsWorld &world;
     IrrlichtDevice &device;
-    std::list<std::unique_ptr<IObstacle>> obstacles;
+    std::list<std::unique_ptr<IObstacle>> m_obstacles;
 
     u32 obstacleCount = 0;
 
-    btScalar farValue = 0;
+    btScalar m_farValue = 0;
     // buffer is used to generate obstacles a bit farther than
     //      the camera's far value so that player sees them
     //      smoothly floating into the view range
-    btScalar buffer = 0;
+    btScalar m_buffer = 0;
 
     // cuboid denoting generated part of the world in cells
     // but its rear face doesn't matter
     Cuboid<long> generatedCuboid;
-
-    btDynamicsWorld &world; // physics world
 };
 
 #endif // OBSTACLEGENERATOR_H

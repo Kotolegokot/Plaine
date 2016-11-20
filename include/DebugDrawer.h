@@ -27,7 +27,7 @@ using namespace irr;
 class DebugDrawer : public btIDebugDraw
 {
 public:
-    DebugDrawer(IrrlichtDevice *deivce);
+    DebugDrawer(IrrlichtDevice &deivce);
 
     virtual void drawLine(const btVector3 &from, const btVector3 &to, const btVector3 &color) override;
     virtual void drawContactPoint(const btVector3 &PointOnB, const btVector3 &normalOnB, btScalar distance,
@@ -38,7 +38,7 @@ public:
     virtual int getDebugMode() const override;
 
 private:
-    IrrlichtDevice *device = nullptr;
+    IrrlichtDevice &device;
     DebugDrawModes debugMode = DBG_NoDebug;
 };
 
