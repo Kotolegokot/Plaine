@@ -72,6 +72,12 @@ struct Vector3 {
     }
 
     template <typename Num2>
+    bool operator !=(const Vector3<Num2> &other) const
+    {
+        return !(*this == other);
+    }
+
+    template <typename Num2>
     auto operator /(Num2 n) const
     {
         return Vector3(x / n, y / n, z / n);
@@ -126,11 +132,11 @@ struct Vector3 {
     }
 
     template <typename Num2>
-    Vector3 &operator +=(Num2 n)
+    Vector3 &operator +=(const Vector3<Num2> &other)
     {
-        x += n;
-        y += n;
-        z += n;
+        x += other.x;
+        y += other.y;
+        z += other.z;
 
         return *this;
     }
@@ -142,11 +148,13 @@ struct Vector3 {
     }
 
     template <typename Num2>
-    Vector3 &operator -=(Num2 n)
+    Vector3 &operator -=(const Vector3<Num2> &other)
     {
-        x -= n;
-        y -= n;
-        z -= n;
+        x -= other.x;
+        y -= other.y;
+        z -= other.z;
+
+        return *this;
     }
 
     Num x = 0;

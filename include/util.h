@@ -26,6 +26,7 @@
 #include "Randomizer.h"
 #include "util/Vector3.h"
 #include "util/Array3.h"
+#include "util/Cuboid.h"
 
 #ifndef _WIN32
 #include <iconv.h>
@@ -60,25 +61,6 @@ int sign(Number num)
     else
         return 0;
 }
-
-//template <typename Num>
-//struct Cube {
-//    Cube() = default;
-
-//    Cube(const Point3<Num> &p1, const Point3<Num> &p2) :
-//        p1(p1), p2(p2) {}
-
-//    template <typename Num2>
-//    bool has(const Point3<Num2> &p)
-//    {
-//        return (p.x <= std::max(p1.x, p2.x) && p.x >= std::min(p1.x, p2.x)) &&
-//               (p.y <= std::max(p1.y, p2.y) && p.y >= std::min(p1.y, p2.y)) &&
-//               (p.z <= std::max(p1.z, p2.z) && p.z >= std::min(p1.z, p2.z));
-//    }
-
-//    Point3<Num> p1;
-//    Point3<Num> p2;
-//};
 
 // GUI IDs
 enum GUI_ID {

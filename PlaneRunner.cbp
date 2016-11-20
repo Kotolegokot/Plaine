@@ -148,6 +148,7 @@
 		<Unit filename="include/screens/SettingsScreen.h" />
 		<Unit filename="include/util.h" />
 		<Unit filename="include/util/Array3.h" />
+		<Unit filename="include/util/Cuboid.h" />
 		<Unit filename="include/util/Vector3.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/CGUITTFont.cpp" />
