@@ -93,7 +93,7 @@ World::~World()
     m_irrlichtDevice.getSceneManager()->clear();
 }
 
-void World::render(video::SColor color, bool b_updateCamera)
+void World::render(video::SColor color)
 {
 #if FOG_ENABLED && IRIDESCENT_FOG
     m_irrlichtDevice.getVideoDriver()->setFog(color, video::EFT_FOG_LINEAR,
@@ -112,13 +112,16 @@ void World::render(video::SColor color, bool b_updateCamera)
     m_physicsWorld->debugDrawWorld();
 #endif // DEBUG_DRAWER_ENABLED
 
-    if (b_updateCamera)
+    if (!m_gameOver)
         updateCamera(); // update camera position, target, and rotation
     m_irrlichtDevice.getSceneManager()->drawAll();
 }
 
 void World::stepSimulation(btScalar timeStep, int maxSubSteps, btScalar fixedTimeStep)
 {
+    m_explosion->setPosition(m_plane->getPosition());
+    m_gameOver = m_plane->getExploded();
+
     m_physicsWorld->stepSimulation(timeStep, maxSubSteps, fixedTimeStep);
 
 #if DEBUG_OUTPUT
@@ -137,29 +140,19 @@ void World::updateAspectRatio()
                             static_cast<f32>(m_configuration.resolution.Height));
 }
 
+bool World::gameOver() const
+{
+    return m_gameOver;
+}
+
 std::size_t World::obstacles() const
 {
     return m_generator->obstacles();
 }
 
-IrrlichtDevice &World::irrlichtDevice()
-{
-    return m_irrlichtDevice;
-}
-
-btDiscreteDynamicsWorld &World::physicsWorld()
-{
-    return *m_physicsWorld;
-}
-
 Plane &World::plane()
 {
     return *m_plane;
-}
-
-Explosion &World::explosion()
-{
-    return *m_explosion;
 }
 
 void World::updateCamera()

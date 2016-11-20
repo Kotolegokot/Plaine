@@ -20,7 +20,6 @@
 #include <iostream>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
-#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <CGUITTFont.h>
 #include <ITimer.h>
 #include "World.h"

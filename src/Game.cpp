@@ -480,7 +480,7 @@ bool Game::run()
                     std::cout << "=== END_SIMULATION ===" << std::endl << std::endl;
                 #endif
 
-                world->render(color, false);
+                world->render(color);
                 handleSelecting();
 
                 if (eventReceiver->checkEvent(ID_BUTTON_MENU)) {
@@ -510,8 +510,7 @@ bool Game::run()
                     gui->reload();
                 }
 
-                world->explosion().setPosition(world->plane().getPosition());
-                if (world->plane().getExploded()) {
+                if (world->gameOver()) {
                     gui->initialize(Screen::GAME_OVER);
                     continue;
                 }
