@@ -1,6 +1,7 @@
 #ifndef CUBOID_H
 #define CUBOID_H
 
+#include <algorithm>
 #include "Vector3.h"
 
 template <typename Num>

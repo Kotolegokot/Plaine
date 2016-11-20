@@ -31,31 +31,30 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition,
         unsigned long obstaclesGenerated = 0;
     #endif
 
-//    const Edges<long> chunkEdges = fieldOfView(playerPosition) / CHUNK_LENGTH;
-    const Edges<long> cellEdges = fieldOfView(playerPosition) / CELL_LENGTH;
-    Vector3<int> cell;
+    const Cuboid<long> view = fieldOfView(playerPosition) / CELL_LENGTH; //field of view in cells
+    Vector3<int> cell; // current cell to generate
 
-    for (cell.z = cellEdges.back; cell.z <= generatedEdges.front; cell.z++) {
-        for (cell.x = cellEdges.left; cell.x < generatedEdges.left; cell.x++)
-            for (cell.y = cellEdges.bottom; cell.y <= cellEdges.top; cell.y++)
+    for (cell.z = back(view); cell.z <= front(generatedCuboid); cell.z++) {
+        for (cell.x = left(view); cell.x < left(generatedCuboid); cell.x++)
+            for (cell.y = bottom(view); cell.y <= top(view); cell.y++)
                 obstaclesGenerated += insertCell(cell, chunkDB);
 
-        for (cell.x = generatedEdges.left; cell.x <= generatedEdges.right; cell.x++) {
-            for (cell.y = cellEdges.bottom; cell.y < generatedEdges.bottom; cell.y++)
+        for (cell.x = left(generatedCuboid); cell.x <= right(generatedCuboid); cell.x++) {
+            for (cell.y = bottom(view); cell.y < bottom(generatedCuboid); cell.y++)
                 obstaclesGenerated += insertCell(cell, chunkDB);
 
-            for (cell.y = generatedEdges.top + 1; cell.y <= cellEdges.top; cell.y++)
+            for (cell.y = top(generatedCuboid) + 1; cell.y <= top(view); cell.y++)
                 obstaclesGenerated += insertCell(cell, chunkDB);
         }
 
-        for (cell.x = generatedEdges.right + 1; cell.x <= cellEdges.right; cell.x++)
-            for (cell.y = cellEdges.bottom; cell.y <= cellEdges.top; cell.y++)
+        for (cell.x = right(generatedCuboid) + 1; cell.x <= right(view); cell.x++)
+            for (cell.y = bottom(view); cell.y <= top(view); cell.y++)
                 obstaclesGenerated += insertCell(cell, chunkDB);
     }
 
-    for (cell.z = generatedEdges.front + 1; cell.z <= cellEdges.front; cell.z++)
-        for (cell.x = cellEdges.left; cell.x <= cellEdges.right; cell.x++)
-            for (cell.y = cellEdges.bottom; cell.y <= cellEdges.top; cell.y++)
+    for (cell.z = front(generatedCuboid) + 1; cell.z <= front(view); cell.z++)
+        for (cell.x = left(view); cell.x <= right(view); cell.x++)
+            for (cell.y = bottom(view); cell.y <= top(view); cell.y++)
                 obstaclesGenerated += insertCell(cell, chunkDB);
 
     #if DEBUG_OUTPUT
@@ -63,20 +62,23 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition,
     #endif // DEBUG_OUTPUT
 
     obstacleCount += obstaclesGenerated;
-    generatedEdges = cellEdges;
+    generatedCuboid = view;
 
     removeLeftBehind(playerPosition.Z);
 }
 
-ObstacleGenerator::Edges<btScalar>
-    ObstacleGenerator::fieldOfView(const core::vector3df &playerPosition) const
+Cuboid<btScalar> ObstacleGenerator::fieldOfView(const core::vector3df &playerPosition) const
 {
-    return { playerPosition.X - farValueWithBuffer(),
-             playerPosition.X + farValueWithBuffer(),
-             playerPosition.Y - farValueWithBuffer(),
-             playerPosition.Y + farValueWithBuffer(),
-             playerPosition.Z,
-             playerPosition.Z + farValueWithBuffer() };
+    return {
+        // left bottom back point
+        { playerPosition.X - farValueWithBuffer(),
+          playerPosition.Y - farValueWithBuffer(),
+          playerPosition.Z },
+        // right top front point
+        { playerPosition.X + farValueWithBuffer(),
+          playerPosition.Y + farValueWithBuffer(),
+          playerPosition.Z + farValueWithBuffer() }
+    };
 }
 
 Vector3<int> ObstacleGenerator::cellToChunk(const Vector3<int> &cell)

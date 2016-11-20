@@ -51,104 +51,20 @@ public:
     btScalar getBuffer() const;
 
 private:
-    template <typename Num>
-    struct Edges {
-        Edges() = default;
-        Edges(Num left, Num right, Num bottom, Num top, Num back, Num front) :
-            left(left), right(right), bottom(bottom), top(top), back(back), front(front) {}
-
-        template <typename Num2>
-        Edges(const Edges<Num2> &other) :
-            left(other.left), right(other.right), bottom(other.bottom),
-            top(other.top), back(other.back), front(other.front) {}
-
-        template <typename Num2>
-        Edges<Num> &operator =(const Edges<Num2> &other)
-        {
-            left = other.left;
-            right = other.right;
-            bottom = other.bottom;
-            top = other.top;
-            back = other.back;
-            front = other.front;
-        }
-
-        template <typename Num2>
-        Edges(Edges<Num2> &&other) :
-            left(other.left), right(other.right), bottom(other.bottom),
-            top(other.top), back(other.back), front(other.front) {}
-
-        template <typename Num2>
-        Edges<Num> &operator =(Edges<Num2> &&other)
-        {
-            left = other.left;
-            right = other.right;
-            bottom = other.bottom;
-            top = other.top;
-            back = other.back;
-            front = other.front;
-        }
-
-        template <typename Num2>
-        bool operator ==(const Edges<Num2> &other) const
-        {
-            return left == other.left &&
-                   right == other.right &&
-                   bottom == other.bottom &&
-                   top == other.top &&
-                   back == other.back &&
-                   front == other.front;
-        }
-
-        template <typename Num2>
-        Edges<Num> operator /(Num2 n) const
-        {
-            return { left / n, right / n,
-                     bottom / n, top / n,
-                     back / n, front / n };
-        }
-
-        template <typename Num2>
-        Edges<Num> operator /=(Num2 n)
-        {
-            left /= n;
-            right /= n;
-            bottom /= n;
-            top /= n;
-            back /= n;
-            front /= n;
-
-            return *this;
-        }
-
-        template <typename Num2>
-        Edges<Num> operator %=(Num2 n)
-        {
-            left %= n;
-            right %= n;
-            bottom %= n;
-            top %= n;
-            back %= n;
-            front %= n;
-
-            return *this;
-        }
-
-        Num left = 0;
-        Num right = 0;
-        Num bottom = 0;
-        Num top = 0;
-        Num back = 0;
-        Num front = 0;
-    };
-
-    Edges<btScalar> fieldOfView(const core::vector3df &playerPosition) const;
+    Cuboid<btScalar> fieldOfView(const core::vector3df &playerPosition) const;
 
     // takes chunk coordinates and generate its appropriate part
     std::size_t insertCell(Vector3<int> cell, const ChunkDB &chunkDB);
 
     static Vector3<int> cellToChunk(const Vector3<int> &cell);
     static Vector3<int> relativeCellPos(const Vector3<int> &cell, const Vector3<int> &chunk);
+
+    static long back(const Cuboid<long> cuboid) { return cuboid.p1.z; }
+    static long front(const Cuboid<long> cuboid) { return cuboid.p2.z; }
+    static long left(const Cuboid<long> cuboid) { return cuboid.p1.x; }
+    static long right(const Cuboid<long> cuboid) { return cuboid.p2.x; }
+    static long bottom(const Cuboid<long> cuboid) { return cuboid.p1.y; }
+    static long top(const Cuboid<long> cuboid) { return cuboid.p2.y; }
 
     void removeLeftBehind(btScalar playerZ);
     btScalar farValueWithBuffer() const;
@@ -164,8 +80,9 @@ private:
     //      smoothly floating into the view range
     btScalar buffer = 0;
 
-    // edges denoting generated part of the world in cells
-    Edges<long> generatedEdges;
+    // cuboid denoting generated part of the world in cells
+    // but its rear face doesn't matter
+    Cuboid<long> generatedCuboid;
 
     btDynamicsWorld &world; // physics world
 };
