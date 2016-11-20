@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function show_usage {
-	echo "Usage: $0 ( ls | count_lines | update_l11n | compile_l11n | add_license_headers | replace_license_headers)"
+	echo "Usage: $0 ( ls | grep | count_lines | update_l11n | compile_l11n | add_license_headers | replace_license_headers)"
 	exit
 }
 
@@ -15,6 +15,8 @@ if [ "$1" == "ls" ]; then
 	for file in $CXX_FILES; do
 		echo $file
 	done
+elif [ "$1" == "grep" ]; then
+	$0 ls | xargs grep "${@:2}"
 elif [ "$1" == "count_lines" ]; then
 	wc -l $CXX_FILES
 elif [ "$1" == "update_l11n" ]; then
