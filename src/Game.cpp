@@ -41,9 +41,11 @@ void Game::start()
 void Game::initializeGUI()
 {
     // load font
-    gui::IGUIFont *font = gui::CGUITTFont::createTTFont(driver, fileSystem, io::path("media/fonts/font.ttf"), 13, true, true);
+    auto *font = gui::CGUITTFont::createTTFont(driver, fileSystem,
+                                               io::path("media/fonts/font.ttf"), 13, true, true);
     if (font)
         skin->setFont(font);
+    font = nullptr;
 
     Game::setSpriteBank(false);
     Game::setSpriteBank(true);
@@ -94,90 +96,6 @@ bool Game::initializeDevice()
     return true;
 }
 
-// initializes bullet world
-void Game::initializeBullet()
-{
-    // add broadphase interface
-    broadphase = new btDbvtBroadphase();
-    // configurate collision
-    collisionConfiguration = new btDefaultCollisionConfiguration();
-    dispatcher = new btCollisionDispatcher(collisionConfiguration);
-    btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
-    // add constraint solver
-    solver = new btSequentialImpulseConstraintSolver;
-    // create world
-    dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-    dynamicsWorld->setGravity(btVector3(0, 0, 0));
-
-    gContactProcessedCallback = [](btManifoldPoint &cp, void *obj0p, void *obj1p) -> bool
-        {
-            auto obj0 = static_cast<btCollisionObject *>(obj0p);
-            auto obj1 = static_cast<btCollisionObject *>(obj1p);
-
-            // if one of the objects is the place
-            if (obj0->getUserIndex() == 1 || obj1->getUserIndex() == 1) {
-                #if DEBUG_OUTPUT
-                    std::cout << "Plane collision occured" << std::endl;
-                    std::cout << "Collision impulse: " << cp.getAppliedImpulse() << std::endl;
-                #endif // DEBUG_OUTPUT
-
-                // obj0 must always be the plane
-                if (obj1->getUserIndex() == 1)
-                    std::swap(obj0, obj1);
-
-                Plane &plane = *static_cast<Plane *>(obj0->getUserPointer());
-                if (cp.getAppliedImpulse() > 400)
-                    plane.setExploded(true);
-                else if (!plane.getExploded())
-                    plane.addScore(-cp.getAppliedImpulse());
-            }
-
-            return true;
-        };
-}
-
-void Game::initializeScene()
-{
-    #if FOG_ENABLED
-        driver->setFog(DEFAULT_COLOR, video::EFT_FOG_LINEAR, configuration.renderDistance - 300,
-                       configuration.renderDistance, .003f, true, false);
-    #endif // FOG_ENABLED
-
-    initializeBullet();
-
-    // create plane
-    plane = new Plane(*dynamicsWorld, *device, btVector3(0, 0, 0));
-    planeControl = new PlaneControl(*plane, configuration.controls);
-
-    explosion = new Explosion(*dynamicsWorld, *device, plane->getPosition(), 1000); // create explosion
-
-    #if DEBUG_DRAWER_ENABLED
-        debugDrawer = new DebugDrawer(device);
-        debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-        dynamicsWorld->setDebugDrawer(debugDrawer);
-    #endif // DEBUG_DRAWER_ENABLED
-
-    // create camera
-    {
-        camera = sceneManager->addCameraSceneNode(0);
-        camera->setFarValue(configuration.renderDistance);
-        updateCamera();
-    }
-
-    // add some light
-    {
-        light = sceneManager->addLightSceneNode(0, core::vector3df(0, 0, 0), DEFAULT_LIGHT_COLOR, 300);
-        light->setLightType(video::ELT_DIRECTIONAL);
-        video::SLight lightData;
-        lightData = light->getLightData();
-        lightData.DiffuseColor = DEFAULT_LIGHT_COLOR;
-        lightData.AmbientColor = DEFAULT_LIGHT_COLOR;
-        light->setLightData(lightData);
-    }
-
-    obstacleGenerator = new ObstacleGenerator(*device, *dynamicsWorld, camera->getFarValue(), 500);
-}
-
 void Game::error(const core::stringw &str) const
 {
     std::wcerr << "Error: " << str.c_str() << std::endl;
@@ -194,26 +112,11 @@ void Game::terminateDevice()
     initialized = false;
 }
 
-void Game::terminateScene()
-{
-    delete explosion;
-    delete plane;
-    // IMPORTANT: obstacleGenerator must be deleted before dynamicsWorld and sceneManager
-    delete obstacleGenerator;
-    delete dynamicsWorld;
-    delete solver;
-    delete dispatcher;
-    delete collisionConfiguration;
-    delete broadphase;
-    sceneManager->clear();
-}
-
 void Game::setSpriteBank(bool isControlButton)
 {
-        // add textures into sprite bank
-        gui::IGUISpriteBank *spriteBank;
-        if (!isControlButton)
-        {
+    // add textures into sprite bank
+    gui::IGUISpriteBank *spriteBank;
+    if (!isControlButton) {
         spriteBank = guiEnvironment->addEmptySpriteBank("SpritesForRegularButtons");
         spriteBank->addTexture(driver->getTexture("media/textures/button_up.png")); // 0
         spriteBank->addTexture(driver->getTexture("media/textures/button_over.png")); // 1
@@ -228,9 +131,7 @@ void Game::setSpriteBank(bool isControlButton)
                 (driver->getTexture("media/textures/button_down.png"))->getOriginalSize()));
         spriteBank->getPositions().push_back(core::rect<s32>(core::position2di(0,0),
                 (driver->getTexture("media/textures/button_focused.png"))->getOriginalSize()));
-        }
-        else
-        {
+    } else {
         spriteBank = guiEnvironment->addEmptySpriteBank("SpritesForControlButtons");
         spriteBank->addTexture(driver->getTexture("media/textures/cbutton_up.png")); // 0
         spriteBank->addTexture(driver->getTexture("media/textures/cbutton_over.png")); // 1
@@ -245,17 +146,16 @@ void Game::setSpriteBank(bool isControlButton)
                 (driver->getTexture("media/textures/cbutton_down.png"))->getOriginalSize()));
         spriteBank->getPositions().push_back(core::rect<s32>(core::position2di(0,0),
                 (driver->getTexture("media/textures/cbutton_focused.png"))->getOriginalSize()));
-        }
-        // add sprites
-        gui::SGUISprite sprite;
-        gui::SGUISpriteFrame sframe;
-        sprite.Frames.push_back(sframe);
-        for (int i = 0; i <= 3; i++)
-            {
-            sprite.Frames[0].rectNumber = i;
-            sprite.Frames[0].textureNumber = i;
-            spriteBank->getSprites().push_back(sprite);
-            }
+    }
+    // add sprites
+    gui::SGUISprite sprite;
+    gui::SGUISpriteFrame sframe;
+    sprite.Frames.push_back(sframe);
+    for (int i = 0; i <= 3; i++) {
+        sprite.Frames[0].rectNumber = i;
+        sprite.Frames[0].textureNumber = i;
+        spriteBank->getSprites().push_back(sprite);
+    }
 }
 
 // show main menu
@@ -491,10 +391,8 @@ void Game::mainMenu()
 bool Game::run()
 {
     gui->initialize(Screen::HUD);
-    initializeScene();
-
-    video::SLight lightData;
-    video::SColor color;
+    world = std::make_unique<World>(*device, configuration);
+    planeControl = new PlaneControl(world->plane(), configuration.controls);
 
     constexpr unsigned int tick = 1000.0f / 60.0f;
     u32 timePrevious, timeCurrent;
@@ -504,7 +402,7 @@ bool Game::run()
 
     while (device->run())
     {
-        color = iridescentColor(timer->getTime());
+        video::SColor color = iridescentColor(timer->getTime());
 
         if (device->isWindowActive()) {
             #if IRIDESCENT_BACKGROUND
@@ -517,7 +415,7 @@ bool Game::run()
             if (configuration.resolution != driver->getScreenSize()) {
                 configuration.resolution = driver->getScreenSize();
                 gui->resize();
-                camera->setAspectRatio((f32) configuration.resolution.Width / configuration.resolution.Height);
+                world->updateAspectRatio();
             }
 
             switch (gui->getCurrentScreenIndex()) {
@@ -533,23 +431,7 @@ bool Game::run()
 
                 // set cursor visible
                 device->getCursorControl()->setVisible(true);
-
-                // rendering
-                #if FOG_ENABLED && IRIDESCENT_FOG
-                    driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300,
-                        configuration.renderDistance, 0.01f, true, true);
-                #endif // FOG_ENABLED && IRIDESCENT_FOG
-                #if IRIDESCENT_LIGHT
-                    lightData = light->getLightData();
-                    lightData.DiffuseColor = color;
-                    lightData.AmbientColor = color;
-                    light->setLightData(lightData);
-                #endif // IRIDESCENT_LIGHT
-                updateCamera(); // update camera position, target, and rotation
-                #if DEBUG_DRAWER_ENABLED
-                    dynamicsWorld->debugDrawWorld();
-                #endif // DEBUG_DRAWER_ENABLED
-                sceneManager->drawAll(); // draw scene
+                world->render(color);
 
                 if (eventReceiver->checkEvent(ID_BUTTON_RESUME) ||
                     eventReceiver->checkKeyPressed(KEY_ESCAPE))
@@ -562,12 +444,12 @@ bool Game::run()
                 if (eventReceiver->checkKeyPressed(KEY_LEFT) ||
                     eventReceiver->checkEvent(ID_BUTTON_MENU))
                 {
-                    terminateScene();
+                    world.reset();
                     return true;
                 }
 
                 if (eventReceiver->checkEvent(ID_BUTTON_QUIT)) {
-                    terminateScene();
+                    world.reset();
                     return false;
                 }
 
@@ -579,7 +461,7 @@ bool Game::run()
             case Screen::GAME_OVER: {
                 {
                     core::stringw score(_w("Your score: "));
-                    score += plane->getScore();
+                    score += world->plane().getScore();
                     gui->getCurrentScreenAsGameOver().textScore->setText(score.c_str());
                 }
 
@@ -592,35 +474,17 @@ bool Game::run()
                 #endif // DEBUG_OUTPUT
                 timeCurrent = timer->getTime();
                 const float step = timeCurrent - timePrevious;
-                dynamicsWorld->stepSimulation((step / 1000.0), 10, tick / 1000.0f);
-                #if DEBUG_OUTPUT
-                    std::cout << "Simulation step: " << step << "ms" << std::endl;
-                #endif // DEBUG_OUTPUT
+                world->stepSimulation((step / 1000.0), 10, tick / 1000.0f);
                 timePrevious = timeCurrent;
                 #if DEBUG_OUTPUT
                     std::cout << "=== END_SIMULATION ===" << std::endl << std::endl;
                 #endif
 
-                // rendering
-                #if FOG_ENABLED && IRIDESCENT_FOG
-                    driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300,
-                        configuration.renderDistance, 0.01f, true, true);
-                #endif // FOG_ENABLED && IRIDESCENT_FOG
-                #if IRIDESCENT_LIGHT
-                    lightData = light->getLightData();
-                    lightData.DiffuseColor = color;
-                    lightData.AmbientColor = color;
-                    light->setLightData(lightData);
-                #endif // IRIDESCENT_LIGHT
-                #if DEBUG_DRAWER_ENABLED
-                    dynamicsWorld->debugDrawWorld();
-                #endif // DEBUG_DRAWER_ENABLED
-                sceneManager->drawAll(); // draw scene
-
+                world->render(color, false);
                 handleSelecting();
 
                 if (eventReceiver->checkEvent(ID_BUTTON_MENU)) {
-                    terminateScene();
+                    world.reset();
                     return true;
                 }
 
@@ -634,10 +498,7 @@ bool Game::run()
                 // physics simulation
                 timeCurrent = timer->getTime();
                 const float step = timeCurrent - timePrevious;
-                dynamicsWorld->stepSimulation((step / 1000.0), 10, tick / 1000.0f);
-                #if DEBUG_OUTPUT
-                    std::cout << "Simulation step: " << step << "ms" << std::endl;
-                #endif // DEBUG_OUTPUT
+                world->stepSimulation((step / 1000.0), 10, tick / 1000.0f);
                 timePrevious = timeCurrent;
 
                 if (eventReceiver->checkKeyPressed(KEY_ESCAPE)) {
@@ -649,12 +510,8 @@ bool Game::run()
                     gui->reload();
                 }
 
-                explosion->setPosition(plane->getPosition());
-
-                if (plane->getExploded()) {
-                    explosion->explode();
-                    plane->disappear();
-
+                world->explosion().setPosition(world->plane().getPosition());
+                if (world->plane().getExploded()) {
                     gui->initialize(Screen::GAME_OVER);
                     continue;
                 }
@@ -667,38 +524,18 @@ bool Game::run()
                     deltaTime -= tick;
                     accumulator += tick;
 
-                    obstacleGenerator->generate(plane->getNode().getPosition()); // generate obstacles
+                    world->generate();
                     planeControl->handle(*eventReceiver); // handle plane controls
-                    plane->addScore(2);
+                    world->plane().addScore(2);
                 }
 
                 #if DEBUG_OUTPUT
                     std::cout << "=== END_SIMULATION ===" << std::endl << std::endl;
                 #endif
 
-                // rendering
-                #if FOG_ENABLED && IRIDESCENT_FOG
-                    driver->setFog(color, video::EFT_FOG_LINEAR, configuration.renderDistance - 300,
-                        configuration.renderDistance, 0.01f, true, true);
-                #endif // FOG_ENABLED && IRIDESCENT_FOG
-
-                #if IRIDESCENT_LIGHT
-                    lightData = light->getLightData();
-                    lightData.DiffuseColor = color;
-                    lightData.AmbientColor = color;
-                    light->setLightData(lightData);
-                #endif // IRIDESCENT_LIGHT
-
-                updateHUD();
-                updateCamera(); // update camera position, target, and rotation
-
+                world->render(color);
                 device->getCursorControl()->setVisible(false); //set cursor invisible
-
-                #if DEBUG_DRAWER_ENABLED
-                    dynamicsWorld->debugDrawWorld();
-                #endif // DEBUG_DRAWER_ENABLED
-
-                sceneManager->drawAll(); // draw scene
+                updateHUD();
 
                 break;
             }
@@ -718,7 +555,7 @@ bool Game::run()
         }
     }
 
-    terminateScene();
+    world.reset();
     return false;
 }
 
@@ -727,7 +564,7 @@ void Game::updateHUD()
     // camera position
     {
         core::stringw cameraPosition = _w("Plane position: (");
-        core::vector3df position = plane->getNode().getPosition();
+        core::vector3df position = world->plane().getNode().getPosition();
         cameraPosition += position.X;
         cameraPosition += ", ";
         cameraPosition += position.Y;
@@ -745,11 +582,11 @@ void Game::updateHUD()
     // cube counter
     {
         core::stringw obstacles = _w("Obstacles: ");
-        obstacles += obstacleGenerator->getCubeCount();
+        obstacles += world->obstacles();
         gui->getCurrentScreenAsHUD().textObstaclesCount->setText(obstacles.c_str());
 
         #if DEBUG_OUTPUT
-            std::cout << "Obstacles: " << obstacleGenerator->getCubeCount() << std::endl;
+            std::cout << "Obstacles: " << world->obstacles() << std::endl;
         #endif // DEBUG_OUTPUT
     }
 
@@ -767,20 +604,24 @@ void Game::updateHUD()
     // velocity counter
     {
         core::stringw velocity = _w("Linear velocity: ");
-        velocity += (int) plane->getRigidBody().getLinearVelocity().length();
+        velocity += (int) world->plane().getRigidBody().getLinearVelocity().length();
         velocity += _w("; Angular velocity: ");
-        velocity += plane->getRigidBody().getAngularVelocity().length();
+        velocity += world->plane().getRigidBody().getAngularVelocity().length();
         gui->getCurrentScreenAsHUD().textVelocity->setText(velocity.c_str());
 
-        #if DEBUG_OUTPUT
-            std::cout << "Linear velocity: " << plane->getRigidBody().getLinearVelocity().length() << std::endl;
-            std::cout << "Angular velocity: " << plane->getRigidBody().getAngularVelocity().length() << std::endl;
-        #endif // DEBUG_OUTPUT
+#if DEBUG_OUTPUT
+        std::cout << "Linear velocity: "
+                  << world->plane().getRigidBody().getLinearVelocity().length()
+                  << std::endl;
+        std::cout << "Angular velocity: "
+                  << world->plane().getRigidBody().getAngularVelocity().length()
+                  << std::endl;
+#endif // DEBUG_OUTPUT
     }
 
     // rotation counter
     {
-        btVector3 rotation = plane->getEulerRotation();
+        btVector3 rotation = world->plane().getEulerRotation();
 
         core::stringw rotation_str = _w("Pitch: ");
         rotation_str += rotation.x();
@@ -790,35 +631,23 @@ void Game::updateHUD()
         rotation_str += rotation.z();
         gui->getCurrentScreenAsHUD().textAngle->setText(rotation_str.c_str());
 
-        #if DEBUG_OUTPUT
-            std::cout << "Pitch: " << rotation.x() << std::endl;
-            std::cout << "Yaw: " << rotation.y() << std::endl;
-            std::cout << "Roll: " << rotation.z() << std::endl;
-        #endif // DEBUG_OUTPUT
+#if DEBUG_OUTPUT
+        std::cout << "Pitch: " << rotation.x() << std::endl;
+        std::cout << "Yaw: " << rotation.y() << std::endl;
+        std::cout << "Roll: " << rotation.z() << std::endl;
+#endif // DEBUG_OUTPUT
     }
 
     // score counter
     {
         core::stringw score = _w("Score: ");
-        score += plane->getScore();
+        score += world->plane().getScore();
         gui->getCurrentScreenAsHUD().textScore->setText(score.c_str());
 
-        #if DEBUG_OUTPUT
-            std::cout << "Score: " << plane->getScore() << std::endl;
-        #endif // DEBUG_OUTPUT
+#if DEBUG_OUTPUT
+        std::cout << "Score: " << world->plane().getScore() << std::endl;
+#endif // DEBUG_OUTPUT
     }
-}
-
-void Game::updateCamera()
-{
-    core::vector3df upVector(0, 1, 0);
-    upVector.rotateXYBy(plane->getEulerRotation().z() * core::RADTODEG64);
-
-    camera->setPosition(plane->getNode().getPosition() + upVector * 0.3f * CAMERA_DISTANCE
-        - core::vector3df(0, 0, CAMERA_DISTANCE));
-    camera->setUpVector(upVector);
-
-    camera->setTarget(camera->getPosition() + core::vector3df(0, 0, 1));
 }
 
 void Game::handleSelecting()

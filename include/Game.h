@@ -21,10 +21,9 @@
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
-#include <BulletCollision/CollisionDispatch/btCollisionObject.h>
-#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include <CGUITTFont.h>
 #include <ITimer.h>
+#include "World.h"
 #include "screens/ControlSettingsScreen.h"
 #include "screens/HUDScreen.h"
 #include "screens/MainMenuScreen.h"
@@ -70,36 +69,16 @@ private:
     gui::IGUISkin *skin = nullptr;
     ITimer *timer = nullptr;
 
-    // Bullet
-    btBroadphaseInterface *broadphase = nullptr;
-    btDefaultCollisionConfiguration *collisionConfiguration = nullptr;
-    btCollisionDispatcher *dispatcher = nullptr;
-    btSequentialImpulseConstraintSolver *solver = nullptr;
-    btDiscreteDynamicsWorld *dynamicsWorld = nullptr;
-    Explosion *explosion = nullptr;
-
-    #if DEBUG_DRAWER_ENABLED
-        btIDebugDraw *debugDrawer = nullptr;
-    #endif // DEBUG_DRAWER_ENABLED
-
-    // Scene
-    scene::ILightSceneNode *light = nullptr;
-    scene::ICameraSceneNode *camera = nullptr;
-    ObstacleGenerator *obstacleGenerator = nullptr;
-    Plane *plane = nullptr;
+    std::unique_ptr<World> world;
     PlaneControl *planeControl = nullptr;
 
     void error(const core::stringw &str) const;
     bool initializeDevice();
     void initializeGUI();
-    void initializeBullet();
-    void initializeScene();
-    void terminateScene();
     void terminateDevice();
     void setSpriteBank(bool);
 
     void updateHUD();
-    void updateCamera();
     void handleSelecting();
 };
 

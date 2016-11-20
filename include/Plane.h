@@ -42,7 +42,7 @@
 class Plane : public IBody
 {
 public:
-    Plane(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &position);
+    Plane(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &position = { 0, 0, 0 });
 
     void setExploded(bool exploded);
     bool getExploded() const;

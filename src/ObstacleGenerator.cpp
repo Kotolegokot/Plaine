@@ -23,17 +23,17 @@ using namespace irr;
 constexpr btScalar ObstacleGenerator::STEP;
 constexpr btScalar ObstacleGenerator::START;
 
-ObstacleGenerator::ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, btScalar farValue, btScalar buffer) :
-    device(device), farValue(farValue), buffer(buffer), world(world) {}
+ObstacleGenerator::ObstacleGenerator(btDynamicsWorld &world, IrrlichtDevice &device, btScalar farValue, btScalar buffer) :
+    world(world), device(device), m_farValue(farValue), m_buffer(buffer) {}
 
 ObstacleGenerator::~ObstacleGenerator()
 {
     // remove all stored cubes
-    while (!obstacles.empty())
-        obstacles.pop_front();
+    while (!m_obstacles.empty())
+        m_obstacles.pop_front();
 }
 
-void ObstacleGenerator::generate(const core::vector3df &playerPosition)
+void ObstacleGenerator::generate(const btVector3 &playerPosition)
 {
     // number of obstacles generated within this tick
     #if DEBUG_OUTPUT
@@ -55,7 +55,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
         case 0:
             {
                 Tunnel tunnel(world, device, btVector3(newX, newY, newZ), Randomizer::getFloat(100, 200), Randomizer::getFloat(300, 600));
-                tunnel.addObstaclesToList(obstacles);
+                tunnel.addObstaclesToList(m_obstacles);
                 obstacleCount += tunnel.getObstacleCount();
                 #if DEBUG_OUTPUT
                     obstacleGenerated += tunnel.getObstacleCount();
@@ -65,7 +65,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
         case 1:
             {
                 Crystal crystal(world, device, btVector3(newX, newY, newZ), Randomizer::getFloat(50.f, 100.f), Randomizer::getFloat(300.f, 600.f));
-                crystal.addObstaclesToList(obstacles);
+                crystal.addObstaclesToList(m_obstacles);
                 obstacleCount += crystal.getObstacleCount();
                 #if DEBUG_OUTPUT
                     obstacleGenerated += crystal.getObstacleCount();
@@ -76,7 +76,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
             {
                 break;
                 Valley<5> valley(world, device, btVector3(newX, newY, newZ), 600);
-                valley.addObstaclesToList(obstacles);
+                valley.addObstaclesToList(m_obstacles);
                 obstacleCount += valley.getObstacleCount();
                 #if DEBUG_OUTPUT
                     obstacleGenerated += valley.getObstacleCount();
@@ -87,7 +87,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
             {
                 std::unique_ptr<IObstacle> obstacle =
                     std::make_unique<Icosahedron>(world, device, btVector3(newX, newY, newZ), Randomizer::getFloat(150.f, 350.f));
-                obstacles.push_back(std::move(obstacle));
+                m_obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
                 #if DEBUG_OUTPUT
                     obstacleGenerated++;
@@ -98,7 +98,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
             {
                 std::unique_ptr<IObstacle> obstacle =
                     std::make_unique<Icosphere2>(world, device, btVector3(newX, newY, newZ), Randomizer::getFloat(50.f, 200.f));
-                obstacles.push_back(std::move(obstacle));
+                m_obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
                 #if DEBUG_OUTPUT
                     obstacleGenerated++;
@@ -109,7 +109,7 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
             {
                 std::unique_ptr<IObstacle> obstacle =
                     std::make_unique<Tetrahedron>(world, device, btVector3(newX, newY, newZ), Randomizer::getFloat(200.f, 400.f));
-                obstacles.push_back(std::move(obstacle));
+                m_obstacles.push_back(std::move(obstacle));
                 obstacleCount++;
                 #if DEBUG_OUTPUT
                     obstacleGenerated++;
@@ -133,36 +133,36 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
     };
 
     // The Z loop must be the first here, because the obstacle deque must be sorted by obstacle' Z coordinate
-    for (btScalar z = preciseEdge(playerPosition.Z - buffer); z <= generatedEdgeZ; z += STEP) {
+    for (btScalar z = preciseEdge(playerPosition.z() - m_buffer); z <= generatedEdgeZ; z += STEP) {
 
-        for (btScalar x = preciseEdge(playerPosition.X - farValueWithBuffer()); x < generatedEdgeLeft; x += STEP)
-            for (btScalar y = preciseEdge(playerPosition.Y - farValueWithBuffer());
-                y <= preciseEdge(playerPosition.Y + farValueWithBuffer()); y += STEP)
+        for (btScalar x = preciseEdge(playerPosition.x() - farValueWithBuffer()); x < generatedEdgeLeft; x += STEP)
+            for (btScalar y = preciseEdge(playerPosition.y() - farValueWithBuffer());
+                y <= preciseEdge(playerPosition.y() + farValueWithBuffer()); y += STEP)
             {
                 handleCell(x, y, z);
             }
 
         for (btScalar x = generatedEdgeLeft; x <= generatedEdgeRight; x += STEP) {
-            for (btScalar y = preciseEdge(playerPosition.Y - farValueWithBuffer()); y < generatedEdgeBottom; y += STEP)
+            for (btScalar y = preciseEdge(playerPosition.y() - farValueWithBuffer()); y < generatedEdgeBottom; y += STEP)
                 handleCell(x, y, z);
 
-            for (btScalar y = generatedEdgeTop + STEP; y <= preciseEdge(playerPosition.Y + farValueWithBuffer()); y += STEP)
+            for (btScalar y = generatedEdgeTop + STEP; y <= preciseEdge(playerPosition.y() + farValueWithBuffer()); y += STEP)
                 handleCell(x, y, z);
         }
 
-        for (btScalar x = generatedEdgeRight + STEP; x <= preciseEdge(playerPosition.X + farValueWithBuffer()); x += STEP)
-            for (btScalar y = preciseEdge(playerPosition.Y - farValueWithBuffer());
-                y <= preciseEdge(playerPosition.Y + farValueWithBuffer()); y += STEP)
+        for (btScalar x = generatedEdgeRight + STEP; x <= preciseEdge(playerPosition.x() + farValueWithBuffer()); x += STEP)
+            for (btScalar y = preciseEdge(playerPosition.y() - farValueWithBuffer());
+                y <= preciseEdge(playerPosition.y() + farValueWithBuffer()); y += STEP)
             {
                 handleCell(x, y, z);
             }
     }
 
-    for (btScalar z = generatedEdgeZ + STEP; z <= preciseEdge(playerPosition.Z + farValueWithBuffer()); z += STEP)
-        for (btScalar x = preciseEdge(playerPosition.X - farValueWithBuffer());
-            x <= preciseEdge(playerPosition.X + farValueWithBuffer()); x += STEP)
-            for (btScalar y = preciseEdge(playerPosition.Y - farValueWithBuffer());
-                y <= preciseEdge(playerPosition.Y + farValueWithBuffer()); y += STEP)
+    for (btScalar z = generatedEdgeZ + STEP; z <= preciseEdge(playerPosition.z() + farValueWithBuffer()); z += STEP)
+        for (btScalar x = preciseEdge(playerPosition.x() - farValueWithBuffer());
+            x <= preciseEdge(playerPosition.x() + farValueWithBuffer()); x += STEP)
+            for (btScalar y = preciseEdge(playerPosition.y() - farValueWithBuffer());
+                y <= preciseEdge(playerPosition.y() + farValueWithBuffer()); y += STEP)
             {
                 handleCell(x, y, z);
             }
@@ -173,14 +173,14 @@ void ObstacleGenerator::generate(const core::vector3df &playerPosition)
 
     // these are the edges of the generated zone
     // the part of the level behind them is generated and must not be touched
-    generatedEdgeLeft = preciseEdge(playerPosition.X - farValueWithBuffer());
-    generatedEdgeRight = preciseEdge(playerPosition.X + farValueWithBuffer());
-    generatedEdgeBottom = preciseEdge(playerPosition.Y - farValueWithBuffer());
-    generatedEdgeTop = preciseEdge(playerPosition.Y + farValueWithBuffer());
-    generatedEdgeZ = preciseEdge(playerPosition.Z + farValueWithBuffer());
+    generatedEdgeLeft = preciseEdge(playerPosition.x() - farValueWithBuffer());
+    generatedEdgeRight = preciseEdge(playerPosition.x() + farValueWithBuffer());
+    generatedEdgeBottom = preciseEdge(playerPosition.y() - farValueWithBuffer());
+    generatedEdgeTop = preciseEdge(playerPosition.y() + farValueWithBuffer());
+    generatedEdgeZ = preciseEdge(playerPosition.z() + farValueWithBuffer());
 
     // remove obstacles behind the player to save some memory
-    removeLeftBehind(playerPosition.Z);
+    removeLeftBehind(playerPosition.z());
 }
 
 btScalar ObstacleGenerator::preciseEdge(btScalar edge) const
@@ -192,14 +192,14 @@ btScalar ObstacleGenerator::preciseEdge(btScalar edge) const
 void ObstacleGenerator::removeLeftBehind(btScalar playerZ)
 {
     size_t count = 0;
-    for (auto it = obstacles.begin();
-        it != obstacles.end() && count < 100; count++)
+    for (auto it = m_obstacles.begin();
+        it != m_obstacles.end() && count < 100; count++)
     {
-        if ((*it)->getPosition().z() < playerZ - buffer ||
+        if ((*it)->getPosition().z() < playerZ - m_buffer ||
             (*it)->getPosition().z() > playerZ + farValueWithBuffer() * 2)
         {
             it->reset();
-            it = obstacles.erase(it);
+            it = m_obstacles.erase(it);
             obstacleCount--;
         } else {
             it++;
@@ -207,32 +207,22 @@ void ObstacleGenerator::removeLeftBehind(btScalar playerZ)
     }
 }
 
-u32 ObstacleGenerator::getCubeCount() const
+std::size_t ObstacleGenerator::obstacles() const
 {
     return obstacleCount;
 }
 
 btScalar ObstacleGenerator::farValueWithBuffer() const
 {
-    return farValue + buffer;
+    return m_farValue + m_buffer;
 }
 
-void ObstacleGenerator::setFarValue(btScalar value)
+btScalar ObstacleGenerator::farValue() const
 {
-    farValue = value;
+    return m_farValue;
 }
 
-btScalar ObstacleGenerator::getFarValue() const
+btScalar ObstacleGenerator::buffer() const
 {
-    return farValue;
-}
-
-void ObstacleGenerator::setBuffer(btScalar buffer)
-{
-    this->buffer = buffer;
-}
-
-btScalar ObstacleGenerator::getBuffer() const
-{
-    return buffer;
+    return m_buffer;
 }

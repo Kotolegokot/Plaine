@@ -42,15 +42,14 @@ using namespace irr;
 class ObstacleGenerator
 {
 public:
-    ObstacleGenerator(IrrlichtDevice &device, btDynamicsWorld &world, btScalar farValue = 1500, btScalar buffer = 300);
+    ObstacleGenerator(btDynamicsWorld &world, IrrlichtDevice &device, btScalar m_farValue = 1500, btScalar m_buffer = 300);
     ~ObstacleGenerator();
-    void generate(const core::vector3df &playerPosition);
-    u32 getCubeCount() const;
 
-    void setFarValue(btScalar value);
-    btScalar getFarValue() const;
-    void setBuffer(btScalar buffer);
-    btScalar getBuffer() const;
+    void generate(const btVector3 &playerPosition);
+
+    std::size_t obstacles() const;
+    btScalar farValue() const;
+    btScalar buffer() const;
 
 private:
     static constexpr btScalar STEP = 800;
@@ -60,16 +59,17 @@ private:
     void removeLeftBehind(btScalar playerZ);
     btScalar farValueWithBuffer() const;
 
+    btDynamicsWorld &world;
     IrrlichtDevice &device;
-    std::list<std::unique_ptr<IObstacle>> obstacles;
+    std::list<std::unique_ptr<IObstacle>> m_obstacles;
 
     u32 obstacleCount = 0;
 
-    btScalar farValue = 0;
+    btScalar m_farValue = 0;
     // buffer is used to generate obstacles a bit farther than
     //      the camera's far value so that player sees them
     //      smoothly floating into the view range
-    btScalar buffer = 0;
+    btScalar m_buffer = 0;
 
     btScalar generatedEdgeZ = 0;
     btScalar generatedEdgeLeft = 0;
@@ -77,8 +77,6 @@ private:
     btScalar generatedEdgeTop = 0;
     btScalar generatedEdgeBottom = 0;
 
-    // physics world
-    btDynamicsWorld &world;
 };
 
 #endif // OBSTACLEGENERATOR_H

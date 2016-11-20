@@ -21,13 +21,13 @@
 
 using namespace irr;
 
-DebugDrawer::DebugDrawer(IrrlichtDevice *device)
+DebugDrawer::DebugDrawer(IrrlichtDevice &device)
     : device(device) {}
 
 void DebugDrawer::drawLine(const btVector3 &from, const btVector3 &to, const btVector3 &/*color*/)
 {
-    device->getVideoDriver()->setTransform(video::ETS_WORLD, core::IdentityMatrix);
-    device->getVideoDriver()->draw3DLine(
+    device.getVideoDriver()->setTransform(video::ETS_WORLD, core::IdentityMatrix);
+    device.getVideoDriver()->draw3DLine(
         core::vector3df(from.x(), from.y(), from.z()),
         core::vector3df(to.x(), to.y(), to.z()),
         video::SColor(255, 255, 255, 0));
