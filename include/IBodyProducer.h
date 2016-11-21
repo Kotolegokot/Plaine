@@ -4,6 +4,7 @@
 #include <memory>
 #include <btBulletDynamicsCommon.h>
 #include <irrlicht.h>
+#include "MotionState.h"
 #include "Body.h"
 #include "util/Vector3.h"
 #include "util.h"
@@ -46,7 +47,12 @@ protected:
                                                           const core::vector3df &position) const = 0;
     virtual std::unique_ptr<btMotionState>
                         createMotionState(std::unique_ptr<scene::ISceneNode> node,
-                                          const btVector3 &position) const = 0;
+                                          const btVector3 &position) const
+    {
+        return std::make_unique<MotionState>(btTransform(0, 0, 0, 1), position,
+                                             node.release());
+    }
+
     virtual std::unique_ptr<btCollisionShape> createShape() const = 0;
 };
 

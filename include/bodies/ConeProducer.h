@@ -4,6 +4,7 @@
 #include <memory>
 #include <btBulletDynamicsCommon.h>
 #include "IBodyProducer.h"
+#include "BulletCollision/CollisionShapes/btConvexPointCloudShape.h"
 #include "ObjMesh.h"
 #include "options.h"
 #include "util/Vector3.h"
@@ -29,16 +30,17 @@ protected:
     std::unique_ptr<scene::ISceneNode> createNode(IrrlichtDevice &irrlichtDeivce,
                                                   const core::vector3df &position) const override
     {
-        std::unique_ptr<scene::IMesh> mesh(device.getSceneManager()->getMesh(CONE_MODEL));
+        std::unique_ptr<scene::IMesh> mesh(irrlichtDevice.getSceneManager()->getMesh(CONE_MODEL));
 
-        std::unique_ptr<scene::ISceneNode> node(device.getSceneManager()->
+        std::unique_ptr<scene::ISceneNode> node(irrlichtDevice.getSceneManager()->
                                     addMeshSceneNode(mesh.release(), 0, -1, position));
         node->setScale({ radius * 2, height, radius * 2 });
         node->setMaterialTexture(0,
                  device.getVideoDriver()->getTexture("media/textures/cone.png"));
         node->setVisible(TEXTURES_ENABLED);
-        if (FOG_ENABLED)
-            node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
+#ifdef FOG_ENABLED
+        node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
+#endif FOG_ENABLED
         node->setMaterialFlag(video::EMF_ANISOTROPIC_FILTER, true);
         node->setMaterialFlag(video::EMF_TRILINEAR_FILTER, true);
         node->setMaterialFlag(video::EMF_ANTI_ALIASING, true);
