@@ -23,24 +23,24 @@ public:
     {
         static constexpr btScalar K = PI<btScalar> * 1.0f / 3.0f;
 
-        return height * radius * radius * K * MASS_COEFFICIENT;
+        return m_height * m_radius * m_radius * K * MASS_COEFFICIENT;
     }
 
 protected:
-    std::unique_ptr<scene::ISceneNode> createNode(IrrlichtDevice &irrlichtDeivce,
+    std::unique_ptr<scene::ISceneNode> createNode(IrrlichtDevice &irrlichtDevice,
                                                   const core::vector3df &position) const override
     {
         std::unique_ptr<scene::IMesh> mesh(irrlichtDevice.getSceneManager()->getMesh(CONE_MODEL));
 
         std::unique_ptr<scene::ISceneNode> node(irrlichtDevice.getSceneManager()->
                                     addMeshSceneNode(mesh.release(), 0, -1, position));
-        node->setScale({ radius * 2, height, radius * 2 });
+        node->setScale({ m_radius * 2, m_height, m_radius * 2 });
         node->setMaterialTexture(0,
-                 device.getVideoDriver()->getTexture("media/textures/cone.png"));
+                 irrlichtDevice.getVideoDriver()->getTexture("media/textures/cone.png"));
         node->setVisible(TEXTURES_ENABLED);
 #ifdef FOG_ENABLED
         node->setMaterialFlag(video::EMF_FOG_ENABLE, true);
-#endif FOG_ENABLED
+#endif
         node->setMaterialFlag(video::EMF_ANISOTROPIC_FILTER, true);
         node->setMaterialFlag(video::EMF_TRILINEAR_FILTER, true);
         node->setMaterialFlag(video::EMF_ANTI_ALIASING, true);
@@ -48,24 +48,16 @@ protected:
         return node;
     }
 
-    std::unique_ptr<btMotionState>
-        createMotionState(std::unique_ptr<scene::ISceneNode> node,
-                          btVector3 &position) const override
-    {
-        return std::make_unique<MotionState>(btTransform(btQuaternion(0, 0, 0, 1), position),
-                                             node.release());
-    }
-
     std::unique_ptr<btCollisionShape> createShape() const override
     {
         return std::make_unique<btConvexPointCloudShape>(objMesh.getPoints(), objMesh.getPointsCount(),
-                                                         { radius * 2, height, radius * 2 });
+                                                         btVector3(m_radius * 2, m_height, m_radius * 2));
     }
 
 
 private:
-    const btScalar radius;
-    const btScalar height;
+    const btScalar m_radius;
+    const btScalar m_height;
 
     static ObjMesh &objMesh;
 };

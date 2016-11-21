@@ -23,7 +23,7 @@ public:
 
     btScalar getMass() const override
     {
-        static constexpr btScalar K = 5.0f / 12.0f * (3.0f + std::sqrt(5.0f));
+        static btScalar K = 5.0f / 12.0f * (3.0f + std::sqrt(5.0f));
 
         return m_edge * m_edge * m_edge * K * MASS_COEFFICIENT;
     }
@@ -36,7 +36,7 @@ protected:
 
         std::unique_ptr<scene::ISceneNode> node(irrlichtDevice.getSceneManager()->
                                 addMeshSceneNode(mesh.release(), 0, -1, position));
-        node->setScale(core::vector3df(edge, edge, edge));
+        node->setScale({ m_edge, m_edge, m_edge });
         node->setMaterialTexture(0, irrlichtDevice.getVideoDriver()->getTexture("media/textures/icosahedron.png"));
         node->setVisible(TEXTURES_ENABLED);
 #ifdef FOG_ENABLED
@@ -52,7 +52,7 @@ protected:
     std::unique_ptr<btCollisionShape> createShape() const override
     {
         return std::make_unique<btConvexPointCloudShape>(objMesh.getPoints(), objMesh.getPointsCount(),
-                                                         { edge, edge, edge });
+                                                         btVector3(m_edge, m_edge, m_edge));
     }
 
 
