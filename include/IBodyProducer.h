@@ -49,7 +49,7 @@ protected:
                         createMotionState(std::unique_ptr<scene::ISceneNode> node,
                                           const btVector3 &position) const
     {
-        return std::make_unique<MotionState>(btTransform(0, 0, 0, 1), position,
+        return std::make_unique<MotionState>(btTransform(btQuaternion(0, 0, 0, 1), position),
                                              node.release());
     }
 
