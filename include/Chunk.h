@@ -129,7 +129,7 @@ public:
 
             if (pos == cell)
                 return generated += pattern->produce(world, device, cellSize,
-                    chunkPosition + btVector3(pos.x, pos.y, pos.z) * cellSize, list);
+                    chunkPosition + pos.toBulletVector3() * cellSize, list);
         }
 
         return 0;
