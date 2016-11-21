@@ -41,14 +41,6 @@ protected:
         return node;
     }
 
-    std::unique_ptr<btMotionState>
-        createMotionState(std::unique_ptr<scene::ISceneNode> node,
-                          const btVector3 &position) const override
-    {
-        return std::make_unique<MotionState>(btTransform(btQuaternion(0, 0, 0, 1), position),
-                                             node.release());
-    }
-
     std::unique_ptr<btCollisionShape> createShape() const override
     {
         // create shape for cubes
