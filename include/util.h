@@ -43,6 +43,11 @@ using namespace irr;
 template<typename T>
 constexpr T PI = T(3.1415926535897932385);
 
+constexpr std::size_t CHUNK_SIZE = 16;
+constexpr std::size_t CHUNK_DB_SIZE = 200;
+constexpr btScalar CELL_LENGTH = 250;
+constexpr btScalar CHUNK_LENGTH = CHUNK_SIZE * CELL_LENGTH;
+
 size_t convert(const char *to, const char *from, char *outbuf, size_t outbuf_size, char *inbuf, size_t inbuf_size);
 std::wstring utf8_to_wide(const std::string &input);
 core::stringw utf8_to_irrwide(const std::string &input);

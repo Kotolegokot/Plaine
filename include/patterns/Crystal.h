@@ -20,6 +20,7 @@
 #include <memory>
 #include "obstacles/Cone.h"
 #include "IObstaclePattern.h"
+#include "util.h"
 
 template <int Thickness, int Length>
 class Crystal : public IObstaclePattern
@@ -35,15 +36,14 @@ public:
 
     std::size_t produce(btDynamicsWorld &world,
                                 IrrlichtDevice &device,
-                                btScalar cellSize,
                                 btVector3 position,
                                 std::list<std::unique_ptr<IObstacle>> &list) const override
     {
-        const btScalar radius = (Thickness - 0.6f) * cellSize * 0.5f;
-        const btScalar length = (Length - 0.2f) * cellSize;
-        position += { Thickness * cellSize * 0.5f,
-                      Length * cellSize * 0.5f,
-                      Thickness * cellSize * 0.5f };
+        const btScalar radius = (Thickness - 0.6f) * CELL_LENGTH * 0.5f;
+        const btScalar length = (Length - 0.2f) * CELL_LENGTH;
+        position += { Thickness * CELL_LENGTH * 0.5f,
+                      Length * CELL_LENGTH * 0.5f,
+                      Thickness * CELL_LENGTH * 0.5f };
 
         auto cone1 = std::make_unique<Cone>(world, device, position, radius, length * 0.5f);
         auto cone2 = std::make_unique<Cone>(world, device, position, radius, length * 0.5f);

@@ -21,18 +21,17 @@ public:
 
     std::size_t produce(btDynamicsWorld &world,
                         IrrlichtDevice &device,
-                        btScalar cellSize,
                         btVector3 position,
                         std::list<std::unique_ptr<IObstacle>> &list) const override
     {
-        position += { Size * cellSize * 0.5f,
-                      Size * cellSize * 0.5f,
-                      Size * cellSize * 0.5f };
+        position += { Size * CELL_LENGTH * 0.5f,
+                      Size * CELL_LENGTH * 0.5f,
+                      Size * CELL_LENGTH * 0.5f };
 
         auto box = std::make_unique<Box>(world, device, position,
-                                         btVector3(Size * cellSize * 0.49,
-                                                   Size * cellSize * 0.49,
-                                                   Size * cellSize * 0.49 ));
+                                         btVector3(Size * CELL_LENGTH * 0.49,
+                                                   Size * CELL_LENGTH * 0.49,
+                                                   Size * CELL_LENGTH * 0.49 ));
 
         list.push_back(std::move(box));
 

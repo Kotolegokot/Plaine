@@ -20,6 +20,7 @@
 #include "obstacles/Box.h"
 #include "IObstacle.h"
 #include "IObstaclePattern.h"
+#include "util.h"
 
 class Tunnel : public IObstaclePattern
 {
@@ -34,13 +35,12 @@ public:
 
     virtual std::size_t produce(btDynamicsWorld &world,
                                 IrrlichtDevice &device,
-                                btScalar cellSize,
                                 btVector3 position,
                                 std::list<std::unique_ptr<IObstacle>> &list) const override
     {
-        const btScalar radius = cellSize * 0.4f;
-        const btScalar length = cellSize * 1.8f;
-        position += { cellSize * 0.5f, cellSize * 0.5f, cellSize };
+        const btScalar radius = CELL_LENGTH * 0.4f;
+        const btScalar length = CELL_LENGTH * 1.8f;
+        position += { CELL_LENGTH * 0.5f, CELL_LENGTH * 0.5f, CELL_LENGTH };
 
         auto box1 = std::make_unique<Box>(world, device, position + btVector3(radius, 0, 0),
                                           btVector3(radius / 10, radius, length / 2));

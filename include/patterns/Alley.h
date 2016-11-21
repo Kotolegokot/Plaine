@@ -6,6 +6,7 @@
 #include "obstacles/Icosahedron.h"
 #include "IObstacle.h"
 #include "IObstaclePattern.h"
+#include "util.h"
 
 template <int Length>
 class Alley : public IObstaclePattern
@@ -21,11 +22,10 @@ public:
 
     virtual std::size_t produce(btDynamicsWorld &world,
                                 IrrlichtDevice &device,
-                                btScalar cellSize,
                                 btVector3 position,
                                 std::list<std::unique_ptr<IObstacle>> &list) const override
     {
-        position += { 1.5f * cellSize, 1.5f * cellSize, 0 };
+        position += { 1.5f * CELL_LENGTH, 1.5f * CELL_LENGTH, 0 };
 
         constexpr btScalar cos45 = 0.70710678118;
         constexpr btScalar radius = 150;
@@ -34,29 +34,29 @@ public:
             auto obstacle1 =
                     std::make_unique<Icosahedron>(world, device, position
                         + (i % 2 == 0 ?
-                            btVector3(-cellSize, 0, cellSize * i * 2) :
-                            btVector3(-cellSize * cos45, cellSize * cos45, cellSize * i * 2)),
+                            btVector3(-CELL_LENGTH, 0, CELL_LENGTH * i * 2) :
+                            btVector3(-CELL_LENGTH * cos45, CELL_LENGTH * cos45, CELL_LENGTH * i * 2)),
                         radius);
 
             auto obstacle2 =
                     std::make_unique<Icosahedron>(world, device, position
                         + (i % 2 == 0 ?
-                            btVector3(cellSize, 0, cellSize * i * 2) :
-                            btVector3(cellSize * cos45, -cellSize * cos45, cellSize * i * 2)),
+                            btVector3(CELL_LENGTH, 0, CELL_LENGTH * i * 2) :
+                            btVector3(CELL_LENGTH * cos45, -CELL_LENGTH * cos45, CELL_LENGTH * i * 2)),
                         radius);
 
             auto obstacle3 =
                     std::make_unique<Icosahedron>(world, device, position
                         + (i % 2 == 0 ?
-                            btVector3(0, -cellSize, cellSize * i * 2) :
-                            btVector3(-cellSize * cos45, -cellSize * cos45, cellSize * i * 2)),
+                            btVector3(0, -CELL_LENGTH, CELL_LENGTH * i * 2) :
+                            btVector3(-CELL_LENGTH * cos45, -CELL_LENGTH * cos45, CELL_LENGTH * i * 2)),
                         radius);
 
             auto obstacle4 =
                     std::make_unique<Icosahedron>(world, device, position
                         + (i % 2 == 0 ?
-                            btVector3(0, cellSize, cellSize * i * 2) :
-                            btVector3(cellSize * cos45, cellSize * cos45, cellSize * i * 2)),
+                            btVector3(0, CELL_LENGTH, CELL_LENGTH * i * 2) :
+                            btVector3(CELL_LENGTH * cos45, CELL_LENGTH * cos45, CELL_LENGTH * i * 2)),
                         radius);
 
             list.push_back(std::move(obstacle1));

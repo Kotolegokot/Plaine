@@ -91,7 +91,6 @@ public:
     // creates objects and returns number of bodies generated
     std::size_t produce(btDynamicsWorld &world,
                         IrrlichtDevice &device,
-                        btScalar cellSize,
                         btVector3 chunkPosition,
                         std::list<std::unique_ptr<IObstacle>> &list) const
     {
@@ -104,8 +103,8 @@ public:
             const auto &pattern = position.pattern;
             const Vector3<int> &pos = position.position;
 
-            generated += pattern->produce(world, device, cellSize,
-                        chunkPosition + btVector3(pos.x, pos.y, pos.z) * cellSize, list);
+            generated += pattern->produce(world, device,
+                  chunkPosition + btVector3(pos.x, pos.y, pos.z) * CELL_LENGTH, list);
         }
         return generated;
     }
@@ -113,7 +112,6 @@ public:
     // creates objects and returns number of bodies generated
     std::size_t produceCell(btDynamicsWorld &world,
                             IrrlichtDevice &device,
-                            btScalar cellSize,
                             btVector3 chunkPosition,
                             std::list<std::unique_ptr<IObstacle>> &list,
                             Vector3<int> cell) const
@@ -128,8 +126,8 @@ public:
             const Vector3<int> &pos = position.position;
 
             if (pos == cell)
-                return generated += pattern->produce(world, device, cellSize,
-                    chunkPosition + pos.toBulletVector3() * cellSize, list);
+                return generated += pattern->produce(world, device,
+                    chunkPosition + pos.toBulletVector3() * CELL_LENGTH, list);
         }
 
         return 0;

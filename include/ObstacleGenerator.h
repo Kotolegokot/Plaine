@@ -28,13 +28,10 @@
 #include "Randomizer.h"
 #include "Patterns.h"
 #include "Chunk.h"
+#include "util.h"
 
 using namespace irr;
 
-constexpr std::size_t CHUNK_SIZE = 16;
-constexpr std::size_t CHUNK_DB_SIZE = 200;
-constexpr btScalar CELL_LENGTH = 250;
-constexpr btScalar CHUNK_LENGTH = CHUNK_SIZE * CELL_LENGTH;
 using ChunkDB = std::array<Chunk<CHUNK_SIZE>, CHUNK_DB_SIZE>;
 
 // this class is responsible for generating obstacles on the fly

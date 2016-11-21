@@ -40,7 +40,6 @@ public:
     // returns number of the bodies created
     virtual std::size_t produce(btDynamicsWorld &world,
                                 IrrlichtDevice &device,
-                                btScalar cellSize,
                                 btVector3 position,
                                 std::list<std::unique_ptr<IObstacle>> &list) const = 0;
 
