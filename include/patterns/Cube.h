@@ -2,8 +2,10 @@
 #define CUBE_H
 
 #include <memory>
-#include "obstacles/Box.h"
+#include "IBodyProducer.h"
 #include "IObstaclePattern.h"
+#include "bodies/BoxProducer.h"
+#include "util.h"
 
 using namespace irr;
 
@@ -19,23 +21,18 @@ public:
         return { Size, Size, Size };
     }
 
-    std::size_t produce(btDynamicsWorld &world,
-                        IrrlichtDevice &device,
-                        btVector3 position,
-                        std::list<std::unique_ptr<IObstacle>> &list) const override
+    std::vector<std::unique_ptr<IBodyProducer>>
+        producers(btVector3 position) const override
     {
         position += { Size * CELL_LENGTH * 0.5f,
                       Size * CELL_LENGTH * 0.5f,
                       Size * CELL_LENGTH * 0.5f };
 
-        auto box = std::make_unique<Box>(world, device, position,
-                                         btVector3(Size * CELL_LENGTH * 0.49,
-                                                   Size * CELL_LENGTH * 0.49,
-                                                   Size * CELL_LENGTH * 0.49 ));
+        auto producer = std::make_unique<BoxProducer>(btVector3(1, 1, 1) *
+                                                      Size * CELL_LENGTH * 0.49);
+        producer->relativeTransform.setOrigin(position);
 
-        list.push_back(std::move(box));
-
-        return 1;
+        return { { std::move(producer) } };
     }
 };
 
