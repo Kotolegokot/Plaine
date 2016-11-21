@@ -18,8 +18,9 @@
 #define CRYSTAL_H
 
 #include <memory>
-#include "obstacles/Cone.h"
+#include "IBodyProducer.h"
 #include "IObstaclePattern.h"
+#include "bodies/ConeProducer.h"
 #include "util.h"
 
 template <int Thickness, int Length>
@@ -34,30 +35,26 @@ public:
         return { Thickness, Length, Thickness };
     }
 
-    std::size_t produce(btDynamicsWorld &world,
-                                IrrlichtDevice &device,
-                                btVector3 position,
-                                std::list<std::unique_ptr<IObstacle>> &list) const override
+    std::vector<std::unique_ptr<IBodyProducer>>
+        producers(btVector3 position) const override
     {
-        const btScalar radius = (Thickness - 0.6f) * CELL_LENGTH * 0.5f;
-        const btScalar length = (Length - 0.2f) * CELL_LENGTH;
         position += { Thickness * CELL_LENGTH * 0.5f,
                       Length * CELL_LENGTH * 0.5f,
                       Thickness * CELL_LENGTH * 0.5f };
 
-        auto cone1 = std::make_unique<Cone>(world, device, position, radius, length * 0.5f);
-        auto cone2 = std::make_unique<Cone>(world, device, position, radius, length * 0.5f);
+        constexpr btScalar radius = (Thickness - 0.6f) * CELL_LENGTH * 0.5f;
+        constexpr btScalar length = (Length - 0.2f) * CELL_LENGTH;
 
-        // turn cone2 upside down
-        btTransform transform = cone2->getRigidBody().getCenterOfMassTransform();
-        btQuaternion rotation(0, 0, PI<btScalar>);
-        transform.setRotation(rotation);
-        cone2->getRigidBody().setCenterOfMassTransform(transform);
+        std::vector<std::unique_ptr<IBodyProducer>> result { {
+            std::make_unique<ConeProducer>(radius, length * 0.5f),
+            std::make_unique<ConeProducer>(radius, length * 0.5f)
+        } };
 
-        list.push_back(std::move(cone1));
-        list.push_back(std::move(cone2));
+        result[0]->relativeTransform.setOrigin(position);
+        result[1]->relativeTransform.setOrigin(position);
+        result[1]->relativeTransform.setRotation(btQuaternion(0, 0, PI<btScalar>));
 
-        return 2;
+        return result;
     }
 };
 

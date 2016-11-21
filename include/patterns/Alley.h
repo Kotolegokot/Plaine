@@ -1,9 +1,7 @@
 #ifndef VALLEY_H
 #define VALLEY_H
 
-#include <array>
 #include <memory>
-#include "obstacles/Icosahedron.h"
 #include "IBodyProducer.h"
 #include "IObstaclePattern.h"
 #include "bodies/IcosahedronProducer.h"
@@ -21,7 +19,7 @@ public:
         return { 3, 3, Length * 2 };
     }
 
-    virtual std::vector<std::unique_ptr<IBodyProducer>>
+    std::vector<std::unique_ptr<IBodyProducer>>
         producers(btVector3 position) const override
     {
         std::vector<std::unique_ptr<IBodyProducer>> result;
@@ -33,24 +31,24 @@ public:
 
         for (std::size_t i = 0; i < Length; i++) {
             result.push_back(std::make_unique<IcosahedronProducer>(edge));
-            result.back()->relativePosition = position + (i % 2 == 0 ?
+            result.back()->relativeTransform.setOrigin(position + (i % 2 == 0 ?
                         btVector3(-CELL_LENGTH, 0, CELL_LENGTH * i * 2) :
-                        btVector3(-CELL_LENGTH * cos45, CELL_LENGTH * cos45, CELL_LENGTH * i * 2));
+                        btVector3(-CELL_LENGTH * cos45, CELL_LENGTH * cos45, CELL_LENGTH * i * 2)));
 
             result.push_back(std::make_unique<IcosahedronProducer>(edge));
-            result.back()->relativePosition = position + (i % 2 == 0 ?
+            result.back()->relativeTransform.setOrigin(position + (i % 2 == 0 ?
                         btVector3(CELL_LENGTH, 0, CELL_LENGTH * i * 2) :
-                        btVector3(CELL_LENGTH * cos45, -CELL_LENGTH * cos45, CELL_LENGTH * i * 2));
+                        btVector3(CELL_LENGTH * cos45, -CELL_LENGTH * cos45, CELL_LENGTH * i * 2)));
 
             result.push_back(std::make_unique<IcosahedronProducer>(edge));
-            result.back()->relativePosition = position + (i % 2 == 0 ?
+            result.back()->relativeTransform.setOrigin(position + (i % 2 == 0 ?
                         btVector3(0, -CELL_LENGTH, CELL_LENGTH * i * 2) :
-                        btVector3(-CELL_LENGTH * cos45, -CELL_LENGTH * cos45, CELL_LENGTH * i * 2));
+                        btVector3(-CELL_LENGTH * cos45, -CELL_LENGTH * cos45, CELL_LENGTH * i * 2)));
 
             result.push_back(std::make_unique<IcosahedronProducer>(edge));
-            result.back()->relativePosition = position + (i % 2 == 0 ?
+            result.back()->relativeTransform(position + (i % 2 == 0 ?
                         btVector3(0, CELL_LENGTH, CELL_LENGTH * i * 2) :
-                        btVector3(CELL_LENGTH * cos45, CELL_LENGTH * cos45, CELL_LENGTH * i * 2));
+                        btVector3(CELL_LENGTH * cos45, CELL_LENGTH * cos45, CELL_LENGTH * i * 2)));
         }
 
         return result;

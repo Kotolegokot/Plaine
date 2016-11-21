@@ -19,7 +19,7 @@ public:
                                   IrrlichtDevice &irrlichtDeivce,
                                   const btVector3 &position) const
     {
-        btVector3 absolutePosition = position + relativePosition;
+        btVector3 absolutePosition = position + relativeTransform.getOrigin();
 
         auto node = createNode(irrlichtDeivce, bullet2irrlicht(absolutePosition));
         auto motionState = createMotionState(std::move(node), absolutePosition);
@@ -41,7 +41,7 @@ public:
 
     virtual btScalar getMass() const = 0;
 
-    btVector3 relativePosition { 0, 0, 0 };
+    btTransform relativeTransform;
 protected:
     virtual std::unique_ptr<scene::ISceneNode> createNode(IrrlichtDevice &IrrlichtDevice,
                                                           const core::vector3df &position) const = 0;
@@ -49,7 +49,8 @@ protected:
                         createMotionState(std::unique_ptr<scene::ISceneNode> node,
                                           const btVector3 &position) const
     {
-        return std::make_unique<MotionState>(btTransform(btQuaternion(0, 0, 0, 1), position),
+        return std::make_unique<MotionState>(btTransform(relativeTransform.getRotation(),
+                                                         position + relativeTransform.getOrigin()),
                                              node.release());
     }
 
