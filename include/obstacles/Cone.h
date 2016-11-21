@@ -24,7 +24,6 @@
 
 using namespace irr;
 
-#define MASS_COEFFICIENT 0.000002
 #define CONE_MODEL "media/models/cone.obj"
 
 class Cone : public IBody

@@ -21,10 +21,10 @@
 #include "BulletCollision/CollisionShapes/btConvexPointCloudShape.h"
 #include "ObjMesh.h"
 #include "IBody.h"
+#include "util.h"
 
 using namespace irr;
 
-#define MASS_COEFFICIENT 0.000002
 #define ICOSAHEDRON_MODEL "media/models/icosahedron.obj"
 
 class Icosahedron : public IBody

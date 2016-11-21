@@ -19,8 +19,6 @@
 
 #include "IBody.h"
 
-#define MASS_COEFFICIENT 0.000002
-
 using namespace irr;
 
 class Box : public IBody

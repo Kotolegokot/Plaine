@@ -6,17 +6,22 @@
 #include <irrlicht.h>
 #include "Body.h"
 #include "util/Vector3.h"
+#include "util.h"
 
 using namespace irr;
 
 class IBodyProducer {
+public:
     IBodyProducer() = default;
 
     std::unique_ptr<Body> produce(btDynamicsWorld &physicsWorld,
                                   IrrlichtDevice &irrlichtDeivce,
-                                  Vector3<long> &cell)
+                                  const btVector3 &position) const
     {
-        auto motionState = createMotionState(createNode(irrlichtDeivce));
+        btVector3 absolutePosition = position + relativePosition;
+
+        auto node = createNode(irrlichtDeivce, bullet2irrlicht(absolutePosition));
+        auto motionState = createMotionState(std::move(node), absolutePosition);
         auto shape = createShape();
         btScalar mass = getMass();
 
@@ -30,16 +35,19 @@ class IBodyProducer {
         rigidBody->setUserIndex(0); // default index for bodies
         physicsWorld.addRigidBody(rigidBody.get());
 
-        return Body(physicsWorld, std::move(rigidBody));
+        return std::make_unique<Body>(physicsWorld, std::move(rigidBody));
     }
 
-    virtual btScalar getMass() = 0;
+    virtual btScalar getMass() const = 0;
 
+    btVector3 relativePosition { 0, 0, 0 };
 protected:
-    virtual std::unique_ptr<scene::ISceneNode> createNode(IrrlichtDevice &) = 0;
+    virtual std::unique_ptr<scene::ISceneNode> createNode(IrrlichtDevice &IrrlichtDevice,
+                                                          const core::vector3df &position) const = 0;
     virtual std::unique_ptr<btMotionState>
-                        createMotionState(std::unique_ptr<scene::ISceneNode>) = 0;
-    virtual std::unique_ptr<btCollisionShape> createShape() = 0;
+                        createMotionState(std::unique_ptr<scene::ISceneNode> node,
+                                          const btVector3 &position) const = 0;
+    virtual std::unique_ptr<btCollisionShape> createShape() const = 0;
 };
 
 #endif // IBODY_PRODUCER

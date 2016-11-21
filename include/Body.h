@@ -9,8 +9,9 @@
 using namespace irr;
 
 class Body {
+public:
     Body(btDynamicsWorld &physicsWorld, std::unique_ptr<btRigidBody> rigidBody) :
-        m_physicsWorld(physicsWorld), m_rigidBody(rigidBody) {}
+        m_physicsWorld(physicsWorld), m_rigidBody(std::move(rigidBody)) {}
 
     ~Body()
     {
@@ -38,22 +39,22 @@ class Body {
         return dynamic_cast<MotionState *>(m_rigidBody->getMotionState())->getNode();
     }
 
-    btVector3 getPosition() const override
+    btVector3 getPosition() const
     {
-        return rigidBody->getCenterOfMassTransform().getOrigin();
+        return m_rigidBody->getCenterOfMassTransform().getOrigin();
     }
 
-    void setPosition(const btVector3 &position) override
+    void setPosition(const btVector3 &position)
     {
-        btTransform transform = rigidBody->getCenterOfMassTransform();
+        btTransform transform = m_rigidBody->getCenterOfMassTransform();
         transform.setOrigin(position);
 
-        rigidBody->setCenterOfMassTransform(transform);
+        m_rigidBody->setCenterOfMassTransform(transform);
     }
 
 private:
-    std::unique_ptr<btRigidBody> m_rigidBody;
     btDynamicsWorld &m_physicsWorld;
+    std::unique_ptr<btRigidBody> m_rigidBody;
 };
 
 #endif // BODY_H

@@ -24,7 +24,6 @@
 
 using namespace irr;
 
-#define MASS_COEFFICIENT 0.000002
 #define ICOSPHERE2_MODEL "media/models/icosphere2.obj"
 
 class Icosphere2 : public IBody

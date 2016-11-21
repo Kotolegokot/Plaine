@@ -257,3 +257,8 @@ video::SColor iridescentColor(const u32 &currentTime)
                                     color.getGreen() + int(oldColor.getGreen() - color.getGreen())*diff,
                                     color.getBlue() + int(oldColor.getBlue() - color.getBlue())*diff);
 }
+
+core::vector3df bullet2irrlicht(const btVector3 &bulletVector)
+{
+    return core::vector3df(bulletVector.x(), bulletVector.y(), bulletVector.z());
+}

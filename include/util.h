@@ -40,6 +40,8 @@ using namespace irr;
 #define _w(string) utf8_to_irrwide(gettext(string))
 #define _wp(string) utf8_to_wide(gettext(string)).c_str()
 
+constexpr btScalar MASS_COEFFICIENT = 0.000002;
+
 template<typename T>
 constexpr T PI = T(3.1415926535897932385);
 
@@ -55,6 +57,14 @@ std::string wide_to_utf8(const std::wstring &input);
 core::stringw keyCodeName(const EKEY_CODE &keyCode);
 void setLanguage(std::string language, bool replace);
 video::SColor iridescentColor(const u32 &currentTime);
+
+template <typename Num>
+btVector3 irrlicht2bullet(const core::vector3d<Num> &irrVector)
+{
+    return btVector3(irrVector.X, irrVector.Y, irrVector.Z);
+}
+
+core::vector3df bullet2irrlicht(const btVector3 &bulletVector);
 
 template <typename Number>
 int sign(Number num)

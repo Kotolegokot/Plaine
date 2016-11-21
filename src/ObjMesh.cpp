@@ -296,12 +296,12 @@ std::unique_ptr<btTriangleMesh> ObjMesh::getTriangleMesh() const
     return triangleMesh;
 }
 
-btVector3 *ObjMesh::getPoints()
+const btVector3 *ObjMesh::getPoints() const
 {
     return vertices.data();
 }
 
-size_t ObjMesh::getPointsCount() const
+std::size_t ObjMesh::getPointsCount() const
 {
     return vertices.size();
 }
