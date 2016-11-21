@@ -17,10 +17,13 @@
 #ifndef TUNNEL_H
 #define TUNNEL_H
 
-#include "obstacles/Box.h"
-#include "IObstacle.h"
+#include <memory>
+#include "IBodyProducer.h"
 #include "IObstaclePattern.h"
+#include "bodies/BoxProducer.h"
 #include "util.h"
+
+using namespace irr;
 
 class Tunnel : public IObstaclePattern
 {
@@ -33,30 +36,31 @@ public:
         return { 1, 1, 2 };
     }
 
-    virtual std::size_t produce(btDynamicsWorld &world,
-                                IrrlichtDevice &device,
-                                btVector3 position,
-                                std::list<std::unique_ptr<IObstacle>> &list) const override
+    std::vector<std::unique_ptr<IBodyProducer>>
+        producers(btVector3 position) const override
     {
-        const btScalar radius = CELL_LENGTH * 0.4f;
-        const btScalar length = CELL_LENGTH * 1.8f;
         position += { CELL_LENGTH * 0.5f, CELL_LENGTH * 0.5f, CELL_LENGTH };
 
-        auto box1 = std::make_unique<Box>(world, device, position + btVector3(radius, 0, 0),
-                                          btVector3(radius / 10, radius, length / 2));
-        auto box2 = std::make_unique<Box>(world, device, position + btVector3(-radius, 0, 0),
-                                          btVector3(radius / 10, radius, length / 2));
-        auto box3 = std::make_unique<Box>(world, device, position + btVector3(0, radius, 0),
-                                          btVector3(radius, radius / 10, length / 2));
-        auto box4 = std::make_unique<Box>(world, device, position + btVector3(0, -radius, 0),
-                                          btVector3(radius, radius / 10, length / 2));
+        constexpr btScalar radius = CELL_LENGTH * 0.4f;
+        constexpr btScalar length = CELL_LENGTH * 1.8f;
 
-        list.push_back(std::move(box1));
-        list.push_back(std::move(box2));
-        list.push_back(std::move(box3));
-        list.push_back(std::move(box4));
+        auto producer1 = std::make_unique<BoxProducer>(btVector3(radius / 10, radius, length / 2));
+        producer1->relativeTransform.setOrigin(position + btVector3(radius, 0, 0));
 
-        return 4;
+        auto producer2 = std::make_unique<BoxProducer>(btVector3(radius / 10, radius, length / 2));
+        producer2->relativeTransform.setOrigin(position + btVector3(-radius, 0, 0));
+
+        auto producer3 = std::make_unique<BoxProducer>(btVector3(radius, radius / 10, length / 2));
+        producer3->relativeTransform.setOrigin(position + btVector3(0, radius, 0));
+
+        auto producer4 = std::make_unique<BoxProducer>(btVector3(radius, radius / 10, length / 2));
+        producer4->relativeTransform.setOrigin(position + btVector3(0, -radius, 0));
+
+        return { { std::move(producer1),
+                   std::move(producer2),
+                   std::move(producer3),
+                   std::move(producer4)
+            } };
     }
 };
 
