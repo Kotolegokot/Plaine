@@ -4,8 +4,9 @@
 #include <array>
 #include <memory>
 #include "obstacles/Icosahedron.h"
-#include "IObstacle.h"
+#include "IBodyProducer.h"
 #include "IObstaclePattern.h"
+#include "bodies/IcosahedronProducer.h"
 #include "util.h"
 
 template <int Length>
@@ -20,52 +21,40 @@ public:
         return { 3, 3, Length * 2 };
     }
 
-    virtual std::size_t produce(btDynamicsWorld &world,
-                                IrrlichtDevice &device,
-                                btVector3 position,
-                                std::list<std::unique_ptr<IObstacle>> &list) const override
+    virtual std::vector<std::unique_ptr<IBodyProducer>>
+        producers(btVector3 position) const override
     {
+        std::vector<std::unique_ptr<IBodyProducer>> result;
+
         position += { 1.5f * CELL_LENGTH, 1.5f * CELL_LENGTH, 0 };
 
         constexpr btScalar cos45 = 0.70710678118;
-        constexpr btScalar radius = 150;
+        constexpr btScalar edge = 150;
 
         for (std::size_t i = 0; i < Length; i++) {
-            auto obstacle1 =
-                    std::make_unique<Icosahedron>(world, device, position
-                        + (i % 2 == 0 ?
-                            btVector3(-CELL_LENGTH, 0, CELL_LENGTH * i * 2) :
-                            btVector3(-CELL_LENGTH * cos45, CELL_LENGTH * cos45, CELL_LENGTH * i * 2)),
-                        radius);
+            result.push_back(std::make_unique<IcosahedronProducer>(edge));
+            result.back()->relativePosition = position + (i % 2 == 0 ?
+                        btVector3(-CELL_LENGTH, 0, CELL_LENGTH * i * 2) :
+                        btVector3(-CELL_LENGTH * cos45, CELL_LENGTH * cos45, CELL_LENGTH * i * 2));
 
-            auto obstacle2 =
-                    std::make_unique<Icosahedron>(world, device, position
-                        + (i % 2 == 0 ?
-                            btVector3(CELL_LENGTH, 0, CELL_LENGTH * i * 2) :
-                            btVector3(CELL_LENGTH * cos45, -CELL_LENGTH * cos45, CELL_LENGTH * i * 2)),
-                        radius);
+            result.push_back(std::make_unique<IcosahedronProducer>(edge));
+            result.back()->relativePosition = position + (i % 2 == 0 ?
+                        btVector3(CELL_LENGTH, 0, CELL_LENGTH * i * 2) :
+                        btVector3(CELL_LENGTH * cos45, -CELL_LENGTH * cos45, CELL_LENGTH * i * 2));
 
-            auto obstacle3 =
-                    std::make_unique<Icosahedron>(world, device, position
-                        + (i % 2 == 0 ?
-                            btVector3(0, -CELL_LENGTH, CELL_LENGTH * i * 2) :
-                            btVector3(-CELL_LENGTH * cos45, -CELL_LENGTH * cos45, CELL_LENGTH * i * 2)),
-                        radius);
+            result.push_back(std::make_unique<IcosahedronProducer>(edge));
+            result.back()->relativePosition = position + (i % 2 == 0 ?
+                        btVector3(0, -CELL_LENGTH, CELL_LENGTH * i * 2) :
+                        btVector3(-CELL_LENGTH * cos45, -CELL_LENGTH * cos45, CELL_LENGTH * i * 2));
 
-            auto obstacle4 =
-                    std::make_unique<Icosahedron>(world, device, position
-                        + (i % 2 == 0 ?
-                            btVector3(0, CELL_LENGTH, CELL_LENGTH * i * 2) :
-                            btVector3(CELL_LENGTH * cos45, CELL_LENGTH * cos45, CELL_LENGTH * i * 2)),
-                        radius);
-
-            list.push_back(std::move(obstacle1));
-            list.push_back(std::move(obstacle2));
-            list.push_back(std::move(obstacle3));
-            list.push_back(std::move(obstacle4));
+            result.push_back(std::make_unique<IcosahedronProducer>(edge));
+            result.back()->relativePosition = position + (i % 2 == 0 ?
+                        btVector3(0, CELL_LENGTH, CELL_LENGTH * i * 2) :
+                        btVector3(CELL_LENGTH * cos45, CELL_LENGTH * cos45, CELL_LENGTH * i * 2));
         }
 
-        return Length * 4;
+        return result;
     }
+
 };
 #endif // VALLEY_H
