@@ -21,7 +21,7 @@
 #include <memory>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
-#include "IObstacle.h"
+#include "IBodyProducer.h"
 #include "util.h"
 
 using namespace irr;
@@ -36,15 +36,12 @@ public:
     int id() const { return m_id; }
     virtual Vector3<int> size() const = 0;
 
-    // create bodies and put them to the list
-    // returns number of the bodies created
-    virtual std::size_t produce(btDynamicsWorld &world,
-                                IrrlichtDevice &device,
-                                btVector3 position,
-                                std::list<std::unique_ptr<IObstacle>> &list) const = 0;
+    // returns body producers that are later used
+    // in Chunk to create bodies
+    virtual std::vector<std::unique_ptr<IBodyProducer>> producers(btVector3 position) const;
 
 private:
-    int m_id;
+    const int m_id;
 };
 
 #endif // IOBSTACLEPATTERN_H
