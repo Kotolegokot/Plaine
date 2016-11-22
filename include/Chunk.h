@@ -6,14 +6,14 @@
 #include "Patterns.h"
 #include "Randomizer.h"
 #include "util.h"
+#include "util/Array3.h"
 
 template <int Size>
 class Chunk {
 private:
     struct PatternPosition {
         PatternPosition() = default;
-        PatternPosition(std::shared_ptr<IObstaclePattern> pattern,
-                        Vector3<int> position) :
+        PatternPosition(std::shared_ptr<IObstaclePattern> pattern, Vector3<int> position) :
             pattern(pattern), position(position) {}
         PatternPosition(const PatternPosition &) = default;
         PatternPosition &operator =(const PatternPosition &) = default;
@@ -30,6 +30,8 @@ public:
 
     void generate()
     {
+        std::vector<PatternPosition> positions;
+
         switch (Randomizer::getInt(0, 2)) {
         case 0: { // cloud of crystals
             std::size_t n;
@@ -42,7 +44,7 @@ public:
 
                     positions.push_back(randomPosition(Patterns::crystals[patternIndex]));
                 }
-            } while ((n = collisions()) < Size * Size / 8);
+            } while ((n = collisions(positions)) < Size * Size / 8);
             positions.resize(n);
             type = ChunkType::CLOUD;
 
@@ -60,7 +62,7 @@ public:
 
                     positions.push_back(randomPosition(Patterns::cubes[patternIndex]));
                 }
-            } while ((n = collisions()) < Size * Size / 8);
+            } while ((n = collisions(positions)) < Size * Size / 8);
             positions.resize(n);
             type = ChunkType::CLOUD;
 
@@ -78,7 +80,7 @@ public:
 
                     positions.push_back(randomPosition(Patterns::all[patternIndex]));
                 }
-            } while (collisions() != positions.size());
+            } while (collisions(positions) != positions.size());
             type = ChunkType::RANDOM;
 
             break;
@@ -86,56 +88,36 @@ public:
         default:
             break;
         }
-    }
 
-    // creates objects and returns number of bodies generated
-    std::size_t produce(btDynamicsWorld &world,
-                        IrrlichtDevice &device,
-                        btVector3 chunkPosition,
-                        std::list<std::unique_ptr<IObstacle>> &list) const
-    {
-        if (type == ChunkType::NOT_GENERATED)
-            return 0;
-
-        std::size_t generated = 0;
-
-        for (const auto &position : positions) {
-            const auto &pattern = position.pattern;
-            const Vector3<int> &pos = position.position;
-
-            generated += pattern->produce(world, device,
-                  chunkPosition + btVector3(pos.x, pos.y, pos.z) * CELL_LENGTH, list);
-        }
-        return generated;
+        generateMap(positions);
     }
 
     // creates objects and returns number of bodies generated
     std::size_t produceCell(btDynamicsWorld &world,
                             IrrlichtDevice &device,
-                            btVector3 chunkPosition,
-                            std::list<std::unique_ptr<IObstacle>> &list,
-                            Vector3<int> cell) const
+                            btVector3 chunk,
+                            Vector3<int> cell,
+                            std::list<std::unique_ptr<Body>> &list) const
     {
         if (type == ChunkType::NOT_GENERATED)
             return 0;
 
         std::size_t generated = 0;
 
-        for (const auto &position : positions) {
-            const auto &pattern = position.pattern;
-            const Vector3<int> &pos = position.position;
+        for (const auto &producer : map[cell]) {
+            auto body = producer->produce(world, device,
+                                          chunk + cell.toBulletVector3() * CELL_LENGTH);
+            list.push_back(std::move(body));
 
-            if (pos == cell)
-                return generated += pattern->produce(world, device,
-                    chunkPosition + pos.toBulletVector3() * CELL_LENGTH, list);
+            generated++;
         }
 
-        return 0;
+        return generated;
     }
 
 private:
     // returns how many obstacles it managed to fit into the chunk
-    std::size_t collisions()
+    std::size_t collisions(const std::vector<PatternPosition> &positions)
     {
         std::size_t result = 0;
         /* 0     = empty
@@ -165,6 +147,37 @@ private:
         return result;
     }
 
+    void generateMap(const std::vector<PatternPosition> &positions)
+    {
+        for (const auto &position : positions) {
+            const auto &pattern = *position.pattern;
+            const Vector3<int> &pos = position.position;
+
+            for (auto &producer : pattern.producers()) {
+                // producer pos relative to pattern
+                btVector3 &origin = producer->relativeTransform.getOrigin();
+
+                // producer cell relative to chunk
+                const Vector3<int> cell = pos + (Vector3<int>(origin) / CELL_LENGTH);
+
+                // producer pos relative to cell
+                origin -= cell.toBulletVector3() * CELL_LENGTH;
+
+                map[cell].push_back(std::move(producer));
+            }
+        }
+    }
+
+    static Vector3<int> cellPos(const btVector3 &position)
+    {
+        return Vector3<int>(position) / CELL_LENGTH;
+    }
+
+    static btVector3 cellRelativePosition(const btVector3 &position, const Vector3<int> &cell)
+    {
+        return position - cell.toBulletVector3() * CELL_LENGTH;
+    }
+
     static PatternPosition randomPosition(std::shared_ptr<IObstaclePattern> pattern)
     {
         return { pattern,
@@ -173,7 +186,7 @@ private:
                    Randomizer::getInt(0, Size - pattern->size().z) } };
     }
 
-    std::vector<PatternPosition> positions;
+    Array3<std::vector<std::unique_ptr<IBodyProducer>>, Size> map;
     ChunkType type = ChunkType::NOT_GENERATED;
 };
 

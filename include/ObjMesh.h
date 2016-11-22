@@ -32,7 +32,7 @@ public:
     ObjMesh(const std::string &filename, btScalar scale = 1.0f);
     void loadMesh(const std::string &filename, btScalar scale = 1.0f);
     std::unique_ptr<btTriangleMesh> getTriangleMesh() const;
-    const btVector3 *getPoints() const;
+    btVector3 *getPoints();
     size_t getPointsCount() const;
     void setPoints(btConvexHullShape &shape);
 

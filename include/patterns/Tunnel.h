@@ -37,30 +37,28 @@ public:
     }
 
     std::vector<std::unique_ptr<IBodyProducer>>
-        producers(btVector3 position) const override
+        producers() const override
     {
-        position += { CELL_LENGTH * 0.5f, CELL_LENGTH * 0.5f, CELL_LENGTH };
+        btVector3 position { CELL_LENGTH * 0.5f, CELL_LENGTH * 0.5f, CELL_LENGTH };
 
         constexpr btScalar radius = CELL_LENGTH * 0.4f;
         constexpr btScalar length = CELL_LENGTH * 1.8f;
 
-        auto producer1 = std::make_unique<BoxProducer>(btVector3(radius / 10, radius, length / 2));
-        producer1->relativeTransform.setOrigin(position + btVector3(radius, 0, 0));
+        std::vector<std::unique_ptr<IBodyProducer>> result;
 
-        auto producer2 = std::make_unique<BoxProducer>(btVector3(radius / 10, radius, length / 2));
-        producer2->relativeTransform.setOrigin(position + btVector3(-radius, 0, 0));
+        result.push_back(std::make_unique<BoxProducer>(btVector3(radius / 10, radius, length / 2)));
+        result.back()->relativeTransform.setOrigin(position + btVector3(radius, 0, 0));
 
-        auto producer3 = std::make_unique<BoxProducer>(btVector3(radius, radius / 10, length / 2));
-        producer3->relativeTransform.setOrigin(position + btVector3(0, radius, 0));
+        result.push_back(std::make_unique<BoxProducer>(btVector3(radius / 10, radius, length / 2)));
+        result.back()->relativeTransform.setOrigin(position + btVector3(-radius, 0, 0));
 
-        auto producer4 = std::make_unique<BoxProducer>(btVector3(radius, radius / 10, length / 2));
-        producer4->relativeTransform.setOrigin(position + btVector3(0, -radius, 0));
+        result.push_back(std::make_unique<BoxProducer>(btVector3(radius, radius / 10, length / 2)));
+        result.back()->relativeTransform.setOrigin(position + btVector3(0, radius, 0));
 
-        return { { std::move(producer1),
-                   std::move(producer2),
-                   std::move(producer3),
-                   std::move(producer4)
-            } };
+        result.push_back(std::make_unique<BoxProducer>(btVector3(radius, radius / 10, length / 2)));
+        result.back()->relativeTransform.setOrigin(position + btVector3(0, -radius, 0));
+
+        return result;
     }
 };
 

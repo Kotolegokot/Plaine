@@ -38,7 +38,7 @@ public:
 
     // returns body producers that are later used
     // in Chunk to create bodies
-    virtual std::vector<std::unique_ptr<IBodyProducer>> producers(btVector3 position) const;
+    virtual std::vector<std::unique_ptr<IBodyProducer>> producers() const = 0;
 
 private:
     const int m_id;

@@ -22,17 +22,18 @@ public:
     }
 
     std::vector<std::unique_ptr<IBodyProducer>>
-        producers(btVector3 position) const override
+        producers() const override
     {
-        position += { Size * CELL_LENGTH * 0.5f,
-                      Size * CELL_LENGTH * 0.5f,
-                      Size * CELL_LENGTH * 0.5f };
+        btVector3 position { Size * CELL_LENGTH * 0.5f,
+                             Size * CELL_LENGTH * 0.5f,
+                             Size * CELL_LENGTH * 0.5f };
 
-        auto producer = std::make_unique<BoxProducer>(btVector3(1, 1, 1) *
-                                                      Size * CELL_LENGTH * 0.49);
-        producer->relativeTransform.setOrigin(position);
+        std::vector<std::unique_ptr<IBodyProducer>> result;
+        result.push_back(std::make_unique<BoxProducer>(btVector3(1, 1, 1) *
+                                                       Size * CELL_LENGTH * 0.49));
+        result.back()->relativeTransform.setOrigin(position);
 
-        return { { std::move(producer) } };
+        return result;
     }
 };
 

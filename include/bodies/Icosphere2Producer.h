@@ -23,18 +23,18 @@ public:
     {
         static constexpr btScalar K = 4.0f / 3.0f * PI<btScalar>;
 
-        return radius * radius * radius * K * MASS_COEFFICIENT;
+        return m_radius * m_radius * m_radius * K * MASS_COEFFICIENT;
     }
 
 protected:
     std::unique_ptr<scene::ISceneNode> createNode(IrrlichtDevice &irrlichtDevice,
-                                                  const btVectore &position) const override
+                                                  const core::vector3df &position) const override
     {
         std::unique_ptr<scene::IMesh> mesh(irrlichtDevice.getSceneManager()->getMesh(ICOSPHERE2_MODEL));
 
         std::unique_ptr<scene::ISceneNode> node(irrlichtDevice.getSceneManager()->
                                 addMeshSceneNode(mesh.release(), 0, -1, position));
-        node->setScale(core::vector3df(radius, radius, radius) * 2);
+        node->setScale(core::vector3df(m_radius, m_radius, m_radius) * 2);
         node->setMaterialTexture(0, irrlichtDevice.getVideoDriver()->getTexture("media/textures/icosphere2.png"));
         node->setVisible(TEXTURES_ENABLED);
 #if LOG_ENABLED
@@ -50,7 +50,7 @@ protected:
     std::unique_ptr<btCollisionShape> createShape() const override
     {
         return std::make_unique<btConvexPointCloudShape>(objMesh.getPoints(), objMesh.getPointsCount(),
-                                                         btVector3(radius, radius, radius) * 2);
+                                                         btVector3(m_radius, m_radius, m_radius) * 2);
     }
 
 

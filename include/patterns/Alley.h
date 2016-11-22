@@ -20,11 +20,11 @@ public:
     }
 
     std::vector<std::unique_ptr<IBodyProducer>>
-        producers(btVector3 position) const override
+        producers() const override
     {
         std::vector<std::unique_ptr<IBodyProducer>> result;
 
-        position += { 1.5f * CELL_LENGTH, 1.5f * CELL_LENGTH, 0 };
+        btVector3 position { 1.5f * CELL_LENGTH, 1.5f * CELL_LENGTH, 0 };
 
         constexpr btScalar cos45 = 0.70710678118;
         constexpr btScalar edge = 150;

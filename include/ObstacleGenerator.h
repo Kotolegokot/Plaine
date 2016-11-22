@@ -68,7 +68,7 @@ private:
 
     btDynamicsWorld &world;
     IrrlichtDevice &device;
-    std::list<std::unique_ptr<IObstacle>> m_obstacles;
+    std::list<std::unique_ptr<Body>> m_obstacles;
 
     u32 obstacleCount = 0;
 

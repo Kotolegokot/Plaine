@@ -7,12 +7,22 @@ template <typename T, std::size_t N>
 struct Array3 : public std::array<T, N * N * N> {
     Array3() = default;
 
-    constexpr const T &at(Vector3<std::size_t> pos) const
+    constexpr const T &at(const Vector3<std::size_t> &pos) const
     {
         return std::array<T, N * N * N>::at(pos.x + pos.y * N + pos.z * N * N);
     }
 
-    T &at(Vector3<std::size_t> pos)
+    T &at(const Vector3<std::size_t> &pos)
+    {
+        return std::array<T, N * N * N>::at(pos.x + pos.y * N + pos.z * N * N);
+    }
+
+    constexpr const T &operator [](const Vector3<std::size_t> &pos) const
+    {
+        return std::array<T, N * N * N>::at(pos.x + pos.y * N + pos.z * N * N);
+    }
+
+    T &operator [](const Vector3<std::size_t> &pos)
     {
         return std::array<T, N * N * N>::at(pos.x + pos.y * N + pos.z * N * N);
     }

@@ -36,19 +36,18 @@ public:
     }
 
     std::vector<std::unique_ptr<IBodyProducer>>
-        producers(btVector3 position) const override
+        producers() const override
     {
-        position += { Thickness * CELL_LENGTH * 0.5f,
-                      Length * CELL_LENGTH * 0.5f,
-                      Thickness * CELL_LENGTH * 0.5f };
+        btVector3 position { Thickness * CELL_LENGTH * 0.5f,
+                             Length * CELL_LENGTH * 0.5f,
+                             Thickness * CELL_LENGTH * 0.5f };
 
         constexpr btScalar radius = (Thickness - 0.6f) * CELL_LENGTH * 0.5f;
         constexpr btScalar length = (Length - 0.2f) * CELL_LENGTH;
 
-        std::vector<std::unique_ptr<IBodyProducer>> result { {
-            std::make_unique<ConeProducer>(radius, length * 0.5f),
-            std::make_unique<ConeProducer>(radius, length * 0.5f)
-        } };
+        std::vector<std::unique_ptr<IBodyProducer>> result;
+        result.push_back(std::make_unique<ConeProducer>(radius, length * 0.5f));
+        result.push_back(std::make_unique<ConeProducer>(radius, length * 0.5f));
 
         result[0]->relativeTransform.setOrigin(position);
         result[1]->relativeTransform.setOrigin(position);

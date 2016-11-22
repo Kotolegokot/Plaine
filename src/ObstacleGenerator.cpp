@@ -117,7 +117,8 @@ std::size_t ObstacleGenerator::insertCell(Vector3<int> cell, const ChunkDB &chun
 
     return chunkDB[chunkIndex].produceCell(world, device,
                                            chunk.toBulletVector3() * CHUNK_LENGTH,
-                                           m_obstacles, relativeCellPos(cell, chunk));
+                                           relativeCellPos(cell, chunk),
+                                           m_obstacles);
 }
 
 // removes obstacles behind the player
