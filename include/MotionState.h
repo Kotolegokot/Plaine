@@ -48,9 +48,6 @@ protected:
     btTransform transform;
     std::unique_ptr<scene::ISceneNode> node;
     virtual void setWorldTransform(const btTransform &worldTrans);
-
-private:
-    static btVector3 quatToEuler(const btQuaternion &quat);
 };
 
 #endif // MOTIONSTATE_H

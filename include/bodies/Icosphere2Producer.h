@@ -28,12 +28,14 @@ public:
 
 protected:
     std::unique_ptr<scene::ISceneNode> createNode(IrrlichtDevice &irrlichtDevice,
-                                                  const core::vector3df &position) const override
+                                                  const btTransform &absoluteTransform) const override
     {
         std::unique_ptr<scene::IMesh> mesh(irrlichtDevice.getSceneManager()->getMesh(ICOSPHERE2_MODEL));
 
         std::unique_ptr<scene::ISceneNode> node(irrlichtDevice.getSceneManager()->
-                                addMeshSceneNode(mesh.release(), 0, -1, position));
+                                addMeshSceneNode(mesh.release()));
+        node->setPosition(bullet2irrlicht(absoluteTransform.getOrigin()));
+        node->setRotation(quatToEuler(absoluteTransform.getRotation()));
         node->setScale(core::vector3df(m_radius, m_radius, m_radius) * 2);
         node->setMaterialTexture(0, irrlichtDevice.getVideoDriver()->getTexture("media/textures/icosphere2.png"));
         node->setVisible(TEXTURES_ENABLED);

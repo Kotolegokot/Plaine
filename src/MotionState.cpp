@@ -70,16 +70,7 @@ void MotionState::setWorldTransform(const btTransform &worldTrans)
     #endif // NAN_ASSERT
 
     if (node) {
-        // rotation
-        core::vector3df eulerRotation;
-        btQuaternion quatRotation = worldTrans.getRotation();
-        core::quaternion q(quatRotation.getX(), quatRotation.getY(), quatRotation.getZ(), quatRotation.getW());
-        q.toEuler(eulerRotation);
-        eulerRotation *= core::RADTODEG;
-        node->setRotation(eulerRotation);
-
-        // position
-        btVector3 pos = worldTrans.getOrigin();
-        node->setPosition(bullet2irrlicht(pos));
+        node->setRotation(quatToEuler(worldTrans.getRotation()));
+        node->setPosition(bullet2irrlicht(worldTrans.getOrigin()));
     }
 }

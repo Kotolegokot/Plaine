@@ -61,6 +61,7 @@ std::string wide_to_utf8(const std::wstring &input);
 core::stringw keyCodeName(const EKEY_CODE &keyCode);
 void setLanguage(std::string language, bool replace);
 video::SColor iridescentColor(const u32 &currentTime);
+core::vector3df quatToEuler(const btQuaternion &quat);
 
 template <typename Num>
 btVector3 irrlicht2bullet(const core::vector3d<Num> &irrVector)

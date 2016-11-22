@@ -22,7 +22,8 @@ public:
         btTransform absoluteTransform = relativeTransform;
         absoluteTransform.getOrigin() += position;
 
-        auto node = createNode(irrlichtDeivce, bullet2irrlicht(absoluteTransform.getOrigin()));
+        auto node = createNode(irrlichtDeivce, absoluteTransform);
+        node->setRotation(quatToEuler(absoluteTransform.getRotation()));
         auto motionState = std::make_unique<MotionState>(btTransform::getIdentity(), node.release());
         auto shape = createShape();
         btScalar mass = getMass();
@@ -46,7 +47,7 @@ public:
     btTransform relativeTransform = btTransform::getIdentity();
 protected:
     virtual std::unique_ptr<scene::ISceneNode> createNode(IrrlichtDevice &IrrlichtDevice,
-                                              const core::vector3df &absolutePosition) const = 0;
+                                              const btTransform &absoluteTransform) const = 0;
 
     virtual std::unique_ptr<btCollisionShape> createShape() const = 0;
 };

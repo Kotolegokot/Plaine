@@ -258,6 +258,15 @@ video::SColor iridescentColor(const u32 &currentTime)
                                     color.getBlue() + int(oldColor.getBlue() - color.getBlue())*diff);
 }
 
+core::vector3df quatToEuler(const btQuaternion &quat)
+{
+    core::vector3df result;
+    core::quaternion(quat.x(), quat.y(), quat.z(), quat.w()).toEuler(result);
+    result *= core::RADTODEG;
+
+    return result;
+}
+
 core::vector3df bullet2irrlicht(const btVector3 &bulletVector)
 {
     return core::vector3df(bulletVector.x(), bulletVector.y(), bulletVector.z());

@@ -23,10 +23,12 @@ public:
 
 protected:
     std::unique_ptr<scene::ISceneNode> createNode(IrrlichtDevice &irrlichtDevice,
-                                                  const core::vector3df &position) const override
+                                                  const btTransform &absoluteTransform) const override
     {
         std::unique_ptr<scene::ISceneNode> node(irrlichtDevice.getSceneManager()->
-                                addCubeSceneNode(1, 0, -1, position));
+                                addCubeSceneNode(1));
+        node->setPosition(bullet2irrlicht(absoluteTransform.getOrigin()));
+        node->setRotation(quatToEuler(absoluteTransform.getRotation()));
         node->setScale(bullet2irrlicht(m_halfExtents) * 2);
         node->setMaterialTexture(0,
                 irrlichtDevice.getVideoDriver()->getTexture("media/textures/square.png"));
