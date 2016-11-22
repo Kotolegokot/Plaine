@@ -54,7 +54,9 @@ constexpr T PI = T(3.1415926535897932385);
 template<>
 constexpr float PI<float> = 3.1415926535897932385;
 
-size_t convert(const char *to, const char *from, char *outbuf, size_t outbuf_size, char *inbuf, size_t inbuf_size);
+std::size_t convert(const char *to, const char *from,
+                    char *outbuf, std::size_t outbuf_size,
+                    char *inbuf, std::size_t inbuf_size);
 std::wstring utf8_to_wide(const std::string &input);
 core::stringw utf8_to_irrwide(const std::string &input);
 std::string wide_to_utf8(const std::wstring &input);

@@ -74,7 +74,7 @@ public:
         return static_cast<GameOverScreen &>(getCurrentScreen());
     }
 
-    void selectElement(size_t num);
+    void selectElement(std::size_t num);
     void selectNextElement();
     void selectPreviousElement();
     void selectWithTab();
@@ -89,7 +89,7 @@ private:
     std::unordered_map<unsigned, std::unique_ptr<IGUIScreen>> screens;
 
     std::vector<gui::IGUIElement *> selectableElements;
-    size_t selectedElement = 0;
+    std::size_t selectedElement = 0;
 
     s32 buttonWidth, buttonHeight;
 

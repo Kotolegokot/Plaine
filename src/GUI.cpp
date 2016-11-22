@@ -126,7 +126,7 @@ void GUI::selectWithTab()
     if (selectableElements.empty())
         return;
 
-    for (size_t i = 0; i < selectableElements.size(); i++)
+    for (std::size_t i = 0; i < selectableElements.size(); i++)
         if (guiEnvironment.getFocus() == selectableElements[i]) {
             selectedElement = i;
             break;
@@ -134,7 +134,7 @@ void GUI::selectWithTab()
     updateSelection();
 }
 
-void GUI::selectElement(size_t index)
+void GUI::selectElement(std::size_t index)
 {
     if (selectableElements.empty())
         return;

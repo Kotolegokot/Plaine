@@ -32,7 +32,7 @@ void ControlSettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
             ids { { ID_BUTTON_CONTROL_UP, ID_BUTTON_CONTROL_LEFT,
                     ID_BUTTON_CONTROL_DOWN, ID_BUTTON_CONTROL_RIGHT,
                     ID_BUTTON_CONTROL_CW_ROLL, ID_BUTTON_CONTROL_CCW_ROLL } };
-    for (size_t i = 0; i < CONTROLS_COUNT; i++) {
+    for (std::size_t i = 0; i < CONTROLS_COUNT; i++) {
         textsControl[i] = guiEnvironment.addStaticText(L"CONTROL", core::rect<s32>(0, 0, 0, 0));
 
         buttonsControl[i] = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
@@ -60,7 +60,7 @@ void ControlSettingsScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 {
     static constexpr std::array<const char *, CONTROLS_COUNT>
             texts { { "Up: ", "Left: ", "Down: ", "Right: ", "CW roll", "CCW roll" } };
-    for (size_t i = 0; i < CONTROLS_COUNT; i++) {
+    for (std::size_t i = 0; i < CONTROLS_COUNT; i++) {
         textsControl[i]->setText(_wp(texts[i]));
         buttonsControl[i]->setText(keyCodeName(configuration.controls[i]).c_str());
     }
@@ -77,7 +77,7 @@ void ControlSettingsScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 
 void ControlSettingsScreen::terminate()
 {
-    for (size_t i = 0; i < CONTROLS_COUNT; i++) {
+    for (std::size_t i = 0; i < CONTROLS_COUNT; i++) {
         textsControl[i]->remove();
         buttonsControl[i]->remove();
     }
@@ -90,7 +90,7 @@ void ControlSettingsScreen::terminate()
 
 void ControlSettingsScreen::resize(s32 buttonWidth, s32 buttonHeight)
 {
-    for (size_t i = 0; i < CONTROLS_COUNT; i++) {
+    for (std::size_t i = 0; i < CONTROLS_COUNT; i++) {
         textsControl[i]->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
                                                              configuration.resolution.Height - (9 - i) * (buttonHeight + SPACE),
                                                              configuration.resolution.Width - buttonWidth / 2 - 2 * SPACE,

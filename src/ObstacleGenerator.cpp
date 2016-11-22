@@ -124,7 +124,7 @@ std::size_t ObstacleGenerator::insertCell(Vector3<int> cell, const ChunkDB &chun
 // removes obstacles behind the player
 void ObstacleGenerator::removeLeftBehind(btScalar playerZ)
 {
-    size_t count = 0;
+    std::size_t count = 0;
     for (auto it = m_obstacles.begin();
         it != m_obstacles.end() && count < 100; count++)
     {

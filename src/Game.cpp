@@ -174,7 +174,7 @@ void Game::mainMenu()
     //sets cursor visible
     device->getCursorControl()->setVisible(true);
 
-    size_t catchingControlID = CONTROLS_COUNT;
+    std::size_t catchingControlID = CONTROLS_COUNT;
 
     ConfigData oldConfiguration = configuration;
 
@@ -311,7 +311,7 @@ void Game::mainMenu()
             break;
 
         case Screen::CONTROL_SETTINGS:
-            for (size_t i = 0; i < CONTROLS_COUNT; i++)
+            for (std::size_t i = 0; i < CONTROLS_COUNT; i++)
                 if (eventReceiver->checkEvent(static_cast<GUI_ID>(gui->getCurrentScreenAsControlSettings().buttonsControl[i]->getID()))) {
                     eventReceiver->startCatchingKey();
                     catchingControlID = i;
@@ -337,7 +337,7 @@ void Game::mainMenu()
                 if (eventReceiver->lastKeyAvailable() &&
                     (!keyCodeName(eventReceiver->getLastKey()).empty() || eventReceiver->getLastKey() == KEY_ESCAPE)) {
                     if (!eventReceiver->checkKeyPressed(KEY_ESCAPE)) {
-                        for (size_t i = 0; i < CONTROLS_COUNT; i++)
+                        for (std::size_t i = 0; i < CONTROLS_COUNT; i++)
                             if (configuration.controls[i] == eventReceiver->getLastKey())
                                 configuration.controls[i] = KEY_KEY_CODES_COUNT;
                         configuration.controls[catchingControlID] = eventReceiver->getLastKey();

@@ -28,7 +28,7 @@
 
 using namespace irr;
 
-constexpr size_t CONTROLS_COUNT = 6;
+constexpr std::size_t CONTROLS_COUNT = 6;
 struct CONTROL {
     enum { UP, LEFT, DOWN, RIGHT, CW_ROLL, CCW_ROLL };
 };
@@ -45,12 +45,12 @@ public:
         keyCodes[CONTROL::CCW_ROLL] = KEY_KEY_Q;
     }
 
-    EKEY_CODE &operator[](size_t i)
+    EKEY_CODE &operator[](std::size_t i)
     {
         return keyCodes[i];
     }
 
-    EKEY_CODE operator[](size_t i) const
+    EKEY_CODE operator[](std::size_t i) const
     {
         return keyCodes[i];
     }

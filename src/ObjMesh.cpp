@@ -234,7 +234,7 @@ void ObjMesh::loadMesh(const std::string &filename, btScalar scale)
 
             case FACE:
                 {
-                    std::vector<size_t> polygon;
+                    std::vector<std::size_t> polygon;
 
                     while (i->type != Item::NEWLINE) {
                         EXPECT(Item::INT);
@@ -278,9 +278,9 @@ void ObjMesh::loadMesh(const std::string &filename, btScalar scale)
     for (std::vector<btVector3>::const_iterator i = vertices.cbegin(); i != vertices.cend(); i++)
         out << "v " << i->x() << " " << i->y() << " " << i->z() << std::endl;
 
-    for (std::vector<std::vector<size_t>>::const_iterator i = polygons.cbegin(); i != polygons.cend(); i++) {
+    for (std::vector<std::vector<std::size_t>>::const_iterator i = polygons.cbegin(); i != polygons.cend(); i++) {
         out << "f ";
-        for (std::vector<size_t>::const_iterator j = i->cbegin(); j != i->cend(); j++)
+        for (std::vector<std::size_t>::const_iterator j = i->cbegin(); j != i->cend(); j++)
             out << *j << " ";
         out << std::endl;
     }*/
@@ -289,8 +289,8 @@ void ObjMesh::loadMesh(const std::string &filename, btScalar scale)
 std::unique_ptr<btTriangleMesh> ObjMesh::getTriangleMesh() const
 {
     auto triangleMesh = std::make_unique<btTriangleMesh>();
-    for (const std::vector<size_t> &polygon : polygons)
-        for (size_t i = 1; i < polygon.size() - 1; i++)
+    for (const std::vector<std::size_t> &polygon : polygons)
+        for (std::size_t i = 1; i < polygon.size() - 1; i++)
             triangleMesh->addTriangle(vertices[polygon[0]], vertices[polygon[i]], vertices[polygon[i + 1]]);
 
     return triangleMesh;
