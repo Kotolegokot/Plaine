@@ -131,6 +131,11 @@
 		<Unit filename="include/PlaneControl.h" />
 		<Unit filename="include/Randomizer.h" />
 		<Unit filename="include/World.h" />
+		<Unit filename="include/bodies/BoxProducer.h" />
+		<Unit filename="include/bodies/ConeProducer.h" />
+		<Unit filename="include/bodies/IcosahedronProducer.h" />
+		<Unit filename="include/bodies/Icosphere2Producer.h" />
+		<Unit filename="include/bodies/TetrahedronProducer.h" />
 		<Unit filename="include/obstacles/Box.h" />
 		<Unit filename="include/obstacles/Cone.h" />
 		<Unit filename="include/obstacles/Icosahedron.h" />
@@ -167,6 +172,10 @@
 		<Unit filename="src/PlaneControl.cpp" />
 		<Unit filename="src/Randomizer.cpp" />
 		<Unit filename="src/World.cpp" />
+		<Unit filename="src/bodies/ConeProducer.cpp" />
+		<Unit filename="src/bodies/IcosahedronProducer.cpp" />
+		<Unit filename="src/bodies/Icosphere2Producer.cpp" />
+		<Unit filename="src/bodies/TetrahedronProducer.cpp" />
 		<Unit filename="src/obstacles/Cone.cpp" />
 		<Unit filename="src/obstacles/Icosahedron.cpp" />
 		<Unit filename="src/obstacles/Icosphere2.cpp" />
