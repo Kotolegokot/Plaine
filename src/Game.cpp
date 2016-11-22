@@ -687,8 +687,8 @@ std::unique_ptr<ChunkDB> Game::generateChunkDB()
 {
     auto chunkDB = std::make_unique<ChunkDB>();
 
-    constexpr std::size_t THREADS = 8;
-    constexpr std::size_t CHUNKS_PER_THREAD = CHUNK_DB_SIZE / THREADS;
+    static std::size_t THREADS = std::max(1u, std::thread::hardware_concurrency());
+    static std::size_t CHUNKS_PER_THREAD = CHUNK_DB_SIZE / THREADS;
 
     auto generateRange =
         [&chunkDB](std::size_t begin, std::size_t end) mutable

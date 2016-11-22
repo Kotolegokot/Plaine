@@ -239,7 +239,7 @@ core::stringw keyCodeName(const EKEY_CODE &keyCode)
 
 video::SColor iridescentColor(const u32 &currentTime)
 {
-    static video::SColor color = video::SColor(0, Randomizer::getFloat(100, 255), Randomizer::getFloat(100, 255), Randomizer::getFloat(100, 255));
+    static video::SColor color = video::SColor(0, Randomizer::getFloat(0, 255), Randomizer::getFloat(0, 255), Randomizer::getFloat(0, 255));
     static video::SColor oldColor = color;
     static f32 diff = 0;
     static u32 time = 0;

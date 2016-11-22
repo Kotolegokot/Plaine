@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <thread>
+#include <algorithm>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include <CGUITTFont.h>

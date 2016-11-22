@@ -149,6 +149,9 @@ private:
 
     void generateMap(const std::vector<PatternPosition> &positions)
     {
+        // clear the map
+        std::for_each(map.begin(), map.end(), [](auto &vector) { vector.clear(); });
+
         for (const auto &position : positions) {
             const auto &pattern = *position.pattern;
             const Vector3<int> &pos = position.position;
@@ -156,9 +159,10 @@ private:
             for (auto &producer : pattern.producers()) {
                 // producer pos relative to pattern
                 btVector3 &origin = producer->relativeTransform.getOrigin();
+                origin += pos.toBulletVector3() * CELL_LENGTH;
 
                 // producer cell relative to chunk
-                const Vector3<int> cell = pos + (Vector3<int>(origin) / CELL_LENGTH);
+                const Vector3<int> cell = (Vector3<int>(origin) / CELL_LENGTH);
 
                 // producer pos relative to cell
                 origin -= cell.toBulletVector3() * CELL_LENGTH;

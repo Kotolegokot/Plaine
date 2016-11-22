@@ -38,15 +38,13 @@ scene::ISceneNode &MotionState::getNode()
 
 void MotionState::setPosition(const core::vector3df &position)
 {
-    transform.setOrigin(btVector3(position.X, position.Y, position.Z));
+    transform.setOrigin(irrlicht2bullet(position));
     node->setPosition(position);
 }
 
 core::vector3df MotionState::getPosition() const
 {
-    btVector3 origin = transform.getOrigin();
-
-    return core::vector3df(origin.x(), origin.y(), origin.z());
+    return bullet2irrlicht(transform.getOrigin());
 }
 
 // gets the body's transformation
@@ -74,8 +72,7 @@ void MotionState::setWorldTransform(const btTransform &worldTrans)
     if (node) {
         // rotation
         core::vector3df eulerRotation;
-        btQuaternion quatRotation;
-        worldTrans.getBasis().getRotation(quatRotation);
+        btQuaternion quatRotation = worldTrans.getRotation();
         core::quaternion q(quatRotation.getX(), quatRotation.getY(), quatRotation.getZ(), quatRotation.getW());
         q.toEuler(eulerRotation);
         eulerRotation *= core::RADTODEG;
@@ -83,6 +80,6 @@ void MotionState::setWorldTransform(const btTransform &worldTrans)
 
         // position
         btVector3 pos = worldTrans.getOrigin();
-        node->setPosition(core::vector3df(pos.x(), pos.y(), pos.z()));
+        node->setPosition(bullet2irrlicht(pos));
     }
 }

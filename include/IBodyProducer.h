@@ -19,10 +19,11 @@ public:
                                   IrrlichtDevice &irrlichtDeivce,
                                   const btVector3 &position) const
     {
-        btVector3 absolutePosition = position + relativeTransform.getOrigin();
+        btTransform absoluteTransform = relativeTransform;
+        absoluteTransform.getOrigin() += position;
 
-        auto node = createNode(irrlichtDeivce, bullet2irrlicht(absolutePosition));
-        auto motionState = createMotionState(std::move(node), absolutePosition);
+        auto node = createNode(irrlichtDeivce, bullet2irrlicht(absoluteTransform.getOrigin()));
+        auto motionState = std::make_unique<MotionState>(btTransform::getIdentity(), node.release());
         auto shape = createShape();
         btScalar mass = getMass();
 
@@ -33,6 +34,7 @@ public:
                                                              shape.release(), inertia);
 
         auto rigidBody = std::make_unique<btRigidBody>(rigidBodyCI);
+        rigidBody->setCenterOfMassTransform(absoluteTransform);
         rigidBody->setUserIndex(0); // default index for bodies
         physicsWorld.addRigidBody(rigidBody.get());
 
@@ -41,18 +43,10 @@ public:
 
     virtual btScalar getMass() const = 0;
 
-    btTransform relativeTransform;
+    btTransform relativeTransform = btTransform::getIdentity();
 protected:
     virtual std::unique_ptr<scene::ISceneNode> createNode(IrrlichtDevice &IrrlichtDevice,
-                                                          const core::vector3df &position) const = 0;
-    virtual std::unique_ptr<btMotionState>
-                        createMotionState(std::unique_ptr<scene::ISceneNode> node,
-                                          const btVector3 &position) const
-    {
-        return std::make_unique<MotionState>(btTransform(relativeTransform.getRotation(),
-                                                         position + relativeTransform.getOrigin()),
-                                             node.release());
-    }
+                                              const core::vector3df &absolutePosition) const = 0;
 
     virtual std::unique_ptr<btCollisionShape> createShape() const = 0;
 };

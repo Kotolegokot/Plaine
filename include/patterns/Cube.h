@@ -32,6 +32,7 @@ public:
         result.push_back(std::make_unique<BoxProducer>(btVector3(1, 1, 1) *
                                                        Size * CELL_LENGTH * 0.49));
         result.back()->relativeTransform.setOrigin(position);
+        result.back()->relativeTransform.setRotation(btQuaternion(0, 0, PI<btScalar> * 0.5f));
 
         return result;
     }
