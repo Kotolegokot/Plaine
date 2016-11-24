@@ -70,6 +70,8 @@ void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
 void SettingsScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 {
+    comboBoxLanguage->clear();
+    comboBoxResolution->clear();
     comboBoxLanguage->addItem(_wp("System language"), 0);
     comboBoxLanguage->addItem(L"English", 1);
     comboBoxLanguage->addItem(L"Русский", 2);
@@ -231,14 +233,14 @@ void SettingsScreen::resize(s32 buttonWidth, s32 buttonHeight)
                                                     configuration.resolution.Height - SPACE));
 
     //if window size has changed, its resolution is not standard
-    comboBoxResolution->removeItem(2);
+    /*comboBoxResolution->removeItem(2);
     core::stringw scrs;
     scrs += configuration.resolution.Width;
     scrs += "x";
     scrs += configuration.resolution.Height;
     scrs += _wp(" (Custom)");
     comboBoxResolution->addItem(scrs.c_str(), 2);
-    comboBoxResolution->setSelected(2);
+    comboBoxResolution->setSelected(2);*/
 }
 
 std::vector<gui::IGUIElement *> SettingsScreen::getSelectableElements()
