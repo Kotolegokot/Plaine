@@ -23,8 +23,6 @@
 #include <btBulletDynamicsCommon.h>
 #include "options.h"
 #include "MotionState.h"
-#include "IObstacle.h"
-#include "IBody.h"
 #include "Randomizer.h"
 #include "Patterns.h"
 #include "Chunk.h"

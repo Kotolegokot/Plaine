@@ -35,7 +35,7 @@ protected:
         std::unique_ptr<scene::ISceneNode> node(irrlichtDevice.getSceneManager()->
                                 addMeshSceneNode(mesh.release()));
         node->setPosition(bullet2irrlicht(absoluteTransform.getOrigin()));
-        node->setRotation(quatToEuler(absoluteTransform.getRotation()));
+        node->setRotation(quatToEulerDeg(absoluteTransform.getRotation()));
         node->setScale(core::vector3df(m_radius, m_radius, m_radius) * 2);
         node->setMaterialTexture(0, irrlichtDevice.getVideoDriver()->getTexture("media/textures/icosphere2.png"));
         node->setVisible(TEXTURES_ENABLED);

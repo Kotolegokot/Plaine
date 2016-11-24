@@ -4,7 +4,8 @@
 #include <memory>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
-#include <MotionState.h>
+#include "MotionState.h"
+#include "util.h"
 
 using namespace irr;
 
@@ -13,46 +14,56 @@ public:
     Body(btDynamicsWorld &physicsWorld, std::unique_ptr<btRigidBody> rigidBody) :
         m_physicsWorld(physicsWorld), m_rigidBody(std::move(rigidBody)) {}
 
-    ~Body()
+    Body(Body &&other) :
+        m_physicsWorld(other.m_physicsWorld),
+        m_rigidBody(std::move(other.m_rigidBody)) {}
+
+    Body &operator =(Body &&other)
     {
-        if (m_rigidBody)
-            m_physicsWorld.removeRigidBody(m_rigidBody.get());
+        m_physicsWorld = other.m_physicsWorld;
+        m_rigidBody = std::move(other.m_rigidBody);
+
+        return *this;
     }
 
-    btRigidBody &rigidBody()
-    {
-        return *m_rigidBody;
-    }
+    Body(const Body &) = delete;
+    Body &operator =(const Body &) = delete;
 
-    const btRigidBody &rigidBody() const
-    {
-        return *m_rigidBody;
-    }
+    virtual ~Body();
 
-    scene::ISceneNode &node()
-    {
-        return dynamic_cast<MotionState *>(m_rigidBody->getMotionState())->getNode();
-    }
+    btRigidBody &rigidBody() { return *m_rigidBody; }
+    const btRigidBody &rigidBody() const { return *m_rigidBody; }
 
-    const scene::ISceneNode &node() const
-    {
-        return dynamic_cast<MotionState *>(m_rigidBody->getMotionState())->getNode();
-    }
+    scene::ISceneNode &node();
+    const scene::ISceneNode &node() const;
 
-    btVector3 getPosition() const
-    {
-        return m_rigidBody->getCenterOfMassTransform().getOrigin();
-    }
+    btVector3 getPosition() const;
+    void setPosition(const btVector3 &position);
 
-    void setPosition(const btVector3 &position)
-    {
-        btTransform transform = m_rigidBody->getCenterOfMassTransform();
-        transform.setOrigin(position);
+    btVector3 getLinearVelocity() const;
+    void setLinearVelocity(const btVector3 &linearVelocity);
 
-        m_rigidBody->setCenterOfMassTransform(transform);
-    }
+    btScalar getScalarLinearVelocity() const;
+    void setScalarLinearVelocity(btScalar length);
 
-private:
+    btVector3 getAngularVelocity() const;
+    void setAngularVelocity(const btVector3 &angularVelocity);
+
+    btScalar getScalarAngularVelocity() const;
+    void setScalarAngularVelocity(btScalar length);
+
+    btQuaternion getRotation() const;
+    void setRotation(const btQuaternion &rotation);
+
+    btVector3 getEulerRotationRad() const;
+    btVector3 getEulerRotationDeg() const;
+    void setEulerRotationRad(const btVector3 &rotation);
+    void setEulerRotationDeg(const btVector3 &rotation);
+
+    void getAxisAngleRotation(btVector3 &axis, btScalar &angle) const;
+    void setAxisAngleRotation(const btVector3 &axis, btScalar angle);
+
+protected:
     btDynamicsWorld &m_physicsWorld;
     std::unique_ptr<btRigidBody> m_rigidBody;
 };

@@ -55,5 +55,5 @@
 #endif // FAR_CAMERA_DISTANCE
 
 #ifndef NAN_ASSERT
-    #define NAN_ASSERT false
+    #define NAN_ASSERT true
 #endif // NAN_ASSERT

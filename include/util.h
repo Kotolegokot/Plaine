@@ -24,6 +24,7 @@
 #include <libintl.h>
 #include <btBulletDynamicsCommon.h>
 #include "Randomizer.h"
+#include "options.h"
 #include "util/Vector3.h"
 #include "util/Array3.h"
 #include "util/Cuboid.h"
@@ -63,7 +64,26 @@ std::string wide_to_utf8(const std::wstring &input);
 core::stringw keyCodeName(const EKEY_CODE &keyCode);
 void setLanguage(std::string language, bool replace);
 video::SColor iridescentColor(const u32 &currentTime);
-core::vector3df quatToEuler(const btQuaternion &quat);
+core::vector3df quatToEulerRad(const btQuaternion &quat);
+core::vector3df quatToEulerDeg(const btQuaternion &quat);
+
+template <typename Real>
+void notNanAssert(Real real)
+{
+#if NAN_ASSERT
+    assert(!std::isnan(real));
+#endif
+}
+
+template <typename ...Ts>
+void notNanAssert(const Ts &... params)
+{
+    (void) (int []) { 0, (notNanAssert(params), 0)... };
+}
+
+void notNanAssert(const btQuaternion &quat);
+void notNanAssert(const btVector3 &vec);
+void notNanAssert(const btTransform &transform);
 
 template <typename Num>
 btVector3 irrlicht2bullet(const core::vector3d<Num> &irrVector)

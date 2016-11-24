@@ -17,13 +17,13 @@ public:
 
     std::unique_ptr<Body> produce(btDynamicsWorld &physicsWorld,
                                   IrrlichtDevice &irrlichtDeivce,
-                                  const btVector3 &position) const
+                                  const btVector3 &position = { 0, 0, 0 }) const
     {
         btTransform absoluteTransform = relativeTransform;
         absoluteTransform.getOrigin() += position;
 
         auto node = createNode(irrlichtDeivce, absoluteTransform);
-        node->setRotation(quatToEuler(absoluteTransform.getRotation()));
+        node->setRotation(quatToEulerDeg(absoluteTransform.getRotation()));
         auto motionState = std::make_unique<MotionState>(btTransform::getIdentity(), node.release());
         auto shape = createShape();
         btScalar mass = getMass();
@@ -37,6 +37,7 @@ public:
         auto rigidBody = std::make_unique<btRigidBody>(rigidBodyCI);
         rigidBody->setCenterOfMassTransform(absoluteTransform);
         rigidBody->setUserIndex(0); // default index for bodies
+        finishingTouch(*rigidBody);
         physicsWorld.addRigidBody(rigidBody.get());
 
         return std::make_unique<Body>(physicsWorld, std::move(rigidBody));
@@ -50,6 +51,8 @@ protected:
                                               const btTransform &absoluteTransform) const = 0;
 
     virtual std::unique_ptr<btCollisionShape> createShape() const = 0;
+
+    virtual void finishingTouch(btRigidBody &/* body */) const {}
 };
 
 #endif // IBODY_PRODUCER

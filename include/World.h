@@ -8,6 +8,7 @@
 #include <BulletCollision/CollisionDispatch/btCollisionObject.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "ObstacleGenerator.h"
+#include "PlaneProducer.h"
 #include "Plane.h"
 #include "Explosion.h"
 #include "Chunk.h"
@@ -15,6 +16,12 @@
 #include "options.h"
 
 using namespace irr;
+
+#if FAR_CAMERA_DISTANCE
+constexpr btScalar CAMERA_DISTANCE = 600;
+#else
+constexpr btScalar CAMERA_DISTANCE = 200;
+#endif // FAR_CAMERA_DISTANCE
 
 class World {
 public:

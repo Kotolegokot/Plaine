@@ -129,6 +129,7 @@
 		<Unit filename="include/Patterns.h" />
 		<Unit filename="include/Plane.h" />
 		<Unit filename="include/PlaneControl.h" />
+		<Unit filename="include/PlaneProducer.h" />
 		<Unit filename="include/Randomizer.h" />
 		<Unit filename="include/World.h" />
 		<Unit filename="include/bodies/BoxProducer.h" />
@@ -157,6 +158,7 @@
 		<Unit filename="include/util/Cuboid.h" />
 		<Unit filename="include/util/Vector3.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Body.cpp" />
 		<Unit filename="src/CGUITTFont.cpp" />
 		<Unit filename="src/Config.cpp" />
 		<Unit filename="src/DebugDrawer.cpp" />
@@ -170,6 +172,7 @@
 		<Unit filename="src/Patterns.cpp" />
 		<Unit filename="src/Plane.cpp" />
 		<Unit filename="src/PlaneControl.cpp" />
+		<Unit filename="src/PlaneProducer.cpp" />
 		<Unit filename="src/Randomizer.cpp" />
 		<Unit filename="src/World.cpp" />
 		<Unit filename="src/bodies/ConeProducer.cpp" />

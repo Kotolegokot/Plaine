@@ -21,7 +21,7 @@ World::World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration,
                  m_solver.get(), m_collisionConfiguration.get());
         m_physicsWorld->setGravity({ 0, 0, 0 });
 
-        m_plane = std::make_unique<Plane>(*m_physicsWorld, m_irrlichtDevice);
+        m_plane = PlaneProducer().producePlane(*m_physicsWorld, m_irrlichtDevice);
         m_explosion = std::make_unique<Explosion>(*m_physicsWorld, m_irrlichtDevice,
                                                   m_plane->getPosition(), 1000);
 
@@ -43,8 +43,8 @@ World::World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration,
 
                     Plane &plane = *static_cast<Plane *>(obj0->getUserPointer());
                     if (cp.getAppliedImpulse() > 400)
-                        plane.setExploded(true);
-                    else if (!plane.getExploded())
+                        plane.explode();
+                    else if (!plane.exploded())
                         plane.addScore(-cp.getAppliedImpulse());
                 }
 
@@ -122,7 +122,7 @@ void World::render(video::SColor color)
 void World::stepSimulation(btScalar timeStep, int maxSubSteps, btScalar fixedTimeStep)
 {
     m_explosion->setPosition(m_plane->getPosition());
-    m_gameOver = m_plane->getExploded();
+    m_gameOver = m_plane->exploded();
 
     m_physicsWorld->stepSimulation(timeStep, maxSubSteps, fixedTimeStep);
 
@@ -160,9 +160,9 @@ Plane &World::plane()
 void World::updateCamera()
 {
     core::vector3df upVector(0, 1, 0);
-    upVector.rotateXYBy(m_plane->getEulerRotation().z() * core::RADTODEG64);
+    upVector.rotateXYBy(m_plane->getEulerRotationDeg().z());
 
-    m_camera.setPosition(m_plane->getNode().getPosition() + upVector * 0.3f * CAMERA_DISTANCE -
+    m_camera.setPosition(m_plane->node().getPosition() + upVector * 0.3f * CAMERA_DISTANCE -
                          core::vector3df(0, 0, CAMERA_DISTANCE));
     m_camera.setUpVector(upVector);
 

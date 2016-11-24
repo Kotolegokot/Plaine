@@ -18,9 +18,9 @@
 
 using namespace irr;
 
-Explosion::Explosion(btDynamicsWorld &world, IrrlichtDevice &device,
+Explosion::Explosion(btDynamicsWorld &world, IrrlichtDevice &/* device */,
                      const btVector3 &position, btScalar radius) :
-    world(world), device(device), radius(radius)
+    world(world), /* device(device), */ radius(radius)
 {
     explosionObject = std::make_unique<btGhostObject>();
     explosionObject->setCollisionShape(new btSphereShape(radius));

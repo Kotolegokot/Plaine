@@ -407,7 +407,8 @@ bool Game::run()
     {
         video::SColor color = iridescentColor(timer->getTime());
 
-        if (device->isWindowActive()) {
+//        if (device->isWindowActive()) {
+        if (true) {
             #if IRIDESCENT_BACKGROUND
                 driver->beginScene(true, true, color);
             #else
@@ -464,7 +465,7 @@ bool Game::run()
             case Screen::GAME_OVER: {
                 {
                     core::stringw score(_w("Your score: "));
-                    score += world->plane().getScore();
+                    score += world->plane().score();
                     gui->getCurrentScreenAsGameOver().textScore->setText(score.c_str());
                 }
 
@@ -566,7 +567,7 @@ void Game::updateHUD()
     // camera position
     {
         core::stringw cameraPosition = _w("Plane position: (");
-        core::vector3df position = world->plane().getNode().getPosition();
+        core::vector3df position = world->plane().node().getPosition();
         cameraPosition += position.X;
         cameraPosition += ", ";
         cameraPosition += position.Y;
@@ -606,48 +607,49 @@ void Game::updateHUD()
     // velocity counter
     {
         core::stringw velocity = _w("Linear velocity: ");
-        velocity += (int) world->plane().getRigidBody().getLinearVelocity().length();
+        velocity += (int) world->plane().rigidBody().getLinearVelocity().length();
         velocity += _w("; Angular velocity: ");
-        velocity += world->plane().getRigidBody().getAngularVelocity().length();
+        velocity += world->plane().rigidBody().getAngularVelocity().length();
         gui->getCurrentScreenAsHUD().textVelocity->setText(velocity.c_str());
 
 #if DEBUG_OUTPUT
         std::cout << "Linear velocity: "
-                  << world->plane().getRigidBody().getLinearVelocity().length()
+                  << world->plane().rigidBody().getLinearVelocity().length()
                   << std::endl;
         std::cout << "Angular velocity: "
-                  << world->plane().getRigidBody().getAngularVelocity().length()
+                  << world->plane().rigidBody().getAngularVelocity().length()
                   << std::endl;
 #endif // DEBUG_OUTPUT
     }
 
     // rotation counter
     {
-        btVector3 rotation = world->plane().getEulerRotation();
+        btVector3 rotation = world->plane().getEulerRotationDeg();
 
         core::stringw rotation_str = _w("Pitch: ");
         rotation_str += rotation.x();
-        rotation_str += _w("; Yaw: ");
+        rotation_str += _w("°; Yaw: ");
         rotation_str += rotation.y();
-        rotation_str += _w("; Roll: ");
+        rotation_str += _w("°; Roll: ");
         rotation_str += rotation.z();
+        rotation_str += _w("°");
         gui->getCurrentScreenAsHUD().textAngle->setText(rotation_str.c_str());
 
 #if DEBUG_OUTPUT
-        std::cout << "Pitch: " << rotation.x() << std::endl;
-        std::cout << "Yaw: " << rotation.y() << std::endl;
-        std::cout << "Roll: " << rotation.z() << std::endl;
+        std::cout << "Pitch: " << rotation.x() << "°" << std::endl;
+        std::cout << "Yaw: " << rotation.y() << "°" << std::endl;
+        std::cout << "Roll: " << rotation.z() << "°" << std::endl;
 #endif // DEBUG_OUTPUT
     }
 
     // score counter
     {
         core::stringw score = _w("Score: ");
-        score += world->plane().getScore();
+        score += world->plane().score();
         gui->getCurrentScreenAsHUD().textScore->setText(score.c_str());
 
 #if DEBUG_OUTPUT
-        std::cout << "Score: " << world->plane().getScore() << std::endl;
+        std::cout << "Score: " << world->plane().score() << std::endl;
 #endif // DEBUG_OUTPUT
     }
 }

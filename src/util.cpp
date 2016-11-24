@@ -260,13 +260,46 @@ video::SColor iridescentColor(const u32 &currentTime)
                                     color.getBlue() + int(oldColor.getBlue() - color.getBlue())*diff);
 }
 
-core::vector3df quatToEuler(const btQuaternion &quat)
+core::vector3df quatToEulerRad(const btQuaternion &quat)
+{
+    core::vector3df result;
+    core::quaternion(quat.x(), quat.y(), quat.z(), quat.w()).toEuler(result);
+
+    return result;
+}
+
+core::vector3df quatToEulerDeg(const btQuaternion &quat)
 {
     core::vector3df result;
     core::quaternion(quat.x(), quat.y(), quat.z(), quat.w()).toEuler(result);
     result *= core::RADTODEG;
 
     return result;
+}
+
+void notNanAssert(const btQuaternion &quat)
+{
+#if NAN_ASSERT
+    assert(!std::isnan(quat.getX()));
+    assert(!std::isnan(quat.getY()));
+    assert(!std::isnan(quat.getZ()));
+    assert(!std::isnan(quat.getW()));
+#endif // NAN_ASSERT
+}
+
+void notNanAssert(const btVector3 &vec)
+{
+#if NAN_ASSERT
+    assert(!std::isnan(vec.getX()));
+    assert(!std::isnan(vec.getY()));
+    assert(!std::isnan(vec.getZ()));
+#endif
+}
+
+void notNanAssert(const btTransform &transform)
+{
+    notNanAssert(transform.getOrigin());
+    notNanAssert(transform.getRotation());
 }
 
 core::vector3df bullet2irrlicht(const btVector3 &bulletVector)

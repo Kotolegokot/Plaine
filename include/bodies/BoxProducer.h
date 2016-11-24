@@ -28,7 +28,7 @@ protected:
         std::unique_ptr<scene::ISceneNode> node(irrlichtDevice.getSceneManager()->
                                 addCubeSceneNode(1));
         node->setPosition(bullet2irrlicht(absoluteTransform.getOrigin()));
-        node->setRotation(quatToEuler(absoluteTransform.getRotation()));
+        node->setRotation(quatToEulerDeg(absoluteTransform.getRotation()));
         node->setScale(bullet2irrlicht(m_halfExtents) * 2);
         node->setMaterialTexture(0,
                 irrlichtDevice.getVideoDriver()->getTexture("media/textures/square.png"));
