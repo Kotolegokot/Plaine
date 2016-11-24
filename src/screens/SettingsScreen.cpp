@@ -27,17 +27,17 @@ SettingsScreen::~SettingsScreen()
 void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
     textScreenSize = guiEnvironment.addStaticText(L"SCREEN_SIZE", core::rect<s32>(0, 0, 0, 0));
-    textLanguage = guiEnvironment.addStaticText(_wp("Language:"), core::rect<s32>(0, 0, 0, 0));
+    textLanguage = guiEnvironment.addStaticText(_wp(""), core::rect<s32>(0, 0, 0, 0));
 
     comboBoxLanguage = guiEnvironment.addComboBox(core::rect<s32>(0, 0, 0, 0));
     comboBoxLanguage->setID(ID_COMBOBOX_LANGUAGE);
 
-    textResolution = guiEnvironment.addStaticText(_wp("Resolution:"), core::rect<s32>(0, 0, 0, 0));
+    textResolution = guiEnvironment.addStaticText(L"", core::rect<s32>(0, 0, 0, 0));
 
     comboBoxResolution = guiEnvironment.addComboBox(core::rect<s32>(0, 0, 0, 0));
     comboBoxResolution->setID(ID_COMBOBOX_RESOLUTION);
 
-    textRenderDistance = guiEnvironment.addStaticText(_wp("Render distance:"), core::rect<s32>(0, 0, 0, 0));
+    textRenderDistance = guiEnvironment.addStaticText(_wp(""), core::rect<s32>(0, 0, 0, 0));
 
     spinBoxRenderDistance = guiEnvironment.addSpinBox(_wp("Render distance"), core::rect<s32>(0, 0, 0, 0));
     spinBoxRenderDistance->setID(ID_SPINBOX_RENDER_DISTANCE);
@@ -72,6 +72,9 @@ void SettingsScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 {
     comboBoxLanguage->clear();
     comboBoxResolution->clear();
+    textResolution->setText(_wp("Resolution:"));
+    textLanguage->setText(_wp("Language:"));
+    textRenderDistance->setText(_wp("Render distance:"));
     comboBoxLanguage->addItem(_wp("System language"), 0);
     comboBoxLanguage->addItem(L"English", 1);
     comboBoxLanguage->addItem(L"Русский", 2);
