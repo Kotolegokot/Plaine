@@ -22,7 +22,6 @@
 #include <algorithm>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
-#include <util/CGUITTFont.h>
 #include <ITimer.h>
 #include "World.h"
 #include "gui/GUI.h"
@@ -33,7 +32,6 @@
 #include "gui/screens/SettingsScreen.h"
 #include "gui/screens/GameOverScreen.h"
 #include "EventReceiver.h"
-#include "util.h"
 #include "Config.h"
 #include "ObstacleGenerator.h"
 #include "Plane.h"
@@ -43,6 +41,8 @@
 #include "Explosion.h"
 #include "Patterns.h"
 #include "Chunk.h"
+#include "util/i18n.h"
+#include "util/CGUITTFont.h"
 
 using namespace irr;
 

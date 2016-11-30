@@ -18,25 +18,13 @@
 #define UTIL_H_INCLUDED
 
 #include <array>
-#include <string>
 #include <cstdlib>
 #include <irrlicht.h>
-#include <libintl.h>
 #include <btBulletDynamicsCommon.h>
 #include "Randomizer.h"
 #include "options.h"
 
-#ifndef _WIN32
-#include <iconv.h>
-#else
-#include <Windows.h>
-#endif
-
 using namespace irr;
-
-#define _(string) gettext(string)
-#define _w(string) utf8_to_irrwide(gettext(string))
-#define _wp(string) utf8_to_wide(gettext(string)).c_str()
 
 constexpr std::size_t CHUNK_SIZE = 16;
 constexpr std::size_t CHUNK_DB_SIZE = 200;
@@ -52,14 +40,6 @@ constexpr T PI = T(3.1415926535897932385);
 template<>
 constexpr float PI<float> = 3.1415926535897932385;
 
-std::size_t convert(const char *to, const char *from,
-                    char *outbuf, std::size_t outbuf_size,
-                    char *inbuf, std::size_t inbuf_size);
-std::wstring utf8_to_wide(const std::string &input);
-core::stringw utf8_to_irrwide(const std::string &input);
-std::string wide_to_utf8(const std::wstring &input);
-core::stringw keyCodeName(const EKEY_CODE &keyCode);
-void setLanguage(std::string language, bool replace);
 video::SColor iridescentColor(const u32 &currentTime);
 core::vector3df quatToEulerRad(const btQuaternion &quat);
 core::vector3df quatToEulerDeg(const btQuaternion &quat);

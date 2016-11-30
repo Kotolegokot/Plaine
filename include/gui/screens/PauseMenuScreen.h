@@ -20,7 +20,7 @@
 #include <irrlicht.h>
 #include "interfaces/IGUIScreen.h"
 #include "Config.h"
-#include "util.h"
+#include "util/i18n.h"
 
 using namespace irr;
 
