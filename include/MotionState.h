@@ -23,8 +23,9 @@
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include "options.h"
-#include "util.h"
+#include "util/math.h"
 #include "util/NaN.h"
+#include "util.h"
 
 using namespace irr;
 

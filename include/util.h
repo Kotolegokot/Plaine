@@ -27,8 +27,6 @@
 using namespace irr;
 
 video::SColor iridescentColor(const u32 &currentTime);
-core::vector3df quatToEulerRad(const btQuaternion &quat);
-core::vector3df quatToEulerDeg(const btQuaternion &quat);
 
 template <typename Num>
 btVector3 irrlicht2bullet(const core::vector3d<Num> &irrVector)
@@ -38,16 +36,6 @@ btVector3 irrlicht2bullet(const core::vector3d<Num> &irrVector)
 
 core::vector3df bullet2irrlicht(const btVector3 &bulletVector);
 
-template <typename Number>
-int sign(Number num)
-{
-    if (num < 0)
-        return -1;
-    else if (num > 0)
-        return 1;
-    else
-        return 0;
-}
 
 constexpr f32 COLOR_CHANGE_INTERVAL = 3000.0f;
 

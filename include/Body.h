@@ -21,8 +21,9 @@
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include "MotionState.h"
-#include "util.h"
 #include "util/NaN.h"
+#include "util/math.h"
+#include "util.h"
 
 using namespace irr;
 

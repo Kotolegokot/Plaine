@@ -11,11 +11,5 @@ constexpr btScalar CHUNK_LENGTH = CHUNK_SIZE * CELL_LENGTH;
 
 constexpr btScalar MASS_COEFFICIENT = 0.000002;
 
-template<typename T>
-constexpr T PI = T(3.1415926535897932385);
-
-// shit making it possible to compile with TDM-GCC under Windows
-template<>
-constexpr float PI<float> = 3.1415926535897932385;
 
 #endif // CONSTANTS_H
