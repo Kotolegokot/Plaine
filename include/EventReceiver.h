@@ -21,6 +21,7 @@
 #include <irrlicht.h>
 #include "util.h"
 #include "gui/GUI.h"
+#include "gui/GUIID.h"
 
 using namespace irr;
 

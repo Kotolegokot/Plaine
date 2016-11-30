@@ -25,6 +25,7 @@
 #include <ITimer.h>
 #include "World.h"
 #include "gui/GUI.h"
+#include "gui/GUIID.h"
 #include "gui/screens/ControlSettingsScreen.h"
 #include "gui/screens/HUDScreen.h"
 #include "gui/screens/MainMenuScreen.h"

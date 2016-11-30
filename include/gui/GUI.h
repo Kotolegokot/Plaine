@@ -27,7 +27,6 @@
 #include "gui/screens/PauseMenuScreen.h"
 #include "gui/screens/SettingsScreen.h"
 #include "gui/screens/GameOverScreen.h"
-#include "util.h"
 
 struct Screen {
     enum { TERMINATED, MAIN_MENU, SETTINGS, CONTROL_SETTINGS, PAUSE_MENU, HUD, GAME_OVER };

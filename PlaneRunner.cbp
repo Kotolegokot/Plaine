@@ -132,6 +132,7 @@
 		<Unit filename="include/bodies/Icosphere2Producer.h" />
 		<Unit filename="include/bodies/TetrahedronProducer.h" />
 		<Unit filename="include/gui/GUI.h" />
+		<Unit filename="include/gui/GUIID.h" />
 		<Unit filename="include/gui/screens/ControlSettingsScreen.h" />
 		<Unit filename="include/gui/screens/GameOverScreen.h" />
 		<Unit filename="include/gui/screens/HUDScreen.h" />
@@ -152,6 +153,7 @@
 		<Unit filename="include/util/Cuboid.h" />
 		<Unit filename="include/util/NaN.h" />
 		<Unit filename="include/util/Vector3.h" />
+		<Unit filename="include/util/i18n.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Body.cpp" />
 		<Unit filename="src/Config.cpp" />
@@ -181,6 +183,7 @@
 		<Unit filename="src/util.cpp" />
 		<Unit filename="src/util/CGUITTFont.cpp" />
 		<Unit filename="src/util/NaN.cpp" />
+		<Unit filename="src/util/i18n.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

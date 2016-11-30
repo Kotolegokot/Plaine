@@ -22,6 +22,7 @@
 #include "interfaces/IGUIScreen.h"
 #include "Config.h"
 #include "util/i18n.h"
+#include "gui/GUIID.h"
 
 using namespace irr;
 
