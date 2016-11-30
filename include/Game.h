@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
-#include <CGUITTFont.h>
+#include <util/CGUITTFont.h>
 #include <ITimer.h>
 #include "World.h"
 #include "gui/GUI.h"
