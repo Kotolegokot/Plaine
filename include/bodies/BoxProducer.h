@@ -20,7 +20,7 @@
 #include <memory>
 #include <btBulletDynamicsCommon.h>
 #include <irrlicht.h>
-#include "IBodyProducer.h"
+#include "interfaces/IBodyProducer.h"
 #include "options.h"
 #include "util/Vector3.h"
 #include "util.h"

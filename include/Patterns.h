@@ -20,7 +20,7 @@
 #include <memory>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
-#include "IObstaclePattern.h"
+#include "interfaces/IObstaclePattern.h"
 #include "patterns/Cube.h"
 #include "patterns/Crystal.h"
 #include "patterns/Tunnel.h"

@@ -18,8 +18,8 @@
 #define TUNNEL_H
 
 #include <memory>
-#include "IBodyProducer.h"
-#include "IObstaclePattern.h"
+#include "interfaces/IBodyProducer.h"
+#include "interfaces/IObstaclePattern.h"
 #include "bodies/BoxProducer.h"
 #include "util.h"
 

@@ -137,6 +137,9 @@
 		<Unit filename="include/bodies/IcosahedronProducer.h" />
 		<Unit filename="include/bodies/Icosphere2Producer.h" />
 		<Unit filename="include/bodies/TetrahedronProducer.h" />
+		<Unit filename="include/interfaces/IBodyProducer.h" />
+		<Unit filename="include/interfaces/IGUIScreen.h" />
+		<Unit filename="include/interfaces/IObstaclePattern.h" />
 		<Unit filename="include/obstacles/Box.h" />
 		<Unit filename="include/obstacles/Cone.h" />
 		<Unit filename="include/obstacles/Icosahedron.h" />

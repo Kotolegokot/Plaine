@@ -18,7 +18,7 @@
 #define MAINMENUSCREEN_H
 
 #include <irrlicht.h>
-#include <IGUIScreen.h>
+#include "interfaces/IGUIScreen.h"
 #include "Config.h"
 #include "util.h"
 

@@ -20,7 +20,7 @@
 #include <algorithm>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
-#include "IBodyProducer.h"
+#include "interfaces/IBodyProducer.h"
 #include "Body.h"
 #include "Plane.h"
 #include "ObjMesh.h"

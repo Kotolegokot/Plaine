@@ -20,7 +20,7 @@
 #include <memory>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionShapes/btConvexPointCloudShape.h>
-#include "IBodyProducer.h"
+#include "interfaces/IBodyProducer.h"
 #include "ObjMesh.h"
 #include "options.h"
 #include "util/Vector3.h"
