@@ -689,8 +689,9 @@ std::unique_ptr<ChunkDB> Game::generateChunkDB()
 {
     auto chunkDB = std::make_unique<ChunkDB>();
 
-    static std::size_t THREADS = std::max(1u, std::thread::hardware_concurrency());
-    static std::size_t CHUNKS_PER_THREAD = CHUNK_DB_SIZE / THREADS;
+    static const std::size_t THREADS = std::max(1u, std::thread::hardware_concurrency());
+
+    static const std::size_t CHUNKS_PER_THREAD = CHUNK_DB_SIZE / THREADS;
 
     auto generateRange =
         [&chunkDB](std::size_t begin, std::size_t end) mutable
@@ -706,11 +707,10 @@ std::unique_ptr<ChunkDB> Game::generateChunkDB()
         threads.emplace_back(generateRange, i * CHUNKS_PER_THREAD, (i + 1) * CHUNKS_PER_THREAD);
 
     // last piece
-    threads.emplace_back(generateRange, (THREADS - 1) * CHUNKS_PER_THREAD, chunkDB->size());
+    generateRange((THREADS - 1) * CHUNKS_PER_THREAD, chunkDB->size());
 
     // waiting for all the threads to get done
-    for (auto &thread : threads)
-        thread.join();
+    std::for_each(threads.begin(), threads.end(), std::mem_fn(&std::thread::join));
 
     return chunkDB;
 }
