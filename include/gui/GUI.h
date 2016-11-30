@@ -20,13 +20,13 @@
 #include <unordered_map>
 #include <vector>
 #include <memory>
-#include "IGUIScreen.h"
-#include "screens/ControlSettingsScreen.h"
-#include "screens/HUDScreen.h"
-#include "screens/MainMenuScreen.h"
-#include "screens/PauseMenuScreen.h"
-#include "screens/SettingsScreen.h"
-#include "screens/GameOverScreen.h"
+#include "interfaces/IGUIScreen.h"
+#include "gui/screens/ControlSettingsScreen.h"
+#include "gui/screens/HUDScreen.h"
+#include "gui/screens/MainMenuScreen.h"
+#include "gui/screens/PauseMenuScreen.h"
+#include "gui/screens/SettingsScreen.h"
+#include "gui/screens/GameOverScreen.h"
 #include "util.h"
 
 struct Screen {

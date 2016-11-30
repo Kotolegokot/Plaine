@@ -14,7 +14,7 @@
  * along with PlaneRunner. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "screens/PauseMenuScreen.h"
+#include "gui/screens/PauseMenuScreen.h"
 
 PauseMenuScreen::PauseMenuScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment) :
     IGUIScreen(configuration, guiEnvironment) {}

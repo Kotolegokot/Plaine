@@ -14,7 +14,7 @@
  * along with PlaneRunner. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "screens/MainMenuScreen.h"
+#include "gui/screens/MainMenuScreen.h"
 
 using namespace irr;
 

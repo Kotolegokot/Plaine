@@ -20,7 +20,7 @@
 #include <array>
 #include <irrlicht.h>
 #include "util.h"
-#include "GUI.h"
+#include "gui/GUI.h"
 
 using namespace irr;
 

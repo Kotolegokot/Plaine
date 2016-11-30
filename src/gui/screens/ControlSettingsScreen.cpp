@@ -14,7 +14,7 @@
  * along with PlaneRunner. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "screens/ControlSettingsScreen.h"
+#include "gui/screens/ControlSettingsScreen.h"
 
 ControlSettingsScreen::ControlSettingsScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment) :
     IGUIScreen(configuration, guiEnvironment) {}

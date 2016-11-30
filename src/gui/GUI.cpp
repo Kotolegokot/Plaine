@@ -14,7 +14,7 @@
  * along with PlaneRunner. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "GUI.h"
+#include "gui/GUI.h"
 
 using namespace irr;
 
