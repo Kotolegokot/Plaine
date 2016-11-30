@@ -40,8 +40,8 @@ public:
         else
             m_score += score * negativeMultiplier;
 
-        if (score < 0)
-            score = 0;
+        if (m_score < 0)
+            m_score = 0;
     }
 
     long score() const { return m_score; }
@@ -52,6 +52,8 @@ public:
 private:
     bool m_exploded = false;
     long m_score = 0;
+
+
 };
 
 #endif // PLANE_H

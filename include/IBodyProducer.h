@@ -31,9 +31,9 @@ class IBodyProducer {
 public:
     IBodyProducer() = default;
 
-    std::unique_ptr<Body> produce(btDynamicsWorld &physicsWorld,
-                                  IrrlichtDevice &irrlichtDeivce,
-                                  const btVector3 &position = { 0, 0, 0 }) const
+    virtual std::unique_ptr<Body> produce(btDynamicsWorld &physicsWorld,
+                                          IrrlichtDevice &irrlichtDeivce,
+                                          const btVector3 &position = { 0, 0, 0 }) const
     {
         btTransform absoluteTransform = relativeTransform;
         absoluteTransform.getOrigin() += position;

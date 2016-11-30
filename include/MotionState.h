@@ -17,6 +17,7 @@
 #ifndef MOTIONSTATE_H
 #define MOTIONSTATE_H
 
+#include <iostream>
 #include <memory>
 #include <cassert>
 #include <irrlicht.h>

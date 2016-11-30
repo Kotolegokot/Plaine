@@ -28,8 +28,6 @@
 
 #define PLANE_MODEL "media/models/plane.obj"
 
-constexpr btScalar PLANE_MASS = 1.0f;
-
 class PlaneProducer : public IBodyProducer
 {
 public:
@@ -39,9 +37,37 @@ public:
                                         IrrlichtDevice &irrlichtDevice,
                                         const btVector3 &position = { 0, 0, 0 }) const
     {
-        std::unique_ptr<Body> body = produce(physicsWorld, irrlichtDevice, position);
+        auto body = produce(physicsWorld, irrlichtDevice, position);
 
         return std::unique_ptr<Plane>(static_cast<Plane *>(body.release()));
+    }
+
+    std::unique_ptr<Body> produce(btDynamicsWorld &physicsWorld,
+                                  IrrlichtDevice &irrlichtDeivce,
+                                  const btVector3 &position = { 0, 0, 0 }) const override
+    {
+        btTransform absoluteTransform = relativeTransform;
+        absoluteTransform.getOrigin() += position;
+
+        auto node = createNode(irrlichtDeivce, absoluteTransform);
+        node->setRotation(quatToEulerDeg(absoluteTransform.getRotation()));
+        auto motionState = std::make_unique<MotionState>(btTransform::getIdentity(), node.release());
+        auto shape = createShape();
+        btScalar mass = getMass();
+
+        btVector3 inertia(0, 0, 0);
+        if (mass)
+            shape->calculateLocalInertia(mass, inertia);
+        btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, motionState.release(),
+                                                             shape.release(), inertia);
+
+        auto rigidBody = std::make_unique<btRigidBody>(rigidBodyCI);
+        rigidBody->setCenterOfMassTransform(absoluteTransform);
+        rigidBody->setUserIndex(0); // default index for bodies
+        finishingTouch(*rigidBody);
+        physicsWorld.addRigidBody(rigidBody.get());
+
+        return std::make_unique<Plane>(physicsWorld, std::move(rigidBody));
     }
 
     btScalar getMass() const override;

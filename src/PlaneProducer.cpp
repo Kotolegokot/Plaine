@@ -20,7 +20,7 @@ using namespace irr;
 
 btScalar PlaneProducer::getMass() const
 {
-    return PLANE_MASS;
+    return 1.0f;
 }
 
 std::unique_ptr<scene::ISceneNode> PlaneProducer::createNode(IrrlichtDevice &irrlichtDevice,
