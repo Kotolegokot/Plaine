@@ -52,8 +52,6 @@ public:
 private:
     bool m_exploded = false;
     long m_score = 0;
-
-
 };
 
 #endif // PLANE_H

@@ -279,21 +279,17 @@ core::vector3df quatToEulerDeg(const btQuaternion &quat)
 
 void notNanAssert(const btQuaternion &quat)
 {
-#if NAN_ASSERT
-    assert(!std::isnan(quat.getX()));
-    assert(!std::isnan(quat.getY()));
-    assert(!std::isnan(quat.getZ()));
-    assert(!std::isnan(quat.getW()));
-#endif // NAN_ASSERT
+    notNanAssert(quat.getX());
+    notNanAssert(quat.getY());
+    notNanAssert(quat.getZ());
+    notNanAssert(quat.getW());
 }
 
 void notNanAssert(const btVector3 &vec)
 {
-#if NAN_ASSERT
-    assert(!std::isnan(vec.getX()));
-    assert(!std::isnan(vec.getY()));
-    assert(!std::isnan(vec.getZ()));
-#endif
+    notNanAssert(vec.getX());
+    notNanAssert(vec.getY());
+    notNanAssert(vec.getZ());
 }
 
 void notNanAssert(const btTransform &transform)

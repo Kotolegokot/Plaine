@@ -106,6 +106,7 @@ void Body::setRotation(const btQuaternion &rotation)
     notNanAssert(rotation);
     const btTransform &transform = m_rigidBody->getCenterOfMassTransform();
 
+    notNanAssert(btTransform(rotation, transform.getOrigin()));
     m_rigidBody->setCenterOfMassTransform(btTransform(rotation, transform.getOrigin()));
 }
 
@@ -125,6 +126,7 @@ void Body::setEulerRotationRad(const btVector3 &rotation)
     const btTransform &transform = m_rigidBody->getCenterOfMassTransform();
     btQuaternion qRotation(rotation.x(), rotation.y(), rotation.z());
 
+    notNanAssert(btTransform(qRotation, transform.getOrigin()));
     m_rigidBody->setCenterOfMassTransform(btTransform(qRotation, transform.getOrigin()));
 }
 
@@ -147,5 +149,6 @@ void Body::setAxisAngleRotation(const btVector3 &axis, btScalar angle)
     const btTransform &transform = m_rigidBody->getCenterOfMassTransform();
     btQuaternion qRotation(axis, angle);
 
+    notNanAssert(btTransform(qRotation, transform.getOrigin()));
     m_rigidBody->setCenterOfMassTransform(btTransform(qRotation, transform.getOrigin()));
 }
