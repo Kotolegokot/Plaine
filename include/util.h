@@ -64,27 +64,6 @@ video::SColor iridescentColor(const u32 &currentTime);
 core::vector3df quatToEulerRad(const btQuaternion &quat);
 core::vector3df quatToEulerDeg(const btQuaternion &quat);
 
-#if NAN_ASSERT
-template <typename Real>
-void notNanAssert(Real real)
-{
-    assert(!std::isnan(real));
-}
-#else
-template <typename Real>
-void notNanAssert(Real) {}
-#endif
-
-template <typename ...Ts>
-void notNanAssert(const Ts &... params)
-{
-    (void) (int []) { 0, (notNanAssert(params), 0)... };
-}
-
-void notNanAssert(const btQuaternion &quat);
-void notNanAssert(const btVector3 &vec);
-void notNanAssert(const btTransform &transform);
-
 template <typename Num>
 btVector3 irrlicht2bullet(const core::vector3d<Num> &irrVector)
 {

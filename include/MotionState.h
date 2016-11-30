@@ -24,6 +24,7 @@
 #include <btBulletDynamicsCommon.h>
 #include "options.h"
 #include "util.h"
+#include "util/NaN.h"
 
 using namespace irr;
 

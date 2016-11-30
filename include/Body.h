@@ -22,6 +22,7 @@
 #include <btBulletDynamicsCommon.h>
 #include "MotionState.h"
 #include "util.h"
+#include "util/NaN.h"
 
 using namespace irr;
 

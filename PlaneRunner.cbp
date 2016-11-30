@@ -111,7 +111,6 @@
 			<Add library="Irrlicht" />
 			<Add directory="deps/lib" />
 		</Linker>
-		<Unit filename="include/CGUITTFont.h" />
 		<Unit filename="include/Chunk.h" />
 		<Unit filename="include/Config.h" />
 		<Unit filename="include/DebugDrawer.h" />
@@ -149,11 +148,12 @@
 		<Unit filename="include/patterns/Tunnel.h" />
 		<Unit filename="include/util.h" />
 		<Unit filename="include/util/Array3.h" />
+		<Unit filename="include/util/CGUITTFont.h" />
 		<Unit filename="include/util/Cuboid.h" />
+		<Unit filename="include/util/NaN.h" />
 		<Unit filename="include/util/Vector3.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Body.cpp" />
-		<Unit filename="src/CGUITTFont.cpp" />
 		<Unit filename="src/Config.cpp" />
 		<Unit filename="src/DebugDrawer.cpp" />
 		<Unit filename="src/EventReceiver.cpp" />
@@ -179,6 +179,8 @@
 		<Unit filename="src/gui/screens/PauseMenuScreen.cpp" />
 		<Unit filename="src/gui/screens/SettingsScreen.cpp" />
 		<Unit filename="src/util.cpp" />
+		<Unit filename="src/util/CGUITTFont.cpp" />
+		<Unit filename="src/util/NaN.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
