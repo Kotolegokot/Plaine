@@ -64,13 +64,16 @@ video::SColor iridescentColor(const u32 &currentTime);
 core::vector3df quatToEulerRad(const btQuaternion &quat);
 core::vector3df quatToEulerDeg(const btQuaternion &quat);
 
+#if NAN_ASSERT
 template <typename Real>
 void notNanAssert(Real real)
 {
-#if NAN_ASSERT
     assert(!std::isnan(real));
-#endif
 }
+#else
+template <typename Real>
+void notNanAssert(Real) {}
+#endif
 
 template <typename ...Ts>
 void notNanAssert(const Ts &... params)
