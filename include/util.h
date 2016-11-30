@@ -25,9 +25,6 @@
 #include <btBulletDynamicsCommon.h>
 #include "Randomizer.h"
 #include "options.h"
-#include "util/Vector3.h"
-#include "util/Array3.h"
-#include "util/Cuboid.h"
 
 #ifndef _WIN32
 #include <iconv.h>

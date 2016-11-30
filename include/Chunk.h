@@ -19,6 +19,7 @@
 
 #include <array>
 #include <vector>
+#include <algorithm>
 #include "Patterns.h"
 #include "Randomizer.h"
 #include "util.h"

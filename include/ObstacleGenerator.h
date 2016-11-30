@@ -26,7 +26,7 @@
 #include "Randomizer.h"
 #include "Patterns.h"
 #include "Chunk.h"
-#include "util.h"
+#include "util/Cuboid.h"
 
 using namespace irr;
 
