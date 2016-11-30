@@ -24,9 +24,9 @@
 #include <irrlicht.h>
 #include "interfaces/IBodyProducer.h"
 #include "ObjMesh.h"
-#include "options.h"
 #include "util/Vector3.h"
 #include "util/constants.h"
+#include "util/options.h"
 
 using namespace irr;
 

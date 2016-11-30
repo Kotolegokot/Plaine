@@ -21,7 +21,7 @@
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include "util/Randomizer.h"
-#include "options.h"
+#include "util/options.h"
 
 using namespace irr;
 

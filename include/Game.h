@@ -38,12 +38,12 @@
 #include "Plane.h"
 #include "PlaneControl.h"
 #include "DebugDrawer.h"
-#include "options.h"
 #include "Explosion.h"
 #include "Patterns.h"
 #include "Chunk.h"
 #include "util/i18n.h"
 #include "util/CGUITTFont.h"
+#include "util/options.h"
 
 using namespace irr;
 

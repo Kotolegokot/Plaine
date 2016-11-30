@@ -22,10 +22,10 @@
 #include <cassert>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
-#include "options.h"
 #include "util/math.h"
 #include "util/NaN.h"
 #include "util/other.h"
+#include "util/options.h"
 
 using namespace irr;
 

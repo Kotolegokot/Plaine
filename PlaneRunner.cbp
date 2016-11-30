@@ -141,7 +141,6 @@
 		<Unit filename="include/interfaces/IBodyProducer.h" />
 		<Unit filename="include/interfaces/IGUIScreen.h" />
 		<Unit filename="include/interfaces/IObstaclePattern.h" />
-		<Unit filename="include/options.h" />
 		<Unit filename="include/patterns/Alley.h" />
 		<Unit filename="include/patterns/Crystal.h" />
 		<Unit filename="include/patterns/Cube.h" />
@@ -155,6 +154,7 @@
 		<Unit filename="include/util/constants.h" />
 		<Unit filename="include/util/i18n.h" />
 		<Unit filename="include/util/math.h" />
+		<Unit filename="include/util/options.h" />
 		<Unit filename="include/util/other.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Body.cpp" />
