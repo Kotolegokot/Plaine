@@ -152,6 +152,7 @@
 		<Unit filename="include/util/Randomizer.h" />
 		<Unit filename="include/util/Vector3.h" />
 		<Unit filename="include/util/constants.h" />
+		<Unit filename="include/util/exceptions.h" />
 		<Unit filename="include/util/i18n.h" />
 		<Unit filename="include/util/math.h" />
 		<Unit filename="include/util/options.h" />

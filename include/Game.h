@@ -20,6 +20,9 @@
 #include <iostream>
 #include <thread>
 #include <algorithm>
+#include <memory>
+#include <functional>
+#include <exception>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include <ITimer.h>
@@ -44,11 +47,10 @@
 #include "util/i18n.h"
 #include "util/CGUITTFont.h"
 #include "util/options.h"
+#include "util/exceptions.h"
 
 using namespace irr;
 
-// this class describes the whole game from main menu
-// to plane controlling
 class Game
 {
 public:
@@ -63,21 +65,21 @@ private:
     void mainMenu();
 
     ConfigData configuration;
-    GUI *gui = nullptr;
-    IrrlichtDevice *device = nullptr;
-    video::IVideoDriver *driver = nullptr;
-    scene::ISceneManager *sceneManager = nullptr;
-    gui::IGUIEnvironment *guiEnvironment = nullptr;
-    io::IFileSystem *fileSystem = nullptr;
-    EventReceiver *eventReceiver = nullptr;
-    gui::IGUISkin *skin = nullptr;
-    ITimer *timer = nullptr;
+    std::unique_ptr<GUI> gui;
+    IrrlichtDevice *device;
+    video::IVideoDriver *driver;
+    scene::ISceneManager *sceneManager;
+    gui::IGUIEnvironment *guiEnvironment;
+    io::IFileSystem *fileSystem;
+    EventReceiver *eventReceiver;
+    gui::IGUISkin *skin;
+    ITimer *timer;
 
     std::unique_ptr<World> world;
-    PlaneControl *planeControl = nullptr;
+    std::unique_ptr<PlaneControl> planeControl;
 
     void error(const core::stringw &str) const;
-    bool initializeDevice();
+    void initializeDevice();
     void initializeGUI();
     void terminateDevice();
     void setSpriteBank(bool);

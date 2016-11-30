@@ -15,8 +15,8 @@
  */
 
 #include <clocale>
-#include <cstdlib>
 #include <random>
+#include <exception>
 #include <irrlicht.h>
 
 #include "Game.h"
@@ -39,7 +39,11 @@ int main()
     textdomain("planerunner");
 
     // create instance of game class and give it configuration structure
-    Game(data).start();
+    try {
+        Game(data).start();
+    } catch (const std::exception &e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
 
     return 0;
 }

@@ -22,10 +22,8 @@ Game::Game(const ConfigData &data)
 {
     // load configuration, initialize device and GUI
     configuration = data;
-    if (!initializeDevice())
-        return;
+    initializeDevice();
     initializeGUI();
-    initialized = true;
 }
 
 Game::~Game()
@@ -49,7 +47,7 @@ void Game::initializeGUI()
 
     Game::setSpriteBank(false);
     Game::setSpriteBank(true);
-    gui = new GUI(configuration, *guiEnvironment);
+    gui = std::make_unique<GUI>(configuration, *guiEnvironment);
     gui->addScreen(std::make_unique<MainMenuScreen>(configuration, *guiEnvironment), Screen::MAIN_MENU);
     gui->addScreen(std::make_unique<SettingsScreen>(configuration, *guiEnvironment), Screen::SETTINGS);
     gui->addScreen(std::make_unique<ControlSettingsScreen>(configuration, *guiEnvironment), Screen::CONTROL_SETTINGS);
@@ -58,13 +56,18 @@ void Game::initializeGUI()
     gui->addScreen(std::make_unique<GameOverScreen>(configuration, *guiEnvironment), Screen::GAME_OVER);
 }
 
-bool Game::initializeDevice()
+void Game::initializeDevice()
 {
+    if (initialized)
+        throw repeated_initialization();
+
     // if fullscreen is enabled, create an empty device
     //      to get screen resolution
     if (configuration.fullscreen)
     {
         IrrlichtDevice *nulldevice = createDevice(video::EDT_NULL);
+        if (!nulldevice)
+            throw initialization_error();
         configuration.resolution = nulldevice->getVideoModeList()->getDesktopResolution();
         nulldevice -> drop();
     }
@@ -72,11 +75,10 @@ bool Game::initializeDevice()
     // create device (which is simply a window in which the
     //      whole world is rendered)
     device = createDevice(video::EDT_OPENGL, configuration.resolution, 32,
-                          configuration.fullscreen, configuration.stencilBuffer, configuration.vsync);
-    if (!device) {
-        error("Couldn't create a device :(\n");
-        return false;
-    }
+                                   configuration.fullscreen, configuration.stencilBuffer,
+                                   configuration.vsync);
+    if (!device)
+        throw initialization_error();
     device->setWindowCaption(L"PlaneRunner");
 
     // get a lot of useful pointers from device
@@ -93,7 +95,7 @@ bool Game::initializeDevice()
     timer->setTime(0);
     timer->start();
 
-    return true;
+    initialized = true;
 }
 
 void Game::error(const core::stringw &str) const
@@ -161,12 +163,6 @@ void Game::setSpriteBank(bool isControlButton)
 // show main menu
 void Game::mainMenu()
 {
-    // if game is not initialized send error message and exit
-    if (!initialized) {
-        error("device has failed to initialize!");
-        return;
-    }
-
     // set resolution to actual screen size
     configuration.resolution = driver->getScreenSize();
     // initialize menu
@@ -248,10 +244,8 @@ void Game::mainMenu()
                 }
 
                 terminateDevice();
-                if (!initializeDevice())
-                    return;
+                initializeDevice();
                 initializeGUI();
-                initialized = true;
                 oldConfiguration = configuration;
 
                 gui->initialize(Screen::SETTINGS);
@@ -263,10 +257,8 @@ void Game::mainMenu()
                 configuration.fullscreen = !configuration.fullscreen;
 
                 terminateDevice();
-                if (!initializeDevice())
-                    return;
+                initializeDevice();
                 initializeGUI();
-                initialized = true;
                 oldConfiguration = configuration;
 
                 gui->initialize(Screen::SETTINGS);
@@ -288,10 +280,8 @@ void Game::mainMenu()
                 bool needRestart = configuration.needRestart(oldConfiguration);
                 if (needRestart) {
                     terminateDevice();
-                    if (!initializeDevice())
-                        return;
+                    initializeDevice();
                     initializeGUI();
-                    initialized = true;
                 }
 
                 gui->initialize(Screen::MAIN_MENU);
@@ -395,7 +385,7 @@ bool Game::run()
 
     gui->initialize(Screen::HUD);
     world = std::make_unique<World>(*device, configuration, *chunkDB);
-    planeControl = new PlaneControl(world->plane(), configuration.controls);
+    planeControl = std::make_unique<PlaneControl>(world->plane(), configuration.controls);
 
     constexpr unsigned int tick = 1000.0f / 60.0f;
     u32 timePrevious, timeCurrent;
@@ -407,8 +397,7 @@ bool Game::run()
     {
         video::SColor color = iridescentColor(timer->getTime());
 
-//        if (device->isWindowActive()) {
-        if (true) {
+        if (device->isWindowActive()) {
             #if IRIDESCENT_BACKGROUND
                 driver->beginScene(true, true, color);
             #else
