@@ -58,8 +58,8 @@ void MotionState::getWorldTransform(btTransform &worldTrans) const
 //      quaternion notation to Euler angles
 void MotionState::setWorldTransform(const btTransform &worldTrans)
 {
-    transform = worldTrans;
     notNanAssert(worldTrans);
+    transform = worldTrans;
 
     if (node) {
         node->setRotation(quatToEulerDeg(worldTrans.getRotation()));

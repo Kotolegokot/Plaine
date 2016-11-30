@@ -119,10 +119,12 @@ void PlaneControl::handle(EventReceiver &eventReceiver)
     }
 
     angularVelocity = angularVelocity.rotate(axis, angle);
+    notNanAssert(angularVelocity);
     plane.setAngularVelocity(angularVelocity);
 
     sideImpulse = sideImpulse.rotate(axis, angle);
     sideImpulse.setZ(0);
+    notNanAssert(sideImpulse);
     plane.rigidBody().applyCentralImpulse(sideImpulse);
 
     plane.rigidBody().applyCentralImpulse(btVector3(0, 0, FORWARD_IMPULSE));
@@ -130,5 +132,6 @@ void PlaneControl::handle(EventReceiver &eventReceiver)
     // air resistance simulation
     btVector3 linearVelocity = -plane.getLinearVelocity();
     linearVelocity *= 0.00001f*linearVelocity.length();
+    notNanAssert(linearVelocity);
     plane.rigidBody().applyCentralImpulse(linearVelocity);
 }

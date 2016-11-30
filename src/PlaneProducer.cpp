@@ -18,6 +18,37 @@
 
 using namespace irr;
 
+std::unique_ptr<Body> PlaneProducer::produce(btDynamicsWorld &physicsWorld,
+                                             IrrlichtDevice &irrlichtDeivce,
+                                             const btVector3 &position) const
+{
+    btTransform absoluteTransform = relativeTransform;
+    absoluteTransform.getOrigin() += position;
+
+    auto node = createNode(irrlichtDeivce, absoluteTransform);
+    node->setRotation(quatToEulerDeg(absoluteTransform.getRotation()));
+    auto motionState = std::make_unique<MotionState>(btTransform::getIdentity(), node.release());
+    auto shape = createShape();
+    btScalar mass = getMass();
+
+    btVector3 inertia(0, 0, 0);
+    if (mass)
+        shape->calculateLocalInertia(mass, inertia);
+    btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, motionState.release(),
+                                                         shape.release(), inertia);
+
+    auto rigidBody = std::make_unique<btRigidBody>(rigidBodyCI);
+    rigidBody->setCenterOfMassTransform(absoluteTransform);
+    rigidBody->setUserIndex(1); // default index for bodies
+    rigidBody->setActivationState(DISABLE_DEACTIVATION);
+    physicsWorld.addRigidBody(rigidBody.get());
+
+    auto plane = std::make_unique<Plane>(physicsWorld, std::move(rigidBody));
+    plane->rigidBody().setUserPointer(plane.get());
+
+    return plane;
+}
+
 btScalar PlaneProducer::getMass() const
 {
     return 1.0f;
@@ -44,11 +75,4 @@ std::unique_ptr<btCollisionShape> PlaneProducer::createShape() const
     ObjMesh objMesh(PLANE_MODEL, 15);
 
     return std::make_unique<btConvexTriangleMeshShape>(objMesh.getTriangleMesh().release());
-}
-
-void PlaneProducer::finishingTouch(btRigidBody &body) const
-{
-    body.setUserIndex(1);
-    body.setUserPointer(&body);
-    body.setActivationState(DISABLE_DEACTIVATION);
 }

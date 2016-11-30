@@ -44,31 +44,7 @@ public:
 
     std::unique_ptr<Body> produce(btDynamicsWorld &physicsWorld,
                                   IrrlichtDevice &irrlichtDeivce,
-                                  const btVector3 &position = { 0, 0, 0 }) const override
-    {
-        btTransform absoluteTransform = relativeTransform;
-        absoluteTransform.getOrigin() += position;
-
-        auto node = createNode(irrlichtDeivce, absoluteTransform);
-        node->setRotation(quatToEulerDeg(absoluteTransform.getRotation()));
-        auto motionState = std::make_unique<MotionState>(btTransform::getIdentity(), node.release());
-        auto shape = createShape();
-        btScalar mass = getMass();
-
-        btVector3 inertia(0, 0, 0);
-        if (mass)
-            shape->calculateLocalInertia(mass, inertia);
-        btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, motionState.release(),
-                                                             shape.release(), inertia);
-
-        auto rigidBody = std::make_unique<btRigidBody>(rigidBodyCI);
-        rigidBody->setCenterOfMassTransform(absoluteTransform);
-        rigidBody->setUserIndex(0); // default index for bodies
-        finishingTouch(*rigidBody);
-        physicsWorld.addRigidBody(rigidBody.get());
-
-        return std::make_unique<Plane>(physicsWorld, std::move(rigidBody));
-    }
+                                  const btVector3 &position = { 0, 0, 0 }) const override;
 
     btScalar getMass() const override;
 
@@ -76,8 +52,6 @@ protected:
     std::unique_ptr<scene::ISceneNode> createNode(IrrlichtDevice &irrlichtDevice,
                                       const btTransform &absoluteTransform) const override;
     std::unique_ptr<btCollisionShape> createShape() const override;
-
-    void finishingTouch(btRigidBody &body) const override;
 };
 
 #endif // PLANE_PRODUCER_H
