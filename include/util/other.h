@@ -20,7 +20,7 @@
 #include <cstdlib>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
-#include "Randomizer.h"
+#include "util/Randomizer.h"
 #include "options.h"
 
 using namespace irr;

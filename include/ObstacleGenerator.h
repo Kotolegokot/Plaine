@@ -23,9 +23,9 @@
 #include <btBulletDynamicsCommon.h>
 #include "options.h"
 #include "MotionState.h"
-#include "Randomizer.h"
 #include "Patterns.h"
 #include "Chunk.h"
+#include "util/Randomizer.h"
 #include "util/Cuboid.h"
 #include "util/other.h"
 

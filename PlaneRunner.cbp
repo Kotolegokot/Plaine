@@ -124,7 +124,6 @@
 		<Unit filename="include/Plane.h" />
 		<Unit filename="include/PlaneControl.h" />
 		<Unit filename="include/PlaneProducer.h" />
-		<Unit filename="include/Randomizer.h" />
 		<Unit filename="include/World.h" />
 		<Unit filename="include/bodies/BoxProducer.h" />
 		<Unit filename="include/bodies/ConeProducer.h" />
@@ -151,6 +150,7 @@
 		<Unit filename="include/util/CGUITTFont.h" />
 		<Unit filename="include/util/Cuboid.h" />
 		<Unit filename="include/util/NaN.h" />
+		<Unit filename="include/util/Randomizer.h" />
 		<Unit filename="include/util/Vector3.h" />
 		<Unit filename="include/util/constants.h" />
 		<Unit filename="include/util/i18n.h" />
@@ -169,7 +169,6 @@
 		<Unit filename="src/Patterns.cpp" />
 		<Unit filename="src/PlaneControl.cpp" />
 		<Unit filename="src/PlaneProducer.cpp" />
-		<Unit filename="src/Randomizer.cpp" />
 		<Unit filename="src/World.cpp" />
 		<Unit filename="src/bodies/ConeProducer.cpp" />
 		<Unit filename="src/bodies/IcosahedronProducer.cpp" />
@@ -184,6 +183,7 @@
 		<Unit filename="src/gui/screens/SettingsScreen.cpp" />
 		<Unit filename="src/util/CGUITTFont.cpp" />
 		<Unit filename="src/util/NaN.cpp" />
+		<Unit filename="src/util/Randomizer.cpp" />
 		<Unit filename="src/util/i18n.cpp" />
 		<Unit filename="src/util/other.cpp" />
 		<Extensions>

@@ -14,6 +14,6 @@
  * along with PlaneRunner. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Randomizer.h"
+#include "util/Randomizer.h"
 
 std::default_random_engine Randomizer::engine { std::random_device()() };

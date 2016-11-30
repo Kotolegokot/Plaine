@@ -21,7 +21,7 @@
 #include <vector>
 #include <algorithm>
 #include "Patterns.h"
-#include "Randomizer.h"
+#include "util/Randomizer.h"
 #include "util/other.h"
 #include "util/Array3.h"
 
