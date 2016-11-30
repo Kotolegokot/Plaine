@@ -153,6 +153,7 @@
 		<Unit filename="include/util/Cuboid.h" />
 		<Unit filename="include/util/NaN.h" />
 		<Unit filename="include/util/Vector3.h" />
+		<Unit filename="include/util/constants.h" />
 		<Unit filename="include/util/i18n.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Body.cpp" />

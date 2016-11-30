@@ -21,7 +21,7 @@
 #include "EventReceiver.h"
 #include "Config.h"
 #include "Plane.h"
-#include "util.h"
+#include "util/constants.h"
 
 class PlaneControl
 {

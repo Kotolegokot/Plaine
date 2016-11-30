@@ -25,7 +25,7 @@
 #include "ObjMesh.h"
 #include "options.h"
 #include "util/Vector3.h"
-#include "util.h"
+#include "util/constants.h"
 
 using namespace irr;
 
