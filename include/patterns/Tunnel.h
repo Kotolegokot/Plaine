@@ -21,7 +21,7 @@
 #include "interfaces/IBodyProducer.h"
 #include "interfaces/IObstaclePattern.h"
 #include "bodies/BoxProducer.h"
-#include "util.h"
+#include "util/other.h"
 
 using namespace irr;
 

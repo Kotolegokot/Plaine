@@ -23,7 +23,7 @@
 #include "MotionState.h"
 #include "Body.h"
 #include "util/Vector3.h"
-#include "util.h"
+#include "util/other.h"
 
 using namespace irr;
 

@@ -27,6 +27,7 @@
 #include "Patterns.h"
 #include "Chunk.h"
 #include "util/Cuboid.h"
+#include "util/other.h"
 
 using namespace irr;
 

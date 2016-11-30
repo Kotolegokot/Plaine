@@ -14,7 +14,7 @@
  * along with PlaneRunner. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "util.h"
+#include "util/other.h"
 
 using namespace irr;
 

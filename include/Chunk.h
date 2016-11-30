@@ -22,7 +22,7 @@
 #include <algorithm>
 #include "Patterns.h"
 #include "Randomizer.h"
-#include "util.h"
+#include "util/other.h"
 #include "util/Array3.h"
 
 template <int Size>

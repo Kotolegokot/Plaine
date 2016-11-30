@@ -24,7 +24,7 @@
 #include "Body.h"
 #include "Plane.h"
 #include "ObjMesh.h"
-#include "util.h"
+#include "util/other.h"
 
 #define PLANE_MODEL "media/models/plane.obj"
 

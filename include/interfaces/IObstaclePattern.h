@@ -22,7 +22,7 @@
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include "IBodyProducer.h"
-#include "util.h"
+#include "util/other.h"
 
 using namespace irr;
 

@@ -147,7 +147,6 @@
 		<Unit filename="include/patterns/Crystal.h" />
 		<Unit filename="include/patterns/Cube.h" />
 		<Unit filename="include/patterns/Tunnel.h" />
-		<Unit filename="include/util.h" />
 		<Unit filename="include/util/Array3.h" />
 		<Unit filename="include/util/CGUITTFont.h" />
 		<Unit filename="include/util/Cuboid.h" />
@@ -155,6 +154,8 @@
 		<Unit filename="include/util/Vector3.h" />
 		<Unit filename="include/util/constants.h" />
 		<Unit filename="include/util/i18n.h" />
+		<Unit filename="include/util/math.h" />
+		<Unit filename="include/util/other.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Body.cpp" />
 		<Unit filename="src/Config.cpp" />
@@ -181,10 +182,10 @@
 		<Unit filename="src/gui/screens/MainMenuScreen.cpp" />
 		<Unit filename="src/gui/screens/PauseMenuScreen.cpp" />
 		<Unit filename="src/gui/screens/SettingsScreen.cpp" />
-		<Unit filename="src/util.cpp" />
 		<Unit filename="src/util/CGUITTFont.cpp" />
 		<Unit filename="src/util/NaN.cpp" />
 		<Unit filename="src/util/i18n.cpp" />
+		<Unit filename="src/util/other.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

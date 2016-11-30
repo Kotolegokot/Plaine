@@ -19,7 +19,7 @@
 
 #include <array>
 #include <irrlicht.h>
-#include "util.h"
+#include "util/other.h"
 #include "gui/GUI.h"
 #include "gui/GUIID.h"
 

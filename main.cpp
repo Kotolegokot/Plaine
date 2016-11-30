@@ -21,7 +21,7 @@
 
 #include "Game.h"
 #include "Config.h"
-#include "util.h"
+#include "util/i18n.h"
 
 using namespace irr;
 

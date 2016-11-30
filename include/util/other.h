@@ -14,10 +14,9 @@
  * along with PlaneRunner. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UTIL_H_INCLUDED
-#define UTIL_H_INCLUDED
+#ifndef OTHER_H
+#define OTHER_H
 
-#include <array>
 #include <cstdlib>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
@@ -26,6 +25,7 @@
 
 using namespace irr;
 
+constexpr f32 COLOR_CHANGE_INTERVAL = 3000.0f;
 video::SColor iridescentColor(const u32 &currentTime);
 
 template <typename Num>
@@ -37,6 +37,4 @@ btVector3 irrlicht2bullet(const core::vector3d<Num> &irrVector)
 core::vector3df bullet2irrlicht(const btVector3 &bulletVector);
 
 
-constexpr f32 COLOR_CHANGE_INTERVAL = 3000.0f;
-
-#endif // UTIL_H_INCLUDED
+#endif // OTHER_H

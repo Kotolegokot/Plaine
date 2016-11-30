@@ -21,7 +21,7 @@
 #include "interfaces/IBodyProducer.h"
 #include "interfaces/IObstaclePattern.h"
 #include "bodies/IcosahedronProducer.h"
-#include "util.h"
+#include "util/other.h"
 
 template <int Length>
 class Alley : public IObstaclePattern

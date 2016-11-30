@@ -15,9 +15,6 @@
  */
 
 #include "ObstacleGenerator.h"
-#include "Chunk.h"
-#include "util.h"
-#include "options.h"
 
 using namespace irr;
 

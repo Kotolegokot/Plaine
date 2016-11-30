@@ -24,7 +24,7 @@
 #include <iostream>
 #include <cctype>
 #include <irrlicht.h>
-#include "util.h"
+#include "util/other.h"
 
 using namespace irr;
 
