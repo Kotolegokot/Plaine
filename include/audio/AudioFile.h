@@ -23,22 +23,30 @@
 
  */
 
-#ifndef OPENAL_H
-#define OPENAL_H
-
 #include <al.h>
 #include <alc.h>
+#include <sndfile.h>
+#include <string>
+#include <vector>
 #include "Log.h"
 
-class OpenAL {
-    ALCdevice *openALPlaybackDevice = nullptr;
-    ALCcontext *openALContext = nullptr;
+class AudioFile {
+    static ALenum getFormatFromChannels(unsigned int channelCount);
 
+    SNDFILE *m_file = nullptr;
+    SF_INFO m_fileInfo;
 public:
-    OpenAL();
-    ~OpenAL();
+    AudioFile() = default;
+    ~AudioFile();
 
-    void changePlaybackDevice(const ALchar *deviceName);
+    bool tryOpen(const std::string &filePath);
+    void close();
+
+    bool open() const;
+
+    void setReadingOffset(float seconds);
+    bool readSecondIntoBuffer(ALuint buffer, bool allowLooping = false);
+    void readFileIntoBuffer(ALuint buffer);
+
+    const SF_INFO &fileInfo() const;
 };
-
-#endif // OPENAL_H
