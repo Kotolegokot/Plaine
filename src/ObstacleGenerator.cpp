@@ -23,9 +23,7 @@ ObstacleGenerator::ObstacleGenerator(btDynamicsWorld &world, IrrlichtDevice &dev
 
 void ObstacleGenerator::generate(const btVector3 &playerPosition, const ChunkDB &chunkDB)
 {
-    #if DEBUG_OUTPUT
-        unsigned long obstaclesGenerated = 0;
-    #endif
+    unsigned long obstaclesGenerated = 0;
 
     const Cuboid<long> view = fieldOfView(playerPosition) / CELL_LENGTH; //field of view in cells
     Vector3<int> cell; // current cell to generate
@@ -53,9 +51,7 @@ void ObstacleGenerator::generate(const btVector3 &playerPosition, const ChunkDB 
             for (cell.y = bottom(view); cell.y <= top(view); cell.y++)
                 obstaclesGenerated += insertCell(cell, chunkDB);
 
-    #if DEBUG_OUTPUT
-        std::cout << obstaclesGenerated << " obstacles generated" << std::endl;
-    #endif // DEBUG_OUTPUT
+    Log::debug(obstaclesGenerated, " obstacles generated");
 
     obstacleCount += obstaclesGenerated;
     generatedCuboid = view;

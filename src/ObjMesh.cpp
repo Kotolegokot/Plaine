@@ -25,7 +25,8 @@ std::vector<ObjMesh::Item> ObjMesh::parse(const std::string &filename)
 {
     std::ifstream inputFile(filename);
     if (!inputFile.is_open()) {
-        std::cerr << "Error: unable to open file\"" << filename << "\" for reading" << std::endl;
+        Log::warning("unable to open file\"", filename, "\" for reading.");
+
         return std::vector<Item>();
     }
 
@@ -56,7 +57,7 @@ std::vector<ObjMesh::Item> ObjMesh::parse(const std::string &filename)
             } else if (c == EOF) {
                 break;
             } else {
-                std::cerr << "Error: config \"" << filename << "\" is invalid." << std::endl;
+                Log::warning("config \"", filename, "\" is invalid.");
                 return std::vector<Item>();
             }
             break;
@@ -141,16 +142,16 @@ std::vector<ObjMesh::Item> ObjMesh::parse(const std::string &filename)
     return items;
 }
 
-void ObjMesh::error(Item::ItemType expected, Item::ItemType found)
+void ObjMesh::warning(Item::ItemType expected, Item::ItemType found)
 {
-    std::cout << "Error: " + Item::typeToString(expected) + " expected, but " +
-        Item::typeToString(found) + " found." << std::endl;
+    Log::warning(Item::typeToString(expected), " expected, but ",
+                 Item::typeToString(found), " found.");
 }
 
 #define \
 EXPECT(_expected) {\
     if ((*i).type != _expected) {\
-        error(_expected, (*i).type);\
+        warning(_expected, (*i).type);\
         goToNextNEWLINE = true;\
         state = NONE;\
         break;\
@@ -255,9 +256,9 @@ void ObjMesh::loadMesh(const std::string &filename, btScalar scale)
                                     ++i;
                                 }
                             } else {
-                                std::cout << "Error: " + Item::typeToString(Item::SLASH) + " or " +
-                                    Item::typeToString(Item::INT) + " expected, but " +
-                                    Item::typeToString(i->type) + " found." << std::endl;
+                                Log::warning(Item::typeToString(Item::SLASH), " or ",
+                                             Item::typeToString(Item::INT) + " expected, but ",
+                                             Item::typeToString(i->type) + " found.");
                                 state = NONE;
                                 goToNextNEWLINE = true;
                                 break;

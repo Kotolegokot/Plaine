@@ -24,7 +24,7 @@ std::vector<Config::Item> Config::parse(const std::string &filename)
 {
     std::ifstream inputFile(filename);
     if (!inputFile.is_open()) {
-        std::cerr << "Error: unable to open file\"" << filename << "\" for reading" << std::endl;
+        Log::warning("unable to open file\"", filename, "\" for reading.");
         return std::vector<Item>();
     }
 
@@ -59,7 +59,7 @@ std::vector<Config::Item> Config::parse(const std::string &filename)
             } else if (c == EOF) {
                 break;
             } else {
-                std::cerr << "Error: config \"" << filename << "\" is invalid." << std::endl;
+                Log::warning("config \"", filename, "\" is invalid.");
                 return std::vector<Item>();
             }
             break;
@@ -117,17 +117,17 @@ std::vector<Config::Item> Config::parse(const std::string &filename)
     return items;
 }
 
-void Config::error(Item::ItemType expected, Item::ItemType found)
+void Config::warning(Item::ItemType expected, Item::ItemType found)
 {
-    std::cout << "Error: " + Item::typeToString(expected) + " expected, but " +
-        Item::typeToString(found) + " found." << std::endl;
+    Log::warning(Item::typeToString(expected), " expected, but ",
+                 Item::typeToString(found), " found.");
 }
 
 // throws an error if we encounter something we don't want
 #define \
 EXPECT(_expected) {\
     if (i->type != _expected) {\
-        error(_expected, i->type);\
+        warning(_expected, i->type);\
         goToNextNEWLINE = true;\
         state = NONE;\
         break;\
@@ -227,7 +227,7 @@ ConfigData Config::loadConfig(const std::string &filename)
 
                 EXPECT(Item::KEYWORD);
                 if (i->getString() != "on" && i->getString() != "off") {
-                    std::cerr << "Error: on or off expected, but " << Item::typeToString(i->type) << " found." << std::endl;
+                    Log::warning("on or off expected, but ", Item::typeToString(i -> type), " found.");
                     goToNextNEWLINE = true;
                     break;
                 }
@@ -260,7 +260,7 @@ ConfigData Config::loadConfig(const std::string &filename)
 
                 EXPECT(Item::KEYWORD);
                 if (i->getString() != "on" && i->getString() != "off") {
-                    std::cerr << "Error: on or off expected, but " << Item::typeToString(i->type) << " found." << std::endl;
+                    Log::warning("on or off expected, but ", Item::typeToString(i->type), " found.");
                     goToNextNEWLINE = true;
                     break;
                 }
@@ -277,7 +277,7 @@ ConfigData Config::loadConfig(const std::string &filename)
 
                 EXPECT(Item::KEYWORD);
                 if (i->getString() != "on" && i->getString() != "off") {
-                    std::cerr << "Error: on or off expected, but " << Item::typeToString(i->type) << " found." << std::endl;
+                    Log::warning("on or off expected, but ", Item::typeToString(i->type), " found.");
                     goToNextNEWLINE = true;
                     break;
                 }
@@ -294,7 +294,7 @@ ConfigData Config::loadConfig(const std::string &filename)
 
                 EXPECT(Item::KEYWORD);
                 if (i->getString() != "on" && i->getString() != "off") {
-                    std::cerr << "Error: on or off expected, but " << Item::typeToString(i->type) << " found." << std::endl;
+                    Log::warning("on or off expected, but ", Item::typeToString(i->type), " found.");
                     goToNextNEWLINE = true;
                     break;
                 }
@@ -411,7 +411,7 @@ void Config::saveConfig(const std::string &filename, const ConfigData &data)
 {
     std::ofstream outputFile(filename);
     if (!outputFile.is_open()) {
-        std::cerr << "Error: unable to open file\"" << filename << "\" for writing" << std::endl;
+        Log::warning("unable to open file\"", filename, "\" for writing.");
         return;
     }
 

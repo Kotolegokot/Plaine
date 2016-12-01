@@ -48,10 +48,8 @@ World::World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration,
 
                 // if one of the objects is the place
                 if (obj0->getUserIndex() == 1 || obj1->getUserIndex() == 1) {
-#if DEBUG_OUTPUT
-                    std::cout << "Plane collision occured" << std::endl;
-                    std::cout << "Collision impulse: " << cp.getAppliedImpulse() << std::endl;
-#endif // DEBUG_OUTPUT
+                    Log::debug("plane collision occured");
+                    Log::debug("collision impulse = ", cp.getAppliedImpulse());
 
                     // obj0 must always be the plane
                     if (obj1->getUserIndex() == 1)
@@ -142,9 +140,7 @@ void World::stepSimulation(btScalar timeStep, int maxSubSteps, btScalar fixedTim
 
     m_physicsWorld->stepSimulation(timeStep, maxSubSteps, fixedTimeStep);
 
-#if DEBUG_OUTPUT
-    std::cout << "Simulation step: " << timeStep << "ms" << std::endl;
-#endif // DEBUG_OUTPUT
+    Log::debug("simulation step = ", timeStep, "ms");
 }
 
 void World::generate()

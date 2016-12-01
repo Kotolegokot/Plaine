@@ -43,7 +43,9 @@ int main()
     try {
         Game(data).start();
     } catch (const std::exception &e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+        Log::error(e.what());
+
+        return 1;
     }
 
     return 0;

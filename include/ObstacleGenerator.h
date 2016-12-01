@@ -24,6 +24,7 @@
 #include "MotionState.h"
 #include "Patterns.h"
 #include "Chunk.h"
+#include "Log.h"
 #include "util/Randomizer.h"
 #include "util/Cuboid.h"
 #include "util/other.h"

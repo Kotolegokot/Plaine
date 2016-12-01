@@ -62,9 +62,7 @@ btVector3 Explosion::getPosition() const
 
 void Explosion::explode()
 {
-    #if DEBUG_OUTPUT
-        std::cout << "PLANE EXPLODED!!" << std::endl;
-    #endif // DEBUG_OUTPUT
+    Log::debug("plane exploded");
 
     //startAnimation();
 
