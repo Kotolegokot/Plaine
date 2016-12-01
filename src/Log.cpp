@@ -20,34 +20,3 @@ std::ostream &operator <<(std::ostream &out, severity_level level)
 
     return out;
 }
-
-void Log::write(severity_level level, const std::string &message)
-{
-    std::lock_guard<std::mutex> lock(mutex);
-    out << level << " " << message << std::endl;
-}
-
-void Log::error(const std::string &message)
-{
-    write(severity_level::error, message);
-}
-
-void Log::warning(const std::string &message)
-{
-    write(severity_level::warning, message);
-}
-
-void Log::notice(const std::string &message)
-{
-    write(severity_level::notice, message);
-}
-
-void Log::info(const std::string &message)
-{
-    write(severity_level::info, message);
-}
-
-void Log::debug(const std::string &message)
-{
-    write(severity_level::debug, message);
-}

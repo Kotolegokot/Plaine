@@ -5,10 +5,13 @@
 #include <ostream>
 #include <string>
 #include <mutex>
+#include <utility>
 
 const std::string LOG_FILE { "logfile" };
 
 enum class severity_level { error, warning, notice, info, debug };
+
+std::ostream &operator <<(std::ostream &out, severity_level level);
 
 class Log {
     static std::ofstream out;
@@ -17,13 +20,44 @@ class Log {
 public:
     Log() = delete;
 
-    static void write(severity_level level, const std::string &message);
+    template <typename... Args>
+    static void write(severity_level level, Args &&... args)
+    {
+        std::lock_guard<std::mutex> lock(mutex);
+        out << level << " ";
+        (void)(int []){ 0, (out << std::forward<Args>(args), 0)... };
+        out << std::endl;
+    }
 
-    static void error(const std::string &message);
-    static void warning(const std::string &message);
-    static void notice(const std::string &message);
-    static void info(const std::string &message);
-    static void debug(const std::string &message);
+    template <typename... Args>
+    static void error(Args &&... args)
+    {
+        write(severity_level::error, std::forward<Args>(args)...);
+    }
+
+    template <typename... Args>
+    static void warning(Args &&... args)
+    {
+        write(severity_level::warning, std::forward<Args>(args)...);
+    }
+
+    template <typename... Args>
+    static void notice(Args &&... args)
+    {
+        write(severity_level::notice, std::forward<Args>(args)...);
+    }
+
+    template <typename... Args>
+    static void info(Args &&... args)
+    {
+        write(severity_level::info, std::forward<Args>(args)...);
+    }
+
+    template <typename... Args>
+    static void debug(Args &&... args)
+    {
+        write(severity_level::debug, std::forward<Args>(args)...);
+    }
 };
 
 #endif // LOG_H
