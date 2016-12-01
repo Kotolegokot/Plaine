@@ -98,11 +98,6 @@ void Game::initializeDevice()
     initialized = true;
 }
 
-void Game::error(const core::stringw &str) const
-{
-    std::wcerr << "Error: " << str.c_str() << std::endl;
-}
-
 void Game::terminateDevice()
 {
     Config::saveConfig("game.conf", configuration);
@@ -462,16 +457,13 @@ bool Game::run()
                 device->getCursorControl()->setVisible(true);
 
                 // still continue simulation as we wanna see plane blowing up when we lose
-                #if DEBUG_OUTPUT
-                    std::cout << "=== BEGIN SIMULATION ===" << std::endl;;
-                #endif // DEBUG_OUTPUT
+                Log::debug("=== BEGIN SIMULATION STEP ===");
+
                 timeCurrent = timer->getTime();
                 const float step = timeCurrent - timePrevious;
                 world->stepSimulation((step / 1000.0), 10, tick / 1000.0f);
                 timePrevious = timeCurrent;
-                #if DEBUG_OUTPUT
-                    std::cout << "=== END_SIMULATION ===" << std::endl << std::endl;
-                #endif
+                Log::debug("=== END SIMULATION STEP ===");
 
                 world->render(color);
                 handleSelecting();
@@ -484,9 +476,7 @@ bool Game::run()
                 break;
             }
             case Screen::HUD: {
-                #if DEBUG_OUTPUT
-                    std::cout << "=== BEGIN SIMULATION ===" << std::endl;;
-                #endif // DEBUG_OUTPUT
+                Log::debug("=== BEGIN SIMULATION STEP ===");
 
                 // physics simulation
                 timeCurrent = timer->getTime();
@@ -509,9 +499,7 @@ bool Game::run()
                 }
 
                 deltaTime = timer->getTime() - accumulator;
-                #if DEBUG_OUTPUT
-                    std::cout << "Control handling delta: " << deltaTime << "ms" << std::endl;
-                #endif // DEBUG_OUTPUT
+                Log::debug("generation and control handling delta = ", deltaTime, "ms");
                 while (deltaTime >= tick) {
                     deltaTime -= tick;
                     accumulator += tick;
@@ -521,9 +509,7 @@ bool Game::run()
                     world->plane().addScore(2);
                 }
 
-                #if DEBUG_OUTPUT
-                    std::cout << "=== END_SIMULATION ===" << std::endl << std::endl;
-                #endif
+                Log::debug("=== END SIMULATION STEP ===");
 
                 world->render(color);
                 device->getCursorControl()->setVisible(false); //set cursor invisible
@@ -565,10 +551,7 @@ void Game::updateHUD()
         cameraPosition += ")";
         gui->getCurrentScreenAsHUD().textCameraPosition->setText(cameraPosition.c_str());
 
-        #if DEBUG_OUTPUT
-            std::cout << "Plane position: (" << position.X << ", " << position.Y
-                      << ", " << position.Z << ")" << std::endl;
-        #endif // DEBUG_OUTPUT
+        Log::debug("plane position = (", position.X, ", ", position.Y, ", ", position.Z, ")");
     }
 
     // cube counter
@@ -577,9 +560,7 @@ void Game::updateHUD()
         obstacles += world->obstacles();
         gui->getCurrentScreenAsHUD().textObstaclesCount->setText(obstacles.c_str());
 
-        #if DEBUG_OUTPUT
-            std::cout << "Obstacles: " << world->obstacles() << std::endl;
-        #endif // DEBUG_OUTPUT
+        Log::debug("obstacles = ", world->obstacles());
     }
 
     // fps counter
@@ -588,9 +569,7 @@ void Game::updateHUD()
         fps += driver->getFPS();
         gui->getCurrentScreenAsHUD().textFPS->setText(fps.c_str());
 
-        #if DEBUG_OUTPUT
-            std::cout << "FPS: " << driver->getFPS() << std::endl;
-        #endif // DEBUG_OUTPUT
+        Log::debug("FPS = ", driver->getFPS());
     }
 
     // velocity counter
@@ -601,14 +580,8 @@ void Game::updateHUD()
         velocity += world->plane().rigidBody().getAngularVelocity().length();
         gui->getCurrentScreenAsHUD().textVelocity->setText(velocity.c_str());
 
-#if DEBUG_OUTPUT
-        std::cout << "Linear velocity: "
-                  << world->plane().rigidBody().getLinearVelocity().length()
-                  << std::endl;
-        std::cout << "Angular velocity: "
-                  << world->plane().rigidBody().getAngularVelocity().length()
-                  << std::endl;
-#endif // DEBUG_OUTPUT
+        Log::debug("linear velocity = ", world->plane().getLinearVelocity().length());
+        Log::debug("angular velocity = ", world->plane().getLinearVelocity().length());
     }
 
     // rotation counter
@@ -624,11 +597,7 @@ void Game::updateHUD()
         rotation_str += _w("°");
         gui->getCurrentScreenAsHUD().textAngle->setText(rotation_str.c_str());
 
-#if DEBUG_OUTPUT
-        std::cout << "Pitch: " << rotation.x() << "°" << std::endl;
-        std::cout << "Yaw: " << rotation.y() << "°" << std::endl;
-        std::cout << "Roll: " << rotation.z() << "°" << std::endl;
-#endif // DEBUG_OUTPUT
+        Log::debug("rotation = (", rotation.x(), ", ", rotation.y(), ", ", rotation.z(), ")");
     }
 
     // score counter
@@ -637,9 +606,7 @@ void Game::updateHUD()
         score += world->plane().score();
         gui->getCurrentScreenAsHUD().textScore->setText(score.c_str());
 
-#if DEBUG_OUTPUT
-        std::cout << "Score: " << world->plane().score() << std::endl;
-#endif // DEBUG_OUTPUT
+        Log::debug("score = ", world->plane().score());
     }
 }
 
