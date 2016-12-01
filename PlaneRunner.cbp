@@ -126,6 +126,7 @@
 		<Unit filename="include/PlaneControl.h" />
 		<Unit filename="include/PlaneProducer.h" />
 		<Unit filename="include/World.h" />
+		<Unit filename="include/audio/OpenAL.h" />
 		<Unit filename="include/bodies/BoxProducer.h" />
 		<Unit filename="include/bodies/ConeProducer.h" />
 		<Unit filename="include/bodies/IcosahedronProducer.h" />
@@ -173,6 +174,7 @@
 		<Unit filename="src/PlaneControl.cpp" />
 		<Unit filename="src/PlaneProducer.cpp" />
 		<Unit filename="src/World.cpp" />
+		<Unit filename="src/audio/OpenAL.cpp" />
 		<Unit filename="src/bodies/ConeProducer.cpp" />
 		<Unit filename="src/bodies/IcosahedronProducer.cpp" />
 		<Unit filename="src/bodies/Icosphere2Producer.cpp" />
