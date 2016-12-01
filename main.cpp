@@ -24,6 +24,9 @@
 #include "Log.h"
 #include "util/i18n.h"
 
+// DELETE
+#include "audio/OpenAL.h"
+
 using namespace irr;
 
 int main()
@@ -38,6 +41,11 @@ int main()
     bindtextdomain("planerunner", "media/locale/");
     bind_textdomain_codeset("planerunner", "utf-8");
     textdomain("planerunner");
+
+    //DELETE
+    {
+        OpenAL openAL;
+    }
 
     // create instance of game class and give it configuration structure
     try {
