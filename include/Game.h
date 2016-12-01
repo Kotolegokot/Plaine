@@ -78,7 +78,6 @@ private:
     std::unique_ptr<World> world;
     std::unique_ptr<PlaneControl> planeControl;
 
-    void error(const core::stringw &str) const;
     void initializeDevice();
     void initializeGUI();
     void terminateDevice();

@@ -24,6 +24,7 @@
 #include <string>
 #include <sstream>
 #include <btBulletDynamicsCommon.h>
+#include "Log.h"
 
 class ObjMesh
 {
@@ -126,7 +127,7 @@ private:
         void *data = nullptr;
     };
     static std::vector<Item> parse(const std::string &filename);
-    void error(Item::ItemType expected, Item::ItemType found);
+    void warning(Item::ItemType expected, Item::ItemType found);
 };
 
 #endif // OBJMESH_H

@@ -20,6 +20,7 @@
 #include <iostream>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
+#include "Log.h"
 
 using namespace irr;
 

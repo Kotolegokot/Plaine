@@ -24,6 +24,7 @@
 #include <iostream>
 #include <cctype>
 #include <irrlicht.h>
+#include "Log.h"
 #include "util/other.h"
 
 using namespace irr;
@@ -194,7 +195,7 @@ private:
     };
 
     static std::vector<Item> parse(const std::string &filename);
-    static void error(Item::ItemType expected, Item::ItemType found);
+    static void warning(Item::ItemType expected, Item::ItemType found);
 };
 
 #endif // CONFIG_H
