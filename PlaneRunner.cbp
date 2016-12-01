@@ -117,6 +117,7 @@
 		<Unit filename="include/EventReceiver.h" />
 		<Unit filename="include/Explosion.h" />
 		<Unit filename="include/Game.h" />
+		<Unit filename="include/Log.h" />
 		<Unit filename="include/MotionState.h" />
 		<Unit filename="include/ObjMesh.h" />
 		<Unit filename="include/ObstacleGenerator.h" />
@@ -164,6 +165,7 @@
 		<Unit filename="src/EventReceiver.cpp" />
 		<Unit filename="src/Explosion.cpp" />
 		<Unit filename="src/Game.cpp" />
+		<Unit filename="src/Log.cpp" />
 		<Unit filename="src/MotionState.cpp" />
 		<Unit filename="src/ObjMesh.cpp" />
 		<Unit filename="src/ObstacleGenerator.cpp" />
