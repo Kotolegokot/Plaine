@@ -14,6 +14,7 @@ find_package(Irrlicht REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(OpenAL REQUIRED)
+find_package(SndFile REQUIRED)
 find_package(Threads REQUIRED)
 
 file(GLOB_RECURSE CPPs "src/*.cpp")
@@ -25,7 +26,8 @@ include_directories(SYSTEM
 	${IRRLICHT_INCLUDE_DIR}
 	${BULLET_INCLUDE_DIRS}
 	${FREETYPE_INCLUDE_DIRS}
-    ${OPENAL_INCLUDE_DIR})
+    ${OPENAL_INCLUDE_DIR}
+    ${SNDFILE_INCLUDE_DIRS})
 
 target_link_libraries(${PROJECT_NAME}
 	${IRRLICHT_LIBRARY}
@@ -34,6 +36,7 @@ target_link_libraries(${PROJECT_NAME}
 	${BULLET_MATH_LIBRARY}
 	${FREETYPE_LIBRARY}
     ${OPENAL_LIBRARY}
+    ${SNDFILE_LIBRARY}
 	Threads::Threads)
 
 if(DEBUG)
