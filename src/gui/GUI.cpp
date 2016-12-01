@@ -41,7 +41,7 @@ GUI::GUI(ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment) :
 
 GUI::~GUI()
 {
-    terminate();
+    getCurrentScreen().terminate();
 }
 
 unsigned GUI::getCurrentScreenIndex() const
