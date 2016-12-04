@@ -29,6 +29,7 @@
 #include "audio/AudioFile.h"
 #include "audio/AudioListener.h"
 #include "audio/AudioSource.h"
+#include "audio/AudioStream.h"
 
 using namespace irr;
 
