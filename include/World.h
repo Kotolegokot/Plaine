@@ -11,6 +11,7 @@
 #include "Plane.h"
 #include "Explosion.h"
 #include "Config.h"
+#include "Scoreboard.h"
 #include "options.h"
 
 using namespace irr;

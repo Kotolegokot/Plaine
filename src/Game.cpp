@@ -512,6 +512,10 @@ bool Game::run()
 
                 if (world->gameOver()) {
                     gui->initialize(Screen::GAME_OVER);
+                    std::vector<s32> score = Scoreboard::loadScore("score.txt");
+                    score.push_back((world->plane().getScore()));
+                    std::sort(score.begin(), score.end(), std::greater<int>());
+                    Scoreboard::saveScore("score.txt", score);
                     continue;
                 }
 

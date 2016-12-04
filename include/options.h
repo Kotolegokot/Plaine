@@ -47,7 +47,7 @@
 #endif // DEFAULT_LIGHT_COLOR
 
 #ifndef DEBUG_OUTPUT
-    #define DEBUG_OUTPUT true
+    #define DEBUG_OUTPUT false
 #endif // DEBUG_OUTPUT
 
 #ifndef FAR_CAMERA_DISTANCE

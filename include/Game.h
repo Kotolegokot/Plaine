@@ -32,6 +32,7 @@
 #include "EventReceiver.h"
 #include "util.h"
 #include "Config.h"
+#include "Scoreboard.h"
 #include "GUI.h"
 #include "ObstacleGenerator.h"
 #include "Plane.h"

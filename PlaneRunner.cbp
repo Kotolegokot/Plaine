@@ -1,286 +1,174 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
-   <FileVersion major="1" minor="6" />
-   <Project>
-      <Option title="PlaneRunner" />
-      <Option makefile_is_custom="1" />
-      <Option compiler="gcc" />
-      <Option virtualFolders="CMake Files\;CMake Files\cmake\;CMake Files\cmake\Modules\;" />
-      <Build>
-      <Target title="all">
-         <Option working_dir="/home/xnekrosx/PlaneRunner" />
-         <Option type="4" />
-         <MakeCommands>
-            <Build command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 all" />
-            <CompileFile command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
-            <Clean command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean" />
-            <DistClean command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean" />
-         </MakeCommands>
-      </Target>
-      <Target title="edit_cache">
-         <Option working_dir="/home/xnekrosx/PlaneRunner" />
-         <Option type="4" />
-         <MakeCommands>
-            <Build command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 edit_cache" />
-            <CompileFile command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
-            <Clean command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean" />
-            <DistClean command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean" />
-         </MakeCommands>
-      </Target>
-      <Target title="rebuild_cache">
-         <Option working_dir="/home/xnekrosx/PlaneRunner" />
-         <Option type="4" />
-         <MakeCommands>
-            <Build command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 rebuild_cache" />
-            <CompileFile command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
-            <Clean command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean" />
-            <DistClean command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean" />
-         </MakeCommands>
-      </Target>
-      <Target title="PlaneRunner">
-         <Option output="/home/xnekrosx/PlaneRunner/bin/PlaneRunner" prefix_auto="0" extension_auto="0" />
-         <Option working_dir="/home/xnekrosx/PlaneRunner/bin" />
-         <Option object_output="./" />
-         <Option type="1" />
-         <Option compiler="gcc" />
-         <Compiler>
-            <Add directory="/home/xnekrosx/PlaneRunner/include" />
-            <Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.0/../../../../include/c++/5.4.0" />
-            <Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.0/../../../../include/c++/5.4.0/backward" />
-            <Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.0/../../../../include/x86_64-linux-gnu/c++/5.4.0" />
-            <Add directory="/usr/include" />
-            <Add directory="/usr/include/bullet" />
-            <Add directory="/usr/include/freetype2" />
-            <Add directory="/usr/include/irrlicht" />
-            <Add directory="/usr/include/x86_64-linux-gnu" />
-            <Add directory="/usr/include/x86_64-linux-gnu/freetype2" />
-            <Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include" />
-            <Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
-            <Add directory="/usr/lib/llvm-3.8/bin/../lib/clang/3.8.0/include" />
-            <Add directory="/usr/local/include" />
-         </Compiler>
-         <MakeCommands>
-            <Build command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 PlaneRunner" />
-            <CompileFile command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
-            <Clean command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean" />
-            <DistClean command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean" />
-         </MakeCommands>
-      </Target>
-      <Target title="PlaneRunner/fast">
-         <Option output="/home/xnekrosx/PlaneRunner/bin/PlaneRunner" prefix_auto="0" extension_auto="0" />
-         <Option working_dir="/home/xnekrosx/PlaneRunner/bin" />
-         <Option object_output="./" />
-         <Option type="1" />
-         <Option compiler="gcc" />
-         <Compiler>
-            <Add directory="/home/xnekrosx/PlaneRunner/include" />
-            <Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.0/../../../../include/c++/5.4.0" />
-            <Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.0/../../../../include/c++/5.4.0/backward" />
-            <Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.0/../../../../include/x86_64-linux-gnu/c++/5.4.0" />
-            <Add directory="/usr/include" />
-            <Add directory="/usr/include/bullet" />
-            <Add directory="/usr/include/freetype2" />
-            <Add directory="/usr/include/irrlicht" />
-            <Add directory="/usr/include/x86_64-linux-gnu" />
-            <Add directory="/usr/include/x86_64-linux-gnu/freetype2" />
-            <Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include" />
-            <Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
-            <Add directory="/usr/lib/llvm-3.8/bin/../lib/clang/3.8.0/include" />
-            <Add directory="/usr/local/include" />
-         </Compiler>
-         <MakeCommands>
-            <Build command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 PlaneRunner/fast" />
-            <CompileFile command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
-            <Clean command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean" />
-            <DistClean command="/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean" />
-         </MakeCommands>
-      </Target>
-      </Build>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/CGUITTFont.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/Config.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/DebugDrawer.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/EventReceiver.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/Explosion.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/GUI.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/Game.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/IBody.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/IGUIScreen.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/IObstacle.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/IObstaclePattern.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/MotionState.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/ObjMesh.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/ObstacleGenerator.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/Plane.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/PlaneControl.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/Randomizer.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/World.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/obstacles/Box.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/obstacles/Cone.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/obstacles/Icosahedron.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/obstacles/Icosphere2.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/obstacles/Tetrahedron.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/options.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/patterns/Crystal.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/patterns/Tunnel.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/patterns/Valley.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/screens/ControlSettingsScreen.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/screens/GameOverScreen.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/screens/HUDScreen.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/screens/MainMenuScreen.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/screens/PauseMenuScreen.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/screens/SettingsScreen.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/include/util.h">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/main.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/CGUITTFont.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/Config.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/DebugDrawer.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/EventReceiver.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/Explosion.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/GUI.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/Game.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/MotionState.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/ObjMesh.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/ObstacleGenerator.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/Plane.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/PlaneControl.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/Randomizer.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/World.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/obstacles/Cone.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/obstacles/Icosahedron.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/obstacles/Icosphere2.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/obstacles/Tetrahedron.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/screens/ControlSettingsScreen.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/screens/GameOverScreen.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/screens/HUDScreen.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/screens/MainMenuScreen.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/screens/PauseMenuScreen.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/screens/SettingsScreen.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/src/util.cpp">
-         <Option target="PlaneRunner"/>
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/CMakeLists.txt">
-          <Option virtualFolder="CMake Files\" />
-      </Unit>
-      <Unit filename="/home/xnekrosx/PlaneRunner/cmake/Modules/FindIrrlicht.cmake">
-          <Option virtualFolder="CMake Files\cmake\Modules\" />
-      </Unit>
-   </Project>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="PlaneRunner" />
+		<Option makefile_is_custom="1" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="all">
+				<Option type="4" />
+				<Option compiler="gcc" />
+				<MakeCommands>
+					<Build command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 all' />
+					<CompileFile command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 &quot;$file&quot;' />
+					<Clean command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean' />
+					<DistClean command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean' />
+					<AskRebuildNeeded command="$make -q -f $makefile $target" />
+					<SilentBuild command="$make -f $makefile $target &gt; $(CMD_NULL)" />
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option type="4" />
+				<Option compiler="gcc" />
+				<MakeCommands>
+					<Build command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 edit_cache' />
+					<CompileFile command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 &quot;$file&quot;' />
+					<Clean command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean' />
+					<DistClean command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean' />
+					<AskRebuildNeeded command="$make -q -f $makefile $target" />
+					<SilentBuild command="$make -f $makefile $target &gt; $(CMD_NULL)" />
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option type="4" />
+				<Option compiler="gcc" />
+				<MakeCommands>
+					<Build command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 rebuild_cache' />
+					<CompileFile command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 &quot;$file&quot;' />
+					<Clean command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean' />
+					<DistClean command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean' />
+					<AskRebuildNeeded command="$make -q -f $makefile $target" />
+					<SilentBuild command="$make -f $makefile $target &gt; $(CMD_NULL)" />
+				</MakeCommands>
+			</Target>
+			<Target title="PlaneRunner">
+				<Option output="/home/xnekrosx/PlaneRunner/bin/PlaneRunner" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="/home/xnekrosx/PlaneRunner/bin" />
+				<Option object_output="./" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add directory="/home/xnekrosx/PlaneRunner/include" />
+					<Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.0/../../../../include/c++/5.4.0" />
+					<Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.0/../../../../include/c++/5.4.0/backward" />
+					<Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.0/../../../../include/x86_64-linux-gnu/c++/5.4.0" />
+					<Add directory="/usr/include" />
+					<Add directory="/usr/include/bullet" />
+					<Add directory="/usr/include/freetype2" />
+					<Add directory="/usr/include/irrlicht" />
+					<Add directory="/usr/include/x86_64-linux-gnu" />
+					<Add directory="/usr/include/x86_64-linux-gnu/freetype2" />
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include" />
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
+					<Add directory="/usr/lib/llvm-3.8/bin/../lib/clang/3.8.0/include" />
+					<Add directory="/usr/local/include" />
+				</Compiler>
+				<MakeCommands>
+					<Build command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 PlaneRunner' />
+					<CompileFile command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 &quot;$file&quot;' />
+					<Clean command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean' />
+					<DistClean command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean' />
+					<AskRebuildNeeded command="$make -q -f $makefile $target" />
+					<SilentBuild command="$make -f $makefile $target &gt; $(CMD_NULL)" />
+				</MakeCommands>
+			</Target>
+			<Target title="PlaneRunner/fast">
+				<Option output="/home/xnekrosx/PlaneRunner/bin/PlaneRunner" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="/home/xnekrosx/PlaneRunner/bin" />
+				<Option object_output="./" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add directory="/home/xnekrosx/PlaneRunner/include" />
+					<Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.0/../../../../include/c++/5.4.0" />
+					<Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.0/../../../../include/c++/5.4.0/backward" />
+					<Add directory="/usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.0/../../../../include/x86_64-linux-gnu/c++/5.4.0" />
+					<Add directory="/usr/include" />
+					<Add directory="/usr/include/bullet" />
+					<Add directory="/usr/include/freetype2" />
+					<Add directory="/usr/include/irrlicht" />
+					<Add directory="/usr/include/x86_64-linux-gnu" />
+					<Add directory="/usr/include/x86_64-linux-gnu/freetype2" />
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include" />
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
+					<Add directory="/usr/lib/llvm-3.8/bin/../lib/clang/3.8.0/include" />
+					<Add directory="/usr/local/include" />
+				</Compiler>
+				<MakeCommands>
+					<Build command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 PlaneRunner/fast' />
+					<CompileFile command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 &quot;$file&quot;' />
+					<Clean command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean' />
+					<DistClean command='/usr/bin/make -f &quot;/home/xnekrosx/PlaneRunner/Makefile&quot;  VERBOSE=1 clean' />
+					<AskRebuildNeeded command="$make -q -f $makefile $target" />
+					<SilentBuild command="$make -f $makefile $target &gt; $(CMD_NULL)" />
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="include/CGUITTFont.h" />
+		<Unit filename="include/Config.h" />
+		<Unit filename="include/DebugDrawer.h" />
+		<Unit filename="include/EventReceiver.h" />
+		<Unit filename="include/Explosion.h" />
+		<Unit filename="include/GUI.h" />
+		<Unit filename="include/Game.h" />
+		<Unit filename="include/IBody.h" />
+		<Unit filename="include/IGUIScreen.h" />
+		<Unit filename="include/IObstacle.h" />
+		<Unit filename="include/IObstaclePattern.h" />
+		<Unit filename="include/MotionState.h" />
+		<Unit filename="include/ObjMesh.h" />
+		<Unit filename="include/ObstacleGenerator.h" />
+		<Unit filename="include/Plane.h" />
+		<Unit filename="include/PlaneControl.h" />
+		<Unit filename="include/Randomizer.h" />
+		<Unit filename="include/Scoreboard.h" />
+		<Unit filename="include/World.h" />
+		<Unit filename="include/obstacles/Box.h" />
+		<Unit filename="include/obstacles/Cone.h" />
+		<Unit filename="include/obstacles/Icosahedron.h" />
+		<Unit filename="include/obstacles/Icosphere2.h" />
+		<Unit filename="include/obstacles/Tetrahedron.h" />
+		<Unit filename="include/options.h" />
+		<Unit filename="include/patterns/Crystal.h" />
+		<Unit filename="include/patterns/Tunnel.h" />
+		<Unit filename="include/patterns/Valley.h" />
+		<Unit filename="include/screens/ControlSettingsScreen.h" />
+		<Unit filename="include/screens/GameOverScreen.h" />
+		<Unit filename="include/screens/HUDScreen.h" />
+		<Unit filename="include/screens/MainMenuScreen.h" />
+		<Unit filename="include/screens/PauseMenuScreen.h" />
+		<Unit filename="include/screens/SettingsScreen.h" />
+		<Unit filename="include/util.h" />
+		<Unit filename="src/CGUITTFont.cpp" />
+		<Unit filename="src/Config.cpp" />
+		<Unit filename="src/DebugDrawer.cpp" />
+		<Unit filename="src/EventReceiver.cpp" />
+		<Unit filename="src/Explosion.cpp" />
+		<Unit filename="src/GUI.cpp" />
+		<Unit filename="src/Game.cpp" />
+		<Unit filename="src/MotionState.cpp" />
+		<Unit filename="src/ObjMesh.cpp" />
+		<Unit filename="src/ObstacleGenerator.cpp" />
+		<Unit filename="src/Plane.cpp" />
+		<Unit filename="src/PlaneControl.cpp" />
+		<Unit filename="src/Randomizer.cpp" />
+		<Unit filename="src/Scoreboard.cpp" />
+		<Unit filename="src/World.cpp" />
+		<Unit filename="src/obstacles/Cone.cpp" />
+		<Unit filename="src/obstacles/Icosahedron.cpp" />
+		<Unit filename="src/obstacles/Icosphere2.cpp" />
+		<Unit filename="src/obstacles/Tetrahedron.cpp" />
+		<Unit filename="src/screens/ControlSettingsScreen.cpp" />
+		<Unit filename="src/screens/GameOverScreen.cpp" />
+		<Unit filename="src/screens/HUDScreen.cpp" />
+		<Unit filename="src/screens/MainMenuScreen.cpp" />
+		<Unit filename="src/screens/PauseMenuScreen.cpp" />
+		<Unit filename="src/screens/SettingsScreen.cpp" />
+		<Unit filename="src/util.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
 </CodeBlocks_project_file>
