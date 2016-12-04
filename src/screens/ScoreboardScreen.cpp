@@ -29,12 +29,12 @@ void ScoreboardScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
     std::vector<s32> dataScore = Scoreboard::loadScore("score.txt");
     int n;
-    (dataScore.size() < 30) ? (n = dataScore.size()) : (n = 30);
+    (dataScore.size() < 20) ? (n = dataScore.size()) : (n = 20);
     std::string str;
     for (int i = 0; i < n; i++)
     {
        str = "#" + std::to_string(i + 1) + " : " + std::to_string(dataScore[i]);
-       score.push_back(guiEnvironment.addStaticText(utf8_to_wide(str).c_str(), core::rect<s32>(10, 10 * i, 200, 10 * i + 20)));
+       score.push_back(guiEnvironment.addStaticText(utf8_to_wide(str).c_str(), core::rect<s32>(10, 20 * i, 200, 20 * i + 20)));
     }
     
     buttonMenu = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
