@@ -23,6 +23,9 @@
 
  */
 
+#ifndef AUDIO_FILE_H
+#define AUDIO_FILE_H
+
 #include <al.h>
 #include <alc.h>
 #include <sndfile.h>
@@ -50,3 +53,5 @@ public:
 
     const SF_INFO &fileInfo() const;
 };
+
+#endif // AUDIO_FILE_H
