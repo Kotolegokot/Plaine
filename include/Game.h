@@ -28,6 +28,7 @@
 #include "screens/MainMenuScreen.h"
 #include "screens/PauseMenuScreen.h"
 #include "screens/SettingsScreen.h"
+#include "screens/ScoreboardScreen.h"
 #include "screens/GameOverScreen.h"
 #include "EventReceiver.h"
 #include "util.h"

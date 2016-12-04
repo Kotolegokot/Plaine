@@ -27,10 +27,11 @@
 #include "screens/PauseMenuScreen.h"
 #include "screens/SettingsScreen.h"
 #include "screens/GameOverScreen.h"
+#include "screens/ScoreboardScreen.h"
 #include "util.h"
 
 struct Screen {
-    enum { TERMINATED, MAIN_MENU, SETTINGS, CONTROL_SETTINGS, PAUSE_MENU, HUD, GAME_OVER };
+    enum { TERMINATED, MAIN_MENU, SETTINGS, CONTROL_SETTINGS, PAUSE_MENU, HUD, GAME_OVER, SCOREBOARD };
 };
 
 class GUI
@@ -72,6 +73,11 @@ public:
     GameOverScreen &getCurrentScreenAsGameOver()
     {
         return static_cast<GameOverScreen &>(getCurrentScreen());
+    }
+
+    ScoreboardScreen &getCurrentScreenAsScoreboard()
+    {
+        return static_cast<ScoreboardScreen &>(getCurrentScreen());
     }
 
     void selectElement(size_t num);

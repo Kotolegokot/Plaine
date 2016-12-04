@@ -138,6 +138,7 @@
 		<Unit filename="include/screens/HUDScreen.h" />
 		<Unit filename="include/screens/MainMenuScreen.h" />
 		<Unit filename="include/screens/PauseMenuScreen.h" />
+		<Unit filename="include/screens/ScoreboardScreen.h" />
 		<Unit filename="include/screens/SettingsScreen.h" />
 		<Unit filename="include/util.h" />
 		<Unit filename="src/CGUITTFont.cpp" />
@@ -164,6 +165,7 @@
 		<Unit filename="src/screens/HUDScreen.cpp" />
 		<Unit filename="src/screens/MainMenuScreen.cpp" />
 		<Unit filename="src/screens/PauseMenuScreen.cpp" />
+		<Unit filename="src/screens/ScoreboardScreen.cpp" />
 		<Unit filename="src/screens/SettingsScreen.cpp" />
 		<Unit filename="src/util.cpp" />
 		<Extensions>
