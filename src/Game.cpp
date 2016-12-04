@@ -204,13 +204,7 @@ void Game::mainMenu()
                 return;
             break;
         case Screen::SCOREBOARD:
-            if (eventReceiver->checkEvent(ID_BUTTON_MENU)) {
-                if (run())
-                    gui->initialize(Screen::MAIN_MENU);
-                else
-                    return;
-            }
-            else if (eventReceiver->checkEvent(ID_BUTTON_MENU) ||
+            if (eventReceiver->checkEvent(ID_BUTTON_MENU) ||
                 eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
                 eventReceiver->checkKeyPressed(KEY_LEFT))
                 gui->initialize(Screen::MAIN_MENU);
