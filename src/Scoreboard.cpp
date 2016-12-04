@@ -100,14 +100,14 @@ std::vector<s32> Scoreboard::loadScore(const std::string &filename)
     std::vector<Item> items = parse(filename);
 
      //print items (for debug purposes)
-     for (const Item &item : items) {
+     /*for (const Item &item : items) {
         if (item.type == Item::INT)
             std::cout << "INT: " << (int) item.getInt() << std::endl;
         else if (item.type == Item::OP_SHARP)
             std::cout << "OP_SHARP" << std::endl;
         else if (item.type == Item::NEWLINE)
             std::cout << "NEWLINE" << std::endl;
-    }
+    }*/
 
     bool goToNextNEWLINE = false;
     enum { NONE, SCORE } state = NONE;
