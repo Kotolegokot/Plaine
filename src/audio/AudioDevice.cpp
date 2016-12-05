@@ -194,13 +194,13 @@ std::uint32_t AudioDevice::leastImportantSource()
     std::sort(m_sounds.begin(), m_sounds.begin() + lowestPriorityCount,
               [](const SoundData &lhs, const SoundData &rhs) -> bool
               {
-                  return lhs.second->volume() < rhs.second->volume();
+                  return lhs.second->gain() < rhs.second->gain();
               });
 
-    float lowestVolume = m_sounds[0].second->volume();
+    float lowestVolume = m_sounds[0].second->gain();
     unsigned int lowestVolumeCount = 0;
     for (auto &sound : m_sounds) {
-        if (sound.second->volume() != lowestVolume)
+        if (sound.second->gain() != lowestVolume)
             break;
         else
             ++lowestVolumeCount;

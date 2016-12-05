@@ -78,7 +78,7 @@ duration_t AudioChunk::offset() const
         return duration_t(0.0f);
 }
 
-bool AudioChunk::looped() const
+bool AudioChunk::looping() const
 {
     if (!valid())
         return false;

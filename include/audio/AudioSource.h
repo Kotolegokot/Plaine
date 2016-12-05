@@ -3,6 +3,7 @@
     The MIT License (MIT)
 
     Copyright (c) 2014 by Jakob Larsson
+    Copyright (c) 2016 by Kotik Andreev
 
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the "Software"),
@@ -31,6 +32,7 @@
 #include <al.h>
 #include <alc.h>
 #include "util/Vector3.h"
+#include "util/exceptions.h"
 #include "audio/AudioFile.h"
 
 using duration_t = std::chrono::duration<float>;
@@ -38,54 +40,82 @@ using duration_t = std::chrono::duration<float>;
 class AudioSource {
     friend class AudioDevice;
 
-    bool m_isValidSource = true;
+    bool m_valid = true;
 
-    std::uint32_t invalidate();
+    ALuint invalidate();
     duration_t m_duration;
-    Vector3<float> m_position { 0, 0, 0 };
 public:
-    enum class AudioStatus {
+    enum class State {
         Playing,
         Paused,
         Stopped
     };
 
+    enum class Type {
+        Undetermined,
+        Static,
+        Streaming
+    };
+
+    explicit AudioSource(std::unique_ptr<AudioFile> filePtr, std::uint32_t newSource);
     virtual ~AudioSource();
 
     virtual void play() = 0;
     virtual void pause() = 0;
     virtual void stop() = 0;
 
+    virtual void setLooping(bool looping) = 0;
+    virtual void setOffset(duration_t offset) = 0;
+
+    virtual bool looping() const = 0;
+    virtual duration_t offset() const = 0;
+
     void setPitch(float pitch);
+    void setGain(float gain);
+    void setMaxDistance(float maxDistance);
+    void setRolloffFactor(float rolloffFactor);
+    void setReferenceDistance(float referenceDistance);
+    void setMinGain(float minGain);
+    void setMaxGain(float maxGain);
+    void setConeOuterGain(float coneOuterGain);
+    void setConeInnerAngle(float coneInnerAngle);
+    void setConeOuterAngle(float coneOuterAngle);
     void setPosition(const Vector3<float> &position);
     void setVelocity(const Vector3<float> &velocity);
     void setDirection(const Vector3<float> &direction);
     void setRelativeToListener(bool relative);
-    void setVolume(float volume);
+    void setType(Type type);
 
-    virtual void setLooping(bool looping) = 0;
-    virtual void setOffset(duration_t offset) = 0;
-
-    virtual duration_t offset() const = 0;
-    virtual bool looped() const = 0;
-
-    const duration_t &duration() const;
-    float volume() const;
-    const Vector3<float> &position() const;
+    float pitch() const;
+    float gain() const;
+    float maxDistance() const;
+    float rolloffFactor() const;
+    float referenceDistance() const;
+    float minGain() const;
+    float maxGain() const;
+    float coneOuterGain() const;
+    float coneInnerAngle() const;
+    float coneOuterAngle() const;
+    Vector3<float> position() const;
+    Vector3<float> velocity() const;
+    Vector3<float> direction() const;
+    bool relativeToListener() const;
+    Type type() const;
+    unsigned int bufferID() const;
+    State state() const;
     bool playing() const;
-    AudioStatus status() const;
+    int buffersQueued() const;
+    int buffersProcessed() const;
     bool valid() const;
 
 protected:
     struct BufferWrapper {
-        std::uint32_t buffer = 0;
+        ALuint buffer = 0;
         BufferWrapper();
         ~BufferWrapper();
     };
 
-    explicit AudioSource(std::unique_ptr<AudioFile> filePtr, std::uint32_t newSource);
-
-    std::uint32_t m_source;
+    ALuint m_source;
     std::unique_ptr<AudioFile> m_file;
 };
 

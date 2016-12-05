@@ -57,7 +57,7 @@ public:
     void setOffset(duration_t offset) override;
 
     virtual duration_t offset() const override;
-    bool looped() const override;
+    bool looping() const override;
 };
 
 #endif // AUDIO_STREAM_H
