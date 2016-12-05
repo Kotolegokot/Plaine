@@ -3,6 +3,7 @@
     The MIT License (MIT)
 
     Copyright (c) 2014 by Jakob Larsson
+    Copyright (c) 2016 by Kotik Andreev
 
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the "Software"),
@@ -25,8 +26,8 @@
 
 #include "audio/AudioChunk.h"
 
-AudioChunk::AudioChunk(std::unique_ptr<AudioFile> audioPtr, std::uint32_t newSource) :
-    AudioSource(std::move(audioPtr), newSource)
+AudioChunk::AudioChunk(std::unique_ptr<AudioFile> filePtr, std::uint32_t newSource) :
+    AudioSource(std::move(filePtr), newSource)
 {
     if (valid()) {
         m_file->readFileIntoBuffer(m_buffer.buffer);
@@ -53,38 +54,4 @@ void AudioChunk::stop()
         m_file->setReadingOffset(0);
         alSourceStop(m_source);
     }
-}
-
-void AudioChunk::setLooping(bool looping)
-{
-    if (valid())
-        alSourcei(m_source, AL_LOOPING, looping ? AL_TRUE : AL_FALSE);
-}
-
-void AudioChunk::setOffset(duration_t offset)
-{
-    if (valid())
-        alSourcef(m_source, AL_SEC_OFFSET, offset.count());
-}
-
-duration_t AudioChunk::offset() const
-{
-    if (valid()) {
-        ALfloat seconds = 0.0f;
-        alGetSourcef(m_source, AL_SEC_OFFSET, &seconds);
-
-        return duration_t(seconds);
-    } else
-        return duration_t(0.0f);
-}
-
-bool AudioChunk::looping() const
-{
-    if (!valid())
-        return false;
-
-    ALint looping = 0;
-    alGetSourcei(m_source, AL_LOOPING, &looping);
-
-    return looping;
 }

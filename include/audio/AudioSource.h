@@ -64,11 +64,11 @@ public:
     virtual void pause() = 0;
     virtual void stop() = 0;
 
-    virtual void setLooping(bool looping) = 0;
-    virtual void setOffset(duration_t offset) = 0;
+    virtual void setLooping(bool looping);
+    virtual void setOffset(duration_t offset);
 
-    virtual bool looping() const = 0;
-    virtual duration_t offset() const = 0;
+    virtual bool looping() const;
+    virtual duration_t offset() const;
 
     void setPitch(float pitch);
     void setGain(float gain);

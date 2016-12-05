@@ -318,16 +318,6 @@ AudioSource::Type AudioSource::type() const
     }
 }
 
-bool AudioSource::looping() const
-{
-    if (!m_valid)
-        throw invalid_audiosource(m_source);
-
-    ALint result;
-    alGetSourcei(m_source, AL_LOOPING, &result);
-    return result;
-}
-
 unsigned int AudioSource::bufferID() const
 {
     if (!m_valid)
@@ -389,6 +379,38 @@ bool AudioSource::valid() const
 const duration_t &AudioSource::duration() const
 {
     return m_duration;
+}
+
+void AudioSource::setLooping(bool looping)
+{
+    if (m_valid)
+        alSourcei(m_source, AL_LOOPING, looping ? AL_TRUE : AL_FALSE);
+}
+
+void AudioSource::setOffset(duration_t offset)
+{
+    if (valid())
+        alSourcei(m_source, AL_SEC_OFFSET, offset.count());
+}
+
+bool AudioSource::looping() const
+{
+    if (!m_valid)
+        throw invalid_audiosource(m_source);
+
+    ALint result;
+    alGetSourcei(m_source, AL_LOOPING, &result);
+    return result;
+}
+
+duration_t AudioSource::offset() const
+{
+    if (!m_valid)
+        throw invalid_audiosource(m_source);
+
+    ALfloat result;
+    alGetSourcef(m_source, AL_SEC_OFFSET, &result);
+    return duration_t(result);
 }
 
 AudioSource::BufferWrapper::BufferWrapper()

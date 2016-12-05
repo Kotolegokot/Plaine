@@ -3,6 +3,7 @@
     The MIT License (MIT)
 
     Copyright (c) 2014 by Jakob Larsson
+    Copyright (c) 2016 by Kotik Andreev
 
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the "Software"),
@@ -29,24 +30,20 @@
 #include <memory>
 #include <unordered_map>
 #include <string>
-#include "AudioSource.h"
+#include "audio/AudioSource.h"
+#include "util/exceptions.h"
 
 class AudioChunk : public AudioSource {
     friend class AudioDevice;
-    explicit AudioChunk(std::unique_ptr<AudioFile> audioPtr, std::uint32_t newSource);
-
-    void play() override;
-    void pause() override;
-    void stop() override;
 
     AudioSource::BufferWrapper m_buffer;
 
 public:
-    void setLooping(bool looping) override;
-    void setOffset(duration_t offset) override;
+    explicit AudioChunk(std::unique_ptr<AudioFile> filePtr, std::uint32_t newSource);
 
-    duration_t offset() const override;
-    bool looping() const override;
+    void play() override;
+    void pause() override;
+    void stop() override;
 };
 
 #endif // AUDIO_CHUNK_H
