@@ -40,6 +40,7 @@ class AudioFile {
     SF_INFO m_fileInfo;
 public:
     AudioFile() = default;
+    AudioFile(const std::string &filePath);
     ~AudioFile();
 
     bool tryOpen(const std::string &filePath);
@@ -48,8 +49,8 @@ public:
     bool open() const;
 
     void setReadingOffset(float seconds);
-    bool readSecondIntoBuffer(ALuint buffer, bool allowLooping = false);
-    void readFileIntoBuffer(ALuint buffer);
+    bool readSecondIntoBuffer(unsigned int buffer, bool allowLooping = false);
+    void readFileIntoBuffer(unsigned int buffer);
 
     const SF_INFO &fileInfo() const;
 };

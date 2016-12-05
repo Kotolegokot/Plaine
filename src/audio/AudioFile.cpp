@@ -25,12 +25,17 @@
 
 #include "audio/AudioFile.h"
 
+AudioFile::AudioFile(const std::string &filePath)
+{
+    tryOpen(filePath);
+}
+
 AudioFile::~AudioFile()
 {
     close();
 }
 
-bool AudioFile::tryOpen(const std::__cxx11::string &filePath)
+bool AudioFile::tryOpen(const std::string &filePath)
 {
     m_file = sf_open(filePath.c_str(), SFM_READ, &m_fileInfo);
 
@@ -60,10 +65,10 @@ void AudioFile::setReadingOffset(float seconds)
     sf_seek(m_file, m_fileInfo.samplerate * seconds, SEEK_SET);
 }
 
-bool AudioFile::readSecondIntoBuffer(ALuint buffer, bool allowLooping)
+bool AudioFile::readSecondIntoBuffer(unsigned int buffer, bool allowLooping)
 {
     // read one second chunk of data
-    int sampleSecondCount = m_fileInfo.channels * m_fileInfo.samplerate;
+    const int sampleSecondCount = m_fileInfo.channels * m_fileInfo.samplerate;
     std::vector<ALshort> fileData(sampleSecondCount);
     int readCount = sf_read_short(m_file, &fileData[0], sampleSecondCount);
 
@@ -74,8 +79,8 @@ bool AudioFile::readSecondIntoBuffer(ALuint buffer, bool allowLooping)
 
         // keep reading data until we have all the data we need
         while (readCount < sampleSecondCount) {
-            int leftToRead = sampleSecondCount - readCount;
-            int newReadCount = sf_read_short(m_file, fileData.data() + readCount, leftToRead);
+            const int leftToRead = sampleSecondCount - readCount;
+            const int newReadCount = sf_read_short(m_file, fileData.data() + readCount, leftToRead);
 
             readCount += newReadCount;
 
@@ -95,10 +100,10 @@ bool AudioFile::readSecondIntoBuffer(ALuint buffer, bool allowLooping)
         return true;
     }
 
-    return true;
+    return false;
 }
 
-void AudioFile::readFileIntoBuffer(ALuint buffer)
+void AudioFile::readFileIntoBuffer(unsigned int buffer)
 {
     // read the whole file
     int sampleCount = m_fileInfo.frames * m_fileInfo.channels;
