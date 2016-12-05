@@ -35,20 +35,18 @@ class AudioChunk : public AudioSource {
     friend class AudioDevice;
     explicit AudioChunk(std::unique_ptr<AudioFile> audioPtr, std::uint32_t newSource);
 
-    void play();
-    void pause();
-    void stop();
+    void play() override;
+    void pause() override;
+    void stop() override;
 
     AudioSource::BufferWrapper m_buffer;
 
 public:
-    ~AudioChunk() = default;
+    void setLooping(bool looping) override;
+    void setOffset(duration_t offset) override;
 
-    void setLooping(bool looping);
-    void setOffset(duration_t offset);
-
-    duration_t offset() const;
-    bool lopped() const;
+    duration_t offset() const override;
+    bool looped() const override;
 };
 
 #endif // AUDIO_CHUNK_H

@@ -173,6 +173,16 @@ struct Vector3 {
         return *this;
     }
 
+    template <typename Num2>
+    auto distance(const Vector3<Num2> &other) const
+    {
+        auto dx = x - other.x;
+        auto dy = y - other.y;
+        auto dz = z - other.z;
+
+        return std::sqrt(dx*dx + dy*dy + dz*dz);
+    }
+
     Num x = 0;
     Num y = 0;
     Num z = 0;

@@ -62,7 +62,7 @@ void AudioListener::setUpVector(const Vector3<float> &up)
     setDirection(listenerDirection);
 }
 
-const Vector3<float> &AudioListener::getPosition()
+const Vector3<float> &AudioListener::position()
 {
     return listenerPosition;
 }

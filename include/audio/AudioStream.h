@@ -47,15 +47,15 @@ public:
     explicit AudioStream(std::unique_ptr<AudioFile> audioPtr, std::uint32_t newSource);
     ~AudioStream();
 
-    void play();
-    void pause();
-    void stop();
+    void play() override;
+    void pause() override;
+    void stop() override;
 
-    void setLooping(bool looping);
-    void setOffset(duration_t offset);
+    void setLooping(bool looping) override;
+    void setOffset(duration_t offset) override;
 
-    virtual duration_t offset() const;
-    bool looped() const;
+    virtual duration_t offset() const override;
+    bool looped() const override;
 };
 
 #endif // AUDIO_STREAM_H

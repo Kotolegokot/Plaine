@@ -43,7 +43,7 @@ public:
     static void setUpVector(const Vector3<float> &up);
 
     static float getVolume();
-    static const Vector3<float> &getPosition();
+    static const Vector3<float> &position();
 };
 
 #endif // AUDIO_LISTENER_H

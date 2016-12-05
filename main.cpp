@@ -32,6 +32,7 @@
 #include "audio/AudioStream.h"
 #include "audio/AudioChunk.h"
 #include "audio/Priority.h"
+#include "audio/AudioDevice.h"
 
 using namespace irr;
 
