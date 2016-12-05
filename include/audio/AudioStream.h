@@ -26,6 +26,7 @@
 #ifndef AUDIO_STREAM_H
 #define AUDIO_STREAM_H
 
+/*
 #include "audio/AudioSource.h"
 #include <array>
 #include <thread>
@@ -33,8 +34,6 @@
 using namespace std::chrono_literals;
 
 class AudioStream : public AudioSource {
-    friend class AudioDevice;
-
     bool m_loop = false;
     bool m_requestStop = false;
     duration_t m_playingOffset;
@@ -59,5 +58,6 @@ public:
     virtual duration_t offset() const override;
     bool looping() const override;
 };
+*/
 
 #endif // AUDIO_STREAM_H

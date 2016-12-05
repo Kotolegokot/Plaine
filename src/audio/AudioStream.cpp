@@ -25,6 +25,7 @@
 
 #include "audio/AudioStream.h"
 
+/*
 AudioStream::AudioStream(std::unique_ptr<AudioFile> audioPtr, uint32_t newSource) :
     AudioSource(std::move(audioPtr), newSource)
 {
@@ -178,3 +179,4 @@ duration_t AudioStream::offset() const
     } else
         return duration_t(0);
 }
+*/
