@@ -47,7 +47,7 @@ void AudioStream::play()
     if (valid() && !playing()) {
         m_requestStop = false;
 
-        if (status() == AudioSource::State::Stopped && !m_thread.joinable()) {
+        if (state() == AudioSource::State::Stopped && !m_thread.joinable()) {
             prepareStreaming();
             m_thread = std::thread(&AudioStream::processStream, this);
         }
@@ -95,7 +95,7 @@ void AudioStream::processStream()
 {
     bool regularStop = false;
     while (!regularStop) {
-        if (status() == AudioSource::State::Stopped) {
+        if (state() == AudioSource::State::Stopped) {
             if (!regularStop)
                 alSourcePlay(m_source);
             else {
@@ -163,7 +163,7 @@ void AudioStream::setOffset(duration_t offset)
 duration_t AudioStream::offset() const
 {
     if (valid()) {
-        if (status() != AudioSource::State::Stopped) {
+        if (state() != AudioSource::State::Stopped) {
             ALfloat seconds = 0;
             alGetSourcef(m_source, AL_SEC_OFFSET, &seconds);
 

@@ -43,7 +43,7 @@ class AudioSource {
     bool m_valid = true;
 
     ALuint invalidate();
-    duration_t m_duration;
+    /*const*/ duration_t m_duration;
 public:
     enum class State {
         Playing,
@@ -106,7 +106,9 @@ public:
     bool playing() const;
     int buffersQueued() const;
     int buffersProcessed() const;
+
     bool valid() const;
+    const duration_t &duration() const;
 
 protected:
     struct BufferWrapper {

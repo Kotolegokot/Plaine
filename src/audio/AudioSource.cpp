@@ -295,7 +295,7 @@ bool AudioSource::relativeToListener() const
     if (!m_valid)
         throw invalid_audiosource(m_source);
 
-    ALboolean result;
+    ALint result;
     alGetSourcei(m_source, AL_SOURCE_RELATIVE, &result);
     return result == AL_TRUE;
 }
@@ -308,12 +308,13 @@ AudioSource::Type AudioSource::type() const
     ALint result;
     alGetSourcei(m_source, AL_SOURCE_TYPE, &result);
     switch (result) {
-    case AL_UNDETERMINED:
-        return Type::Undetermined;
     case AL_STATIC:
         return Type::Static;
     case AL_STREAMING:
         return Type::Streaming;
+    case AL_UNDETERMINED:
+    default:
+        return Type::Undetermined;
     }
 }
 
@@ -322,7 +323,7 @@ bool AudioSource::looping() const
     if (!m_valid)
         throw invalid_audiosource(m_source);
 
-    ALboolean result;
+    ALint result;
     alGetSourcei(m_source, AL_LOOPING, &result);
     return result;
 }
@@ -332,7 +333,7 @@ unsigned int AudioSource::bufferID() const
     if (!m_valid)
         throw invalid_audiosource(m_source);
 
-    ALuint result;
+    ALint result;
     alGetSourcei(m_source, AL_BUFFER, &result);
     return result;
 }
@@ -349,6 +350,7 @@ AudioSource::State AudioSource::state() const
         return State::Playing;
     case AL_PAUSED:
         return State::Paused;
+    case AL_STOPPED:
     default:
         return State::Stopped;
     }
@@ -382,6 +384,11 @@ int AudioSource::buffersProcessed() const
 bool AudioSource::valid() const
 {
     return m_valid;
+}
+
+const duration_t &AudioSource::duration() const
+{
+    return m_duration;
 }
 
 AudioSource::BufferWrapper::BufferWrapper()
