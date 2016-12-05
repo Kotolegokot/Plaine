@@ -1,12 +1,30 @@
+/* This file is part of PlaneRunner.
+ *
+ * PlaneRunner is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * PlaneRunner is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PlaneRunner. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "World.h"
 
-World::World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration) :
+World::World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration,
+             const ChunkDB &chunkDB) :
     m_broadphase(std::make_unique<btDbvtBroadphase>()),
     m_collisionConfiguration(std::make_unique<btDefaultCollisionConfiguration>()),
     m_dispatcher(std::make_unique<btCollisionDispatcher>(m_collisionConfiguration.get())),
     m_solver(std::make_unique<btSequentialImpulseConstraintSolver>()),
     m_irrlichtDevice(irrlichtDevice),
     m_configuration(configuration),
+    m_chunkDB(chunkDB),
     m_light(*m_irrlichtDevice.getSceneManager()->addLightSceneNode(0, { 0, 0, 0 }, DEFAULT_LIGHT_COLOR, 300)),
     m_camera(*m_irrlichtDevice.getSceneManager()->addCameraSceneNode(0))
 {
@@ -19,7 +37,7 @@ World::World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration) :
                  m_solver.get(), m_collisionConfiguration.get());
         m_physicsWorld->setGravity({ 0, 0, 0 });
 
-        m_plane = std::make_unique<Plane>(*m_physicsWorld, m_irrlichtDevice);
+        m_plane = PlaneProducer().producePlane(*m_physicsWorld, m_irrlichtDevice);
         m_explosion = std::make_unique<Explosion>(*m_physicsWorld, m_irrlichtDevice,
                                                   m_plane->getPosition(), 1000);
 
@@ -30,10 +48,8 @@ World::World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration) :
 
                 // if one of the objects is the place
                 if (obj0->getUserIndex() == 1 || obj1->getUserIndex() == 1) {
-#if DEBUG_OUTPUT
-                    std::cout << "Plane collision occured" << std::endl;
-                    std::cout << "Collision impulse: " << cp.getAppliedImpulse() << std::endl;
-#endif // DEBUG_OUTPUT
+                    Log::debug("plane collision occured");
+                    Log::debug("collision impulse = ", cp.getAppliedImpulse());
 
                     // obj0 must always be the plane
                     if (obj1->getUserIndex() == 1)
@@ -41,8 +57,8 @@ World::World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration) :
 
                     Plane &plane = *static_cast<Plane *>(obj0->getUserPointer());
                     if (cp.getAppliedImpulse() > 400)
-                        plane.setExploded(true);
-                    else if (!plane.getExploded())
+                        plane.explode();
+                    else if (!plane.exploded())
                         plane.addScore(-cp.getAppliedImpulse());
                 }
 
@@ -120,18 +136,16 @@ void World::render(video::SColor color)
 void World::stepSimulation(btScalar timeStep, int maxSubSteps, btScalar fixedTimeStep)
 {
     m_explosion->setPosition(m_plane->getPosition());
-    m_gameOver = m_plane->getExploded();
+    m_gameOver = m_plane->exploded();
 
     m_physicsWorld->stepSimulation(timeStep, maxSubSteps, fixedTimeStep);
 
-#if DEBUG_OUTPUT
-    std::cout << "Simulation step: " << timeStep << "ms" << std::endl;
-#endif // DEBUG_OUTPUT
+    Log::debug("simulation step = ", timeStep, "ms");
 }
 
 void World::generate()
 {
-    m_generator->generate(m_plane->getPosition());
+    m_generator->generate(m_plane->getPosition(), m_chunkDB);
 }
 
 void World::updateAspectRatio()
@@ -158,9 +172,9 @@ Plane &World::plane()
 void World::updateCamera()
 {
     core::vector3df upVector(0, 1, 0);
-    upVector.rotateXYBy(m_plane->getEulerRotation().z() * core::RADTODEG64);
+    upVector.rotateXYBy(m_plane->getEulerRotationDeg().z());
 
-    m_camera.setPosition(m_plane->getNode().getPosition() + upVector * 0.3f * CAMERA_DISTANCE -
+    m_camera.setPosition(m_plane->node().getPosition() + upVector * 0.3f * CAMERA_DISTANCE -
                          core::vector3df(0, 0, CAMERA_DISTANCE));
     m_camera.setUpVector(upVector);
 

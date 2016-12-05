@@ -17,45 +17,44 @@
 #ifndef CRYSTAL_H
 #define CRYSTAL_H
 
-#include "obstacles/Cone.h"
-#include "IObstacle.h"
-#include "IObstaclePattern.h"
-#include "util.h"
+#include <memory>
+#include "interfaces/IBodyProducer.h"
+#include "interfaces/IObstaclePattern.h"
+#include "bodies/ConeProducer.h"
+#include "util/other.h"
 
+template <int Thickness, int Length>
 class Crystal : public IObstaclePattern
 {
 public:
-    Crystal(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &position, btScalar radius,
-        btScalar length) :
-        IObstaclePattern(world, device, position), radius(radius), length(length)
-    {
-        cone1 = std::make_unique<Cone>(world, device, position, radius, length / 2.0f);
-        cone2 = std::make_unique<Cone>(world, device, position + btVector3(0, 50, 0), radius, length / 2.0f);
+    Crystal(int id) :
+        IObstaclePattern(id) {}
 
-        // turn cone2 upside down
-        btTransform transform;
-        cone2->getRigidBody().getMotionState()->getWorldTransform(transform);
-        btQuaternion rotation(0, 0, PI<btScalar>);
-        transform.setRotation(rotation);
-        cone2->getRigidBody().setCenterOfMassTransform(transform);
+    Vector3<int> size() const override
+    {
+        return { Thickness, Length, Thickness };
     }
 
-    void addObstaclesToList(std::list<std::unique_ptr<IObstacle>> &list) override
+    std::vector<std::unique_ptr<IBodyProducer>>
+        producers() const override
     {
-        list.push_back(std::move(cone1));
-        list.push_back(std::move(cone2));
+        btVector3 position { Thickness * CELL_LENGTH * 0.5f,
+                             Length * CELL_LENGTH * 0.5f,
+                             Thickness * CELL_LENGTH * 0.5f };
+
+        constexpr btScalar radius = (Thickness - 0.6f) * CELL_LENGTH * 0.5f;
+        constexpr btScalar length = (Length - 0.2f) * CELL_LENGTH;
+
+        std::vector<std::unique_ptr<IBodyProducer>> result;
+        result.push_back(std::make_unique<ConeProducer>(radius, length * 0.5f));
+        result.push_back(std::make_unique<ConeProducer>(radius, length * 0.5f));
+
+        result[0]->relativeTransform.setOrigin(position);
+        result[1]->relativeTransform.setOrigin(position);
+        result[1]->relativeTransform.setRotation(btQuaternion(0, 0, PI<btScalar>));
+
+        return result;
     }
-
-    size_t getObstacleCount() const override
-    {
-        return 2;
-    }
-
-protected:
-    btScalar radius = 0;
-    btScalar length = 0;
-
-    std::unique_ptr<Cone> cone1, cone2;
 };
 
 #endif // CRYSTAL_H

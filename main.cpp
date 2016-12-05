@@ -15,13 +15,14 @@
  */
 
 #include <clocale>
-#include <cstdlib>
 #include <random>
+#include <exception>
 #include <irrlicht.h>
 
 #include "Game.h"
 #include "Config.h"
-#include "util.h"
+#include "Log.h"
+#include "util/i18n.h"
 
 using namespace irr;
 
@@ -39,7 +40,13 @@ int main()
     textdomain("planerunner");
 
     // create instance of game class and give it configuration structure
-    Game(data).start();
+    try {
+        Game(data).start();
+    } catch (const std::exception &e) {
+        Log::error(e.what());
+
+        return 1;
+    }
 
     return 0;
 }

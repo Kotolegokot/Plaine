@@ -21,7 +21,7 @@
 #include "EventReceiver.h"
 #include "Config.h"
 #include "Plane.h"
-#include "util.h"
+#include "util/constants.h"
 
 class PlaneControl
 {
@@ -30,6 +30,8 @@ public:
     void handle(EventReceiver &eventReceiver);
 
 private:
+    static constexpr btScalar FORWARD_IMPULSE = 50;
+
     static constexpr btScalar MAX_PITCH_ANGLE = 0.3f;
     static constexpr btScalar MAX_YAW_ANGLE = 0.40f;
 

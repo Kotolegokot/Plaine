@@ -23,14 +23,14 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <BulletCollision/CollisionDispatch/btCollisionObject.h>
-#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
+#include "Log.h"
 
 using namespace irr;
 
 class Explosion
 {
 public:
-    Explosion(btDynamicsWorld &world, IrrlichtDevice &device,
+    Explosion(btDynamicsWorld &world, IrrlichtDevice &/* device */,
               const btVector3 &position = btVector3(0, 0, 0), btScalar radius = 1000);
     ~Explosion();
 
@@ -41,7 +41,7 @@ public:
 
 private:
     btDynamicsWorld &world;
-    IrrlichtDevice &device;
+    /* IrrlichtDevice &device; */
     btScalar radius = 0.0f;
     std::unique_ptr<btGhostObject> explosionObject;
     std::unique_ptr<scene::IParticleSystemSceneNode> particleSystem;

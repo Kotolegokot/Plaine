@@ -22,10 +22,8 @@ Game::Game(const ConfigData &data)
 {
     // load configuration, initialize device and GUI
     configuration = data;
-    if (!initializeDevice())
-        return;
+    initializeDevice();
     initializeGUI();
-    initialized = true;
 }
 
 Game::~Game()
@@ -49,7 +47,7 @@ void Game::initializeGUI()
 
     Game::setSpriteBank(false);
     Game::setSpriteBank(true);
-    gui = new GUI(configuration, *guiEnvironment);
+    gui = std::make_unique<GUI>(configuration, *guiEnvironment);
     gui->addScreen(std::make_unique<MainMenuScreen>(configuration, *guiEnvironment), Screen::MAIN_MENU);
     gui->addScreen(std::make_unique<SettingsScreen>(configuration, *guiEnvironment), Screen::SETTINGS);
     gui->addScreen(std::make_unique<ControlSettingsScreen>(configuration, *guiEnvironment), Screen::CONTROL_SETTINGS);
@@ -58,13 +56,18 @@ void Game::initializeGUI()
     gui->addScreen(std::make_unique<GameOverScreen>(configuration, *guiEnvironment), Screen::GAME_OVER);
 }
 
-bool Game::initializeDevice()
+void Game::initializeDevice()
 {
+    if (initialized)
+        throw repeated_initialization();
+
     // if fullscreen is enabled, create an empty device
     //      to get screen resolution
     if (configuration.fullscreen)
     {
         IrrlichtDevice *nulldevice = createDevice(video::EDT_NULL);
+        if (!nulldevice)
+            throw initialization_error();
         configuration.resolution = nulldevice->getVideoModeList()->getDesktopResolution();
         nulldevice -> drop();
     }
@@ -72,11 +75,10 @@ bool Game::initializeDevice()
     // create device (which is simply a window in which the
     //      whole world is rendered)
     device = createDevice(video::EDT_OPENGL, configuration.resolution, 32,
-                          configuration.fullscreen, configuration.stencilBuffer, configuration.vsync);
-    if (!device) {
-        error("Couldn't create a device :(\n");
-        return false;
-    }
+                                   configuration.fullscreen, configuration.stencilBuffer,
+                                   configuration.vsync);
+    if (!device)
+        throw initialization_error();
     device->setWindowCaption(L"PlaneRunner");
 
     // get a lot of useful pointers from device
@@ -93,12 +95,7 @@ bool Game::initializeDevice()
     timer->setTime(0);
     timer->start();
 
-    return true;
-}
-
-void Game::error(const core::stringw &str) const
-{
-    std::wcerr << "Error: " << str.c_str() << std::endl;
+    initialized = true;
 }
 
 void Game::terminateDevice()
@@ -161,12 +158,6 @@ void Game::setSpriteBank(bool isControlButton)
 // show main menu
 void Game::mainMenu()
 {
-    // if game is not initialized send error message and exit
-    if (!initialized) {
-        error("device has failed to initialize!");
-        return;
-    }
-
     // set resolution to actual screen size
     configuration.resolution = driver->getScreenSize();
     // initialize menu
@@ -174,7 +165,7 @@ void Game::mainMenu()
     //sets cursor visible
     device->getCursorControl()->setVisible(true);
 
-    size_t catchingControlID = CONTROLS_COUNT;
+    std::size_t catchingControlID = CONTROLS_COUNT;
 
     ConfigData oldConfiguration = configuration;
 
@@ -248,10 +239,8 @@ void Game::mainMenu()
                 }
 
                 terminateDevice();
-                if (!initializeDevice())
-                    return;
+                initializeDevice();
                 initializeGUI();
-                initialized = true;
                 oldConfiguration = configuration;
 
                 gui->initialize(Screen::SETTINGS);
@@ -263,10 +252,8 @@ void Game::mainMenu()
                 configuration.fullscreen = !configuration.fullscreen;
 
                 terminateDevice();
-                if (!initializeDevice())
-                    return;
+                initializeDevice();
                 initializeGUI();
-                initialized = true;
                 oldConfiguration = configuration;
 
                 gui->initialize(Screen::SETTINGS);
@@ -288,10 +275,8 @@ void Game::mainMenu()
                 bool needRestart = configuration.needRestart(oldConfiguration);
                 if (needRestart) {
                     terminateDevice();
-                    if (!initializeDevice())
-                        return;
+                    initializeDevice();
                     initializeGUI();
-                    initialized = true;
                 }
 
                 gui->initialize(Screen::MAIN_MENU);
@@ -311,7 +296,7 @@ void Game::mainMenu()
             break;
 
         case Screen::CONTROL_SETTINGS:
-            for (size_t i = 0; i < CONTROLS_COUNT; i++)
+            for (std::size_t i = 0; i < CONTROLS_COUNT; i++)
                 if (eventReceiver->checkEvent(static_cast<GUI_ID>(gui->getCurrentScreenAsControlSettings().buttonsControl[i]->getID()))) {
                     eventReceiver->startCatchingKey();
                     catchingControlID = i;
@@ -337,7 +322,7 @@ void Game::mainMenu()
                 if (eventReceiver->lastKeyAvailable() &&
                     (!keyCodeName(eventReceiver->getLastKey()).empty() || eventReceiver->getLastKey() == KEY_ESCAPE)) {
                     if (!eventReceiver->checkKeyPressed(KEY_ESCAPE)) {
-                        for (size_t i = 0; i < CONTROLS_COUNT; i++)
+                        for (std::size_t i = 0; i < CONTROLS_COUNT; i++)
                             if (configuration.controls[i] == eventReceiver->getLastKey())
                                 configuration.controls[i] = KEY_KEY_CODES_COUNT;
                         configuration.controls[catchingControlID] = eventReceiver->getLastKey();
@@ -390,9 +375,12 @@ void Game::mainMenu()
 // returns false if quit is pressed
 bool Game::run()
 {
+    // generate some chunks
+    auto chunkDB = generateChunkDB();
+
     gui->initialize(Screen::HUD);
-    world = std::make_unique<World>(*device, configuration);
-    planeControl = new PlaneControl(world->plane(), configuration.controls);
+    world = std::make_unique<World>(*device, configuration, *chunkDB);
+    planeControl = std::make_unique<PlaneControl>(world->plane(), configuration.controls);
 
     constexpr unsigned int tick = 1000.0f / 60.0f;
     u32 timePrevious, timeCurrent;
@@ -461,7 +449,7 @@ bool Game::run()
             case Screen::GAME_OVER: {
                 {
                     core::stringw score(_w("Your score: "));
-                    score += world->plane().getScore();
+                    score += world->plane().score();
                     gui->getCurrentScreenAsGameOver().textScore->setText(score.c_str());
                 }
 
@@ -469,16 +457,13 @@ bool Game::run()
                 device->getCursorControl()->setVisible(true);
 
                 // still continue simulation as we wanna see plane blowing up when we lose
-                #if DEBUG_OUTPUT
-                    std::cout << "=== BEGIN SIMULATION ===" << std::endl;;
-                #endif // DEBUG_OUTPUT
+                Log::debug("=== BEGIN SIMULATION STEP ===");
+
                 timeCurrent = timer->getTime();
                 const float step = timeCurrent - timePrevious;
                 world->stepSimulation((step / 1000.0), 10, tick / 1000.0f);
                 timePrevious = timeCurrent;
-                #if DEBUG_OUTPUT
-                    std::cout << "=== END_SIMULATION ===" << std::endl << std::endl;
-                #endif
+                Log::debug("=== END SIMULATION STEP ===");
 
                 world->render(color);
                 handleSelecting();
@@ -491,9 +476,7 @@ bool Game::run()
                 break;
             }
             case Screen::HUD: {
-                #if DEBUG_OUTPUT
-                    std::cout << "=== BEGIN SIMULATION ===" << std::endl;;
-                #endif // DEBUG_OUTPUT
+                Log::debug("=== BEGIN SIMULATION STEP ===");
 
                 // physics simulation
                 timeCurrent = timer->getTime();
@@ -516,9 +499,7 @@ bool Game::run()
                 }
 
                 deltaTime = timer->getTime() - accumulator;
-                #if DEBUG_OUTPUT
-                    std::cout << "Control handling delta: " << deltaTime << "ms" << std::endl;
-                #endif // DEBUG_OUTPUT
+                Log::debug("generation and control handling delta = ", deltaTime, "ms");
                 while (deltaTime >= tick) {
                     deltaTime -= tick;
                     accumulator += tick;
@@ -528,9 +509,7 @@ bool Game::run()
                     world->plane().addScore(2);
                 }
 
-                #if DEBUG_OUTPUT
-                    std::cout << "=== END_SIMULATION ===" << std::endl << std::endl;
-                #endif
+                Log::debug("=== END SIMULATION STEP ===");
 
                 world->render(color);
                 device->getCursorControl()->setVisible(false); //set cursor invisible
@@ -563,7 +542,7 @@ void Game::updateHUD()
     // camera position
     {
         core::stringw cameraPosition = _w("Plane position: (");
-        core::vector3df position = world->plane().getNode().getPosition();
+        core::vector3df position = world->plane().node().getPosition();
         cameraPosition += position.X;
         cameraPosition += ", ";
         cameraPosition += position.Y;
@@ -572,10 +551,7 @@ void Game::updateHUD()
         cameraPosition += ")";
         gui->getCurrentScreenAsHUD().textCameraPosition->setText(cameraPosition.c_str());
 
-        #if DEBUG_OUTPUT
-            std::cout << "Plane position: (" << position.X << ", " << position.Y
-                      << ", " << position.Z << ")" << std::endl;
-        #endif // DEBUG_OUTPUT
+        Log::debug("plane position = (", position.X, ", ", position.Y, ", ", position.Z, ")");
     }
 
     // cube counter
@@ -584,9 +560,7 @@ void Game::updateHUD()
         obstacles += world->obstacles();
         gui->getCurrentScreenAsHUD().textObstaclesCount->setText(obstacles.c_str());
 
-        #if DEBUG_OUTPUT
-            std::cout << "Obstacles: " << world->obstacles() << std::endl;
-        #endif // DEBUG_OUTPUT
+        Log::debug("obstacles = ", world->obstacles());
     }
 
     // fps counter
@@ -595,57 +569,44 @@ void Game::updateHUD()
         fps += driver->getFPS();
         gui->getCurrentScreenAsHUD().textFPS->setText(fps.c_str());
 
-        #if DEBUG_OUTPUT
-            std::cout << "FPS: " << driver->getFPS() << std::endl;
-        #endif // DEBUG_OUTPUT
+        Log::debug("FPS = ", driver->getFPS());
     }
 
     // velocity counter
     {
         core::stringw velocity = _w("Linear velocity: ");
-        velocity += (int) world->plane().getRigidBody().getLinearVelocity().length();
+        velocity += (int) world->plane().rigidBody().getLinearVelocity().length();
         velocity += _w("; Angular velocity: ");
-        velocity += world->plane().getRigidBody().getAngularVelocity().length();
+        velocity += world->plane().rigidBody().getAngularVelocity().length();
         gui->getCurrentScreenAsHUD().textVelocity->setText(velocity.c_str());
 
-#if DEBUG_OUTPUT
-        std::cout << "Linear velocity: "
-                  << world->plane().getRigidBody().getLinearVelocity().length()
-                  << std::endl;
-        std::cout << "Angular velocity: "
-                  << world->plane().getRigidBody().getAngularVelocity().length()
-                  << std::endl;
-#endif // DEBUG_OUTPUT
+        Log::debug("linear velocity = ", world->plane().getLinearVelocity().length());
+        Log::debug("angular velocity = ", world->plane().getLinearVelocity().length());
     }
 
     // rotation counter
     {
-        btVector3 rotation = world->plane().getEulerRotation();
+        btVector3 rotation = world->plane().getEulerRotationDeg();
 
         core::stringw rotation_str = _w("Pitch: ");
         rotation_str += rotation.x();
-        rotation_str += _w("; Yaw: ");
+        rotation_str += _w("°; Yaw: ");
         rotation_str += rotation.y();
-        rotation_str += _w("; Roll: ");
+        rotation_str += _w("°; Roll: ");
         rotation_str += rotation.z();
+        rotation_str += _w("°");
         gui->getCurrentScreenAsHUD().textAngle->setText(rotation_str.c_str());
 
-#if DEBUG_OUTPUT
-        std::cout << "Pitch: " << rotation.x() << std::endl;
-        std::cout << "Yaw: " << rotation.y() << std::endl;
-        std::cout << "Roll: " << rotation.z() << std::endl;
-#endif // DEBUG_OUTPUT
+        Log::debug("rotation = (", rotation.x(), ", ", rotation.y(), ", ", rotation.z(), ")");
     }
 
     // score counter
     {
         core::stringw score = _w("Score: ");
-        score += world->plane().getScore();
+        score += world->plane().score();
         gui->getCurrentScreenAsHUD().textScore->setText(score.c_str());
 
-#if DEBUG_OUTPUT
-        std::cout << "Score: " << world->plane().getScore() << std::endl;
-#endif // DEBUG_OUTPUT
+        Log::debug("score = ", world->plane().score());
     }
 }
 
@@ -677,4 +638,35 @@ void Game::handleSelecting()
             event.GUIEvent.EventType = gui::EGET_BUTTON_CLICKED;
             device->postEventFromUser(event);
         }
+}
+
+
+std::unique_ptr<ChunkDB> Game::generateChunkDB()
+{
+    auto chunkDB = std::make_unique<ChunkDB>();
+
+    static const std::size_t THREADS = std::max(1u, std::thread::hardware_concurrency());
+
+    static const std::size_t CHUNKS_PER_THREAD = CHUNK_DB_SIZE / THREADS;
+
+    auto generateRange =
+        [&chunkDB](std::size_t begin, std::size_t end) mutable
+        {
+            for (std::size_t i = begin; i < end; i++)
+                chunkDB->at(i).generate();
+        };
+
+    std::vector<std::thread> threads;
+
+    // first THREADS - 1 pieces
+    for (std::size_t i = 0; i < THREADS - 1; i++)
+        threads.emplace_back(generateRange, i * CHUNKS_PER_THREAD, (i + 1) * CHUNKS_PER_THREAD);
+
+    // last piece
+    generateRange((THREADS - 1) * CHUNKS_PER_THREAD, chunkDB->size());
+
+    // waiting for all the threads to get done
+    std::for_each(threads.begin(), threads.end(), std::mem_fn(&std::thread::join));
+
+    return chunkDB;
 }

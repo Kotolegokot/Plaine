@@ -1,3 +1,19 @@
+/* This file is part of PlaneRunner.
+ *
+ * PlaneRunner is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * PlaneRunner is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PlaneRunner. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef WORLD_H
 #define WORLD_H
 
@@ -8,16 +24,25 @@
 #include <BulletCollision/CollisionDispatch/btCollisionObject.h>
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include "ObstacleGenerator.h"
+#include "PlaneProducer.h"
 #include "Plane.h"
 #include "Explosion.h"
+#include "Chunk.h"
 #include "Config.h"
-#include "options.h"
+#include "util/options.h"
 
 using namespace irr;
 
+#if FAR_CAMERA_DISTANCE
+constexpr btScalar CAMERA_DISTANCE = 600;
+#else
+constexpr btScalar CAMERA_DISTANCE = 200;
+#endif // FAR_CAMERA_DISTANCE
+
 class World {
 public:
-    World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration);
+    World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration,
+          const ChunkDB &chunkDB);
     ~World();
 
     void render(video::SColor color);
@@ -44,6 +69,7 @@ private:
 
     IrrlichtDevice &m_irrlichtDevice;
     const ConfigData &m_configuration;
+    const ChunkDB &m_chunkDB;
 
 #if DEBUG_DRAWER_ENABLED
     std::unique_ptr<btIDebugDraw> debugDrawer;

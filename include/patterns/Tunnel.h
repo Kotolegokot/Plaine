@@ -17,39 +17,49 @@
 #ifndef TUNNEL_H
 #define TUNNEL_H
 
-#include "obstacles/Box.h"
-#include "IObstacle.h"
-#include "IObstaclePattern.h"
+#include <memory>
+#include "interfaces/IBodyProducer.h"
+#include "interfaces/IObstaclePattern.h"
+#include "bodies/BoxProducer.h"
+#include "util/other.h"
+
+using namespace irr;
 
 class Tunnel : public IObstaclePattern
 {
 public:
-    Tunnel(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &position, btScalar radius,
-        btScalar length) :
-        IObstaclePattern(world, device, position), radius(radius), length(length)
+    Tunnel(int id) :
+        IObstaclePattern(id) {}
+
+    Vector3<int> size() const override
     {
-        boxes[0] = std::make_unique<Box>(world, device, position + btVector3(radius, 0, 0), btVector3(radius / 10, radius, length / 2));
-        boxes[1] = std::make_unique<Box>(world, device, position + btVector3(-radius, 0, 0), btVector3(radius /10, radius, length / 2));
-        boxes[2] = std::make_unique<Box>(world, device, position + btVector3(0, radius, 0), btVector3(radius, radius / 10, length / 2));
-        boxes[3] = std::make_unique<Box>(world, device, position + btVector3(0, -radius, 0), btVector3(radius, radius / 10, length / 2));
+        return { 1, 1, 2 };
     }
 
-    void addObstaclesToList(std::list<std::unique_ptr<IObstacle>> &list) override
+    std::vector<std::unique_ptr<IBodyProducer>>
+        producers() const override
     {
-        for (int i = 0; i < 4; i++)
-            list.push_back(std::move(boxes[i]));
+        btVector3 position { CELL_LENGTH * 0.5f, CELL_LENGTH * 0.5f, CELL_LENGTH };
+
+        constexpr btScalar radius = CELL_LENGTH * 0.4f;
+        constexpr btScalar length = CELL_LENGTH * 1.8f;
+
+        std::vector<std::unique_ptr<IBodyProducer>> result;
+
+        result.push_back(std::make_unique<BoxProducer>(btVector3(radius / 10, radius, length / 2)));
+        result.back()->relativeTransform.setOrigin(position + btVector3(radius, 0, 0));
+
+        result.push_back(std::make_unique<BoxProducer>(btVector3(radius / 10, radius, length / 2)));
+        result.back()->relativeTransform.setOrigin(position + btVector3(-radius, 0, 0));
+
+        result.push_back(std::make_unique<BoxProducer>(btVector3(radius, radius / 10, length / 2)));
+        result.back()->relativeTransform.setOrigin(position + btVector3(0, radius, 0));
+
+        result.push_back(std::make_unique<BoxProducer>(btVector3(radius, radius / 10, length / 2)));
+        result.back()->relativeTransform.setOrigin(position + btVector3(0, -radius, 0));
+
+        return result;
     }
-
-    size_t getObstacleCount() const override
-    {
-        return 4;
-    }
-
-protected:
-    btScalar radius = 0;
-    btScalar length = 0;
-
-    std::unique_ptr<Box> boxes[4] = { 0, 0, 0, 0 };
 };
 
 #endif // TUNNEL_H

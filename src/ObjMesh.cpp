@@ -25,7 +25,8 @@ std::vector<ObjMesh::Item> ObjMesh::parse(const std::string &filename)
 {
     std::ifstream inputFile(filename);
     if (!inputFile.is_open()) {
-        std::cerr << "Error: unable to open file\"" << filename << "\" for reading" << std::endl;
+        Log::warning("unable to open file\"", filename, "\" for reading.");
+
         return std::vector<Item>();
     }
 
@@ -56,7 +57,7 @@ std::vector<ObjMesh::Item> ObjMesh::parse(const std::string &filename)
             } else if (c == EOF) {
                 break;
             } else {
-                std::cerr << "Error: config \"" << filename << "\" is invalid." << std::endl;
+                Log::warning("config \"", filename, "\" is invalid.");
                 return std::vector<Item>();
             }
             break;
@@ -141,16 +142,16 @@ std::vector<ObjMesh::Item> ObjMesh::parse(const std::string &filename)
     return items;
 }
 
-void ObjMesh::error(Item::ItemType expected, Item::ItemType found)
+void ObjMesh::warning(Item::ItemType expected, Item::ItemType found)
 {
-    std::cout << "Error: " + Item::typeToString(expected) + " expected, but " +
-        Item::typeToString(found) + " found." << std::endl;
+    Log::warning(Item::typeToString(expected), " expected, but ",
+                 Item::typeToString(found), " found.");
 }
 
 #define \
 EXPECT(_expected) {\
     if ((*i).type != _expected) {\
-        error(_expected, (*i).type);\
+        warning(_expected, (*i).type);\
         goToNextNEWLINE = true;\
         state = NONE;\
         break;\
@@ -234,7 +235,7 @@ void ObjMesh::loadMesh(const std::string &filename, btScalar scale)
 
             case FACE:
                 {
-                    std::vector<size_t> polygon;
+                    std::vector<std::size_t> polygon;
 
                     while (i->type != Item::NEWLINE) {
                         EXPECT(Item::INT);
@@ -255,9 +256,9 @@ void ObjMesh::loadMesh(const std::string &filename, btScalar scale)
                                     ++i;
                                 }
                             } else {
-                                std::cout << "Error: " + Item::typeToString(Item::SLASH) + " or " +
-                                    Item::typeToString(Item::INT) + " expected, but " +
-                                    Item::typeToString(i->type) + " found." << std::endl;
+                                Log::warning(Item::typeToString(Item::SLASH), " or ",
+                                             Item::typeToString(Item::INT) + " expected, but ",
+                                             Item::typeToString(i->type) + " found.");
                                 state = NONE;
                                 goToNextNEWLINE = true;
                                 break;
@@ -278,9 +279,9 @@ void ObjMesh::loadMesh(const std::string &filename, btScalar scale)
     for (std::vector<btVector3>::const_iterator i = vertices.cbegin(); i != vertices.cend(); i++)
         out << "v " << i->x() << " " << i->y() << " " << i->z() << std::endl;
 
-    for (std::vector<std::vector<size_t>>::const_iterator i = polygons.cbegin(); i != polygons.cend(); i++) {
+    for (std::vector<std::vector<std::size_t>>::const_iterator i = polygons.cbegin(); i != polygons.cend(); i++) {
         out << "f ";
-        for (std::vector<size_t>::const_iterator j = i->cbegin(); j != i->cend(); j++)
+        for (std::vector<std::size_t>::const_iterator j = i->cbegin(); j != i->cend(); j++)
             out << *j << " ";
         out << std::endl;
     }*/
@@ -289,8 +290,8 @@ void ObjMesh::loadMesh(const std::string &filename, btScalar scale)
 std::unique_ptr<btTriangleMesh> ObjMesh::getTriangleMesh() const
 {
     auto triangleMesh = std::make_unique<btTriangleMesh>();
-    for (const std::vector<size_t> &polygon : polygons)
-        for (size_t i = 1; i < polygon.size() - 1; i++)
+    for (const std::vector<std::size_t> &polygon : polygons)
+        for (std::size_t i = 1; i < polygon.size() - 1; i++)
             triangleMesh->addTriangle(vertices[polygon[0]], vertices[polygon[i]], vertices[polygon[i + 1]]);
 
     return triangleMesh;
@@ -301,7 +302,7 @@ btVector3 *ObjMesh::getPoints()
     return vertices.data();
 }
 
-size_t ObjMesh::getPointsCount() const
+std::size_t ObjMesh::getPointsCount() const
 {
     return vertices.size();
 }

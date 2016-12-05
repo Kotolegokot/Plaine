@@ -17,81 +17,41 @@
 #ifndef PLANE_H
 #define PLANE_H
 
-#include <algorithm>
+#include <memory>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
-#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
-#include "IBody.h"
-#include "ObjMesh.h"
-#include "util.h"
+#include "MotionState.h"
+#include "Body.h"
 
-#define PLANE_MODEL "media/models/plane.obj"
+using namespace irr;
 
-#if FAR_CAMERA_DISTANCE
-    #define CAMERA_DISTANCE 600
-#else
-    #define CAMERA_DISTANCE 200
-#endif // FAR_CAMERA_DISTANCE
-
-#define PLANE_MASS 1
-
-// this class defines plane
-// currently it is just a sphere
-//
-// see IBody for more information
-class Plane : public IBody
-{
+class Plane : public Body {
 public:
-    Plane(btDynamicsWorld &world, IrrlichtDevice &device, const btVector3 &position = { 0, 0, 0 });
+    Plane(btDynamicsWorld &physicsWorld, std::unique_ptr<btRigidBody> rigidBody) :
+        Body(physicsWorld, std::move(rigidBody)) {}
 
-    void setExploded(bool exploded);
-    bool getExploded() const;
+    void explode() { m_exploded = true; }
+    bool exploded() const { return m_exploded; }
 
-    void disappear();
-    void appear();
+    void addScore(long score)
+    {
+        if (score > 0)
+            m_score += score * positiveMultiplier;
+        else
+            m_score += score * negativeMultiplier;
 
-    // some convenient
-    btVector3 getLinearVelocity() const;
-    void setLinearVelocity(const btVector3 &linearVelocity);
+        if (m_score < 0)
+            m_score = 0;
+    }
 
-    btScalar getScalarLinearVelocity() const;
-    void setScalarLinearVelocity(btScalar length);
+    long score() const { return m_score; }
+    void nullifyScore() { m_score = 0; }
 
-    btVector3 getAngularVelocity() const;
-    void setAngularVelocity(const btVector3 &angularVelocity);
-
-    btScalar getScalarAngularVelocity() const;
-    void setScalarAngularVelocity(btScalar length);
-
-    btQuaternion getRotation() const;
-    void setRotation(const btQuaternion &rotation);
-
-    btVector3 getEulerRotation() const;
-    void setEulerRotation(const btVector3 &rotation);
-
-    void getAxisAngleRotation(btVector3 &axis, btScalar &angle) const;
-    void setAxisAngleRotation(const btVector3 &axis, btScalar angle);
-
-    long getScore() const;
-    void addScore(long addScore);
-    void clearScore();
-
-    int getPositiveMultiplier() const;
-    void setPositiveMultiplier(int positiveMultiplier);
-
-    int getNegativeMultiplier() const;
-    void setNegativeMultiplier(int negativeMultiplier);
-protected:
-    virtual std::unique_ptr<scene::ISceneNode> createNode() override;
-    virtual void createMotionState(std::unique_ptr<scene::ISceneNode> node) override;
-    virtual void createShape() override;
-    virtual btScalar getMass() override;
-
-private:
-    bool exploded = false;
-    long score = 0;
     int positiveMultiplier = 1;
     int negativeMultiplier = 1;
+private:
+    bool m_exploded = false;
+    long m_score = 0;
 };
 
 #endif // PLANE_H

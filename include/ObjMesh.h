@@ -24,7 +24,7 @@
 #include <string>
 #include <sstream>
 #include <btBulletDynamicsCommon.h>
-#include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
+#include "Log.h"
 
 class ObjMesh
 {
@@ -34,12 +34,12 @@ public:
     void loadMesh(const std::string &filename, btScalar scale = 1.0f);
     std::unique_ptr<btTriangleMesh> getTriangleMesh() const;
     btVector3 *getPoints();
-    size_t getPointsCount() const;
+    std::size_t getPointsCount() const;
     void setPoints(btConvexHullShape &shape);
 
 private:
     std::vector<btVector3> vertices;
-    std::vector<std::vector<size_t>> polygons;
+    std::vector<std::vector<std::size_t>> polygons;
 
     struct Item {
         enum ItemType { SLASH, INT, FLOAT, KEYWORD, STRING, COMMENT, NEWLINE };
@@ -127,7 +127,7 @@ private:
         void *data = nullptr;
     };
     static std::vector<Item> parse(const std::string &filename);
-    void error(Item::ItemType expected, Item::ItemType found);
+    void warning(Item::ItemType expected, Item::ItemType found);
 };
 
 #endif // OBJMESH_H

@@ -16,6 +16,7 @@
 
 #include "PlaneControl.h"
 
+constexpr btScalar PlaneControl::FORWARD_IMPULSE;
 constexpr btScalar PlaneControl::MAX_PITCH_ANGLE;
 constexpr btScalar PlaneControl::MAX_YAW_ANGLE;
 constexpr btScalar PlaneControl::MAX_ROLL_VELOCITY;
@@ -36,7 +37,7 @@ void PlaneControl::handle(EventReceiver &eventReceiver)
     btScalar angle;
     plane.getAxisAngleRotation(axis, angle);
 
-    btVector3 rotation = plane.getEulerRotation();
+    btVector3 rotation = plane.getEulerRotationRad();
 
     btVector3 angularVelocity = plane.getAngularVelocity();
 
@@ -118,16 +119,19 @@ void PlaneControl::handle(EventReceiver &eventReceiver)
     }
 
     angularVelocity = angularVelocity.rotate(axis, angle);
+    notNanAssert(angularVelocity);
     plane.setAngularVelocity(angularVelocity);
 
     sideImpulse = sideImpulse.rotate(axis, angle);
     sideImpulse.setZ(0);
-    plane.getRigidBody().applyCentralImpulse(sideImpulse);
+    notNanAssert(sideImpulse);
+    plane.rigidBody().applyCentralImpulse(sideImpulse);
 
-    plane.getRigidBody().applyCentralImpulse(btVector3(0, 0, 50));
+    plane.rigidBody().applyCentralImpulse(btVector3(0, 0, FORWARD_IMPULSE));
 
     // air resistance simulation
-    btVector3 linearVelocity = -plane.getRigidBody().getLinearVelocity();
+    btVector3 linearVelocity = -plane.getLinearVelocity();
     linearVelocity *= 0.00001f*linearVelocity.length();
-    plane.getRigidBody().applyCentralImpulse(linearVelocity);
+    notNanAssert(linearVelocity);
+    plane.rigidBody().applyCentralImpulse(linearVelocity);
 }

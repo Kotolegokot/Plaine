@@ -15,183 +15,109 @@
  */
 
 #include "ObstacleGenerator.h"
-#include "util.h"
-#include "options.h"
 
 using namespace irr;
-
-constexpr btScalar ObstacleGenerator::STEP;
-constexpr btScalar ObstacleGenerator::START;
 
 ObstacleGenerator::ObstacleGenerator(btDynamicsWorld &world, IrrlichtDevice &device, btScalar farValue, btScalar buffer) :
     world(world), device(device), m_farValue(farValue), m_buffer(buffer) {}
 
-ObstacleGenerator::~ObstacleGenerator()
+void ObstacleGenerator::generate(const btVector3 &playerPosition, const ChunkDB &chunkDB)
 {
-    // remove all stored cubes
-    while (!m_obstacles.empty())
-        m_obstacles.pop_front();
-}
+    unsigned long obstaclesGenerated = 0;
 
-void ObstacleGenerator::generate(const btVector3 &playerPosition)
-{
-    // number of obstacles generated within this tick
-    #if DEBUG_OUTPUT
-    unsigned long obstacleGenerated = 0;
-    auto handleCell = [&obstacleGenerated, this](btScalar x, btScalar y, btScalar z)
-    #else
-    auto handleCell =  [this](btScalar x, btScalar y, btScalar z)
-    #endif // DEBUG_OUTPUT
-    {
-        if (z < START)
-            return;
+    const Cuboid<long> view = fieldOfView(playerPosition) / CELL_LENGTH; //field of view in cells
+    Vector3<int> cell; // current cell to generate
 
-        btScalar newX = x + Randomizer::getFloat(-100, 100);
-        btScalar newY = y + Randomizer::getFloat(-100, 100);
-        btScalar newZ = z + Randomizer::getFloat(-100, 100);
+    for (cell.z = back(view); cell.z <= front(generatedCuboid); cell.z++) {
+        for (cell.x = left(view); cell.x < left(generatedCuboid); cell.x++)
+            for (cell.y = bottom(view); cell.y <= top(view); cell.y++)
+                obstaclesGenerated += insertCell(cell, chunkDB);
 
-        // create obstacles and add them to the deque
-        switch (Randomizer::getInt(0, 7)) {
-        case 0:
-            {
-                Tunnel tunnel(world, device, btVector3(newX, newY, newZ), Randomizer::getFloat(100, 200), Randomizer::getFloat(300, 600));
-                tunnel.addObstaclesToList(m_obstacles);
-                obstacleCount += tunnel.getObstacleCount();
-                #if DEBUG_OUTPUT
-                    obstacleGenerated += tunnel.getObstacleCount();
-                #endif // DEBUG_OUTPUT
-                break;
-            }
-        case 1:
-            {
-                Crystal crystal(world, device, btVector3(newX, newY, newZ), Randomizer::getFloat(50.f, 100.f), Randomizer::getFloat(300.f, 600.f));
-                crystal.addObstaclesToList(m_obstacles);
-                obstacleCount += crystal.getObstacleCount();
-                #if DEBUG_OUTPUT
-                    obstacleGenerated += crystal.getObstacleCount();
-                #endif // DEBUG_OUTPUT
-                break;
-            }
-        case 2:
-            {
-                break;
-                Valley<5> valley(world, device, btVector3(newX, newY, newZ), 600);
-                valley.addObstaclesToList(m_obstacles);
-                obstacleCount += valley.getObstacleCount();
-                #if DEBUG_OUTPUT
-                    obstacleGenerated += valley.getObstacleCount();
-                #endif
-                break;
-            }
-        case 3:
-            {
-                std::unique_ptr<IObstacle> obstacle =
-                    std::make_unique<Icosahedron>(world, device, btVector3(newX, newY, newZ), Randomizer::getFloat(150.f, 350.f));
-                m_obstacles.push_back(std::move(obstacle));
-                obstacleCount++;
-                #if DEBUG_OUTPUT
-                    obstacleGenerated++;
-                #endif // DEBUG_OUTPUT
-                break;
-            }
-        case 4:
-            {
-                std::unique_ptr<IObstacle> obstacle =
-                    std::make_unique<Icosphere2>(world, device, btVector3(newX, newY, newZ), Randomizer::getFloat(50.f, 200.f));
-                m_obstacles.push_back(std::move(obstacle));
-                obstacleCount++;
-                #if DEBUG_OUTPUT
-                    obstacleGenerated++;
-                #endif // DEBUG_OUTPUT
-                break;
-            }
-        case 5:
-            {
-                std::unique_ptr<IObstacle> obstacle =
-                    std::make_unique<Tetrahedron>(world, device, btVector3(newX, newY, newZ), Randomizer::getFloat(200.f, 400.f));
-                m_obstacles.push_back(std::move(obstacle));
-                obstacleCount++;
-                #if DEBUG_OUTPUT
-                    obstacleGenerated++;
-                #endif // DEBUG_OUTPUT
-                break;
-            }
-        case 6:
-            {
-                //Emptiness empt(nothing);
-                //empt.add_to_the_world(world, device);
-                break;
-            }
-        default:
-            break;
+        for (cell.x = left(generatedCuboid); cell.x <= right(generatedCuboid); cell.x++) {
+            for (cell.y = bottom(view); cell.y < bottom(generatedCuboid); cell.y++)
+                obstaclesGenerated += insertCell(cell, chunkDB);
+
+            for (cell.y = top(generatedCuboid) + 1; cell.y <= top(view); cell.y++)
+                obstaclesGenerated += insertCell(cell, chunkDB);
         }
 
-        //if (Randomizer::getInt(1, 1) == 1)
-        //    body->getRigidBody()->applyTorqueImpulse(btVector3(Randomizer::getFloat(-10000, 10000), Randomizer::getFloat(-10000, 10000), Randomizer::getFloat(-10000, 10000))*body->getMass());
-        //if (Randomizer::getInt(1, 1) == 1)
-        //    body->getRigidBody()->applyCentralImpulse(btVector3(Randomizer::getFloat(-100, 100), Randomizer::getFloat(-100, 100), Randomizer::getFloat(-100, 100))*body->getMass());
-    };
-
-    // The Z loop must be the first here, because the obstacle deque must be sorted by obstacle' Z coordinate
-    for (btScalar z = preciseEdge(playerPosition.z() - m_buffer); z <= generatedEdgeZ; z += STEP) {
-
-        for (btScalar x = preciseEdge(playerPosition.x() - farValueWithBuffer()); x < generatedEdgeLeft; x += STEP)
-            for (btScalar y = preciseEdge(playerPosition.y() - farValueWithBuffer());
-                y <= preciseEdge(playerPosition.y() + farValueWithBuffer()); y += STEP)
-            {
-                handleCell(x, y, z);
-            }
-
-        for (btScalar x = generatedEdgeLeft; x <= generatedEdgeRight; x += STEP) {
-            for (btScalar y = preciseEdge(playerPosition.y() - farValueWithBuffer()); y < generatedEdgeBottom; y += STEP)
-                handleCell(x, y, z);
-
-            for (btScalar y = generatedEdgeTop + STEP; y <= preciseEdge(playerPosition.y() + farValueWithBuffer()); y += STEP)
-                handleCell(x, y, z);
-        }
-
-        for (btScalar x = generatedEdgeRight + STEP; x <= preciseEdge(playerPosition.x() + farValueWithBuffer()); x += STEP)
-            for (btScalar y = preciseEdge(playerPosition.y() - farValueWithBuffer());
-                y <= preciseEdge(playerPosition.y() + farValueWithBuffer()); y += STEP)
-            {
-                handleCell(x, y, z);
-            }
+        for (cell.x = right(generatedCuboid) + 1; cell.x <= right(view); cell.x++)
+            for (cell.y = bottom(view); cell.y <= top(view); cell.y++)
+                obstaclesGenerated += insertCell(cell, chunkDB);
     }
 
-    for (btScalar z = generatedEdgeZ + STEP; z <= preciseEdge(playerPosition.z() + farValueWithBuffer()); z += STEP)
-        for (btScalar x = preciseEdge(playerPosition.x() - farValueWithBuffer());
-            x <= preciseEdge(playerPosition.x() + farValueWithBuffer()); x += STEP)
-            for (btScalar y = preciseEdge(playerPosition.y() - farValueWithBuffer());
-                y <= preciseEdge(playerPosition.y() + farValueWithBuffer()); y += STEP)
-            {
-                handleCell(x, y, z);
-            }
+    for (cell.z = front(generatedCuboid) + 1; cell.z <= front(view); cell.z++)
+        for (cell.x = left(view); cell.x <= right(view); cell.x++)
+            for (cell.y = bottom(view); cell.y <= top(view); cell.y++)
+                obstaclesGenerated += insertCell(cell, chunkDB);
 
-    #if DEBUG_OUTPUT
-        std::cout << obstacleGenerated << " obstacles generated" << std::endl;
-    #endif // DEBUG_OUTPUT
+    Log::debug(obstaclesGenerated, " obstacles generated");
 
-    // these are the edges of the generated zone
-    // the part of the level behind them is generated and must not be touched
-    generatedEdgeLeft = preciseEdge(playerPosition.x() - farValueWithBuffer());
-    generatedEdgeRight = preciseEdge(playerPosition.x() + farValueWithBuffer());
-    generatedEdgeBottom = preciseEdge(playerPosition.y() - farValueWithBuffer());
-    generatedEdgeTop = preciseEdge(playerPosition.y() + farValueWithBuffer());
-    generatedEdgeZ = preciseEdge(playerPosition.z() + farValueWithBuffer());
+    obstacleCount += obstaclesGenerated;
+    generatedCuboid = view;
 
-    // remove obstacles behind the player to save some memory
     removeLeftBehind(playerPosition.z());
 }
 
-btScalar ObstacleGenerator::preciseEdge(btScalar edge) const
+Cuboid<btScalar> ObstacleGenerator::fieldOfView(const btVector3 &playerPosition) const
 {
-    return floor(edge / STEP)*STEP;
+    return {
+        // left bottom back point
+        { playerPosition.x() - farValueWithBuffer(),
+          playerPosition.y() - farValueWithBuffer(),
+          playerPosition.z() },
+        // right top front point
+        { playerPosition.x() + farValueWithBuffer(),
+          playerPosition.y() + farValueWithBuffer(),
+          playerPosition.z() + farValueWithBuffer() }
+    };
+}
+
+Vector3<int> ObstacleGenerator::cellToChunk(const Vector3<int> &cell)
+{
+    Vector3<int> result = cell;
+
+    if (cell.x < 0)
+        result.x++;
+    if (cell.y < 0)
+        result.y++;
+    if (cell.z < 0)
+        result.z++;
+
+    result /= (long) CHUNK_SIZE;
+
+    if (cell.x < 0)
+        result.x--;
+    if (cell.y < 0)
+        result.y--;
+    if (cell.z < 0)
+        result.z--;
+
+    return result;
+}
+
+Vector3<int> ObstacleGenerator::relativeCellPos(const Vector3<int> &cell, const Vector3<int> &chunk)
+{
+    return cell - chunk * CHUNK_SIZE;
+}
+
+std::size_t ObstacleGenerator::insertCell(Vector3<int> cell, const ChunkDB &chunkDB)
+{
+    Vector3<int> chunk = cellToChunk(cell);
+
+    std::size_t chunkIndex = (chunk.x * chunk.y * chunk.z + chunk.x + chunk.y + chunk.z)
+            % chunkDB.size();
+
+    return chunkDB[chunkIndex].produceCell(world, device,
+                                           chunk.toBulletVector3() * CHUNK_LENGTH,
+                                           relativeCellPos(cell, chunk),
+                                           m_obstacles);
 }
 
 // removes obstacles behind the player
 void ObstacleGenerator::removeLeftBehind(btScalar playerZ)
 {
-    size_t count = 0;
+    std::size_t count = 0;
     for (auto it = m_obstacles.begin();
         it != m_obstacles.end() && count < 100; count++)
     {
