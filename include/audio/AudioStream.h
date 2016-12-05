@@ -33,6 +33,9 @@
 using namespace std::chrono_literals;
 
 class AudioStream : public AudioSource {
+    friend class AudioDevice;
+    explicit AudioStream(std::unique_ptr<AudioFile> audioPtr, std::uint32_t newSource);
+
     bool m_loop = false;
     bool m_requestStop = false;
     duration_t m_playingOffset;
@@ -44,7 +47,6 @@ class AudioStream : public AudioSource {
     void prepareStreaming();
 
 public:
-    explicit AudioStream(std::unique_ptr<AudioFile> audioPtr, std::uint32_t newSource);
     ~AudioStream();
 
     void play() override;

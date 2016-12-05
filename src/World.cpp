@@ -16,13 +16,14 @@
 
 #include "World.h"
 
-World::World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration,
+World::World(IrrlichtDevice &irrlichtDevice, AudioDevice &audioDevice, const ConfigData &configuration,
              const ChunkDB &chunkDB) :
     m_broadphase(std::make_unique<btDbvtBroadphase>()),
     m_collisionConfiguration(std::make_unique<btDefaultCollisionConfiguration>()),
     m_dispatcher(std::make_unique<btCollisionDispatcher>(m_collisionConfiguration.get())),
     m_solver(std::make_unique<btSequentialImpulseConstraintSolver>()),
     m_irrlichtDevice(irrlichtDevice),
+    m_audioDevice(audioDevice),
     m_configuration(configuration),
     m_chunkDB(chunkDB),
     m_light(*m_irrlichtDevice.getSceneManager()->addLightSceneNode(0, { 0, 0, 0 }, DEFAULT_LIGHT_COLOR, 300)),

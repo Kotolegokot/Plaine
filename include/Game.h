@@ -44,6 +44,7 @@
 #include "Explosion.h"
 #include "Patterns.h"
 #include "Chunk.h"
+#include "audio/AudioDevice.h"
 #include "util/i18n.h"
 #include "util/CGUITTFont.h"
 #include "util/options.h"
@@ -66,6 +67,7 @@ private:
 
     ConfigData configuration;
     std::unique_ptr<GUI> gui;
+    std::unique_ptr<AudioDevice> audioDevice;
     IrrlichtDevice *device;
     video::IVideoDriver *driver;
     scene::ISceneManager *sceneManager;

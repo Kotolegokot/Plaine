@@ -29,6 +29,7 @@
 #include "Explosion.h"
 #include "Chunk.h"
 #include "Config.h"
+#include "audio/AudioDevice.h"
 #include "util/options.h"
 
 using namespace irr;
@@ -41,8 +42,8 @@ constexpr btScalar CAMERA_DISTANCE = 200;
 
 class World {
 public:
-    World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration,
-          const ChunkDB &chunkDB);
+    World(IrrlichtDevice &irrlichtDevice, AudioDevice &audioDevice,
+          const ConfigData &configuration, const ChunkDB &chunkDB);
     ~World();
 
     void render(video::SColor color);
@@ -68,6 +69,7 @@ private:
     std::unique_ptr<Explosion> m_explosion;
 
     IrrlichtDevice &m_irrlichtDevice;
+    AudioDevice &m_audioDevice;
     const ConfigData &m_configuration;
     const ChunkDB &m_chunkDB;
 

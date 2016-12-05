@@ -24,6 +24,8 @@ Game::Game(const ConfigData &data)
     configuration = data;
     initializeDevice();
     initializeGUI();
+
+    audioDevice = std::make_unique<AudioDevice>();
 }
 
 Game::~Game()
@@ -379,7 +381,7 @@ bool Game::run()
     auto chunkDB = generateChunkDB();
 
     gui->initialize(Screen::HUD);
-    world = std::make_unique<World>(*device, configuration, *chunkDB);
+    world = std::make_unique<World>(*device, *audioDevice, configuration, *chunkDB);
     planeControl = std::make_unique<PlaneControl>(world->plane(), configuration.controls);
 
     constexpr unsigned int tick = 1000.0f / 60.0f;

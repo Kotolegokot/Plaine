@@ -62,7 +62,7 @@ AudioHandle AudioDevice::createStream(std::string fileName, PriorityType priorit
     if (filePtr->open())
         newSource = grabAudioSource();
 
-    auto handle = std::make_shared<AudioStream>(std::move(filePtr), newSource);
+    auto handle = AudioHandle(new AudioStream(std::move(filePtr), newSource));
     if (handle->valid())
         m_sounds.push_back(std::make_pair(priority, handle));
 
