@@ -3,6 +3,7 @@
     The MIT License (MIT)
 
     Copyright (c) 2014 by Jakob Larsson
+    Copyright (c) 2016 by Kotik Andreev
 
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the "Software"),
@@ -25,13 +26,7 @@
 
 #include "audio/AudioListener.h"
 
-Vector3<float> AudioListener::listenerPosition { 0, 0, 0 };
-Vector3<float> AudioListener::listenerDirection { 0, 0, -1 };
-Vector3<float> AudioListener::listenerUpVector { 0, 1, 0 };
-
-float AudioListener::listenerVolume = 1.0f;
-
-void AudioListener::setVolume(float volume)
+void AudioListener::setGain(float volume)
 {
     alListenerf(AL_GAIN, volume);
 }
@@ -39,30 +34,71 @@ void AudioListener::setVolume(float volume)
 void AudioListener::setPosition(const Vector3<float> &position)
 {
     alListener3f(AL_POSITION, position.x, position.y, position.z);
-    listenerPosition = position;
+}
+
+void AudioListener::setVelocity(const Vector3<float> &velocity)
+{
+    alListener3f(AL_VELOCITY, velocity.x, velocity.y, velocity.z);
 }
 
 void AudioListener::setDirection(const Vector3<float> &direction)
 {
-    listenerDirection = direction;
-    float orientation[] = {
-        listenerDirection.x,
-        listenerDirection.y,
-        listenerDirection.z,
-        listenerUpVector.x,
-        listenerUpVector.y,
-        listenerUpVector.z
-    };
+    ALfloat orientation[6];
+    alGetListenerfv(AL_ORIENTATION, orientation);
+
+    orientation[0] = direction.x;
+    orientation[1] = direction.y;
+    orientation[2] = direction.z;
     alListenerfv(AL_ORIENTATION, orientation);
 }
 
-void AudioListener::setUpVector(const Vector3<float> &up)
+void AudioListener::setUpVector(const Vector3<float> &upVector)
 {
-    listenerUpVector = up;
-    setDirection(listenerDirection);
+    ALfloat orientation[6];
+    alGetListenerfv(AL_ORIENTATION, orientation);
+
+    orientation[3] = upVector.x;
+    orientation[4] = upVector.y;
+    orientation[5] = upVector.z;
+    alListenerfv(AL_ORIENTATION, orientation);
 }
 
-const Vector3<float> &AudioListener::position()
+float AudioListener::gain()
 {
-    return listenerPosition;
+    ALfloat gain;
+    alGetListenerf(AL_GAIN, &gain);
+
+    return gain;
+}
+
+Vector3<float> AudioListener::position()
+{
+    Vector3<float> result;
+    alGetListener3f(AL_POSITION, &result.x, &result.y, &result.z);
+
+    return result;
+}
+
+Vector3<float> AudioListener::velocity()
+{
+    Vector3<float> result;
+    alGetListener3f(AL_VELOCITY, &result.x, &result.y, &result.z);
+
+    return result;
+}
+
+Vector3<float> AudioListener::direction()
+{
+    ALfloat orientation[6];
+    alGetListenerfv(AL_ORIENTATION, orientation);
+
+    return { orientation[0], orientation[1], orientation[2] };
+}
+
+Vector3<float> AudioListener::upVector()
+{
+    ALfloat orientation[6];
+    alGetListenerfv(AL_ORIENTATION, orientation);
+
+    return { orientation[3], orientation[4], orientation[5] };
 }

@@ -3,6 +3,7 @@
     The MIT License (MIT)
 
     Copyright (c) 2014 by Jakob Larsson
+    Copyright (c) 2016 by Kotik Andreev
 
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the "Software"),
@@ -30,20 +31,18 @@
 #include "util/Vector3.h"
 
 class AudioListener {
-    static Vector3<float> listenerPosition;
-    static Vector3<float> listenerDirection;
-    static Vector3<float> listenerUpVector;
-
-    static float listenerVolume;
 public:
-    static void setVolume(float volume);
+    static void setGain(float gain);
     static void setPosition(const Vector3<float> &position);
-
+    static void setVelocity(const Vector3<float> &velocity);
     static void setDirection(const Vector3<float> &direction);
     static void setUpVector(const Vector3<float> &up);
 
-    static float getVolume();
-    static const Vector3<float> &position();
+    static float gain();
+    static Vector3<float> position();
+    static Vector3<float> velocity();
+    static Vector3<float> direction();
+    static Vector3<float> upVector();
 };
 
 #endif // AUDIO_LISTENER_H
