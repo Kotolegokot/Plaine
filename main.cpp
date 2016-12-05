@@ -30,6 +30,7 @@
 #include "audio/AudioListener.h"
 #include "audio/AudioSource.h"
 #include "audio/AudioStream.h"
+#include "audio/AudioChunk.h"
 
 using namespace irr;
 
