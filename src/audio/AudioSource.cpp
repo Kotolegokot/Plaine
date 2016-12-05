@@ -32,7 +32,6 @@ AudioSource::AudioSource(std::unique_ptr<AudioFile> filePtr, uint32_t newSource)
     m_valid = m_file->open();
 
     unsigned int sampleCount = m_file->fileInfo().frames * m_file->fileInfo().channels;
-
     m_duration = duration_t(static_cast<float>(sampleCount) /
                             static_cast<float>(m_file->fileInfo().samplerate) /
                             static_cast<float>(m_file->fileInfo().channels));
@@ -44,16 +43,13 @@ AudioSource::~AudioSource()
         alDeleteSources(1, &m_source);
 }
 
-ALuint AudioSource::invalidate()
+unsigned int AudioSource::invalidate()
 {
     stop();
     m_file->close();
     m_valid = false;
 
-    ALuint tempSource = m_source;
-    m_source = 0;
-
-    return tempSource;
+    return m_source;
 }
 
 void AudioSource::setPitch(float pitch)

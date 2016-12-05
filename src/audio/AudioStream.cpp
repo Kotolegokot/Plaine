@@ -160,6 +160,11 @@ void AudioStream::setOffset(duration_t offset)
     }
 }
 
+bool AudioStream::looping() const
+{
+    return m_loop;
+}
+
 duration_t AudioStream::offset() const
 {
     if (valid()) {
@@ -172,9 +177,4 @@ duration_t AudioStream::offset() const
             return m_playingOffset;
     } else
         return duration_t(0);
-}
-
-bool AudioStream::looping() const
-{
-    return m_loop;
 }

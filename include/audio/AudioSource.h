@@ -38,11 +38,7 @@
 using duration_t = std::chrono::duration<float>;
 
 class AudioSource {
-    friend class AudioDevice;
-
     bool m_valid = true;
-
-    ALuint invalidate();
     /*const*/ duration_t m_duration;
 public:
     enum class State {
@@ -109,6 +105,7 @@ public:
 
     bool valid() const;
     const duration_t &duration() const;
+    unsigned int invalidate();
 
 protected:
     struct BufferWrapper {
