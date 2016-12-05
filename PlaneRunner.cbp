@@ -188,6 +188,7 @@
 		<Unit filename="src/util/NaN.cpp" />
 		<Unit filename="src/util/Randomizer.cpp" />
 		<Unit filename="src/util/i18n.cpp" />
+		<Unit filename="src/util/math.cpp" />
 		<Unit filename="src/util/other.cpp" />
 		<Extensions>
 			<code_completion />
