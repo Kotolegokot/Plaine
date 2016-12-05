@@ -59,13 +59,14 @@ public:
 
     static void registerAudio(const std::string &fileName, const std::string &name);
 
-    static AudioHandle createStream(std::string fileName, PriorityType priority = Priority::Medium);
-    static AudioHandle playStream(const std::string &fileName, PriorityType priority = Priority::Medium);
+    /*static AudioHandle createStream(std::string fileName, PriorityType priority = Priority::Medium);
+    static AudioHandle playStream(const std::string &fileName, PriorityType priority = Priority::Medium);*/
 
     static AudioHandle createSound(std::string fileName, PriorityType priority = Priority::Medium);
     static AudioHandle playSound(const std::string &fileName, PriorityType priority = Priority::Medium);
 
     void setPlaybackDevice(const std::string &playbackDevice);
+    void setPlaybackDeviceDefault();
     static void stopAllAudio();
 
     static std::size_t totalSoundCount();

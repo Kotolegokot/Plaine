@@ -35,7 +35,7 @@ namespace {
     // Sounds can be played through channels which allows their volume
     // to be set collectively. TODO
     //std::unordered_map<std::string, float> m_audioChannels;
-};
+}
 
 AudioDevice::AudioDevice() :
     m_openAL(std::make_unique<OpenAL>())
@@ -48,21 +48,19 @@ void AudioDevice::registerAudio(const std::string &fileName, const std::string &
         m_audioFiles[name] = fileName;
 }
 
-AudioHandle AudioDevice::createStream(std::string fileName, PriorityType priority)
+/*AudioHandle AudioDevice::createStream(std::string fileName, PriorityType priority)
 {
     auto it = m_audioFiles.find(fileName);
-
     if (it != m_audioFiles.end())
         fileName = it->second;
 
-    auto filePtr = std::make_unique<AudioFile>();
-    filePtr->tryOpen(fileName);
+    auto filePtr = std::make_unique<AudioFile>(fileName);
 
-    std::uint32_t newSource = 0;
+    ALuint newSource = 0;
     if (filePtr->open())
         newSource = grabAudioSource();
 
-    auto handle = AudioHandle(new AudioStream(std::move(filePtr), newSource));
+    auto handle = std::make_shared<AudioStream>(std::move(filePtr), newSource);
     if (handle->valid())
         m_sounds.push_back(std::make_pair(priority, handle));
 
@@ -75,7 +73,7 @@ AudioHandle AudioDevice::playStream(const std::string &fileName, PriorityType pr
     handle->play();
 
     return handle;
-}
+}*/
 
 AudioHandle AudioDevice::createSound(std::string fileName, PriorityType priority)
 {
@@ -83,15 +81,13 @@ AudioHandle AudioDevice::createSound(std::string fileName, PriorityType priority
     if (it != m_audioFiles.end())
         fileName = it->second;
 
-    auto filePtr = std::make_unique<AudioFile>();
-    filePtr->tryOpen(fileName);
+    auto filePtr = std::make_unique<AudioFile>(fileName);
 
-    std::uint32_t newSource = 0;
+    ALuint newSource = 0;
     if (filePtr->open())
         newSource = grabAudioSource();
 
-    //auto handle = std::make_shared<AudioChunk>(std::move(filePtr), newSource);
-    auto handle = AudioHandle(new AudioChunk(std::move(filePtr), newSource));
+    auto handle = std::make_shared<AudioChunk>(std::move(filePtr), newSource);
     if (handle->valid())
         m_sounds.push_back(std::make_pair(priority, handle));
 
@@ -137,7 +133,7 @@ void AudioDevice::wipeSource(std::uint32_t source)
 
 std::uint32_t AudioDevice::grabAudioSource()
 {
-    std::uint32_t newSource = 0;
+    ALuint newSource = 0;
 
     for (std::size_t i = 0; i < m_sounds.size(); i++) {
         auto &handle = m_sounds[i].second;
@@ -234,6 +230,11 @@ std::uint32_t AudioDevice::leastImportantSource()
               });
 
     return eraseAndReturn();
+}
+
+void AudioDevice::setPlaybackDeviceDefault()
+{
+    m_openAL->changePlaybackDevice(nullptr);
 }
 
 void AudioDevice::setPlaybackDevice(const std::string &playbackDevice)
