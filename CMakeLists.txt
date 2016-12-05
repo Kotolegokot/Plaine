@@ -13,7 +13,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/Modules)
 find_package(Irrlicht REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
-find_package(OpenAL REQUIRED)
 find_package(Threads REQUIRED)
 
 file(GLOB_RECURSE CPPs "src/*.cpp")
@@ -24,8 +23,7 @@ include_directories("include/")
 include_directories(SYSTEM
 	${IRRLICHT_INCLUDE_DIR}
 	${BULLET_INCLUDE_DIRS}
-	${FREETYPE_INCLUDE_DIRS}
-    ${OPENAL_INCLUDE_DIR})
+	${FREETYPE_INCLUDE_DIRS})
 
 target_link_libraries(${PROJECT_NAME}
 	${IRRLICHT_LIBRARY}
@@ -33,7 +31,6 @@ target_link_libraries(${PROJECT_NAME}
 	${BULLET_DYNAMICS_LIBRARY}
 	${BULLET_MATH_LIBRARY}
 	${FREETYPE_LIBRARY}
-    ${OPENAL_LIBRARY}
 	Threads::Threads)
 
 if(DEBUG)
