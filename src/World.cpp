@@ -181,13 +181,13 @@ void checkCollisions(btDynamicsWorld *physicsWorld, btScalar /* timeStep */)
                     Log::debug("plane collision occured");
                     Log::debug("collision impulse = ", pt.getAppliedImpulse());
 
-                    if (pt.getAppliedImpulse() > 4000)
+                    if (pt.getAppliedImpulse() > 400)
                         world.plane().explode();
                     else if (!world.plane().exploded())
                         world.plane().addScore(-pt.getAppliedImpulse());
 
-//                    if (pt.getAppliedImpulse() > 50)
-//                        Audio::getInstance().collision.play();
+                    if (pt.getAppliedImpulse() > 50)
+                        Audio::getInstance().collision.play();
                 } else {
                     if (pt.getAppliedImpulse() > 50)
                         Audio::getInstance().collision.play();

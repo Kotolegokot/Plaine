@@ -375,6 +375,8 @@ void Game::mainMenu()
 // returns false if quit is pressed
 bool Game::run()
 {
+    Audio::getInstance().background.play();
+
     // generate some chunks
     auto chunkDB = generateChunkDB();
 
@@ -533,6 +535,7 @@ bool Game::run()
         }
     }
 
+    Audio::getInstance().background.stop();
     world.reset();
     return false;
 }
