@@ -32,12 +32,11 @@ void ScoreboardScreen::initialize(s32 buttonWidth, s32 buttonHeight)
     listBoxScore->setDrawBackground(true);
 
     std::vector<s32> dataScore = Scoreboard::loadScore("score.txt");
-    //int n = (dataScore.size() < 20) ? dataScore.size() : 20;
     std::string str;
 
-    for (int i = 0; i < dataScore.size(); i++)
+    for (std::size_t i = 0; i < dataScore.size(); i++)
     {
-       str = "#" + std::to_string(i + 1) + " : " + std::to_string(dataScore[i]);
+       str = "#" + std::to_string(i + 1) + "    :    " + std::to_string(dataScore[i]);
        listBoxScore->addItem(utf8_to_wide(str).c_str());
     }
 
