@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <memory>
+#include <functional>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btCollisionObject.h>
@@ -30,6 +31,7 @@
 #include "Chunk.h"
 #include "Config.h"
 #include "audio/AudioDevice.h"
+#include "audio/AudioListener.h"
 #include "util/options.h"
 
 using namespace irr;
@@ -82,7 +84,7 @@ private:
 
     bool m_gameOver = false;
 private:
-    void updateCamera();
+    void updateCameraAndListener();
 };
 
 #endif // WORLD_H

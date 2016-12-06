@@ -42,7 +42,7 @@ World::World(IrrlichtDevice &irrlichtDevice, AudioDevice &audioDevice, const Con
         m_explosion = std::make_unique<Explosion>(*m_physicsWorld, m_irrlichtDevice,
                                                   m_plane->getPosition(), 1000);
 
-        gContactProcessedCallback = [](btManifoldPoint &cp, void *obj0p, void *obj1p) -> bool
+        /*gContactProcessedCallback = [](btManifoldPoint &cp, void *obj0p, void *obj1p) -> bool
             {
                 auto obj0 = static_cast<btCollisionObject *>(obj0p);
                 auto obj1 = static_cast<btCollisionObject *>(obj1p);
@@ -56,7 +56,15 @@ World::World(IrrlichtDevice &irrlichtDevice, AudioDevice &audioDevice, const Con
                     if (obj1->getUserIndex() == 1)
                         std::swap(obj0, obj1);
 
+
                     Plane &plane = *static_cast<Plane *>(obj0->getUserPointer());
+
+                    auto sound = m_audioDevice.createSound("media/sounds/collision.mp3");
+                    sound->setPosition(plane.getPosition());
+                    sound->setDirection(plane.getRotation().getAxis());
+                    sound->setVelocity(plane.getLinearVelocity());
+                    sound->play();
+
                     if (cp.getAppliedImpulse() > 400)
                         plane.explode();
                     else if (!plane.exploded())
@@ -64,7 +72,7 @@ World::World(IrrlichtDevice &irrlichtDevice, AudioDevice &audioDevice, const Con
                 }
 
                 return true;
-            };
+            };*/
     }
 
     // graphics
@@ -76,7 +84,7 @@ World::World(IrrlichtDevice &irrlichtDevice, AudioDevice &audioDevice, const Con
 #endif // FOG_ENABLED
 
         m_camera.setFarValue(m_configuration.renderDistance);
-        updateCamera();
+        updateCameraAndListener();
 
         m_light.setLightType(video::ELT_DIRECTIONAL);
         {
@@ -130,7 +138,7 @@ void World::render(video::SColor color)
 #endif // DEBUG_DRAWER_ENABLED
 
     if (!m_gameOver)
-        updateCamera(); // update camera position, target, and rotation
+        updateCameraAndListener(); // update camera position, target, and rotation
     m_irrlichtDevice.getSceneManager()->drawAll();
 }
 
@@ -170,7 +178,7 @@ Plane &World::plane()
     return *m_plane;
 }
 
-void World::updateCamera()
+void World::updateCameraAndListener()
 {
     core::vector3df upVector(0, 1, 0);
     upVector.rotateXYBy(m_plane->getEulerRotationDeg().z());
@@ -180,4 +188,8 @@ void World::updateCamera()
     m_camera.setUpVector(upVector);
 
     m_camera.setTarget(m_camera.getPosition() + core::vector3df(0, 0, 1));
+
+    AudioListener::setPosition(m_plane->getPosition());
+    AudioListener::setUpVector(upVector);
+    AudioListener::setDirection(m_plane->getPosition() + btVector3(0, 0, 1));
 }
