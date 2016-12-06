@@ -14,24 +14,28 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gui/screens/PauseMenuScreen.h"
+#include "gui/screens/ScoreboardScreen.h"
 
-PauseMenuScreen::PauseMenuScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment) :
+ScoreboardScreen::ScoreboardScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment) :
     IGUIScreen(configuration, guiEnvironment) {}
 
-PauseMenuScreen::~PauseMenuScreen()
+ScoreboardScreen::~ScoreboardScreen()
 {
     terminate();
 }
 
-void PauseMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
+void ScoreboardScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
-    textScreenSize = guiEnvironment.addStaticText(L"SCREEN_SIZE",core::rect<s32>(10, 10, 200, 30));
-
-    buttonResume = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
-    buttonResume->setID(ID_BUTTON_RESUME);
-    setCustomButtonSkin(*buttonResume);
-
+    std::vector<s32> dataScore = Scoreboard::loadScore("score.txt");
+    int n;
+    (dataScore.size() < 20) ? (n = dataScore.size()) : (n = 20);
+    std::string str;
+    for (int i = 0; i < n; i++)
+    {
+       str = "#" + std::to_string(i + 1) + " : " + std::to_string(dataScore[i]);
+       score.push_back(guiEnvironment.addStaticText(utf8_to_wide(str).c_str(), core::rect<s32>(10, 20 * i, 200, 20 * i + 20)));
+    }
+    
     buttonMenu = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonMenu->setID(ID_BUTTON_MENU);
     setCustomButtonSkin(*buttonMenu);
@@ -46,11 +50,8 @@ void PauseMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
     initialized = true;
 }
 
-void PauseMenuScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
+void ScoreboardScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 {
-    buttonResume->setText(_wp("Resume"));
-    buttonResume->setToolTipText(_wp("Resume game"));
-
     buttonMenu->setText(_wp("Menu"));
     buttonMenu->setToolTipText(_wp("Exit to main menu"));
 
@@ -58,11 +59,11 @@ void PauseMenuScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
     buttonQuit->setToolTipText(_wp("Exit game"));
 }
 
-void PauseMenuScreen::terminate()
+void ScoreboardScreen::terminate()
 {
     if (initialized) {
-        textScreenSize->remove();
-        buttonResume->remove();
+        for (std::size_t i = 0; i < score.size(); i++)
+            score[i]->remove();
         buttonMenu->remove();
         buttonQuit->remove();
 
@@ -70,13 +71,8 @@ void PauseMenuScreen::terminate()
     }
 }
 
-void PauseMenuScreen::resize(s32 buttonWidth, s32 buttonHeight)
+void ScoreboardScreen::resize(s32 buttonWidth, s32 buttonHeight)
 {
-    buttonResume->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
-                                                      configuration.resolution.Height - 3 * buttonHeight - 3 * SPACE,
-                                                      configuration.resolution.Width - 2 * SPACE,
-                                                      configuration.resolution.Height - 2 * buttonHeight - 3 * SPACE));
-
     buttonMenu->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
                                                     configuration.resolution.Height - 2 * buttonHeight - 2 * SPACE,
                                                     configuration.resolution.Width - 2 * SPACE,
@@ -86,17 +82,18 @@ void PauseMenuScreen::resize(s32 buttonWidth, s32 buttonHeight)
                                                     configuration.resolution.Height - buttonHeight - SPACE,
                                                     configuration.resolution.Width - 2 * SPACE,
                                                     configuration.resolution.Height - SPACE));
+                                                    
 }
 
-std::vector<gui::IGUIElement *> PauseMenuScreen::getSelectableElements()
+std::vector<gui::IGUIElement *> ScoreboardScreen::getSelectableElements()
 {
-    return { buttonResume, buttonMenu, buttonQuit };
+    return {buttonMenu, buttonQuit};
 }
 
-void PauseMenuScreen::setVisible(bool visible)
+void ScoreboardScreen::setVisible(bool visible)
 {
-    textScreenSize->setVisible(visible);
-    buttonResume->setVisible(visible);
+    for (std::size_t i = 0; i < score.size(); i++)
+        score[i]->setVisible(visible);
     buttonMenu->setVisible(visible);
     buttonQuit->setVisible(visible);
 }

@@ -2,8 +2,8 @@ lib
 obj
 bin
 deps
-PlaneRunner.layout
-PlaneRunner.depend
+Plaine.layout
+Plaine.depend
 planerunner.pot
 logfile
 *.conf
@@ -12,3 +12,4 @@ logfile
 *.swp
 build/*
 CMakeLists.txt.user
+score*

@@ -14,35 +14,29 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OBJMESH_H
-#define OBJMESH_H
+#ifndef SCOREBOARD_H
+#define SCOREBOARD_H
 
-#include <iostream>
-#include <memory>
-#include <fstream>
+#include <array>
 #include <vector>
 #include <string>
-#include <sstream>
-#include <btBulletDynamicsCommon.h>
-#include "Log.h"
+#include <fstream>
+#include <iostream>
+#include <cctype>
+#include <irrlicht.h>
 
-class ObjMesh
+using namespace irr;
+
+
+class Scoreboard
 {
 public:
-    ObjMesh() = default;
-    ObjMesh(const std::string &filename, btScalar scale = 1.0f);
-    void loadMesh(const std::string &filename, btScalar scale = 1.0f);
-    std::unique_ptr<btTriangleMesh> getTriangleMesh() const;
-    btVector3 *getPoints();
-    std::size_t getPointsCount() const;
-    void setPoints(btConvexHullShape &shape);
+    static std::vector <s32> loadScore(const std::string &filename);
+    static void saveScore(const std::string &filename, const std::vector <s32> &data);
 
 private:
-    std::vector<btVector3> vertices;
-    std::vector<std::vector<std::size_t>> polygons;
-
     struct Item {
-        enum ItemType { SLASH, INT, FLOAT, KEYWORD, STRING, COMMENT, NEWLINE };
+        enum ItemType { INT, OP_SHARP, NEWLINE };
 
         Item(ItemType type) :
             type(type) {}
@@ -50,11 +44,17 @@ private:
         Item(ItemType type, const std::string &text) :
             type(type), data((void *) new std::string(text)) {}
 
-        Item(ItemType type, btScalar floatNumber) :
-            type(type), data((void *) new btScalar(floatNumber)) {}
+        Item(ItemType type, f32 floatNumber) :
+            type(type), data((void *) new f32)
+        {
+            *(f32 *) data = floatNumber;
+        }
 
-        Item(ItemType type, int intNumber) :
-            type(type), data((void *) new int(intNumber)) {}
+        Item(ItemType type, s32 intNumber) :
+            type(type), data((void *) new s32)
+        {
+            *(s32 *) data = intNumber;
+        }
 
         Item(Item &&item) noexcept :
             type(item.type), data(item.data)
@@ -67,14 +67,6 @@ private:
             switch (type) {
             case INT:
                 delete (int *) data;
-                break;
-            case FLOAT:
-                delete (float *) data;
-                break;
-            case STRING:
-            case KEYWORD:
-            case COMMENT:
-                delete (std::string *) data;
                 break;
             default:
                 break;
@@ -91,33 +83,25 @@ private:
             return *(std::string *) data;
         }
 
-        btScalar getFloat() const
+        f32 getFloat() const
         {
-            return *(btScalar *) data;
+            return *(f32 *) data;
         }
 
-        int getInt() const
+        s32 getInt() const
         {
-            return *(int *) data;
+            return *(s32 *) data;
         }
 
         static std::string typeToString(ItemType type)
         {
             switch (type) {
-            case SLASH:
-                return "slash";
             case INT:
                 return "integer";
-            case FLOAT:
-                return "float";
-            case STRING:
-                return "string";
-            case KEYWORD:
-                return "keyword";
+            case OP_SHARP:
+                return "#";
             case NEWLINE:
                 return "new line or end of file";
-            case COMMENT:
-                return "comment";
             default:
                 return "";
             }
@@ -126,8 +110,9 @@ private:
         ItemType type;
         void *data = nullptr;
     };
+
     static std::vector<Item> parse(const std::string &filename);
-    void warning(Item::ItemType expected, Item::ItemType found);
+    static void error(Item::ItemType expected, Item::ItemType found);
 };
 
-#endif // OBJMESH_H
+#endif // SCOREBOARD_H

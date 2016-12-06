@@ -125,6 +125,7 @@
 		<Unit filename="include/Plane.h" />
 		<Unit filename="include/PlaneControl.h" />
 		<Unit filename="include/PlaneProducer.h" />
+		<Unit filename="include/Scoreboard.h" />
 		<Unit filename="include/World.h" />
 		<Unit filename="include/audio/OpenAL.h" />
 		<Unit filename="include/bodies/BoxProducer.h" />
@@ -139,6 +140,7 @@
 		<Unit filename="include/gui/screens/HUDScreen.h" />
 		<Unit filename="include/gui/screens/MainMenuScreen.h" />
 		<Unit filename="include/gui/screens/PauseMenuScreen.h" />
+		<Unit filename="include/gui/screens/ScoreboardScreen.h" />
 		<Unit filename="include/gui/screens/SettingsScreen.h" />
 		<Unit filename="include/interfaces/IBodyProducer.h" />
 		<Unit filename="include/interfaces/IGUIScreen.h" />
@@ -173,6 +175,7 @@
 		<Unit filename="src/Patterns.cpp" />
 		<Unit filename="src/PlaneControl.cpp" />
 		<Unit filename="src/PlaneProducer.cpp" />
+		<Unit filename="src/Scoreboard.cpp" />
 		<Unit filename="src/World.cpp" />
 		<Unit filename="src/audio/OpenAL.cpp" />
 		<Unit filename="src/bodies/ConeProducer.cpp" />
@@ -185,6 +188,7 @@
 		<Unit filename="src/gui/screens/HUDScreen.cpp" />
 		<Unit filename="src/gui/screens/MainMenuScreen.cpp" />
 		<Unit filename="src/gui/screens/PauseMenuScreen.cpp" />
+		<Unit filename="src/gui/screens/ScoreboardScreen.cpp" />
 		<Unit filename="src/gui/screens/SettingsScreen.cpp" />
 		<Unit filename="src/util/CGUITTFont.cpp" />
 		<Unit filename="src/util/NaN.cpp" />

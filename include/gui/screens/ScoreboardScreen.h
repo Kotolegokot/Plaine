@@ -14,24 +14,25 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SETTINGSSCREEN_H
-#define SETTINGSSCREEN_H
+#ifndef SCOREBOARDSCREEN_H
+#define SCOREBOARDSCREEN_H
 
 #include <irrlicht.h>
-#include "interfaces/IGUIScreen.h"
+#include <interfaces/IGUIScreen.h>
 #include "Config.h"
-#include "util/i18n.h"
+#include "Scoreboard.h"
 #include "gui/GUIID.h"
+#include "util/i18n.h"
 
 using namespace irr;
 
-class SettingsScreen : public IGUIScreen
+class ScoreboardScreen : public IGUIScreen
 {
     bool initialized = false;
 
 public:
-    SettingsScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment);
-    ~SettingsScreen();
+    ScoreboardScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment);
+    ~ScoreboardScreen();
 
     virtual void initialize(s32 buttonWidth, s32 buttonHeight) override;
     virtual void reload(s32 buttonWidth, s32 buttonHeight) override;
@@ -40,19 +41,10 @@ public:
     virtual std::vector<gui::IGUIElement *> getSelectableElements() override;
     virtual void setVisible(bool visible) override;
 
-    gui::IGUIStaticText *textScreenSize;
-    gui::IGUIStaticText *textLanguage;
-    gui::IGUIStaticText *textResolution;
-    gui::IGUIStaticText *textRenderDistance;
-    gui::IGUIComboBox *comboBoxLanguage;
-    gui::IGUIComboBox *comboBoxResolution;
-    gui::IGUISpinBox *spinBoxRenderDistance;
-    gui::IGUICheckBox *checkBoxVSync;
-    gui::IGUICheckBox *checkBoxStencilBuffer;
-    gui::IGUIButton *buttonToggleFullscreen;
-    gui::IGUIButton *buttonControlSettings;
+    std::vector<gui::IGUIStaticText *> score;
     gui::IGUIButton *buttonMenu;
     gui::IGUIButton *buttonQuit;
 };
 
-#endif // SETTINGSSCREEN_H
+#endif // SCOREBOARDSCREEN_H
+

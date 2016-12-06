@@ -1,17 +1,17 @@
-/* This file is part of PlaneRunner.
+/* This file is part of Plaine.
  *
- * PlaneRunner is free software: you can redistribute it and/or modify
+ * Plaine is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * PlaneRunner is distributed in the hope that it will be useful,
+ * Plaine is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with PlaneRunner. If not, see <http://www.gnu.org/licenses/>.
+ * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "PlaneProducer.h"
@@ -43,10 +43,7 @@ std::unique_ptr<Body> PlaneProducer::produce(btDynamicsWorld &physicsWorld,
     rigidBody->setActivationState(DISABLE_DEACTIVATION);
     physicsWorld.addRigidBody(rigidBody.get());
 
-    auto plane = std::make_unique<Plane>(physicsWorld, std::move(rigidBody));
-    plane->rigidBody().setUserPointer(plane.get());
-
-    return plane;
+    return std::make_unique<Plane>(physicsWorld, std::move(rigidBody));
 }
 
 btScalar PlaneProducer::getMass() const
