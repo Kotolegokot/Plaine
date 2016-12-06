@@ -152,6 +152,6 @@ void Scoreboard::saveScore(const std::string &filename, const std::vector<s32> &
         return;
     }
 
-    for (int i = 0; i < data.size(); i++)
+    for (std::size_t i = 0; i < data.size(); i++)
         outputFile << "#" << std::to_string(i + 1) << " " << std::to_string(data[i]) << std::endl;
 }
