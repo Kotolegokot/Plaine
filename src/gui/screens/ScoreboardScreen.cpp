@@ -27,14 +27,18 @@ ScoreboardScreen::~ScoreboardScreen()
 
 void ScoreboardScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
+    listBoxScore = guiEnvironment.addListBox(core::rect<s32>(0, 0, 0, 0));
+    listBoxScore->setID(ID_LISTBOX);
+    listBoxScore->setDrawBackground(true);
+
     std::vector<s32> dataScore = Scoreboard::loadScore("score.txt");
-    int n;
-    (dataScore.size() < 20) ? (n = dataScore.size()) : (n = 20);
+    //int n = (dataScore.size() < 20) ? dataScore.size() : 20;
     std::string str;
-    for (int i = 0; i < n; i++)
+
+    for (int i = 0; i < dataScore.size(); i++)
     {
        str = "#" + std::to_string(i + 1) + " : " + std::to_string(dataScore[i]);
-       score.push_back(guiEnvironment.addStaticText(utf8_to_wide(str).c_str(), core::rect<s32>(10, 20 * i, 200, 20 * i + 20)));
+       listBoxScore->addItem(utf8_to_wide(str).c_str());
     }
 
     buttonMenu = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
@@ -63,8 +67,7 @@ void ScoreboardScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 void ScoreboardScreen::terminate()
 {
     if (initialized) {
-        for (auto it = score.begin(); it != score.end(); it++)
-            (*it)->remove();
+        listBoxScore->remove();
         buttonMenu->remove();
         buttonQuit->remove();
 
@@ -74,6 +77,10 @@ void ScoreboardScreen::terminate()
 
 void ScoreboardScreen::resize(s32 buttonWidth, s32 buttonHeight)
 {
+    listBoxScore->setRelativePosition(core::rect<s32>(2*SPACE, SPACE,
+                                                      configuration.resolution.Width - 4*SPACE - buttonWidth,
+                                                      configuration.resolution.Height - 2*SPACE));
+
     buttonMenu->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
                                                     configuration.resolution.Height - 2 * buttonHeight - 2 * SPACE,
                                                     configuration.resolution.Width - 2 * SPACE,
@@ -93,8 +100,7 @@ std::vector<gui::IGUIElement *> ScoreboardScreen::getSelectableElements()
 
 void ScoreboardScreen::setVisible(bool visible)
 {
-    for (auto it = score.begin(); it != score.end(); it++)
-            (*it)->setVisible(visible);
+    listBoxScore->setVisible(visible);
     buttonMenu->setVisible(visible);
     buttonQuit->setVisible(visible);
 }
