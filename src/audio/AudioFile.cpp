@@ -40,7 +40,7 @@ bool AudioFile::tryOpen(const std::string &filePath)
     m_file = sf_open(filePath.c_str(), SFM_READ, &m_fileInfo);
 
     if (!m_file) {
-        Log::warning("could not open audio file '", filePath, "'");
+        Log::warning("could not open audio file '", filePath, "': ", sf_strerror(m_file));
         return false;
     }
 
