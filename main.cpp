@@ -24,21 +24,10 @@
 #include "Log.h"
 #include "util/i18n.h"
 
-// DELETE
-#include "audio/AudioDevice.h"
-
 using namespace irr;
 
 int main()
 {
-    // DELETE
-    {
-        AudioDevice ad;
-        ad.playSound("media/sounds/collision.ogg");
-
-        return 0;
-    }
-
     // load config into the structure (conf file is kept in the root directory of the project)
     ConfigData data = Config::loadConfig("game.conf");
     // setting language (platform dependent realization!)

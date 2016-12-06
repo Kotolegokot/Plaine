@@ -18,14 +18,13 @@
 
 void checkCollisions(btDynamicsWorld *physicsWorld, btScalar timeStep);
 
-World::World(IrrlichtDevice &irrlichtDevice, AudioDevice &audioDevice, const ConfigData &configuration,
+World::World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration,
              const ChunkDB &chunkDB) :
     m_broadphase(std::make_unique<btDbvtBroadphase>()),
     m_collisionConfiguration(std::make_unique<btDefaultCollisionConfiguration>()),
     m_dispatcher(std::make_unique<btCollisionDispatcher>(m_collisionConfiguration.get())),
     m_solver(std::make_unique<btSequentialImpulseConstraintSolver>()),
     m_irrlichtDevice(irrlichtDevice),
-    m_audioDevice(audioDevice),
     m_configuration(configuration),
     m_chunkDB(chunkDB),
     m_light(*m_irrlichtDevice.getSceneManager()->addLightSceneNode(0, { 0, 0, 0 }, DEFAULT_LIGHT_COLOR, 300)),
@@ -149,11 +148,6 @@ Plane &World::plane()
     return *m_plane;
 }
 
-AudioDevice &World::audioDevice()
-{
-    return m_audioDevice;
-}
-
 void World::updateCameraAndListener()
 {
     core::vector3df upVector(0, 1, 0);
@@ -164,10 +158,6 @@ void World::updateCameraAndListener()
     m_camera.setUpVector(upVector);
 
     m_camera.setTarget(m_camera.getPosition() + core::vector3df(0, 0, 1));
-
-    AudioListener::setPosition(m_plane->getPosition());
-    AudioListener::setUpVector(upVector);
-    AudioListener::setDirection(m_plane->getPosition() + btVector3(0, 0, 1));
 }
 
 void checkCollisions(btDynamicsWorld *physicsWorld, btScalar /* timeStep */)
@@ -190,12 +180,6 @@ void checkCollisions(btDynamicsWorld *physicsWorld, btScalar /* timeStep */)
             if (pt.getDistance() <= 0.0f) {
                 Log::debug("plane collision occured");
                 Log::debug("collision impulse = ", pt.getAppliedImpulse());
-
-                auto sound = world.audioDevice().createSound("media/sounds/collision.ogg");
-                sound->setPosition(world.plane().getPosition());
-                sound->setDirection(world.plane().getRotation().getAxis());
-                sound->setVelocity(world.plane().getLinearVelocity());
-                sound->play();
 
                 if (pt.getAppliedImpulse() > 400)
                     world.plane().explode();

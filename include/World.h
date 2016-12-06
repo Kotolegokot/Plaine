@@ -30,8 +30,6 @@
 #include "Explosion.h"
 #include "Chunk.h"
 #include "Config.h"
-#include "audio/AudioDevice.h"
-#include "audio/AudioListener.h"
 #include "util/options.h"
 
 using namespace irr;
@@ -45,8 +43,7 @@ constexpr btScalar CAMERA_DISTANCE = 200;
 class World {
     friend struct ContactSensorCallback;
 public:
-    World(IrrlichtDevice &irrlichtDevice, AudioDevice &audioDevice,
-          const ConfigData &configuration, const ChunkDB &chunkDB);
+    World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration, const ChunkDB &chunkDB);
     ~World();
 
     void render(video::SColor color);
@@ -60,7 +57,6 @@ public:
     std::size_t obstacles() const;
 
     Plane &plane();
-    AudioDevice &audioDevice();
 private:
     std::unique_ptr<btBroadphaseInterface> m_broadphase;
     std::unique_ptr<btDefaultCollisionConfiguration> m_collisionConfiguration;
@@ -73,7 +69,6 @@ private:
     std::unique_ptr<Explosion> m_explosion;
 
     IrrlichtDevice &m_irrlichtDevice;
-    AudioDevice &m_audioDevice;
     const ConfigData &m_configuration;
     const ChunkDB &m_chunkDB;
 
