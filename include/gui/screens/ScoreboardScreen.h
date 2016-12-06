@@ -41,7 +41,7 @@ public:
     virtual std::vector<gui::IGUIElement *> getSelectableElements() override;
     virtual void setVisible(bool visible) override;
 
-    gui::IGUIListBox *listBoxScore;
+    gui::IGUITable *tableScore;
     gui::IGUIButton *buttonMenu;
     gui::IGUIButton *buttonQuit;
 };
