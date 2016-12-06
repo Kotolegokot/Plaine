@@ -66,6 +66,8 @@ void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
     reload(buttonWidth, buttonHeight);
     resize(buttonWidth, buttonHeight);
+
+    initialized = true;
 }
 
 void SettingsScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
@@ -158,19 +160,23 @@ void SettingsScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 
 void SettingsScreen::terminate()
 {
-    textScreenSize->remove();
-    textLanguage->remove();
-    textResolution->remove();
-    textRenderDistance->remove();
-    comboBoxLanguage->remove();
-    comboBoxResolution->remove();
-    spinBoxRenderDistance->remove();
-    checkBoxVSync->remove();
-    checkBoxStencilBuffer->remove();
-    buttonToggleFullscreen->remove();
-    buttonControlSettings->remove();
-    buttonMenu->remove();
-    buttonQuit->remove();
+    if (initialized) {
+        textScreenSize->remove();
+        textLanguage->remove();
+        textResolution->remove();
+        textRenderDistance->remove();
+        comboBoxLanguage->remove();
+        comboBoxResolution->remove();
+        spinBoxRenderDistance->remove();
+        checkBoxVSync->remove();
+        checkBoxStencilBuffer->remove();
+        buttonToggleFullscreen->remove();
+        buttonControlSettings->remove();
+        buttonMenu->remove();
+        buttonQuit->remove();
+
+        initialized = false;
+    }
 }
 
 void SettingsScreen::resize(s32 buttonWidth, s32 buttonHeight)

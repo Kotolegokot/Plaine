@@ -46,6 +46,8 @@ void HUDScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
     reload(buttonWidth, buttonHeight);
     resize(buttonWidth, buttonHeight);
+
+    initialized = true;
 }
 
 void HUDScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
@@ -60,12 +62,16 @@ void HUDScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 
 void HUDScreen::terminate()
 {
-    textCameraPosition->remove();
-    textObstaclesCount->remove();
-    textFPS->remove();
-    textVelocity->remove();
-    textAngle->remove();
-    textScore->remove();
+    if (initialized) {
+        textCameraPosition->remove();
+        textObstaclesCount->remove();
+        textFPS->remove();
+        textVelocity->remove();
+        textAngle->remove();
+        textScore->remove();
+
+        initialized = false;
+    }
 }
 
 void HUDScreen::resize(s32, s32) {}

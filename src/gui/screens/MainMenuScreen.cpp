@@ -44,6 +44,8 @@ void MainMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
     reload(buttonWidth, buttonHeight);
     resize(buttonWidth, buttonHeight);
+
+    initialized = true;
 }
 
 void MainMenuScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
@@ -60,10 +62,14 @@ void MainMenuScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 
 void MainMenuScreen::terminate()
 {
-    textScreenSize->remove();
-    buttonStart->remove();
-    buttonSettings->remove();
-    buttonQuit->remove();
+    if (initialized) {
+        textScreenSize->remove();
+        buttonStart->remove();
+        buttonSettings->remove();
+        buttonQuit->remove();
+
+        initialized = false;
+    }
 }
 
 void MainMenuScreen::resize(s32 buttonWidth, s32 buttonHeight)

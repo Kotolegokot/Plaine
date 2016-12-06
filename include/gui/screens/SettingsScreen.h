@@ -27,6 +27,8 @@ using namespace irr;
 
 class SettingsScreen : public IGUIScreen
 {
+    bool initialized = false;
+
 public:
     SettingsScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment);
     ~SettingsScreen();
