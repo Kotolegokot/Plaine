@@ -62,7 +62,7 @@ btVector3 Explosion::getPosition() const
 
 void Explosion::explode()
 {
-    Log::debug("plane exploded");
+    Log::getInstance().debug("plane exploded");
 
     //startAnimation();
 

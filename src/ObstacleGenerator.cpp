@@ -51,7 +51,7 @@ void ObstacleGenerator::generate(const btVector3 &playerPosition, const ChunkDB 
             for (cell.y = bottom(view); cell.y <= top(view); cell.y++)
                 obstaclesGenerated += insertCell(cell, chunkDB);
 
-    Log::debug(obstaclesGenerated, " obstacles generated");
+    Log::getInstance().debug(obstaclesGenerated, " obstacles generated");
 
     obstacleCount += obstaclesGenerated;
     generatedCuboid = view;
