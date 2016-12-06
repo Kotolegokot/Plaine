@@ -95,11 +95,11 @@ std::string wide_to_utf8(const std::wstring &input) {
 #else
 
 // uses environment variable LANGUAGE to set language for gettext
-void setLanguage(std::string language, bool)
+void setLanguage(const std::string &language, bool)
 {
-        std::string str = "LANGUAGE=";
-        str += language;
-        _wputenv(utf8_to_wide(str).c_str());
+    std::string str = "LANGUAGE=";
+    str += language;
+    _wputenv(utf8_to_wide(str).c_str());
 }
 
 // converts a utf8 string into a standard c++ utf16 string

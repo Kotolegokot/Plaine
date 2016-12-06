@@ -28,6 +28,8 @@ using namespace irr;
 
 class ControlSettingsScreen : public IGUIScreen
 {
+    bool initialized = false;
+
 public:
     ControlSettingsScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment);
     ~ControlSettingsScreen();

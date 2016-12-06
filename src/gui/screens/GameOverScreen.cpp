@@ -37,6 +37,8 @@ void GameOverScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
     reload(buttonWidth, buttonHeight);
     resize(buttonWidth, buttonHeight);
+
+    initialized = true;
 }
 
 void GameOverScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
@@ -47,9 +49,13 @@ void GameOverScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 
 void GameOverScreen::terminate()
 {
-    textMessage->remove();
-    textScore->remove();
-    buttonOK->remove();
+    if (initialized) {
+        textMessage->remove();
+        textScore->remove();
+        buttonOK->remove();
+
+        initialized = false;
+    }
 }
 
 void GameOverScreen::resize(s32 buttonWidth, s32 buttonHeight)

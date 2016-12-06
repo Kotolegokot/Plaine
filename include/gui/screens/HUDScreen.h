@@ -27,6 +27,10 @@ using namespace irr;
 
 class HUDScreen : public IGUIScreen
 {
+    bool infoVisible = true;
+    bool allVisible = true;
+    bool initialized = false;
+
 public:
     HUDScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment);
     ~HUDScreen();
@@ -47,10 +51,6 @@ public:
     gui::IGUIStaticText *textVelocity;
     gui::IGUIStaticText *textAngle;
     gui::IGUIStaticText *textScore;
-
-private:
-    bool infoVisible = true;
-    bool allVisible = true;
 };
 
 #endif // HUDSCREEN_H

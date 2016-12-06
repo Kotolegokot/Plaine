@@ -27,6 +27,8 @@ using namespace irr;
 
 class MainMenuScreen : public IGUIScreen
 {
+    bool initialized = false;
+
 public:
     MainMenuScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment);
     ~MainMenuScreen();

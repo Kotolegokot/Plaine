@@ -28,6 +28,8 @@ using namespace irr;
 
 class GameOverScreen : public IGUIScreen
 {
+    bool initialized = false;
+
 public:
     GameOverScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment);
     ~GameOverScreen();

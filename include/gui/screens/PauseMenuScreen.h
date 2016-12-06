@@ -27,6 +27,7 @@ using namespace irr;
 
 class PauseMenuScreen : public IGUIScreen
 {
+    bool initialized = false;
 public:
     PauseMenuScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment);
     ~PauseMenuScreen();

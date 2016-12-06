@@ -54,6 +54,8 @@ void ControlSettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
     reload(buttonWidth, buttonHeight);
     resize(buttonWidth, buttonHeight);
+
+    initialized = true;
 }
 
 void ControlSettingsScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
@@ -77,15 +79,19 @@ void ControlSettingsScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 
 void ControlSettingsScreen::terminate()
 {
-    for (std::size_t i = 0; i < CONTROLS_COUNT; i++) {
-        textsControl[i]->remove();
-        buttonsControl[i]->remove();
-    }
+    if (initialized) {
+        for (std::size_t i = 0; i < CONTROLS_COUNT; i++) {
+            textsControl[i]->remove();
+            buttonsControl[i]->remove();
+        }
 
-    buttonDefaultControls->remove();
-    buttonSettings->remove();
-    buttonQuit->remove();
-    textScreenSize->remove();
+        buttonDefaultControls->remove();
+        buttonSettings->remove();
+        buttonQuit->remove();
+        textScreenSize->remove();
+
+        initialized = false;
+    }
 }
 
 void ControlSettingsScreen::resize(s32 buttonWidth, s32 buttonHeight)

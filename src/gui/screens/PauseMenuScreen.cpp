@@ -42,6 +42,8 @@ void PauseMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
     reload(buttonWidth, buttonHeight);
     resize(buttonWidth, buttonHeight);
+
+    initialized = true;
 }
 
 void PauseMenuScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
@@ -58,10 +60,14 @@ void PauseMenuScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 
 void PauseMenuScreen::terminate()
 {
-    textScreenSize->remove();
-    buttonResume->remove();
-    buttonMenu->remove();
-    buttonQuit->remove();
+    if (initialized) {
+        textScreenSize->remove();
+        buttonResume->remove();
+        buttonMenu->remove();
+        buttonQuit->remove();
+
+        initialized = false;
+    }
 }
 
 void PauseMenuScreen::resize(s32 buttonWidth, s32 buttonHeight)
