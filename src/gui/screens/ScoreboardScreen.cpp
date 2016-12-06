@@ -1,4 +1,4 @@
- 
+
 /* This file is part of PlaneRunner.
  *
  * PlaneRunner is free software: you can redistribute it and/or modify
@@ -36,7 +36,7 @@ void ScoreboardScreen::initialize(s32 buttonWidth, s32 buttonHeight)
        str = "#" + std::to_string(i + 1) + " : " + std::to_string(dataScore[i]);
        score.push_back(guiEnvironment.addStaticText(utf8_to_wide(str).c_str(), core::rect<s32>(10, 20 * i, 200, 20 * i + 20)));
     }
-    
+
     buttonMenu = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonMenu->setID(ID_BUTTON_MENU);
     setCustomButtonSkin(*buttonMenu);
@@ -63,8 +63,8 @@ void ScoreboardScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 void ScoreboardScreen::terminate()
 {
     if (initialized) {
-        for (std::size_t i = 0; i < score.size(); i++)
-            score[i]->remove();
+        for (auto it = score.begin(); it != score.end(); it++)
+            (*it)->remove();
         buttonMenu->remove();
         buttonQuit->remove();
 
@@ -83,7 +83,7 @@ void ScoreboardScreen::resize(s32 buttonWidth, s32 buttonHeight)
                                                     configuration.resolution.Height - buttonHeight - SPACE,
                                                     configuration.resolution.Width - 2 * SPACE,
                                                     configuration.resolution.Height - SPACE));
-                                                    
+
 }
 
 std::vector<gui::IGUIElement *> ScoreboardScreen::getSelectableElements()
@@ -93,8 +93,8 @@ std::vector<gui::IGUIElement *> ScoreboardScreen::getSelectableElements()
 
 void ScoreboardScreen::setVisible(bool visible)
 {
-    for (std::size_t i = 0; i < score.size(); i++)
-        score[i]->setVisible(visible);
+    for (auto it = score.begin(); it != score.end(); it++)
+            (*it)->setVisible(visible);
     buttonMenu->setVisible(visible);
     buttonQuit->setVisible(visible);
 }

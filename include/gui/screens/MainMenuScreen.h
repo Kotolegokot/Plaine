@@ -40,7 +40,6 @@ public:
     virtual std::vector<gui::IGUIElement *> getSelectableElements() override;
     virtual void setVisible(bool visible) override;
 
-    gui::IGUIStaticText* textScreenSize;
     gui::IGUIButton* buttonStart;
     gui::IGUIButton* buttonScoreboard;
     gui::IGUIButton* buttonSettings;

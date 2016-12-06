@@ -28,8 +28,6 @@ MainMenuScreen::~MainMenuScreen()
 
 void MainMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
-    textScreenSize = guiEnvironment.addStaticText(L"SCREEN_SIZE", core::rect<s32>(10, 10, 200, 30));
-
     buttonStart = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonStart->setID(ID_BUTTON_START);
     setCustomButtonSkin(*buttonStart);
@@ -37,7 +35,7 @@ void MainMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
     buttonScoreboard = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonScoreboard->setID(ID_BUTTON_SCOREBOARD);
     setCustomButtonSkin(*buttonScoreboard);
-    
+
     buttonSettings = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonSettings->setID(ID_BUTTON_SETTINGS);
     setCustomButtonSkin(*buttonSettings);
@@ -58,8 +56,8 @@ void MainMenuScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
     buttonStart->setToolTipText(_wp("Start game"));
 
     buttonScoreboard->setText(_wp("Scoreboard"));
-    buttonStart->setToolTipText(_wp("Scoreboard screen"));
-    
+    buttonScoreboard->setToolTipText(_wp("Scoreboard screen"));
+
     buttonSettings->setText(_wp("Settings"));
     buttonSettings->setToolTipText(_wp("Game settings"));
 
@@ -70,7 +68,6 @@ void MainMenuScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 void MainMenuScreen::terminate()
 {
     if (initialized) {
-        textScreenSize->remove();
         buttonStart->remove();
         buttonScoreboard->remove();
         buttonSettings->remove();
@@ -86,12 +83,12 @@ void MainMenuScreen::resize(s32 buttonWidth, s32 buttonHeight)
                                                      configuration.resolution.Height - 4 * buttonHeight - 4 * SPACE,
                                                      configuration.resolution.Width - 2 * SPACE,
                                                      configuration.resolution.Height - 3 * buttonHeight - 4 * SPACE));
-    
+
     buttonScoreboard->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
                                                           configuration.resolution.Height - 3 * buttonHeight - 3 * SPACE,
                                                           configuration.resolution.Width - 2 * SPACE,
                                                           configuration.resolution.Height - 2 * buttonHeight - 3 * SPACE));
-    
+
     buttonSettings->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
                                                         configuration.resolution.Height - 2 * buttonHeight - 2 * SPACE,
                                                         configuration.resolution.Width - 2 * SPACE,
@@ -110,7 +107,6 @@ std::vector<gui::IGUIElement *> MainMenuScreen::getSelectableElements()
 
 void MainMenuScreen::setVisible(bool visible)
 {
-    textScreenSize->setVisible(visible);
     buttonStart->setVisible(visible);
     buttonScoreboard->setVisible(visible);
     buttonSettings->setVisible(visible);
