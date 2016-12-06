@@ -34,7 +34,7 @@ int main()
     // DELETE
     {
         AudioDevice ad;
-        ad.playSound("media/sounds/collision.mp3");
+        ad.playSound("media/sounds/collision.ogg");
 
         return 0;
     }

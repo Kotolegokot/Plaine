@@ -191,7 +191,7 @@ void checkCollisions(btDynamicsWorld *physicsWorld, btScalar /* timeStep */)
                 Log::debug("plane collision occured");
                 Log::debug("collision impulse = ", pt.getAppliedImpulse());
 
-                auto sound = world.audioDevice().createSound("media/sounds/collision.mp3");
+                auto sound = world.audioDevice().createSound("media/sounds/collision.ogg");
                 sound->setPosition(world.plane().getPosition());
                 sound->setDirection(world.plane().getRotation().getAxis());
                 sound->setVelocity(world.plane().getLinearVelocity());
