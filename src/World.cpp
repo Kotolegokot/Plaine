@@ -171,22 +171,27 @@ void checkCollisions(btDynamicsWorld *physicsWorld, btScalar /* timeStep */)
         auto objA = static_cast<const btCollisionObject *>(contactManifold->getBody0());
         auto objB = static_cast<const btCollisionObject *>(contactManifold->getBody1());
 
-        if (objA != &world.plane().rigidBody() && objB != &world.plane().rigidBody())
-            continue;
+        bool plane = objA == &world.plane().rigidBody() || objB == &world.plane().rigidBody();
 
         int numContacts = contactManifold->getNumContacts();
         for (int j = 0; j < numContacts; j++) {
             btManifoldPoint &pt = contactManifold->getContactPoint(j);
             if (pt.getDistance() <= 0.0f && pt.getAppliedImpulse() > 0) {
-                Log::debug("plane collision occured");
-                Log::debug("collision impulse = ", pt.getAppliedImpulse());
+                if (plane) {
+                    Log::debug("plane collision occured");
+                    Log::debug("collision impulse = ", pt.getAppliedImpulse());
 
-                Audio::getInstance().collision.play();
+                    if (pt.getAppliedImpulse() > 4000)
+                        world.plane().explode();
+                    else if (!world.plane().exploded())
+                        world.plane().addScore(-pt.getAppliedImpulse());
 
-                if (pt.getAppliedImpulse() > 400)
-                    world.plane().explode();
-                else if (!world.plane().exploded())
-                    world.plane().addScore(-pt.getAppliedImpulse());
+//                    if (pt.getAppliedImpulse() > 50)
+//                        Audio::getInstance().collision.play();
+                } else {
+                    if (pt.getAppliedImpulse() > 50)
+                        Audio::getInstance().collision.play();
+                }
             }
         }
     }
