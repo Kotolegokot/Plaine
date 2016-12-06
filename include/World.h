@@ -43,6 +43,7 @@ constexpr btScalar CAMERA_DISTANCE = 200;
 #endif // FAR_CAMERA_DISTANCE
 
 class World {
+    friend struct ContactSensorCallback;
 public:
     World(IrrlichtDevice &irrlichtDevice, AudioDevice &audioDevice,
           const ConfigData &configuration, const ChunkDB &chunkDB);
@@ -59,6 +60,7 @@ public:
     std::size_t obstacles() const;
 
     Plane &plane();
+    AudioDevice &audioDevice();
 private:
     std::unique_ptr<btBroadphaseInterface> m_broadphase;
     std::unique_ptr<btDefaultCollisionConfiguration> m_collisionConfiguration;

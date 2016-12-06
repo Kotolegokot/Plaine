@@ -16,6 +16,8 @@
 
 #include "World.h"
 
+void checkCollisions(btDynamicsWorld *physicsWorld, btScalar timeStep);
+
 World::World(IrrlichtDevice &irrlichtDevice, AudioDevice &audioDevice, const ConfigData &configuration,
              const ChunkDB &chunkDB) :
     m_broadphase(std::make_unique<btDbvtBroadphase>()),
@@ -36,43 +38,12 @@ World::World(IrrlichtDevice &irrlichtDevice, AudioDevice &audioDevice, const Con
         m_physicsWorld = std::make_unique<btDiscreteDynamicsWorld>
                 (m_dispatcher.get(), m_broadphase.get(),
                  m_solver.get(), m_collisionConfiguration.get());
+        m_physicsWorld->setInternalTickCallback(&checkCollisions, static_cast<void *>(this), true);
         m_physicsWorld->setGravity({ 0, 0, 0 });
 
         m_plane = PlaneProducer().producePlane(*m_physicsWorld, m_irrlichtDevice);
         m_explosion = std::make_unique<Explosion>(*m_physicsWorld, m_irrlichtDevice,
                                                   m_plane->getPosition(), 1000);
-
-        /*gContactProcessedCallback = [](btManifoldPoint &cp, void *obj0p, void *obj1p) -> bool
-            {
-                auto obj0 = static_cast<btCollisionObject *>(obj0p);
-                auto obj1 = static_cast<btCollisionObject *>(obj1p);
-
-                // if one of the objects is the place
-                if (obj0->getUserIndex() == 1 || obj1->getUserIndex() == 1) {
-                    Log::debug("plane collision occured");
-                    Log::debug("collision impulse = ", cp.getAppliedImpulse());
-
-                    // obj0 must always be the plane
-                    if (obj1->getUserIndex() == 1)
-                        std::swap(obj0, obj1);
-
-
-                    Plane &plane = *static_cast<Plane *>(obj0->getUserPointer());
-
-                    auto sound = m_audioDevice.createSound("media/sounds/collision.mp3");
-                    sound->setPosition(plane.getPosition());
-                    sound->setDirection(plane.getRotation().getAxis());
-                    sound->setVelocity(plane.getLinearVelocity());
-                    sound->play();
-
-                    if (cp.getAppliedImpulse() > 400)
-                        plane.explode();
-                    else if (!plane.exploded())
-                        plane.addScore(-cp.getAppliedImpulse());
-                }
-
-                return true;
-            };*/
     }
 
     // graphics
@@ -178,6 +149,11 @@ Plane &World::plane()
     return *m_plane;
 }
 
+AudioDevice &World::audioDevice()
+{
+    return m_audioDevice;
+}
+
 void World::updateCameraAndListener()
 {
     core::vector3df upVector(0, 1, 0);
@@ -192,4 +168,40 @@ void World::updateCameraAndListener()
     AudioListener::setPosition(m_plane->getPosition());
     AudioListener::setUpVector(upVector);
     AudioListener::setDirection(m_plane->getPosition() + btVector3(0, 0, 1));
+}
+
+void checkCollisions(btDynamicsWorld *physicsWorld, btScalar /* timeStep */)
+{
+    World &world = *static_cast<World *>(physicsWorld->getWorldUserInfo());
+
+    int numManifolds = physicsWorld->getDispatcher()->getNumManifolds();
+
+    for (int i = 0; i < numManifolds; i++) {
+        btPersistentManifold *contactManifold = physicsWorld->getDispatcher()->getManifoldByIndexInternal(i);
+        auto objA = static_cast<const btCollisionObject *>(contactManifold->getBody0());
+        auto objB = static_cast<const btCollisionObject *>(contactManifold->getBody1());
+
+        if (objA != &world.plane().rigidBody() && objB != &world.plane().rigidBody())
+            continue;
+
+        int numContacts = contactManifold->getNumContacts();
+        for (int j = 0; j < numContacts; j++) {
+            btManifoldPoint &pt = contactManifold->getContactPoint(j);
+            if (pt.getDistance() <= 0.0f) {
+                Log::debug("plane collision occured");
+                Log::debug("collision impulse = ", pt.getAppliedImpulse());
+
+                auto sound = world.audioDevice().createSound("media/sounds/collision.mp3");
+                sound->setPosition(world.plane().getPosition());
+                sound->setDirection(world.plane().getRotation().getAxis());
+                sound->setVelocity(world.plane().getLinearVelocity());
+                sound->play();
+
+                if (pt.getAppliedImpulse() > 400)
+                    world.plane().explode();
+                else if (!world.plane().exploded())
+                    world.plane().addScore(-pt.getAppliedImpulse());
+            }
+        }
+    }
 }
