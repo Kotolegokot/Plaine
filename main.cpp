@@ -43,7 +43,7 @@ int main()
     try {
         Game(data).start();
     } catch (const std::exception &e) {
-        Log::error(e.what());
+        Log::getInstance().error(e.what());
 
         return 1;
     }

@@ -24,7 +24,7 @@ std::vector<Config::Item> Config::parse(const std::string &filename)
 {
     std::ifstream inputFile(filename);
     if (!inputFile.is_open()) {
-        Log::warning("unable to open file\"", filename, "\" for reading.");
+        Log::getInstance().warning("unable to open file\"", filename, "\" for reading.");
         return std::vector<Item>();
     }
 
@@ -59,7 +59,7 @@ std::vector<Config::Item> Config::parse(const std::string &filename)
             } else if (c == EOF) {
                 break;
             } else {
-                Log::warning("config \"", filename, "\" is invalid.");
+                Log::getInstance().warning("config \"", filename, "\" is invalid.");
                 return std::vector<Item>();
             }
             break;
@@ -119,7 +119,7 @@ std::vector<Config::Item> Config::parse(const std::string &filename)
 
 void Config::warning(Item::ItemType expected, Item::ItemType found)
 {
-    Log::warning(Item::typeToString(expected), " expected, but ",
+    Log::getInstance().warning(Item::typeToString(expected), " expected, but ",
                  Item::typeToString(found), " found.");
 }
 
@@ -227,7 +227,7 @@ ConfigData Config::loadConfig(const std::string &filename)
 
                 EXPECT(Item::KEYWORD);
                 if (i->getString() != "on" && i->getString() != "off") {
-                    Log::warning("on or off expected, but ", Item::typeToString(i -> type), " found.");
+                    Log::getInstance().warning("on or off expected, but ", Item::typeToString(i -> type), " found.");
                     goToNextNEWLINE = true;
                     break;
                 }
@@ -260,7 +260,7 @@ ConfigData Config::loadConfig(const std::string &filename)
 
                 EXPECT(Item::KEYWORD);
                 if (i->getString() != "on" && i->getString() != "off") {
-                    Log::warning("on or off expected, but ", Item::typeToString(i->type), " found.");
+                    Log::getInstance().warning("on or off expected, but ", Item::typeToString(i->type), " found.");
                     goToNextNEWLINE = true;
                     break;
                 }
@@ -277,7 +277,7 @@ ConfigData Config::loadConfig(const std::string &filename)
 
                 EXPECT(Item::KEYWORD);
                 if (i->getString() != "on" && i->getString() != "off") {
-                    Log::warning("on or off expected, but ", Item::typeToString(i->type), " found.");
+                    Log::getInstance().warning("on or off expected, but ", Item::typeToString(i->type), " found.");
                     goToNextNEWLINE = true;
                     break;
                 }
@@ -294,7 +294,7 @@ ConfigData Config::loadConfig(const std::string &filename)
 
                 EXPECT(Item::KEYWORD);
                 if (i->getString() != "on" && i->getString() != "off") {
-                    Log::warning("on or off expected, but ", Item::typeToString(i->type), " found.");
+                    Log::getInstance().warning("on or off expected, but ", Item::typeToString(i->type), " found.");
                     goToNextNEWLINE = true;
                     break;
                 }
@@ -411,7 +411,7 @@ void Config::saveConfig(const std::string &filename, const ConfigData &data)
 {
     std::ofstream outputFile(filename);
     if (!outputFile.is_open()) {
-        Log::warning("unable to open file\"", filename, "\" for writing.");
+        Log::getInstance().warning("unable to open file\"", filename, "\" for writing.");
         return;
     }
 

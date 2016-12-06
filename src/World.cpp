@@ -119,7 +119,7 @@ void World::stepSimulation(btScalar timeStep, int maxSubSteps, btScalar fixedTim
 
     m_physicsWorld->stepSimulation(timeStep, maxSubSteps, fixedTimeStep);
 
-    Log::debug("simulation step = ", timeStep, "ms");
+    Log::getInstance().debug("simulation step = ", timeStep, "ms");
 }
 
 void World::generate()
