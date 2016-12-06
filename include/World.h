@@ -19,7 +19,6 @@
 
 #include <iostream>
 #include <memory>
-#include <functional>
 #include <irrlicht.h>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btCollisionObject.h>
@@ -30,6 +29,7 @@
 #include "Explosion.h"
 #include "Chunk.h"
 #include "Config.h"
+#include "Audio.h"
 #include "util/options.h"
 
 using namespace irr;

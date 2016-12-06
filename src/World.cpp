@@ -177,9 +177,11 @@ void checkCollisions(btDynamicsWorld *physicsWorld, btScalar /* timeStep */)
         int numContacts = contactManifold->getNumContacts();
         for (int j = 0; j < numContacts; j++) {
             btManifoldPoint &pt = contactManifold->getContactPoint(j);
-            if (pt.getDistance() <= 0.0f) {
+            if (pt.getDistance() <= 0.0f && pt.getAppliedImpulse() > 0) {
                 Log::debug("plane collision occured");
                 Log::debug("collision impulse = ", pt.getAppliedImpulse());
+
+                Audio::getInstance().collision.play();
 
                 if (pt.getAppliedImpulse() > 400)
                     world.plane().explode();
