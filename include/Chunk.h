@@ -122,8 +122,7 @@ public:
         std::size_t generated = 0;
 
         for (const auto &producer : map[cell]) {
-            auto body = producer->produce(world, device,
-                                          chunk + cell.toBulletVector3() * CELL_LENGTH);
+            auto body = producer->produce(world, device, chunk + cell * CELL_LENGTH);
             list.push_back(std::move(body));
 
             generated++;
@@ -176,13 +175,13 @@ private:
             for (auto &producer : pattern.producers()) {
                 // producer pos relative to pattern
                 btVector3 &origin = producer->relativeTransform.getOrigin();
-                origin += pos.toBulletVector3() * CELL_LENGTH;
+                origin += pos * CELL_LENGTH;
 
                 // producer cell relative to chunk
                 const Vector3<int> cell = (Vector3<int>(origin) / CELL_LENGTH);
 
                 // producer pos relative to cell
-                origin -= cell.toBulletVector3() * CELL_LENGTH;
+                origin -= cell * CELL_LENGTH;
 
                 map[cell].push_back(std::move(producer));
             }
@@ -196,7 +195,7 @@ private:
 
     static btVector3 cellRelativePosition(const btVector3 &position, const Vector3<int> &cell)
     {
-        return position - cell.toBulletVector3() * CELL_LENGTH;
+        return position - cell * CELL_LENGTH;
     }
 
     static PatternPosition randomPosition(std::shared_ptr<IObstaclePattern> pattern)

@@ -19,6 +19,7 @@
 
 #include <bullet/LinearMath/btVector3.h>
 #include <irrlicht.h>
+#include <SFML/Audio.hpp>
 
 template <typename Num>
 struct Vector3 {
@@ -68,15 +69,21 @@ struct Vector3 {
         return *this;
     }
 
-    btVector3 toBulletVector3() const
+    operator btVector3() const
     {
         return btVector3(x, y, z);
     }
 
     template <typename Num2>
-    irr::core::vector3d<Num2> toIrrlichtVector() const
+    operator irr::core::vector3d<Num2>() const
     {
         return irr::core::vector3d<Num2>(x, y, z);
+    }
+
+    template <typename Num2>
+    operator sf::Vector3<Num2>() const
+    {
+        return sf::Vector3<Num2>(x, y, z);
     }
 
     template <typename Num2>
