@@ -14,24 +14,25 @@
  * along with PlaneRunner. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MAINMENUSCREEN_H
-#define MAINMENUSCREEN_H
+#ifndef SCOREBOARDSCREEN_H
+#define SCOREBOARDSCREEN_H
 
 #include <irrlicht.h>
-#include "interfaces/IGUIScreen.h"
+#include <interfaces/IGUIScreen.h>
 #include "Config.h"
-#include "util/i18n.h"
+#include "Scoreboard.h"
 #include "gui/GUIID.h"
+#include "util/i18n.h"
 
 using namespace irr;
 
-class MainMenuScreen : public IGUIScreen
+class ScoreboardScreen : public IGUIScreen
 {
     bool initialized = false;
 
 public:
-    MainMenuScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment);
-    ~MainMenuScreen();
+    ScoreboardScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment);
+    ~ScoreboardScreen();
 
     virtual void initialize(s32 buttonWidth, s32 buttonHeight) override;
     virtual void reload(s32 buttonWidth, s32 buttonHeight) override;
@@ -40,11 +41,10 @@ public:
     virtual std::vector<gui::IGUIElement *> getSelectableElements() override;
     virtual void setVisible(bool visible) override;
 
-    gui::IGUIStaticText* textScreenSize;
-    gui::IGUIButton* buttonStart;
-    gui::IGUIButton* buttonScoreboard;
-    gui::IGUIButton* buttonSettings;
-    gui::IGUIButton* buttonQuit;
+    std::vector<gui::IGUIStaticText *> score;
+    gui::IGUIButton *buttonMenu;
+    gui::IGUIButton *buttonQuit;
 };
 
-#endif // MAINMENUSCREEN_H
+#endif // SCOREBOARDSCREEN_H
+

@@ -54,6 +54,7 @@ void Game::initializeGUI()
     gui->addScreen(std::make_unique<PauseMenuScreen>(configuration, *guiEnvironment), Screen::PAUSE_MENU);
     gui->addScreen(std::make_unique<HUDScreen>(configuration, *guiEnvironment), Screen::HUD);
     gui->addScreen(std::make_unique<GameOverScreen>(configuration, *guiEnvironment), Screen::GAME_OVER);
+    gui->addScreen(std::make_unique<ScoreboardScreen>(configuration, *guiEnvironment), Screen::SCOREBOARD);
 }
 
 void Game::initializeDevice()
@@ -181,24 +182,26 @@ void Game::mainMenu()
                 else
                     return;
             }
-            if (eventReceiver->checkEvent(ID_BUTTON_SETTINGS)) {
+            else if (eventReceiver->checkEvent(ID_BUTTON_SCOREBOARD)) {
+                gui->initialize(Screen::SCOREBOARD);
+            }
+            else if (eventReceiver->checkEvent(ID_BUTTON_SETTINGS)) {
                 oldConfiguration = configuration;
                 gui->initialize(Screen::SETTINGS);
             }
-            if (eventReceiver->checkEvent(ID_BUTTON_QUIT) ||
+            else if (eventReceiver->checkEvent(ID_BUTTON_QUIT) ||
                 eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
                 eventReceiver->checkKeyPressed(KEY_LEFT))
                 return;
-
-            {
-                core::stringw scrs = _w("Screen size: ");
-                scrs += configuration.resolution.Width;
-                scrs += "x";
-                scrs += configuration.resolution.Height;
-                gui->getCurrentScreenAsMainMenu().textScreenSize->setText(scrs.c_str());
-            }
             break;
-
+        case Screen::SCOREBOARD:
+            if (eventReceiver->checkEvent(ID_BUTTON_MENU) ||
+                eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
+                eventReceiver->checkKeyPressed(KEY_LEFT))
+                gui->initialize(Screen::MAIN_MENU);
+            else if (eventReceiver->checkEvent(ID_BUTTON_QUIT))
+                return;
+            break;
         case Screen::SETTINGS:
             if (eventReceiver->checkEvent(ID_COMBOBOX_LANGUAGE)) {
                 switch (gui->getCurrentScreenAsSettings().comboBoxLanguage->getSelected()) {
@@ -347,7 +350,6 @@ void Game::mainMenu()
                 gui->getCurrentScreenAsControlSettings().textScreenSize->setText(scrs.c_str());
             }
             break;
-
         default:
             break;
         }
@@ -495,6 +497,10 @@ bool Game::run()
 
                 if (world->gameOver()) {
                     gui->initialize(Screen::GAME_OVER);
+                    std::vector<s32> score = Scoreboard::loadScore("score.txt");
+                    score.push_back((world->plane().score()));
+                    std::sort(score.begin(), score.end(), std::greater<int>());
+                    Scoreboard::saveScore("score.txt", score);
                     continue;
                 }
 

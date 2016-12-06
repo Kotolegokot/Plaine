@@ -29,6 +29,7 @@
 #include "Explosion.h"
 #include "Chunk.h"
 #include "Config.h"
+#include "Scoreboard.h"
 #include "util/options.h"
 
 using namespace irr;

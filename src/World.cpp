@@ -56,7 +56,7 @@ World::World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration,
                         std::swap(obj0, obj1);
 
                     Plane &plane = *static_cast<Plane *>(obj0->getUserPointer());
-                    if (cp.getAppliedImpulse() > 400)
+                    if (cp.getAppliedImpulse() > 200)
                         plane.explode();
                     else if (!plane.exploded())
                         plane.addScore(-cp.getAppliedImpulse());
