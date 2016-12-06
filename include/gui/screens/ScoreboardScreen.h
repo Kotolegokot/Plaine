@@ -17,6 +17,7 @@
 #ifndef SCOREBOARDSCREEN_H
 #define SCOREBOARDSCREEN_H
 
+#include <algorithm>
 #include <irrlicht.h>
 #include <interfaces/IGUIScreen.h>
 #include "Config.h"

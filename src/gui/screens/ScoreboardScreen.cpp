@@ -27,8 +27,7 @@ ScoreboardScreen::~ScoreboardScreen()
 void ScoreboardScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
     std::vector<s32> dataScore = Scoreboard::loadScore("score.txt");
-    int n;
-    (dataScore.size() < 20) ? (n = dataScore.size()) : (n = 20);
+    int n = std::min<std::size_t>(dataScore.size(), 20);
     std::string str;
     for (int i = 0; i < n; i++)
     {
