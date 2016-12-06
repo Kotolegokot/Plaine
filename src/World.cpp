@@ -178,8 +178,8 @@ void checkCollisions(btDynamicsWorld *physicsWorld, btScalar /* timeStep */)
             btManifoldPoint &pt = contactManifold->getContactPoint(j);
             if (pt.getDistance() <= 0.0f && pt.getAppliedImpulse() > 0) {
                 if (plane) {
-                    Log::debug("plane collision occured");
-                    Log::debug("collision impulse = ", pt.getAppliedImpulse());
+                    Log::getInstance().debug("plane collision occured");
+                    Log::getInstance().debug("collision impulse = ", pt.getAppliedImpulse());
 
                     if (pt.getAppliedImpulse() > 400)
                         world.plane().explode();
@@ -187,10 +187,10 @@ void checkCollisions(btDynamicsWorld *physicsWorld, btScalar /* timeStep */)
                         world.plane().addScore(-pt.getAppliedImpulse());
 
                     if (pt.getAppliedImpulse() > 50)
-                        Audio::getInstance().collision.play();
+                        Audio::getInstance().playCollision(pt.getPositionWorldOnA());
                 } else {
                     if (pt.getAppliedImpulse() > 50)
-                        Audio::getInstance().collision.play();
+                        Audio::getInstance().playCollision(pt.getPositionWorldOnA());
                 }
             }
         }

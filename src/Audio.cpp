@@ -16,3 +16,48 @@
 
 #include "Audio.h"
 
+Audio Audio::instance;
+
+Audio::Audio() {
+    if (!collisionBuffer.loadFromFile(COLLISION_FILE))
+        Log::getInstance().warning("couldn't open file '", COLLISION_FILE, "'");
+    if (!backgroundBuffer.loadFromFile(BACKGROUND_FILE))
+        Log::getInstance().warning("couldn't open file '", BACKGROUND_FILE, "'");
+}
+
+sf::Sound Audio::getCollision() const
+{
+    sf::Sound collision;
+    collision.setBuffer(collisionBuffer);
+
+    return collision;
+}
+
+void Audio::playCollision(const Vector3<float> &position) const
+{
+    std::thread([this, &position]{
+        auto collision = getCollision();
+        collision.setPosition(position);
+        collision.play();
+
+        while (collision.getStatus() == sf::SoundSource::Playing) {}
+    }).detach();
+}
+
+sf::Sound Audio::getBackground() const
+{
+    sf::Sound background;
+    background.setBuffer(backgroundBuffer);
+
+    return background;
+}
+
+void Audio::playBlackground() const
+{
+    std::thread([this]{
+        auto bg = getBackground();
+        bg.play();
+
+        while (bg.getStatus() == sf::SoundSource::Playing) {}
+    }).detach();
+}
