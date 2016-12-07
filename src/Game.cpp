@@ -500,6 +500,8 @@ bool Game::run()
                 }
 
                 if (world->gameOver()) {
+                    background.stop();
+
                     gui->initialize(Screen::GAME_OVER);
                     std::vector<s32> score = Scoreboard::loadScore("score.txt");
                     score.push_back((world->plane().score()));
