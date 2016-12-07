@@ -377,11 +377,12 @@ void Game::mainMenu()
 // returns false if quit is pressed
 bool Game::run()
 {
-    auto bg = Audio::getInstance().getBackground();
-    bg.play();
-
     // generate some chunks
     auto chunkDB = generateChunkDB();
+
+    // start backgroudn music
+    sf::Sound background = Audio::getInstance().background();
+    background.play();
 
     gui->initialize(Screen::HUD);
     world = std::make_unique<World>(*device, configuration, *chunkDB);

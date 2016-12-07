@@ -41,6 +41,8 @@ constexpr btScalar CAMERA_DISTANCE = 600;
 constexpr btScalar CAMERA_DISTANCE = 200;
 #endif // FAR_CAMERA_DISTANCE
 
+constexpr btScalar EXPLOSION_THRESHOLD = 400.0f;
+
 class World {
     friend struct ContactSensorCallback;
 public:

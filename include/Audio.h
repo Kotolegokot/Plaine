@@ -17,19 +17,27 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
-#include <SFML/Audio.hpp>
+#include <memory>
 #include <thread>
+#include <queue>
+#include <list>
+#include <SFML/Audio.hpp>
 #include "Log.h"
 #include "util/Vector3.h"
 
 #define COLLISION_FILE "media/sounds/collision.ogg"
+#define EXPLOSION_FILE "media/sounds/explosion.ogg"
 #define BACKGROUND_FILE "media/sounds/background.ogg"
 
 class Audio {
     Audio();
 
     sf::SoundBuffer collisionBuffer;
+    sf::SoundBuffer explosionBuffer;
     sf::SoundBuffer backgroundBuffer;
+
+    static std::queue<sf::Sound, std::list<sf::Sound>> queue;
+    static void clearQueue();
 
     static Audio instance;
 public:
@@ -38,10 +46,12 @@ public:
         return instance;
     }
 
-    sf::Sound getCollision() const;
-    void playCollision(const Vector3<float> &position = { 0, 0, 0}) const;
-    sf::Sound getBackground() const;
-    void playBlackground() const;
+    sf::Sound collision() const;
+    sf::Sound explosion() const;
+    sf::Sound background() const;
+
+    static void play(sf::Sound sound, float volume = -1);
+    static void playAt(sf::Sound sound, const Vector3<float> &position, float volume = -1);
 };
 
 #endif // AUDIO_H

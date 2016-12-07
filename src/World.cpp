@@ -171,7 +171,11 @@ void checkCollisions(btDynamicsWorld *physicsWorld, btScalar /* timeStep */)
         auto objA = static_cast<const btCollisionObject *>(contactManifold->getBody0());
         auto objB = static_cast<const btCollisionObject *>(contactManifold->getBody1());
 
-        bool plane = objA == &world.plane().rigidBody() || objB == &world.plane().rigidBody();
+        // plane must be always objA
+        if (objB == &world.plane().rigidBody())
+            std::swap(objA, objB);
+
+        bool plane = objA == &world.plane().rigidBody();
 
         int numContacts = contactManifold->getNumContacts();
         for (int j = 0; j < numContacts; j++) {
@@ -181,16 +185,27 @@ void checkCollisions(btDynamicsWorld *physicsWorld, btScalar /* timeStep */)
                     Log::getInstance().debug("plane collision occured");
                     Log::getInstance().debug("collision impulse = ", pt.getAppliedImpulse());
 
-                    if (pt.getAppliedImpulse() > 400)
+                    if (pt.getAppliedImpulse() > EXPLOSION_THRESHOLD) {
                         world.plane().explode();
-                    else if (!world.plane().exploded())
+
+                        Audio::playAt(Audio::getInstance().explosion(), pt.getPositionWorldOnA());
+                    } else if (!world.plane().exploded()) {
                         world.plane().addScore(-pt.getAppliedImpulse());
 
-                    if (pt.getAppliedImpulse() > 50)
-                        Audio::getInstance().playCollision(pt.getPositionWorldOnA());
+                        if (pt.getAppliedImpulse() > 50.f)
+                            Audio::playAt(Audio::getInstance().collision(),
+                                          (pt.getPositionWorldOnA() +
+                                           pt.getPositionWorldOnB()) * 0.5f,
+                                          pt.getAppliedImpulse() / EXPLOSION_THRESHOLD * 100);
+                    }
                 } else {
-                    if (pt.getAppliedImpulse() > 50)
-                        Audio::getInstance().playCollision(pt.getPositionWorldOnA());
+                    if (pt.getAppliedImpulse() > 100.0f) {
+                        Audio::playAt(Audio::getInstance().collision(),
+                                      (pt.getPositionWorldOnA() +
+                                       pt.getPositionWorldOnB()) * 0.5f,
+                                      std::min(100.0f,
+                                               pt.getAppliedImpulse() / EXPLOSION_THRESHOLD * 100));
+                    }
                 }
             }
         }

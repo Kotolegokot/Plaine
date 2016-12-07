@@ -17,47 +17,59 @@
 #include "Audio.h"
 
 Audio Audio::instance;
+std::queue<sf::Sound, std::list<sf::Sound>> Audio::queue;
 
 Audio::Audio() {
     if (!collisionBuffer.loadFromFile(COLLISION_FILE))
         Log::getInstance().warning("couldn't open file '", COLLISION_FILE, "'");
+
+    if (!explosionBuffer.loadFromFile(EXPLOSION_FILE))
+        Log::getInstance().warning("couldn't open file '", EXPLOSION_FILE, "'");
+
     if (!backgroundBuffer.loadFromFile(BACKGROUND_FILE))
         Log::getInstance().warning("couldn't open file '", BACKGROUND_FILE, "'");
 }
 
-sf::Sound Audio::getCollision() const
+sf::Sound Audio::collision() const
 {
-    sf::Sound collision;
-    collision.setBuffer(collisionBuffer);
-
-    return collision;
+    return sf::Sound(collisionBuffer);
 }
 
-void Audio::playCollision(const Vector3<float> &position) const
+sf::Sound Audio::explosion() const
 {
-    std::thread([this, &position]{
-        auto collision = getCollision();
-        collision.setPosition(position);
-        collision.play();
-
-        while (collision.getStatus() == sf::SoundSource::Playing) {}
-    }).detach();
+    return sf::Sound(explosionBuffer);
 }
 
-sf::Sound Audio::getBackground() const
+sf::Sound Audio::background() const
 {
-    sf::Sound background;
-    background.setBuffer(backgroundBuffer);
-
-    return background;
+    return sf::Sound(backgroundBuffer);
 }
 
-void Audio::playBlackground() const
+void Audio::play(sf::Sound sound, float volume)
 {
-    std::thread([this]{
-        auto bg = getBackground();
-        bg.play();
+    if (volume >= 0)
+        sound.setVolume(volume);
 
-        while (bg.getStatus() == sf::SoundSource::Playing) {}
-    }).detach();
+    queue.push(sound);
+    queue.back().play();
+
+    clearQueue();
+}
+
+void Audio::playAt(sf::Sound sound, const Vector3<float> &position, float volume)
+{
+    sound.setPosition(position);
+    if (volume >= 0)
+        sound.setVolume(volume);
+
+    queue.push(sound);
+    queue.back().play();
+
+    clearQueue();
+}
+
+void Audio::clearQueue()
+{
+    while (queue.front().getStatus() == sf::SoundSource::Stopped)
+        queue.pop();
 }
