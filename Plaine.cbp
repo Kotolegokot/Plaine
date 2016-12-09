@@ -26,6 +26,8 @@
 				</Compiler>
 				<Linker>
 					<Add library="pthread" />
+					<Add library="sfml-audio" />
+					<Add library="sfml-system" />
 				</Linker>
 			</Target>
 			<Target title="Linux-Release">
@@ -50,6 +52,8 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="sfml-audio" />
+					<Add library="sfml-system" />
 				</Linker>
 			</Target>
 			<Target title="Windows-Debug">
@@ -70,6 +74,8 @@
 				</Compiler>
 				<Linker>
 					<Add library="intl" />
+					<Add library="sfml-audio-2" />
+					<Add library="sfml-system-2" />
 				</Linker>
 			</Target>
 			<Target title="Windows-Release">
@@ -93,6 +99,8 @@
 				<Linker>
 					<Add option="-s" />
 					<Add library="intl" />
+					<Add library="sfml-audio-2" />
+					<Add library="sfml-system-2" />
 				</Linker>
 			</Target>
 		</Build>
@@ -109,8 +117,6 @@
 			<Add library="BulletCollision" />
 			<Add library="LinearMath" />
 			<Add library="Irrlicht" />
-			<Add library="sfml-audio-2" />
-			<Add library="sfml-system-2" />
 			<Add directory="deps/lib" />
 		</Linker>
 		<Unit filename="include/Audio.h" />
