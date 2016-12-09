@@ -109,8 +109,11 @@
 			<Add library="BulletCollision" />
 			<Add library="LinearMath" />
 			<Add library="Irrlicht" />
+			<Add library="sfml-audio-2" />
+			<Add library="sfml-system-2" />
 			<Add directory="deps/lib" />
 		</Linker>
+		<Unit filename="include/Audio.h" />
 		<Unit filename="include/Chunk.h" />
 		<Unit filename="include/Config.h" />
 		<Unit filename="include/DebugDrawer.h" />
@@ -127,7 +130,6 @@
 		<Unit filename="include/PlaneProducer.h" />
 		<Unit filename="include/Scoreboard.h" />
 		<Unit filename="include/World.h" />
-		<Unit filename="include/audio/OpenAL.h" />
 		<Unit filename="include/bodies/BoxProducer.h" />
 		<Unit filename="include/bodies/ConeProducer.h" />
 		<Unit filename="include/bodies/IcosahedronProducer.h" />
@@ -162,6 +164,7 @@
 		<Unit filename="include/util/options.h" />
 		<Unit filename="include/util/other.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Audio.cpp" />
 		<Unit filename="src/Body.cpp" />
 		<Unit filename="src/Config.cpp" />
 		<Unit filename="src/DebugDrawer.cpp" />
@@ -177,7 +180,6 @@
 		<Unit filename="src/PlaneProducer.cpp" />
 		<Unit filename="src/Scoreboard.cpp" />
 		<Unit filename="src/World.cpp" />
-		<Unit filename="src/audio/OpenAL.cpp" />
 		<Unit filename="src/bodies/ConeProducer.cpp" />
 		<Unit filename="src/bodies/IcosahedronProducer.cpp" />
 		<Unit filename="src/bodies/Icosphere2Producer.cpp" />
