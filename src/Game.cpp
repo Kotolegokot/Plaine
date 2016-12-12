@@ -159,6 +159,9 @@ void Game::setSpriteBank(bool isControlButton)
 // show main menu
 void Game::mainMenu()
 {
+    sf::Sound menu = Audio::getInstance().menu();
+    menu.play();
+
     // set resolution to actual screen size
     configuration.resolution = driver->getScreenSize();
     // initialize menu
@@ -177,8 +180,12 @@ void Game::mainMenu()
         switch (gui->getCurrentScreenIndex()) {
         case Screen::MAIN_MENU:
             if (eventReceiver->checkEvent(ID_BUTTON_START)) {
+                    menu.pause();
                 if (run())
+                {
+                    menu.play();
                     gui->initialize(Screen::MAIN_MENU);
+                }
                 else
                     return;
             }
@@ -380,7 +387,7 @@ bool Game::run()
     // generate some chunks
     auto chunkDB = generateChunkDB();
 
-    // start backgroudn music
+    // start background music
     sf::Sound background = Audio::getInstance().background();
     background.play();
 

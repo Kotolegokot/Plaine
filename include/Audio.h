@@ -28,6 +28,7 @@
 #define COLLISION_FILE "media/sounds/collision.ogg"
 #define EXPLOSION_FILE "media/sounds/explosion.ogg"
 #define BACKGROUND_FILE "media/sounds/background.ogg"
+#define MENU_FILE "media/sounds/menu.ogg"
 
 class Audio {
     Audio();
@@ -35,6 +36,7 @@ class Audio {
     sf::SoundBuffer collisionBuffer;
     sf::SoundBuffer explosionBuffer;
     sf::SoundBuffer backgroundBuffer;
+    sf::SoundBuffer menuBuffer;
 
     static std::queue<sf::Sound, std::list<sf::Sound>> queue;
     static void clearQueue();
@@ -49,6 +51,7 @@ public:
     sf::Sound collision() const;
     sf::Sound explosion() const;
     sf::Sound background() const;
+    sf::Sound menu() const;
 
     static void play(sf::Sound sound, float volume = -1);
     static void playAt(sf::Sound sound, const Vector3<float> &position, float volume = -1);

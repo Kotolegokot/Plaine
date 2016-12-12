@@ -28,6 +28,9 @@ Audio::Audio() {
 
     if (!backgroundBuffer.loadFromFile(BACKGROUND_FILE))
         Log::getInstance().warning("couldn't open file '", BACKGROUND_FILE, "'");
+
+    if (!menuBuffer.loadFromFile(MENU_FILE))
+        Log::getInstance().warning("couldn't open file '", MENU_FILE, "'");
 }
 
 sf::Sound Audio::collision() const
@@ -43,6 +46,11 @@ sf::Sound Audio::explosion() const
 sf::Sound Audio::background() const
 {
     return sf::Sound(backgroundBuffer);
+}
+
+sf::Sound Audio::menu() const
+{
+    return sf::Sound(menuBuffer);
 }
 
 void Audio::play(sf::Sound sound, float volume)
