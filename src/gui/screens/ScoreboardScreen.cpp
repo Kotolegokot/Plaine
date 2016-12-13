@@ -26,15 +26,26 @@ ScoreboardScreen::~ScoreboardScreen()
 
 void ScoreboardScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
+    tableScore = guiEnvironment.addTable(core::rect<s32>(0, 0, 0, 0));
+    tableScore->setID(ID_LISTBOX_SCORE);
+    tableScore->setResizableColumns(false);
+
+    tableScore->addColumn(_wp("Place"), 0);
+    tableScore->addColumn(_wp("Score"), 1);
+
     std::vector<s32> dataScore = Scoreboard::loadScore("score.txt");
-    int n = std::min<std::size_t>(dataScore.size(), 20);
+
     std::string str;
-    for (int i = 0; i < n; i++)
+
+    for (std::size_t i = 0; i < dataScore.size(); i++)
     {
-       str = "#" + std::to_string(i + 1) + " : " + std::to_string(dataScore[i]);
-       score.push_back(guiEnvironment.addStaticText(utf8_to_wide(str).c_str(), core::rect<s32>(10, 20 * i, 200, 20 * i + 20)));
+       str = "#" + std::to_string(i + 1);
+       tableScore->addRow(i);
+       tableScore->setCellText(i, 0, utf8_to_wide(str).c_str());
+       str = std::to_string(dataScore[i]);
+       tableScore->setCellText(i, 1, utf8_to_wide(str).c_str());
     }
-    
+
     buttonMenu = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonMenu->setID(ID_BUTTON_MENU);
     setCustomButtonSkin(*buttonMenu);
@@ -61,8 +72,7 @@ void ScoreboardScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 void ScoreboardScreen::terminate()
 {
     if (initialized) {
-        for (std::size_t i = 0; i < score.size(); i++)
-            score[i]->remove();
+        tableScore->remove();
         buttonMenu->remove();
         buttonQuit->remove();
 
@@ -72,6 +82,11 @@ void ScoreboardScreen::terminate()
 
 void ScoreboardScreen::resize(s32 buttonWidth, s32 buttonHeight)
 {
+    tableScore->setRelativePosition(core::rect<s32>(2*SPACE, SPACE,
+                                                      configuration.resolution.Width - 4*SPACE - buttonWidth,
+                                                      configuration.resolution.Height - 2*SPACE));
+    tableScore->setColumnWidth(0, 6*SPACE);
+    tableScore->setColumnWidth(1, configuration.resolution.Width - 12*SPACE - buttonWidth - 1);
     buttonMenu->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
                                                     configuration.resolution.Height - 2 * buttonHeight - 2 * SPACE,
                                                     configuration.resolution.Width - 2 * SPACE,
@@ -81,7 +96,7 @@ void ScoreboardScreen::resize(s32 buttonWidth, s32 buttonHeight)
                                                     configuration.resolution.Height - buttonHeight - SPACE,
                                                     configuration.resolution.Width - 2 * SPACE,
                                                     configuration.resolution.Height - SPACE));
-                                                    
+
 }
 
 std::vector<gui::IGUIElement *> ScoreboardScreen::getSelectableElements()
@@ -91,8 +106,7 @@ std::vector<gui::IGUIElement *> ScoreboardScreen::getSelectableElements()
 
 void ScoreboardScreen::setVisible(bool visible)
 {
-    for (std::size_t i = 0; i < score.size(); i++)
-        score[i]->setVisible(visible);
+    tableScore->setVisible(visible);
     buttonMenu->setVisible(visible);
     buttonQuit->setVisible(visible);
 }
