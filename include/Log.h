@@ -1,3 +1,19 @@
+/* This file is part of Plaine.
+ *
+ * Plaine is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Plaine is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef LOG_H
 #define LOG_H
 
@@ -11,19 +27,68 @@ const std::string LOG_FILE { "logfile" };
 
 enum class severity_level { error, warning, notice, info, debug };
 
-std::ostream &operator <<(std::ostream &out, severity_level level);
-std::wostream &operator <<(std::wostream &wout, severity_level level);
+static inline std::ostream &operator <<(std::ostream &out, severity_level level)
+{
+    switch (level) {
+    case severity_level::error:
+        out << "ERROR   :";
+        break;
+    case severity_level::warning:
+        out << "WARNING :";
+        break;
+    case severity_level::notice:
+        out << "NOTICE  :";
+        break;
+    case severity_level::info:
+        out << "INFO    :";
+        break;
+    case severity_level::debug:
+        out << "DEBUG   :";
+        break;
+    }
+
+    return out;
+}
+
+static inline std::wostream &operator <<(std::wostream &wout, severity_level level)
+{
+    switch (level) {
+    case severity_level::error:
+        wout << L"ERROR   :";
+        break;
+    case severity_level::warning:
+        wout << L"WARNING :";
+        break;
+    case severity_level::notice:
+        wout << L"NOTICE  :";
+        break;
+    case severity_level::info:
+        wout << L"INFO    :";
+        break;
+    case severity_level::debug:
+        wout << L"DEBUG   :";
+        break;
+    }
+
+    return wout;
+}
 
 class Log {
-    static std::ofstream out;
-    static std::wofstream wout;
-    static std::mutex mutex;
+    Log() = default;
 
+    std::ofstream out { LOG_FILE };
+    std::wofstream wout { LOG_FILE };
+    std::mutex mutex;
+
+    static Log instance;
 public:
-    Log() = delete;
+    static Log &getInstance()
+    {
+        return instance;
+    }
 
     template <typename... Args>
-    static void write(severity_level level, Args &&... args)
+    void write(severity_level level, Args &&... args)
     {
         std::lock_guard<std::mutex> lock(mutex);
         out << level << " ";
@@ -32,7 +97,7 @@ public:
     }
 
     template <typename... Args>
-    static void wwrite(severity_level level, Args &&... args)
+    void wwrite(severity_level level, Args &&... args)
     {
         std::lock_guard<std::mutex> lock(mutex);
         wout << level << L" ";
@@ -41,61 +106,61 @@ public:
     }
 
     template <typename... Args>
-    static void error(Args &&... args)
+    void error(Args &&... args)
     {
         write(severity_level::error, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
-    static void werror(Args &&... args)
+    void werror(Args &&... args)
     {
         wwrite(severity_level::error, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
-    static void warning(Args &&... args)
+    void warning(Args &&... args)
     {
         write(severity_level::warning, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
-    static void wwarning(Args &&... args)
+    void wwarning(Args &&... args)
     {
         wwrite(severity_level::warning, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
-    static void notice(Args &&... args)
+    void notice(Args &&... args)
     {
         write(severity_level::notice, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
-    static void wnotice(Args &&... args)
+    void wnotice(Args &&... args)
     {
         wwrite(severity_level::notice, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
-    static void info(Args &&... args)
+    void info(Args &&... args)
     {
         write(severity_level::info, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
-    static void winfo(Args &&... args)
+    void winfo(Args &&... args)
     {
         wwrite(severity_level::info, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
-    static void debug(Args &&... args)
+    void debug(Args &&... args)
     {
         write(severity_level::debug, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
-    static void wdebug(Args &&... args)
+    void wdebug(Args &&... args)
     {
         wwrite(severity_level::debug, std::forward<Args>(args)...);
     }

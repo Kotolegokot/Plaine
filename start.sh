@@ -1,3 +1,3 @@
 #!/bin/sh
 
-./bin/PlaneRunner
+./bin/Plaine

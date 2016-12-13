@@ -1,17 +1,17 @@
-/* This file is part of PlaneRunner.
+/* This file is part of Plaine.
  *
- * PlaneRunner is free software: you can redistribute it and/or modify
+ * Plaine is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * PlaneRunner is distributed in the hope that it will be useful,
+ * Plaine is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with PlaneRunner. If not, see <http://www.gnu.org/licenses/>.
+ * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Game.h"
@@ -459,13 +459,13 @@ bool Game::run()
                 device->getCursorControl()->setVisible(true);
 
                 // still continue simulation as we wanna see plane blowing up when we lose
-                Log::debug("=== BEGIN SIMULATION STEP ===");
+                Log::getInstance().debug("=== BEGIN SIMULATION STEP ===");
 
                 timeCurrent = timer->getTime();
                 const float step = timeCurrent - timePrevious;
                 world->stepSimulation((step / 1000.0), 10, tick / 1000.0f);
                 timePrevious = timeCurrent;
-                Log::debug("=== END SIMULATION STEP ===");
+                Log::getInstance().debug("=== END SIMULATION STEP ===");
 
                 world->render(color);
                 handleSelecting();
@@ -478,7 +478,7 @@ bool Game::run()
                 break;
             }
             case Screen::HUD: {
-                Log::debug("=== BEGIN SIMULATION STEP ===");
+                Log::getInstance().debug("=== BEGIN SIMULATION STEP ===");
 
                 // physics simulation
                 timeCurrent = timer->getTime();
@@ -505,7 +505,7 @@ bool Game::run()
                 }
 
                 deltaTime = timer->getTime() - accumulator;
-                Log::debug("generation and control handling delta = ", deltaTime, "ms");
+                Log::getInstance().debug("generation and control handling delta = ", deltaTime, "ms");
                 while (deltaTime >= tick) {
                     deltaTime -= tick;
                     accumulator += tick;
@@ -515,7 +515,7 @@ bool Game::run()
                     world->plane().addScore(2);
                 }
 
-                Log::debug("=== END SIMULATION STEP ===");
+                Log::getInstance().debug("=== END SIMULATION STEP ===");
 
                 world->render(color);
                 device->getCursorControl()->setVisible(false); //set cursor invisible
@@ -557,7 +557,7 @@ void Game::updateHUD()
         cameraPosition += ")";
         gui->getCurrentScreenAsHUD().textCameraPosition->setText(cameraPosition.c_str());
 
-        Log::debug("plane position = (", position.X, ", ", position.Y, ", ", position.Z, ")");
+        Log::getInstance().debug("plane position = (", position.X, ", ", position.Y, ", ", position.Z, ")");
     }
 
     // cube counter
@@ -566,7 +566,7 @@ void Game::updateHUD()
         obstacles += world->obstacles();
         gui->getCurrentScreenAsHUD().textObstaclesCount->setText(obstacles.c_str());
 
-        Log::debug("obstacles = ", world->obstacles());
+        Log::getInstance().debug("obstacles = ", world->obstacles());
     }
 
     // fps counter
@@ -575,7 +575,7 @@ void Game::updateHUD()
         fps += driver->getFPS();
         gui->getCurrentScreenAsHUD().textFPS->setText(fps.c_str());
 
-        Log::debug("FPS = ", driver->getFPS());
+        Log::getInstance().debug("FPS = ", driver->getFPS());
     }
 
     // velocity counter
@@ -586,8 +586,8 @@ void Game::updateHUD()
         velocity += world->plane().rigidBody().getAngularVelocity().length();
         gui->getCurrentScreenAsHUD().textVelocity->setText(velocity.c_str());
 
-        Log::debug("linear velocity = ", world->plane().getLinearVelocity().length());
-        Log::debug("angular velocity = ", world->plane().getLinearVelocity().length());
+        Log::getInstance().debug("linear velocity = ", world->plane().getLinearVelocity().length());
+        Log::getInstance().debug("angular velocity = ", world->plane().getLinearVelocity().length());
     }
 
     // rotation counter
@@ -603,7 +603,7 @@ void Game::updateHUD()
         rotation_str += _w("°");
         gui->getCurrentScreenAsHUD().textAngle->setText(rotation_str.c_str());
 
-        Log::debug("rotation = (", rotation.x(), ", ", rotation.y(), ", ", rotation.z(), ")");
+        Log::getInstance().debug("rotation = (", rotation.x(), ", ", rotation.y(), ", ", rotation.z(), ")");
     }
 
     // score counter
@@ -612,7 +612,7 @@ void Game::updateHUD()
         score += world->plane().score();
         gui->getCurrentScreenAsHUD().textScore->setText(score.c_str());
 
-        Log::debug("score = ", world->plane().score());
+        Log::getInstance().debug("score = ", world->plane().score());
     }
 }
 
