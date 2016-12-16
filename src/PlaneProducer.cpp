@@ -43,10 +43,7 @@ std::unique_ptr<Body> PlaneProducer::produce(btDynamicsWorld &physicsWorld,
     rigidBody->setActivationState(DISABLE_DEACTIVATION);
     physicsWorld.addRigidBody(rigidBody.get());
 
-    auto plane = std::make_unique<Plane>(physicsWorld, std::move(rigidBody));
-    plane->rigidBody().setUserPointer(plane.get());
-
-    return plane;
+    return std::make_unique<Plane>(physicsWorld, std::move(rigidBody));
 }
 
 btScalar PlaneProducer::getMass() const

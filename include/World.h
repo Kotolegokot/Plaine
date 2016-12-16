@@ -29,6 +29,7 @@
 #include "Explosion.h"
 #include "Chunk.h"
 #include "Config.h"
+#include "Audio.h"
 #include "Scoreboard.h"
 #include "util/options.h"
 
@@ -40,10 +41,12 @@ constexpr btScalar CAMERA_DISTANCE = 600;
 constexpr btScalar CAMERA_DISTANCE = 200;
 #endif // FAR_CAMERA_DISTANCE
 
+constexpr btScalar EXPLOSION_THRESHOLD = 400.0f;
+
 class World {
+    friend struct ContactSensorCallback;
 public:
-    World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration,
-          const ChunkDB &chunkDB);
+    World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration, const ChunkDB &chunkDB);
     ~World();
 
     void render(video::SColor color);
@@ -81,7 +84,7 @@ private:
 
     bool m_gameOver = false;
 private:
-    void updateCamera();
+    void updateCameraAndListener();
 };
 
 #endif // WORLD_H

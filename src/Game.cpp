@@ -159,6 +159,10 @@ void Game::setSpriteBank(bool isControlButton)
 // show main menu
 void Game::mainMenu()
 {
+    sf::Sound menu = Audio::getInstance().menu();
+    menu.setLoop(true);
+    menu.play();
+
     // set resolution to actual screen size
     configuration.resolution = driver->getScreenSize();
     // initialize menu
@@ -177,8 +181,12 @@ void Game::mainMenu()
         switch (gui->getCurrentScreenIndex()) {
         case Screen::MAIN_MENU:
             if (eventReceiver->checkEvent(ID_BUTTON_START)) {
+                    menu.pause();
                 if (run())
+                {
+                    menu.play();
                     gui->initialize(Screen::MAIN_MENU);
+                }
                 else
                     return;
             }
@@ -380,6 +388,11 @@ bool Game::run()
     // generate some chunks
     auto chunkDB = generateChunkDB();
 
+    // start background music
+    sf::Sound background = Audio::getInstance().background();
+    background.setLoop(true);
+    background.play();
+
     gui->initialize(Screen::HUD);
     world = std::make_unique<World>(*device, configuration, *chunkDB);
     planeControl = std::make_unique<PlaneControl>(world->plane(), configuration.controls);
@@ -496,6 +509,8 @@ bool Game::run()
                 }
 
                 if (world->gameOver()) {
+                    background.stop();
+
                     gui->initialize(Screen::GAME_OVER);
                     std::vector<s32> score = Scoreboard::loadScore("score.txt");
                     score.push_back((world->plane().score()));
@@ -539,6 +554,7 @@ bool Game::run()
         }
     }
 
+//    Audio::getInstance().background.stop();
     world.reset();
     return false;
 }

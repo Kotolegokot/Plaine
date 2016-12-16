@@ -16,6 +16,8 @@
 
 #include "World.h"
 
+void checkCollisions(btDynamicsWorld *physicsWorld, btScalar timeStep);
+
 World::World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration,
              const ChunkDB &chunkDB) :
     m_broadphase(std::make_unique<btDbvtBroadphase>()),
@@ -35,35 +37,12 @@ World::World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration,
         m_physicsWorld = std::make_unique<btDiscreteDynamicsWorld>
                 (m_dispatcher.get(), m_broadphase.get(),
                  m_solver.get(), m_collisionConfiguration.get());
+        m_physicsWorld->setInternalTickCallback(&checkCollisions, static_cast<void *>(this), true);
         m_physicsWorld->setGravity({ 0, 0, 0 });
 
         m_plane = PlaneProducer().producePlane(*m_physicsWorld, m_irrlichtDevice);
         m_explosion = std::make_unique<Explosion>(*m_physicsWorld, m_irrlichtDevice,
                                                   m_plane->getPosition(), 1000);
-
-        gContactProcessedCallback = [](btManifoldPoint &cp, void *obj0p, void *obj1p) -> bool
-            {
-                auto obj0 = static_cast<btCollisionObject *>(obj0p);
-                auto obj1 = static_cast<btCollisionObject *>(obj1p);
-
-                // if one of the objects is the place
-                if (obj0->getUserIndex() == 1 || obj1->getUserIndex() == 1) {
-                    Log::getInstance().debug("plane collision occured");
-                    Log::getInstance().debug("collision impulse = ", cp.getAppliedImpulse());
-
-                    // obj0 must always be the plane
-                    if (obj1->getUserIndex() == 1)
-                        std::swap(obj0, obj1);
-
-                    Plane &plane = *static_cast<Plane *>(obj0->getUserPointer());
-                    if (cp.getAppliedImpulse() > 200)
-                        plane.explode();
-                    else if (!plane.exploded())
-                        plane.addScore(-cp.getAppliedImpulse());
-                }
-
-                return true;
-            };
     }
 
     // graphics
@@ -75,7 +54,7 @@ World::World(IrrlichtDevice &irrlichtDevice, const ConfigData &configuration,
 #endif // FOG_ENABLED
 
         m_camera.setFarValue(m_configuration.renderDistance);
-        updateCamera();
+        updateCameraAndListener();
 
         m_light.setLightType(video::ELT_DIRECTIONAL);
         {
@@ -129,7 +108,7 @@ void World::render(video::SColor color)
 #endif // DEBUG_DRAWER_ENABLED
 
     if (!m_gameOver)
-        updateCamera(); // update camera position, target, and rotation
+        updateCameraAndListener(); // update camera position, target, and rotation
     m_irrlichtDevice.getSceneManager()->drawAll();
 }
 
@@ -169,7 +148,7 @@ Plane &World::plane()
     return *m_plane;
 }
 
-void World::updateCamera()
+void World::updateCameraAndListener()
 {
     core::vector3df upVector(0, 1, 0);
     upVector.rotateXYBy(m_plane->getEulerRotationDeg().z());
@@ -179,4 +158,56 @@ void World::updateCamera()
     m_camera.setUpVector(upVector);
 
     m_camera.setTarget(m_camera.getPosition() + core::vector3df(0, 0, 1));
+}
+
+void checkCollisions(btDynamicsWorld *physicsWorld, btScalar /* timeStep */)
+{
+    World &world = *static_cast<World *>(physicsWorld->getWorldUserInfo());
+
+    int numManifolds = physicsWorld->getDispatcher()->getNumManifolds();
+
+    for (int i = 0; i < numManifolds; i++) {
+        btPersistentManifold *contactManifold = physicsWorld->getDispatcher()->getManifoldByIndexInternal(i);
+        auto objA = static_cast<const btCollisionObject *>(contactManifold->getBody0());
+        auto objB = static_cast<const btCollisionObject *>(contactManifold->getBody1());
+
+        // plane must be always objA
+        if (objB == &world.plane().rigidBody())
+            std::swap(objA, objB);
+
+        bool plane = objA == &world.plane().rigidBody();
+
+        int numContacts = contactManifold->getNumContacts();
+        for (int j = 0; j < numContacts; j++) {
+            btManifoldPoint &pt = contactManifold->getContactPoint(j);
+            if (pt.getDistance() <= 0.0f && pt.getAppliedImpulse() > 0) {
+                if (plane) {
+                    Log::getInstance().debug("plane collision occured");
+                    Log::getInstance().debug("collision impulse = ", pt.getAppliedImpulse());
+
+                    if (pt.getAppliedImpulse() > EXPLOSION_THRESHOLD) {
+                        world.plane().explode();
+
+                        Audio::playAt(Audio::getInstance().explosion(), pt.getPositionWorldOnA());
+                    } else if (!world.plane().exploded()) {
+                        world.plane().addScore(-pt.getAppliedImpulse());
+
+                        if (pt.getAppliedImpulse() > 50.f)
+                            Audio::playAt(Audio::getInstance().collision(),
+                                          (pt.getPositionWorldOnA() +
+                                           pt.getPositionWorldOnB()) * 0.5f,
+                                          pt.getAppliedImpulse() / EXPLOSION_THRESHOLD * 100);
+                    }
+                } else {
+                    if (pt.getAppliedImpulse() > 100.0f) {
+                        Audio::playAt(Audio::getInstance().collision(),
+                                      (pt.getPositionWorldOnA() +
+                                       pt.getPositionWorldOnB()) * 0.5f,
+                                      std::min(100.0f,
+                                               pt.getAppliedImpulse() / EXPLOSION_THRESHOLD * 100));
+                    }
+                }
+            }
+        }
+    }
 }

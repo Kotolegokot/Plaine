@@ -26,6 +26,8 @@
 				</Compiler>
 				<Linker>
 					<Add library="pthread" />
+					<Add library="sfml-audio" />
+					<Add library="sfml-system" />
 				</Linker>
 			</Target>
 			<Target title="Linux-Release">
@@ -50,6 +52,8 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="sfml-audio" />
+					<Add library="sfml-system" />
 				</Linker>
 			</Target>
 			<Target title="Windows-Debug">
@@ -70,6 +74,8 @@
 				</Compiler>
 				<Linker>
 					<Add library="intl" />
+					<Add library="sfml-audio-2" />
+					<Add library="sfml-system-2" />
 				</Linker>
 			</Target>
 			<Target title="Windows-Release">
@@ -93,6 +99,8 @@
 				<Linker>
 					<Add option="-s" />
 					<Add library="intl" />
+					<Add library="sfml-audio-2" />
+					<Add library="sfml-system-2" />
 				</Linker>
 			</Target>
 		</Build>
@@ -111,6 +119,7 @@
 			<Add library="Irrlicht" />
 			<Add directory="deps/lib" />
 		</Linker>
+		<Unit filename="include/Audio.h" />
 		<Unit filename="include/Chunk.h" />
 		<Unit filename="include/Config.h" />
 		<Unit filename="include/DebugDrawer.h" />
@@ -161,6 +170,7 @@
 		<Unit filename="include/util/options.h" />
 		<Unit filename="include/util/other.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Audio.cpp" />
 		<Unit filename="src/Body.cpp" />
 		<Unit filename="src/Config.cpp" />
 		<Unit filename="src/DebugDrawer.cpp" />

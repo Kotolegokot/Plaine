@@ -109,7 +109,7 @@ std::size_t ObstacleGenerator::insertCell(Vector3<int> cell, const ChunkDB &chun
             % chunkDB.size();
 
     return chunkDB[chunkIndex].produceCell(world, device,
-                                           chunk.toBulletVector3() * CHUNK_LENGTH,
+                                           chunk * CHUNK_LENGTH,
                                            relativeCellPos(cell, chunk),
                                            m_obstacles);
 }
