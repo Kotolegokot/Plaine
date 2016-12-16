@@ -186,16 +186,19 @@ void Game::mainMenu()
                 {
                     menu.play();
                     gui->initialize(Screen::MAIN_MENU);
+                    continue;
                 }
                 else
                     return;
             }
             else if (eventReceiver->checkEvent(ID_BUTTON_SCOREBOARD)) {
                 gui->initialize(Screen::SCOREBOARD);
+                continue;
             }
             else if (eventReceiver->checkEvent(ID_BUTTON_SETTINGS)) {
                 oldConfiguration = configuration;
                 gui->initialize(Screen::SETTINGS);
+                continue;
             }
             else if (eventReceiver->checkEvent(ID_BUTTON_QUIT) ||
                 eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
@@ -205,9 +208,10 @@ void Game::mainMenu()
         case Screen::SCOREBOARD:
             if (eventReceiver->checkEvent(ID_BUTTON_MENU) ||
                 eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
-                eventReceiver->checkKeyPressed(KEY_LEFT))
+                eventReceiver->checkKeyPressed(KEY_LEFT)) {
                 gui->initialize(Screen::MAIN_MENU);
-            else if (eventReceiver->checkEvent(ID_BUTTON_QUIT))
+                continue;
+            } else if (eventReceiver->checkEvent(ID_BUTTON_QUIT))
                 return;
             break;
         case Screen::SETTINGS:
@@ -255,6 +259,7 @@ void Game::mainMenu()
                 oldConfiguration = configuration;
 
                 gui->initialize(Screen::SETTINGS);
+                continue;
             }
             if (eventReceiver->checkEvent(ID_BUTTON_CONTROL_SETTINGS)) {
                 gui->initialize(Screen::CONTROL_SETTINGS);
@@ -268,7 +273,7 @@ void Game::mainMenu()
                 oldConfiguration = configuration;
 
                 gui->initialize(Screen::SETTINGS);
-
+                continue;
             }
             if (eventReceiver->checkEvent(ID_SPINBOX_RENDER_DISTANCE)) {
                 configuration.renderDistance = gui->getCurrentScreenAsSettings().spinBoxRenderDistance->getValue();
@@ -291,6 +296,7 @@ void Game::mainMenu()
                 }
 
                 gui->initialize(Screen::MAIN_MENU);
+                continue;
             }
             if (eventReceiver->checkEvent(ID_BUTTON_QUIT)) {
                 return;
@@ -324,6 +330,7 @@ void Game::mainMenu()
                 eventReceiver->stopCatchingKey();
                 catchingControlID = CONTROLS_COUNT;
                 gui->initialize(Screen::SETTINGS);
+                continue;
             }
             if (eventReceiver->checkEvent(ID_BUTTON_QUIT)) {
                 return;
@@ -347,6 +354,7 @@ void Game::mainMenu()
                 if (eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
                     eventReceiver->checkKeyPressed(KEY_LEFT)) {
                     gui->initialize(Screen::SETTINGS);
+                    continue;
                 }
             }
 
