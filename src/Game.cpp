@@ -160,6 +160,7 @@ void Game::setSpriteBank(bool isControlButton)
 void Game::mainMenu()
 {
     sf::Sound menu = Audio::getInstance().menu();
+    menu.setLoop(true);
     menu.play();
 
     // set resolution to actual screen size
@@ -389,6 +390,7 @@ bool Game::run()
 
     // start background music
     sf::Sound background = Audio::getInstance().background();
+    background.setLoop(true);
     background.play();
 
     gui->initialize(Screen::HUD);
