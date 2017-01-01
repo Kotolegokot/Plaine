@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "ConsoleInterface.hpp"
+#include "IBodyFactory.hpp"
 
 int main()
 {
