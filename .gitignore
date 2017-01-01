@@ -1,7 +1,7 @@
-lib
-obj
-bin
-deps
+**/lib
+**/obj
+**/bin
+**/deps
 Plaine.layout
 Plaine.depend
 planerunner.pot
@@ -10,6 +10,6 @@ logfile
 *~
 *.blend1
 *.swp
-build/*
+**/build/*
 CMakeLists.txt.user
 score*
