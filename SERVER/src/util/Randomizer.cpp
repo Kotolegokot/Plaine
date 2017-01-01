@@ -14,14 +14,6 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-
-#include "ConsoleInterface.hpp"
 #include "util/Randomizer.hpp"
 
-int main()
-{
-    ConsoleInterface().run();
-
-    return 0;
-}
+std::default_random_engine Randomizer::engine { std::random_device()() };
