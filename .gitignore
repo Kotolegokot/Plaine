@@ -11,5 +11,6 @@ logfile
 *.blend1
 *.swp
 **/build/*
+**/build-*/*
 CMakeLists.txt.user
 score*

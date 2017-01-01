@@ -1,8 +1,10 @@
 #include <iostream>
 
+#include "ConsoleInterface.hpp"
+
 int main()
 {
-    std::cout << "Hello, world!" << std::endl;
+    ConsoleInterface().run();
 
     return 0;
 }
