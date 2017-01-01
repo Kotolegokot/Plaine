@@ -168,3 +168,4 @@ struct Vector3 {
 
 using Vector3i = Vector3<int>;
 using Vector3f = Vector3<float>;
+using Vector3s = Vector3<std::size_t>;
