@@ -63,7 +63,7 @@ public:
 private:
     bool initialized = false;
 
-    bool run();
+    bool run(std::unique_ptr<ChunkDB> chunkDB);
     void mainMenu();
 
     ConfigData configuration;

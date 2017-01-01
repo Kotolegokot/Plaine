@@ -181,8 +181,9 @@ void Game::mainMenu()
         switch (gui->getCurrentScreenIndex()) {
         case Screen::MAIN_MENU:
             if (eventReceiver->checkEvent(ID_BUTTON_START)) {
-                    menu.pause();
-                if (run())
+                auto chunkDB = generateChunkDB();
+                menu.pause();
+                if (run(std::move(chunkDB)))
                 {
                     menu.play();
                     gui->initialize(Screen::MAIN_MENU);
@@ -391,11 +392,8 @@ void Game::mainMenu()
 
 // start the game itself
 // returns false if quit is pressed
-bool Game::run()
+bool Game::run(std::unique_ptr<ChunkDB> chunkDB)
 {
-    // generate some chunks
-    auto chunkDB = generateChunkDB();
-
     // start background music
     sf::Sound background = Audio::getInstance().background();
     background.setLoop(true);
