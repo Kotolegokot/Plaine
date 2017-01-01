@@ -14,14 +14,25 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
+#pragma once
 
-#include "ConsoleInterface.hpp"
-#include "IPattern.hpp"
+#include <vector>
 
-int main()
+#include "IBodyFactory.hpp"
+#include "util/Vector3.hpp"
+
+class IPattern
 {
-    ConsoleInterface().run();
+    const int m_id;
+public:
+    IPattern (int id) :
+        m_id(id) {}
+    virtual ~IPattern() = default;
 
-    return 0;
-}
+    int id() const { return m_id; }
+    virtual Vector3i size() const = 0;
+
+    // return body factories that can be
+    // then used in Chunk
+    virtual std::vector<std::unique_ptr<IBodyFactory>> factories() const = 0;
+};

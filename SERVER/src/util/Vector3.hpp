@@ -18,9 +18,6 @@
 
 #include <bullet/LinearMath/btVector3.h>
 
-using Vector3i = btVector3<int>;
-using Vector3f = btVector3<float>;
-
 template <typename Num>
 struct Vector3 {
     Vector3() = default;
@@ -168,3 +165,6 @@ struct Vector3 {
     Num y = 0;
     Num z = 0;
 };
+
+using Vector3i = Vector3<int>;
+using Vector3f = Vector3<float>;
