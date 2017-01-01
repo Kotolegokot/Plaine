@@ -17,7 +17,7 @@
 #include <iostream>
 
 #include "ConsoleInterface.hpp"
-#include "util/Randomizer.hpp"
+#include "Patterns.hpp"
 
 int main()
 {
