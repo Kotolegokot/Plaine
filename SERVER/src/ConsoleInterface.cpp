@@ -20,20 +20,28 @@ void ConsoleInterface::parse_string(const std::string &str)
 
 void ConsoleInterface::execute_cmd(const std::string &cmd, const std::list<Lexeme> &args)
 {
-    // checking cmds
-
-    // else
-    //     ParseError("undefined command: '" + cmd + "'");
+    throw ParseError("undefined command: '" + cmd + "'");
 }
 
 void ConsoleInterface::run()
 {
+    unsigned long line = 0;
     while (!std::cin.fail()) {
-        std::string s;
-        std::getline(std::cin, s);
-        parse_string(s);
+        try {
+            std::cout << '[' << line << "]> ";
+
+            std::string s;
+            std::getline(std::cin, s);
+            parse_string(s);
+        } catch (const ParseError &e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
+
+        line++;
     }
 
+    if (std::cin.eof())
+        std::cout << std::endl << "Bye!" << std::endl;
 }
 
 static std::list<Lexeme> lexer(const std::string &str)
