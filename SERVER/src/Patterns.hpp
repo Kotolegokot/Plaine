@@ -20,22 +20,22 @@
 #include <array>
 #include <btBulletDynamicsCommon.h>
 #include "IPattern.hpp"
-//#include "patterns/Cube.h"
-//#include "patterns/Crystal.h"
-//#include "patterns/Tunnel.h"
-//#include "patterns/Alley.h"
+#include "patterns/Cube.hpp"
+#include "patterns/Crystal.hpp"
+#include "patterns/Tunnel.hpp"
+#include "patterns/Alley.hpp"
 
 
 class Patterns {
 private:
-//    static constexpr std::size_t CRYSTALS = 4;
-//    static constexpr std::size_t CUBES = 2;
-//
-//    static constexpr std::size_t ALL = CRYSTALS + CUBES + 2;
+    static constexpr std::size_t CRYSTALS = 4;
+    static constexpr std::size_t CUBES = 2;
+
+    static constexpr std::size_t ALL = CRYSTALS + CUBES + 2;
 public:
     Patterns() = delete;
 
-//    static const std::array<std::shared_ptr<IObstaclePattern>, ALL> all;
-//    static const std::array<std::shared_ptr<IObstaclePattern>, CRYSTALS> crystals;
-//    static const std::array<std::shared_ptr<IObstaclePattern>, CUBES> cubes;
+    static const std::array<std::shared_ptr<IPattern>, ALL> all;
+    static const std::array<std::shared_ptr<IPattern>, CRYSTALS> crystals;
+    static const std::array<std::shared_ptr<IPattern>, CUBES> cubes;
 };
