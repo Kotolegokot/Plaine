@@ -17,7 +17,7 @@
 #include <iostream>
 
 #include "ConsoleInterface.hpp"
-#include "Explosion.hpp"
+#include "Plane.hpp"
 
 int main()
 {
