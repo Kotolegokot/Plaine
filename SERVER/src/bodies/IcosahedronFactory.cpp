@@ -14,13 +14,6 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
+#include "bodies/IcosahedronFactory.hpp"
 
-#include "ConsoleInterface.hpp"
-
-int main()
-{
-    ConsoleInterface().run();
-
-    return 0;
-}
+Mesh &IcosahedronFactory::mesh = *new Mesh(ICOSAHEDRON_MODEL);

@@ -14,13 +14,30 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
+#pragma once
 
-#include "ConsoleInterface.hpp"
+#include <memory>
+#include <btBulletDynamicsCommon.h>
+#include "IBodyFactory.hpp"
+#include "util/Vector3.hpp"
+#include "util/constants.hpp"
 
-int main()
-{
-    ConsoleInterface().run();
+class BoxProducer : public IBodyFactory {
+public:
+    BoxProducer(const btVector3 &halfExtents) :
+        m_half_extents(halfExtents) {}
 
-    return 0;
-}
+    btScalar mass() const override
+    {
+        return 8*m_half_extents.x()*m_half_extents.y()*m_half_extents.z()*MASS_COEFFICIENT;
+    }
+
+protected:
+    std::unique_ptr<btCollisionShape> shape() const override
+    {
+        return std::make_unique<btBoxShape>(m_half_extents);
+    }
+
+private:
+    btVector3 m_half_extents;
+};

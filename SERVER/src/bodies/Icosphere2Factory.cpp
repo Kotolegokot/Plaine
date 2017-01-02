@@ -14,13 +14,6 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
+#include "bodies/Icosphere2Factory.hpp"
 
-#include "ConsoleInterface.hpp"
-
-int main()
-{
-    ConsoleInterface().run();
-
-    return 0;
-}
+Mesh &Icosphere2Factory::mesh = *new Mesh(ICOSPHERE2_MODEL);
