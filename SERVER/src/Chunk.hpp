@@ -108,7 +108,7 @@ public:
     }
 
     // creates objects and returns number of bodies generated
-    std::size_t produceCell(btDynamicsWorld &world,
+    std::size_t produce_cell(btDynamicsWorld &world,
                             btVector3 chunk,
                             Vector3i cell,
                             std::list<std::unique_ptr<btRigidBody>> &list) const
