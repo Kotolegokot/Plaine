@@ -17,6 +17,7 @@
 #include <iostream>
 
 #include "ConsoleInterface.hpp"
+#include "patterns/Tunnel.hpp"
 
 int main()
 {

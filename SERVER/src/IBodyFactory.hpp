@@ -51,5 +51,5 @@ struct IBodyFactory {
 protected:
     virtual std::unique_ptr<btCollisionShape> shape() const = 0;
     virtual btScalar mass() const = 0;
-    virtual void finishing_touch(btRigidBody &) const = 0;
+    virtual void finishing_touch(btRigidBody &) const {}
 };

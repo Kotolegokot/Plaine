@@ -17,27 +17,32 @@
 #pragma once
 
 #include <memory>
-#include <btBulletDynamicsCommon.h>
 #include "IBodyFactory.hpp"
-#include "util/Vector3.hpp"
-#include "util/constants.hpp"
+#include "IPattern.hpp"
+#include "bodies/BoxFactory.hpp"
 
-class BoxFactory : public IBodyFactory {
+template <int Size>
+class Cube : public IPattern
+{
 public:
-    BoxFactory(const btVector3 &halfExtents) :
-        m_half_extents(halfExtents) {}
+    Cube(int id) : IPattern(id) {}
 
-    btScalar mass() const override
+    Vector3<int> size() const override
     {
-        return 8*m_half_extents.x()*m_half_extents.y()*m_half_extents.z()*MASS_COEFFICIENT;
+        return { Size, Size, Size };
     }
 
-protected:
-    std::unique_ptr<btCollisionShape> shape() const override
+    std::vector<std::unique_ptr<IBodyFactory>> factories() const override
     {
-        return std::make_unique<btBoxShape>(m_half_extents);
-    }
+        btVector3 position { Size * CELL_LENGTH * 0.5f,
+                             Size * CELL_LENGTH * 0.5f,
+                             Size * CELL_LENGTH * 0.5f };
 
-private:
-    btVector3 m_half_extents;
+        std::vector<std::unique_ptr<IBodyFactory>> result;
+        result.push_back(std::make_unique<BoxFactory>(btVector3(1, 1, 1) *
+                                                       Size * CELL_LENGTH * 0.49));
+        result.back()->rel_trans.setOrigin(position);
+
+        return result;
+    }
 };
