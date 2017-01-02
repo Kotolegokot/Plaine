@@ -14,14 +14,28 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
+#pragma once
 
-#include "ConsoleInterface.hpp"
-#include "Explosion.hpp"
+#include <memory>
+#include <algorithm>
+#include <btBulletDynamicsCommon.h>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
+#include <BulletCollision/CollisionDispatch/btCollisionObject.h>
 
-int main()
+class Explosion
 {
-    ConsoleInterface().run();
+public:
+    Explosion(btDynamicsWorld &world,
+              const btVector3 &pos = btVector3(0, 0, 0), btScalar radius = 1000);
+    ~Explosion();
 
-    return 0;
-}
+    void set_position(const btVector3 &pos);
+    btVector3 position() const;
+
+    void explode();
+
+private:
+    btDynamicsWorld &world;
+    btScalar radius = 0.0f;
+    std::unique_ptr<btGhostObject> explosion_obj;
+};
