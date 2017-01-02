@@ -17,7 +17,6 @@
 #include <iostream>
 
 #include "ConsoleInterface.hpp"
-#include "Chunk.hpp"
 
 int main()
 {
