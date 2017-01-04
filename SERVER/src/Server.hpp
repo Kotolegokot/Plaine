@@ -17,12 +17,17 @@
 #pragma once
 
 #include <iostream>
+#include <atomic>
 #include <thread>
 
 class Server
 {
+    std::atomic<bool> m_running { false };
 public:
     unsigned int players = 0;
 
     void start();
+
+    void wait();
+    bool running() const;
 };

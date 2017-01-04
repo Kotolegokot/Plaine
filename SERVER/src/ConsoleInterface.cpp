@@ -20,8 +20,10 @@ static std::list<Lexeme> lexer(const std::string &str);
 
 ConsoleInterface::~ConsoleInterface()
 {
-    if (server_thread && server_thread->joinable())
-        server_thread->join();
+    if (server.running()) {
+        std::cout << "waiting for the server to stop..." << std::endl;
+        server.wait();
+    }
 
     if (std::cin.eof())
         std::cout << std::endl << "Bye!" << std::endl;
@@ -63,23 +65,14 @@ void ConsoleInterface::execute_cmd(const std::string &cmd, const std::list<Lexem
                              "\tusage: start [<players>]");
 
         // check server
-        if (running) {
+        if (server.running()) {
             std::cout << "server is still running" << std::endl;
             return;
         }
 
         // if everything's alright
-        if (server_thread && server_thread->joinable()) {
-            server_thread->join();
-            server_thread.reset();
-        }
         server.players = players;
-        running = true;
-        server_thread = std::make_unique<std::thread>([this]
-        {
-            server.start();
-            running = false;
-        });
+        server.start();
     } else
         throw Error("undefined command: '" + cmd + "'");
 }

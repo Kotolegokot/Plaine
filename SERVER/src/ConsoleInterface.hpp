@@ -33,8 +33,6 @@ class ConsoleInterface {
     void execute_cmd(const std::string &cmd, const std::list<Lexeme> &args);
 
     Server server;
-    std::atomic<bool> running { false };
-    std::unique_ptr<std::thread> server_thread;
 public:
     void run();
 

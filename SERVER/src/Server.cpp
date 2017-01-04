@@ -18,7 +18,24 @@
 
 void Server::start()
 {
-    std::cout << "Start server" << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-    std::cout << "End server" << std::endl;
+    m_running = true;
+
+    std::thread([this] {
+        std::cout << "Start server..." << std::endl;
+
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+
+        m_running = false;
+        std::cout << "Stop server" << std::endl;
+    }).detach();
+}
+
+void Server::wait()
+{
+    while (m_running);
+}
+
+bool Server::running() const
+{
+    return m_running;
 }
