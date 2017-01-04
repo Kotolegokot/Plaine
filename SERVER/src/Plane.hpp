@@ -26,7 +26,7 @@ class Plane {
     long m_score = 0;
 
 public:
-    Plane(btDynamicsWorld &world, std::unique_ptr<btRigidBody> body) :
+    explicit Plane(btDynamicsWorld &world, std::unique_ptr<btRigidBody> body) :
         m_world(world), m_body(std::move(body)) {}
 
     ~Plane()

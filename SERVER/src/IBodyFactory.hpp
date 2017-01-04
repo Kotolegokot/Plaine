@@ -20,8 +20,10 @@
 #include <btBulletDynamicsCommon.h>
 #include <btBulletCollisionCommon.h>
 
-struct IBodyFactory {
+struct IBodyFactory
+{
     IBodyFactory() = default;
+    virtual ~IBodyFactory() {}
 
     virtual std::unique_ptr<btRigidBody> produce(const btVector3 &pos) const
     {

@@ -32,7 +32,7 @@ public:
     Mesh() = default;
     Mesh(const std::string &filename, btScalar scale = 1.0f);
     void load(const std::string &filename, btScalar scale = 1.0f);
-    std::unique_ptr<btTriangleMesh> triangleMesh() const;
+    std::unique_ptr<btTriangleMesh> triangle_mesh() const;
     btVector3 *points();
     std::size_t points_count() const;
     void set_points(btConvexHullShape &shape);

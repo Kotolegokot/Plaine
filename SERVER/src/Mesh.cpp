@@ -282,7 +282,7 @@ void Mesh::load(const std::string &filename, btScalar scale)
     }*/
 }
 
-std::unique_ptr<btTriangleMesh> Mesh::triangleMesh() const
+std::unique_ptr<btTriangleMesh> Mesh::triangle_mesh() const
 {
     auto triangleMesh = std::make_unique<btTriangleMesh>();
     for (const std::vector<std::size_t> &polygon : polygons)
