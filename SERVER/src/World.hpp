@@ -16,6 +16,7 @@
 
 #pragma once
 
+#include <atomic>
 #include <iostream>
 #include <memory>
 #include <btBulletDynamicsCommon.h>
@@ -58,5 +59,5 @@ private:
 
     const ChunkDB &m_chunkDB;
 
-    bool m_gameOver = false;
+    std::atomic<bool> m_game_over { false };
 };

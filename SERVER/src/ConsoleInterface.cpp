@@ -18,6 +18,15 @@
 
 static std::list<Lexeme> lexer(const std::string &str);
 
+ConsoleInterface::~ConsoleInterface()
+{
+    if (server_thread && server_thread->joinable())
+        server_thread->join();
+
+    if (std::cin.eof())
+        std::cout << std::endl << "Bye!" << std::endl;
+}
+
 void ConsoleInterface::parse_string(const std::string &str)
 {
     auto lexemes = lexer(str);
@@ -36,7 +45,43 @@ void ConsoleInterface::parse_string(const std::string &str)
 
 void ConsoleInterface::execute_cmd(const std::string &cmd, const std::list<Lexeme> &args)
 {
-    throw ParseError("undefined command: '" + cmd + "'");
+    if (cmd == "start") {
+        // check arguments
+        if (args.size() > 1)
+            throw ParseError("start: too many arguments;\n"
+                             "\tusage: start [<players>]");
+
+        if (args.size() == 1)
+            if (args.front().type() != Lexeme::INT)
+                throw ParseError("start: int expected;\n"
+                                 "\tusage: start [<players>]");
+
+        int players = args.size() == 1 ? args.front().from_int() : 1;
+
+        if (players < 1)
+            throw ParseError("start: amount of players must be more than 1;\n"
+                             "\tusage: start [<players>]");
+
+        // check server
+        if (running) {
+            std::cout << "server is still running" << std::endl;
+            return;
+        }
+
+        // if everything's alright
+        if (server_thread && server_thread->joinable()) {
+            server_thread->join();
+            server_thread.reset();
+        }
+        server.players = players;
+        running = true;
+        server_thread = std::make_unique<std::thread>([this]
+        {
+            server.start();
+            running = false;
+        });
+    } else
+        throw ParseError("undefined command: '" + cmd + "'");
 }
 
 void ConsoleInterface::run()
@@ -56,8 +101,6 @@ void ConsoleInterface::run()
         line++;
     }
 
-    if (std::cin.eof())
-        std::cout << std::endl << "Bye!" << std::endl;
 }
 
 static std::list<Lexeme> lexer(const std::string &str)

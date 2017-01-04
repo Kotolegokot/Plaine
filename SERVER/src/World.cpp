@@ -44,7 +44,7 @@ World::World(const ChunkDB &chunkDB) :
 void World::stepSimulation(btScalar timeStep, int maxSubSteps, btScalar fixedTimeStep)
 {
     m_explosion->set_position(m_plane->rigid_body().getCenterOfMassPosition());
-    m_gameOver = m_plane->exploded();
+    m_game_over = m_plane->exploded();
 
     m_physicsWorld->stepSimulation(timeStep, maxSubSteps, fixedTimeStep);
 }
@@ -56,7 +56,7 @@ void World::generate()
 
 bool World::game_over() const
 {
-    return m_gameOver;
+    return m_game_over;
 }
 
 std::size_t World::obstacles() const

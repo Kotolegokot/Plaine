@@ -16,26 +16,13 @@
 
 #pragma once
 
-#include <atomic>
 #include <iostream>
 #include <thread>
-#include <string>
-#include <list>
-#include <memory>
-#include <exception>
 
-#include "ParseError.hpp"
-#include "Lexeme.hpp"
-#include "Server.hpp"
-
-class ConsoleInterface {
-    void parse_string(const std::string &str);
-    void execute_cmd(const std::string &cmd, const std::list<Lexeme> &args);
-
-    Server server;
-    std::atomic<bool> running { false };
+class Server
+{
 public:
-    void run();
+    unsigned int players = 0;
 
-    ~ConsoleInterface();
+    void start();
 };
