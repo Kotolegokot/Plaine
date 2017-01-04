@@ -16,11 +16,14 @@
 
 #pragma once
 
-class ParseError : public std::exception
+#include <exception>
+#include <string>
+
+class Error : public std::exception
 {
     std::string m_what;
 public:
-    ParseError(const std::string &w) : m_what(w) {}
-    virtual ~ParseError() {}
+    Error(const std::string &w) : m_what(w) {}
+    virtual ~Error() {}
     const char *what() const noexcept override { return m_what.c_str(); }
 };

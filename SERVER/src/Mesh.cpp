@@ -54,7 +54,7 @@ std::vector<Mesh::Item> Mesh::parse(const std::string &filename)
             } else if (c == EOF) {
                 break;
             } else
-                throw ParseError("unexpected symbol: '" + std::string(c, 1) + "'");
+                throw Error("unexpected symbol: '" + std::string(c, 1) + "'");
             break;
 
         case INT:
@@ -139,7 +139,7 @@ std::vector<Mesh::Item> Mesh::parse(const std::string &filename)
 
 void Mesh::warning(Item::Type expected, Item::Type found)
 {
-    throw ParseError(Item::show_type(expected) + " expected, but " +
+    throw Error(Item::show_type(expected) + " expected, but " +
                      Item::show_type(found) + " found");
 }
 
@@ -251,7 +251,7 @@ void Mesh::load(const std::string &filename, btScalar scale)
                                     ++i;
                                 }
                             } else {
-                                throw ParseError(Item::show_type(Item::SLASH) + " or " +
+                                throw Error(Item::show_type(Item::SLASH) + " or " +
                                                  Item::show_type(Item::INT) + " expected, but " +
                                                  Item::show_type(i->type) + " found");
                                 state = NONE;

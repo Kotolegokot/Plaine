@@ -24,7 +24,7 @@
 #include <memory>
 #include <exception>
 
-#include "ParseError.hpp"
+#include "Error.hpp"
 #include "Lexeme.hpp"
 #include "Server.hpp"
 
@@ -34,6 +34,7 @@ class ConsoleInterface {
 
     Server server;
     std::atomic<bool> running { false };
+    std::unique_ptr<std::thread> server_thread;
 public:
     void run();
 

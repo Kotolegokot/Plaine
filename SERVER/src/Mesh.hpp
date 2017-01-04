@@ -24,7 +24,7 @@
 #include <sstream>
 #include <btBulletDynamicsCommon.h>
 
-#include "ParseError.hpp"
+#include "Error.hpp"
 
 class Mesh
 {
