@@ -60,10 +60,8 @@ void ConsoleInterface::execute_cmd(const std::string &cmd, const std::list<Lexem
             throw Error("start: amount of players must be more than 0");
 
         // check server
-        if (m_server && m_server->running()) {
-            std::cout << "server is still running" << std::endl;
-            return;
-        }
+        if (m_server && m_server->running())
+            throw Error("start: server is still running");
 
         // if everything's alright
         m_server = std::make_unique<Server>(players_count, 36363);
@@ -76,7 +74,24 @@ void ConsoleInterface::execute_cmd(const std::string &cmd, const std::list<Lexem
         if (args.front().type() != Lexeme::SYMBOL)
             throw Error("help: symbol expected");
 
-        std::cout << usage(args.front().from_symbol()) << std::endl;;
+        // if everything's okay
+        std::cout << usage(args.front().from_symbol()) << std::endl;
+    } else if (cmd == "port") {
+        if (args.size() > 0)
+            throw Error("port: too many arguments");
+
+        if (!m_server || !m_server->running())
+            throw Error("port: server is not running");
+
+        std::cout << m_server->port() << std::endl;
+    } else if (cmd == "players_count") {
+        if (args.size() > 0)
+            throw Error("players_count: too many arguments");
+
+        if (!m_server || !m_server->running())
+            throw Error("players_count: server is not running");
+
+        std::cout << m_server->players_count() << std::endl;
     } else {
         throw Error("undefined command: '" + cmd + "'");
     }
@@ -88,6 +103,10 @@ std::string ConsoleInterface::usage(const std::string &cmd)
         return "usage: start [<players> = 0]";
     } else if (cmd == "help") {
         return "usage: help <cmd>";
+    } else if (cmd == "port") {
+        return "usage: port";
+    } else if (cmd == "players_count") {
+        return "usage: players_count";
     } else {
         throw Error("undefined symbol: '" + cmd + "'");
     }
@@ -104,7 +123,7 @@ void ConsoleInterface::run()
             std::getline(std::cin, s);
             parse_string(s);
         } catch (const Error &e) {
-            std::cerr << "Error: " << e.what() << std::endl;
+            std::cerr << e.what() << std::endl;
         }
 
         line++;
