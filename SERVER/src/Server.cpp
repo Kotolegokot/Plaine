@@ -56,16 +56,18 @@ void Server::accept_players()
 
 void Server::play()
 {
-    m_status = PLAYING;
+    std::thread([this] {
+        m_status = PLAYING;
 
-    std::cout << "Playing..." << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-    std::cout << "Game Over" << std::endl;
+        std::cout << "Playing..." << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+        std::cout << "Game Over" << std::endl;
 
-    m_status = INVALID;
-    for (tcp::socket &player : m_players)
-        player.close();
-    m_acceptor.close();
+        m_status = INVALID;
+        for (tcp::socket &player : m_players)
+            player.close();
+        m_acceptor.close();
+    }).detach();
 }
 
 void Server::wait()

@@ -69,13 +69,23 @@ void ConsoleInterface::execute_cmd(const std::string &cmd, const std::list<Lexem
         //check arguments
         if (args.size() > 1)
             throw Error("help: too many arguments");
-        if (args.size() == 0)
-            throw Error("help: too little arguments");
-        if (args.front().type() != Lexeme::SYMBOL)
-            throw Error("help: symbol expected");
 
-        // if everything's okay
-        std::cout << usage(args.front().from_symbol()) << std::endl;
+        if (args.size() == 0) {
+            // no arguments
+            std::cout << "list of commands:" << std::endl;
+            std::cout << "  help" << std::endl
+                      << "  start" << std::endl
+                      << "  port" << std::endl
+                      << "  players_count" << std::endl
+                      << "  info" << std::endl;
+        } else {
+            // one argument
+            if (args.front().type() != Lexeme::SYMBOL)
+                throw Error("help: symbol expected");
+
+            // if everything's okay
+            std::cout << usage(args.front().from_symbol()) << std::endl;
+        }
     } else if (cmd == "port") {
         if (args.size() > 0)
             throw Error("port: too many arguments");
@@ -92,6 +102,15 @@ void ConsoleInterface::execute_cmd(const std::string &cmd, const std::list<Lexem
             throw Error("players_count: server is not running");
 
         std::cout << m_server->players_count() << std::endl;
+    } else if (cmd == "info") {
+        if (args.size() > 0)
+            throw Error("players_count: too many arguments");
+
+        if (!m_server || !m_server->running())
+            throw Error("info: server is not running");
+
+        std::cout << "port: " << m_server->port() << std::endl
+                  << "players: " << m_server->players_count() << std::endl;
     } else {
         throw Error("undefined command: '" + cmd + "'");
     }
@@ -102,11 +121,13 @@ std::string ConsoleInterface::usage(const std::string &cmd)
     if (cmd == "start") {
         return "usage: start [<players> = 0]";
     } else if (cmd == "help") {
-        return "usage: help <cmd>";
+        return "usage: help [<cmd>]";
     } else if (cmd == "port") {
         return "usage: port";
     } else if (cmd == "players_count") {
         return "usage: players_count";
+    } else if (cmd == "info") {
+        return "usage: info";
     } else {
         throw Error("undefined symbol: '" + cmd + "'");
     }
@@ -128,7 +149,6 @@ void ConsoleInterface::run()
 
         line++;
     }
-
 }
 
 static std::list<Lexeme> lexer(const std::string &str)
@@ -143,12 +163,16 @@ static std::list<Lexeme> lexer(const std::string &str)
 
         switch (state) {
         case DEFAULT:
-            if (isspace(c) || c == -1)
+            if (isspace(c) || c == -1) {
                 i++;
-            else if (isalpha(c) || c == '_')
+            } else if (isalpha(c) || c == '_') {
                 state = SYMBOL;
-            else if (isdigit(c) || c == '-' || c == '+') {
+            } else if (isdigit(c) || c == '-' || c == '+') {
                 state = INT;
+                str_acc.push_back(c);
+                i++;
+            } else if (c == '.') {
+                state = FLOAT;
                 str_acc.push_back(c);
                 i++;
             } else if (c == '"') {
@@ -189,6 +213,8 @@ static std::list<Lexeme> lexer(const std::string &str)
                 i++;
                 state = FLOAT;
             } else {
+                if (str_acc == "-" || str_acc == "+")
+                    throw Error("invalid int: '" + str_acc + "'");
                 acc.push_back(Lexeme::create_int(std::stoi(str_acc)));
                 str_acc.clear();
                 state = DEFAULT;
@@ -201,6 +227,8 @@ static std::list<Lexeme> lexer(const std::string &str)
             } else if (c == '.')
                 throw Error("second '.' in a number");
             else {
+                if (str_acc.back() == '.')
+                    throw Error("invalid float: '" + str_acc + "'");
                 acc.push_back(Lexeme::create_float(std::stof(str_acc)));
                 str_acc.clear();
                 state = DEFAULT;
