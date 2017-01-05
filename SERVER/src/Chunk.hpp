@@ -170,13 +170,13 @@ private:
             const auto &pattern = *pos.pattern;
             const Vector3i &ppos = pos.pos;
 
-            for (auto &producer : pattern.producers()) {
+            for (auto &producer : pattern.factories()) {
                 // producer pos relative to pattern
                 btVector3 &origin = producer->rel_trans.getOrigin();
                 origin += ppos * CELL_LENGTH;
 
                 // producer cell relative to chunk
-                const Vector3i cell = (Vector3i(origin) / CELL_LENGTH);
+                const Vector3i cell = static_cast<Vector3i>((Vector3i(origin) / CELL_LENGTH));
 
                 // producer pos relative to cell
                 origin -= cell * CELL_LENGTH;

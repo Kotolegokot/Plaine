@@ -17,7 +17,6 @@
 #include <iostream>
 
 #include "ConsoleInterface.hpp"
-#include "Plane.hpp"
 
 int main()
 {

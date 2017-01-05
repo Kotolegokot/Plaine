@@ -23,6 +23,7 @@
 #include <asio.hpp>
 
 #include "Error.hpp"
+#include "World.hpp"
 
 using asio::ip::tcp;
 using asio::ip::udp;
