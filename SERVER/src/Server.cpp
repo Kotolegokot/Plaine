@@ -58,16 +58,19 @@ void Server::play()
 {
     std::thread([this] {
         m_status = GENERATING_CHUNKS;
+        std::cout << "Generating chunks..." << std::endl;
         auto chunk_db = ChunkGenerator::generate();
 
         m_status = PLAYING;
+        std::cout << "Playing..." << std::endl;
         m_world = std::make_unique<World>(*chunk_db);
 
-        std::cout << "Playing..." << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(5));
-        std::cout << "Game Over" << std::endl;
 
         m_status = INVALID;
+        std::cout << "Game Over" << std::endl;
+
+        // close connections
         for (tcp::socket &player : m_players)
             player.close();
         m_acceptor.close();

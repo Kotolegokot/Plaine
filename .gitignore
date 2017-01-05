@@ -12,5 +12,7 @@ logfile
 *.swp
 **/build/*
 **/build-*/*
+client
+server
 CMakeLists.txt.user
 score*

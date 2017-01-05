@@ -1,40 +1,20 @@
 cmake_minimum_required(VERSION 3.1)
-project(Plaine)
+project (Plaine)
 
-set(CMAKE_REQUIRED_FLAGS "-std=c++14")
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -std=c++14")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DDEBUG_OUTPUT=false")
-set(CMAKE_CXX_FLAGS_DEBUG "-g" )
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
+option(CLIENT "Compile the client" ON)
+option(SERVER "Compile the server" ON)
+option(DEBUG  "Set CMAKE_BUILD_TYPE to Debug" OFF)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/Modules)
-find_package(Irrlicht REQUIRED)
-find_package(Bullet REQUIRED)
-find_package(Freetype REQUIRED)
-find_package(SFML REQUIRED COMPONENTS audio)
-find_package(Threads REQUIRED) 
-file(GLOB_RECURSE CPPs "src/*.cpp")
-file(GLOB_RECURSE Hs "include/*.h")
-add_executable(${PROJECT_NAME} main.cpp ${CPPs} ${Hs})
+if (DEBUG)
+    set(CMAKE_BUILD_TYPE "Debug")
+endif()
 
-include_directories("include/")
-include_directories(SYSTEM
-	${IRRLICHT_INCLUDE_DIR}
-	${BULLET_INCLUDE_DIRS}
-	${FREETYPE_INCLUDE_DIRS}
-    ${SFML_INCLUDE_DIR})
+if(CLIENT)
+    add_subdirectory(CLIENT)
+endif()
 
-target_link_libraries(${PROJECT_NAME}
-	${IRRLICHT_LIBRARY}
-	${BULLET_COLLISION_LIBRARY}
-	${BULLET_DYNAMICS_LIBRARY}
-	${BULLET_MATH_LIBRARY}
-	${FREETYPE_LIBRARY}
-    ${SFML_LIBRARIES}
-	Threads::Threads)
-
-if(DEBUG)
-	set(CMAKE_BUILD_TYPE "Debug")
+if(SERVER)
+    add_subdirectory(SERVER)
 endif()
