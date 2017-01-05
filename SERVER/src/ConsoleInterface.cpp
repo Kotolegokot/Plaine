@@ -50,19 +50,14 @@ void ConsoleInterface::execute_cmd(const std::string &cmd, const std::list<Lexem
     if (cmd == "start") {
         // check arguments
         if (args.size() > 1)
-            throw Error("start: too many arguments;\n"
-                             "\tusage: start [<players>]");
-
+            throw Error("start: too many arguments");
         if (args.size() == 1)
             if (args.front().type() != Lexeme::INT)
-                throw Error("start: int expected;\n"
-                                 "\tusage: start [<players>]");
+                throw Error("start: int expected;");
 
         int players_count = args.size() == 1 ? args.front().from_int() : 1;
-
         if (players_count < 0)
-            throw Error("start: amount of players must be more than 0;\n"
-                             "\tusage: start [<players>]");
+            throw Error("start: amount of players must be more than 0");
 
         // check server
         if (m_server && m_server->running()) {
@@ -72,8 +67,30 @@ void ConsoleInterface::execute_cmd(const std::string &cmd, const std::list<Lexem
 
         // if everything's alright
         m_server = std::make_unique<Server>(players_count, 36363);
-    } else
+    } else if (cmd == "help") {
+        //check arguments
+        if (args.size() > 1)
+            throw Error("help: too many arguments");
+        if (args.size() == 0)
+            throw Error("help: too little arguments");
+        if (args.front().type() != Lexeme::SYMBOL)
+            throw Error("help: symbol expected");
+
+        std::cout << usage(args.front().from_symbol()) << std::endl;;
+    } else {
         throw Error("undefined command: '" + cmd + "'");
+    }
+}
+
+std::string ConsoleInterface::usage(const std::string &cmd)
+{
+    if (cmd == "start") {
+        return "usage: start [<players> = 0]";
+    } else if (cmd == "help") {
+        return "usage: help <cmd>";
+    } else {
+        throw Error("undefined symbol: '" + cmd + "'");
+    }
 }
 
 void ConsoleInterface::run()
