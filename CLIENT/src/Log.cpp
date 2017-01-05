@@ -14,6 +14,6 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Log.h"
+#include "Log.hpp"
 
 Log Log::instance;

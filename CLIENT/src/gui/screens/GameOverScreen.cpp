@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gui/screens/GameOverScreen.h"
+#include "gui/screens/GameOverScreen.hpp"
 
 using namespace irr;
 

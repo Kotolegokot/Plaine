@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Scoreboard.h"
+#include "Scoreboard.hpp"
 
 using namespace irr;
 

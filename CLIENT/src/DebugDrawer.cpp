@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "DebugDrawer.h"
+#include "DebugDrawer.hpp"
 
 using namespace irr;
 

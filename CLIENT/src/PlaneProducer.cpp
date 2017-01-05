@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "PlaneProducer.h"
+#include "PlaneProducer.hpp"
 
 using namespace irr;
 

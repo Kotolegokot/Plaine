@@ -14,6 +14,6 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "util/Randomizer.h"
+#include "util/Randomizer.hpp"
 
 std::default_random_engine Randomizer::engine { std::random_device()() };

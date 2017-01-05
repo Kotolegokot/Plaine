@@ -19,10 +19,10 @@
 #include <exception>
 #include <irrlicht.h>
 
-#include "Game.h"
-#include "Config.h"
-#include "Log.h"
-#include "util/i18n.h"
+#include "Game.hpp"
+#include "Config.hpp"
+#include "Log.hpp"
+#include "util/i18n.hpp"
 
 using namespace irr;
 

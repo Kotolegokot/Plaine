@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Explosion.h"
+#include "Explosion.hpp"
 
 using namespace irr;
 

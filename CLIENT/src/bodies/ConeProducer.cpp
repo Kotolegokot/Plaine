@@ -14,6 +14,6 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "bodies/ConeProducer.h"
+#include "bodies/ConeProducer.hpp"
 
 ObjMesh &ConeProducer::objMesh = *new ObjMesh(CONE_MODEL);

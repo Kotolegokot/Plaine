@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "EventReceiver.h"
+#include "EventReceiver.hpp"
 
 using namespace irr;
 

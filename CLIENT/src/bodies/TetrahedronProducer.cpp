@@ -14,6 +14,6 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "bodies/TetrahedronProducer.h"
+#include "bodies/TetrahedronProducer.hpp"
 
 ObjMesh &TetrahedronProducer::objMesh = *new ObjMesh(TETRAHEDRON_MODEL);

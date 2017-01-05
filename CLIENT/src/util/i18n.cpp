@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "util/i18n.h"
+#include "util/i18n.hpp"
 
 #ifndef _WIN32
 

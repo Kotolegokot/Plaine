@@ -28,7 +28,7 @@
    john@suckerfreegames.com
 */
 
-#include "util/CGUITTFont.h"
+#include "util/CGUITTFont.hpp"
 
 namespace irr
 {

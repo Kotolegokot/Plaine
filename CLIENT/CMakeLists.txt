@@ -19,7 +19,7 @@ find_package(Freetype REQUIRED)
 find_package(SFML REQUIRED COMPONENTS audio)
 find_package(Threads REQUIRED) 
 file(GLOB_RECURSE CPPs "src/*.cpp")
-file(GLOB_RECURSE Hs   "src/*.h")
+file(GLOB_RECURSE Hs   "src/*.hpp")
 add_executable(${EXECUTABLE_NAME} ${CPPs} ${Hs})
 
 include_directories("src/")

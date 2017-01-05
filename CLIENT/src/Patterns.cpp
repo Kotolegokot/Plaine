@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Patterns.h"
+#include "Patterns.hpp"
 
 constexpr std::size_t Patterns::ALL;
 constexpr std::size_t Patterns::CRYSTALS;

@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Body.h"
+#include "Body.hpp"
 
 Body::~Body()
 {

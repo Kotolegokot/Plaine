@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "util/math.h"
+#include "util/math.hpp"
 
 core::vector3df quatToEulerRad(const btQuaternion &quat)
 {

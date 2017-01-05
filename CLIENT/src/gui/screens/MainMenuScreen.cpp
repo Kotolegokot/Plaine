@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gui/screens/MainMenuScreen.h"
+#include "gui/screens/MainMenuScreen.hpp"
 
 using namespace irr;
 

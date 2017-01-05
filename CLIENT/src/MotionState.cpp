@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "MotionState.h"
+#include "MotionState.hpp"
 
 using namespace irr;
 

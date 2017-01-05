@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ObjMesh.h"
+#include "ObjMesh.hpp"
 
 ObjMesh::ObjMesh(const std::string &filename, btScalar scale)
 {

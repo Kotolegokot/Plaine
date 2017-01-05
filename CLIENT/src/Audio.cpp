@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Audio.h"
+#include "Audio.hpp"
 
 Audio Audio::instance;
 std::queue<sf::Sound, std::list<sf::Sound>> Audio::queue;

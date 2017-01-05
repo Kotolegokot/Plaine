@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gui/GUI.h"
+#include "gui/GUI.hpp"
 
 using namespace irr;
 

@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gui/screens/PauseMenuScreen.h"
+#include "gui/screens/PauseMenuScreen.hpp"
 
 PauseMenuScreen::PauseMenuScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment) :
     IGUIScreen(configuration, guiEnvironment) {}

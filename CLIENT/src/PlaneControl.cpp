@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "PlaneControl.h"
+#include "PlaneControl.hpp"
 
 constexpr btScalar PlaneControl::FORWARD_IMPULSE;
 constexpr btScalar PlaneControl::MAX_PITCH_ANGLE;

@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gui/screens/ControlSettingsScreen.h"
+#include "gui/screens/ControlSettingsScreen.hpp"
 
 ControlSettingsScreen::ControlSettingsScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment) :
     IGUIScreen(configuration, guiEnvironment) {}

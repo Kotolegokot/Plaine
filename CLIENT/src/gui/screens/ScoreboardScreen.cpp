@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gui/screens/ScoreboardScreen.h"
+#include "gui/screens/ScoreboardScreen.hpp"
 
 ScoreboardScreen::ScoreboardScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment) :
     IGUIScreen(configuration, guiEnvironment) {}

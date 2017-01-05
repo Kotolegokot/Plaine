@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "World.h"
+#include "World.hpp"
 
 void checkCollisions(btDynamicsWorld *physicsWorld, btScalar timeStep);
 

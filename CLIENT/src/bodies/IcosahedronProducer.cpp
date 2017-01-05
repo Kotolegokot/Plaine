@@ -14,6 +14,6 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "bodies/IcosahedronProducer.h"
+#include "bodies/IcosahedronProducer.hpp"
 
 ObjMesh &IcosahedronProducer::objMesh = *new ObjMesh(ICOSAHEDRON_MODEL);

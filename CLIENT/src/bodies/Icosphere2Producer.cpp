@@ -14,6 +14,6 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "bodies/Icosphere2Producer.h"
+#include "bodies/Icosphere2Producer.hpp"
 
 ObjMesh &Icosphere2Producer::objMesh = *new ObjMesh(ICOSPHERE2_MODEL);

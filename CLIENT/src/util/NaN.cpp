@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "util/NaN.h"
+#include "util/NaN.hpp"
 
 void notNanAssert(const btQuaternion &quat)
 {

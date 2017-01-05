@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ObstacleGenerator.h"
+#include "ObstacleGenerator.hpp"
 
 using namespace irr;
 

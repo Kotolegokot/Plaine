@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Game.h"
+#include "Game.hpp"
 
 using namespace irr;
 
@@ -228,7 +228,7 @@ void Game::mainMenu()
                     configuration.language = "ru";
                     break;
                 case 3:
-                    configuration.language = "crh";
+                    configuration.language = "crhpp";
                     break;
                 case 4:
                     configuration.language = "crh@cyrillic";

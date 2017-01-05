@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gui/screens/SettingsScreen.h"
+#include "gui/screens/SettingsScreen.hpp"
 
 SettingsScreen::SettingsScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment) :
     IGUIScreen(configuration, guiEnvironment) {}
@@ -78,7 +78,7 @@ void SettingsScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
     textLanguage->setText(_wp("Language:"));
     textRenderDistance->setText(_wp("Render distance:"));
     comboBoxLanguage->addItem(_wp("System language"), 0);
-    comboBoxLanguage->addItem(L"English", 1);
+    comboBoxLanguage->addItem(L"Englishpp", 1);
     comboBoxLanguage->addItem(L"Русский", 2);
     comboBoxLanguage->addItem(L"Qırımtatarca", 3);
     comboBoxLanguage->addItem(L"Къырымтатарджа", 4);
@@ -88,7 +88,7 @@ void SettingsScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
         comboBoxLanguage->setSelected(1);
     else if (configuration.language == "ru")
         comboBoxLanguage->setSelected(2);
-    else if (configuration.language == "crh")
+    else if (configuration.language == "crhpp")
         comboBoxLanguage->setSelected(3);
     else if (configuration.language == "crh@cyrillic")
         comboBoxLanguage->setSelected(4);

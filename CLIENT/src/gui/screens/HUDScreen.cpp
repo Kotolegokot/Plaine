@@ -14,7 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gui/screens/HUDScreen.h"
+#include "gui/screens/HUDScreen.hpp"
 
 HUDScreen::HUDScreen(const ConfigData &configuration, gui::IGUIEnvironment &guiEnvironment) :
     IGUIScreen(configuration, guiEnvironment) {}
