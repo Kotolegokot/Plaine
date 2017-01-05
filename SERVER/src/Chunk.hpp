@@ -19,6 +19,7 @@
 #include <array>
 #include <vector>
 #include <algorithm>
+#include <cstdint>
 #include "Patterns.hpp"
 #include "util/Randomizer.hpp"
 #include "util/Array3.hpp"
@@ -137,7 +138,7 @@ private:
         /* 0     = empty
          * n > 0 = obstacle patterns
          */
-        Array3<int, Size> data;
+        Array3<std::uintptr_t, Size> data;
         data.fill(0);
 
         for (const auto &pos : poss) {
@@ -147,12 +148,12 @@ private:
             for (int x = 0; x < pattern->size().x; x++)
             for (int y = 0; y < pattern->size().y; y++)
             for (int z = 0; z < pattern->size().z; z++) {
-                int &currentCell = data.at(ppos + Vector3i(x, y, z));
+                std::uintptr_t &current_cell = data.at(ppos + Vector3i(x, y, z));
 
-                if (currentCell != 0)
+                if (current_cell != 0)
                     return result;
                 else
-                    data.at(ppos + Vector3i(x, y, z)) = pattern->id() + 1;
+                    data.at(ppos + Vector3i(x, y, z)) = reinterpret_cast<std::uintptr_t>(pattern.get());
             }
 
             result++;
@@ -164,7 +165,7 @@ private:
     void generate_map(const std::vector<PatternPos> &poss)
     {
         // clear the map
-        std::for_each(map.begin(), map.end(), [](auto &vector) { vector.clear(); });
+        std::for_each(map.begin(), map.end(), [](auto &v) { v.clear(); });
 
         for (const auto &pos : poss) {
             const auto &pattern = *pos.pattern;

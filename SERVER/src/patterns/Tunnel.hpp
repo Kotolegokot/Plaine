@@ -24,8 +24,6 @@
 class Tunnel : public IPattern
 {
 public:
-    Tunnel(int id) : IPattern(id) {}
-
     Vector3<int> size() const override
     {
         return { 1, 1, 2 };

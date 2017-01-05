@@ -25,8 +25,6 @@ template <int Thickness, int Length>
 class Crystal : public IPattern
 {
 public:
-    Crystal(int id) : IPattern(id) {}
-
     Vector3<int> size() const override
     {
         return { Thickness, Length, Thickness };

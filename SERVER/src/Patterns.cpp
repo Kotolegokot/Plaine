@@ -16,22 +16,23 @@
 
 #include "Patterns.hpp"
 
-constexpr std::size_t Patterns::ALL;
 constexpr std::size_t Patterns::CRYSTALS;
+constexpr std::size_t Patterns::CUBES;
+constexpr std::size_t Patterns::ALL;
 
 const std::array<std::shared_ptr<IPattern>, Patterns::CRYSTALS> Patterns::crystals = {
     {
-        std::make_shared<Crystal<1, 2>>(0),
-        std::make_shared<Crystal<1, 4>>(1),
-        std::make_shared<Crystal<2, 4>>(2),
-        std::make_shared<Crystal<3, 8>>(3)
+        std::make_shared<Crystal<1, 2>>(),
+        std::make_shared<Crystal<1, 4>>(),
+        std::make_shared<Crystal<2, 4>>(),
+        std::make_shared<Crystal<3, 8>>()
     }
 };
 
 const std::array<std::shared_ptr<IPattern>, Patterns::CUBES> Patterns::cubes = {
     {
-        std::make_shared<Cube<1>>(4),
-        std::make_shared<Cube<2>>(5)
+        std::make_shared<Cube<1>>(),
+        std::make_shared<Cube<2>>()
     }
 };
 
@@ -43,8 +44,8 @@ const std::array<std::shared_ptr<IPattern>, Patterns::ALL> Patterns::all = {
         Patterns::crystals[3],
         Patterns::cubes[0],
         Patterns::cubes[1],
-        std::make_shared<Tunnel>(6),
-        std::make_shared<Alley<5>>(7)
+        std::make_shared<Tunnel>(),
+        std::make_shared<Alley<5>>()
     }
 };
 

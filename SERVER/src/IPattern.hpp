@@ -21,15 +21,10 @@
 #include "IBodyFactory.hpp"
 #include "util/Vector3.hpp"
 
-class IPattern
+struct IPattern
 {
-    const int m_id;
-public:
-    IPattern (int id) :
-        m_id(id) {}
     virtual ~IPattern() = default;
 
-    int id() const { return m_id; }
     virtual Vector3i size() const = 0;
 
     // return body factories that can be

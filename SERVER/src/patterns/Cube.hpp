@@ -25,8 +25,6 @@ template <int Size>
 class Cube : public IPattern
 {
 public:
-    Cube(int id) : IPattern(id) {}
-
     Vector3<int> size() const override
     {
         return { Size, Size, Size };

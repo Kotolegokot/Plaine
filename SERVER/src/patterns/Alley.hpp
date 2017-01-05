@@ -25,8 +25,6 @@ template <int Length>
 class Alley : public IPattern
 {
 public:
-    Alley(int id) : IPattern (id) {}
-
     Vector3<int> size() const override
     {
         return { 3, 3, Length * 2 };

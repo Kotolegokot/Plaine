@@ -27,7 +27,6 @@
 
 
 class Patterns {
-private:
     static constexpr std::size_t CRYSTALS = 4;
     static constexpr std::size_t CUBES = 2;
 
