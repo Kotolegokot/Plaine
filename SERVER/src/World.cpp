@@ -41,7 +41,7 @@ World::World(const ChunkDB &chunkDB) :
     m_generator = std::make_unique<Generator>(*m_physicsWorld, 5000, 300);
 }
 
-void World::stepSimulation(btScalar timeStep, int maxSubSteps, btScalar fixedTimeStep)
+void World::step_simulation(btScalar timeStep, int maxSubSteps, btScalar fixedTimeStep)
 {
     m_explosion->set_position(m_plane->rigid_body().getCenterOfMassPosition());
     m_game_over = m_plane->exploded();
