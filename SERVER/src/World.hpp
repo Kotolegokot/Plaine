@@ -33,20 +33,6 @@ constexpr btScalar CAMERA_DISTANCE = 200;
 constexpr btScalar EXPLOSION_THRESHOLD = 400.0f;
 
 class World {
-    friend struct ContactSensorCallback;
-public:
-    World(const ChunkDB &chunkDB);
-
-    void stepSimulation(btScalar timeStep, int maxSubSteps = 1,
-                        btScalar fixedTimeStep = btScalar(1.) / btScalar(60.));
-
-    void generate();
-
-    bool game_over() const;
-    std::size_t obstacles() const;
-
-    Plane &plane();
-private:
     std::unique_ptr<btBroadphaseInterface> m_broadphase;
     std::unique_ptr<btDefaultCollisionConfiguration> m_collisionConfiguration;
     std::unique_ptr<btCollisionDispatcher> m_dispatcher;
@@ -60,4 +46,17 @@ private:
     const ChunkDB &m_chunkDB;
 
     std::atomic<bool> m_game_over { false };
+
+public:
+    World(const ChunkDB &chunkDB);
+
+    void step_simulation(btScalar timeStep, int maxSubSteps = 1,
+                        btScalar fixedTimeStep = btScalar(1.) / btScalar(60.));
+
+    void generate();
+
+    bool game_over() const;
+    std::size_t obstacles() const;
+
+    Plane &plane();
 };
