@@ -8,7 +8,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DDEBUG_OUTPUT=false")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/Modules)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/../cmake/Modules)
 find_package(Irrlicht REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
