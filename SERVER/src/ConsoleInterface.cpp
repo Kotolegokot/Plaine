@@ -20,9 +20,9 @@ static std::list<Lexeme> lexer(const std::string &str);
 
 ConsoleInterface::~ConsoleInterface()
 {
-    if (server.running()) {
+    if (m_server && m_server->running()) {
         std::cout << "waiting for the server to stop..." << std::endl;
-        server.wait();
+        m_server->wait();
     }
 
     if (std::cin.eof())
@@ -58,21 +58,20 @@ void ConsoleInterface::execute_cmd(const std::string &cmd, const std::list<Lexem
                 throw Error("start: int expected;\n"
                                  "\tusage: start [<players>]");
 
-        int players = args.size() == 1 ? args.front().from_int() : 1;
+        int players_count = args.size() == 1 ? args.front().from_int() : 1;
 
-        if (players < 1)
-            throw Error("start: amount of players must be more than 1;\n"
+        if (players_count < 0)
+            throw Error("start: amount of players must be more than 0;\n"
                              "\tusage: start [<players>]");
 
         // check server
-        if (server.running()) {
+        if (m_server && m_server->running()) {
             std::cout << "server is still running" << std::endl;
             return;
         }
 
         // if everything's alright
-        server.players = players;
-        server.start();
+        m_server = std::make_unique<Server>(players_count, 36363);
     } else
         throw Error("undefined command: '" + cmd + "'");
 }

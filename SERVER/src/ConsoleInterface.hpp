@@ -32,7 +32,7 @@ class ConsoleInterface {
     void parse_string(const std::string &str);
     void execute_cmd(const std::string &cmd, const std::list<Lexeme> &args);
 
-    Server server;
+    std::unique_ptr<Server> m_server;
 public:
     void run();
 

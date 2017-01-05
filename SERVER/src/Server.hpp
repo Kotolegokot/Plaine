@@ -17,17 +17,40 @@
 #pragma once
 
 #include <iostream>
-#include <atomic>
 #include <thread>
+#include <atomic>
+#include <memory>
+#include <asio.hpp>
+
+#include "Error.hpp"
+
+using asio::ip::tcp;
+using asio::ip::udp;
 
 class Server
 {
-    std::atomic<bool> m_running { false };
-public:
-    unsigned int players = 0;
+    // when INVALID, server must not be started
+    // again, it should be recreated instead
+    enum Status { STOPPED, LISTENING, PLAYING, INVALID };
+    std::atomic<Status> m_status { STOPPED };
 
-    void start();
+    asio::io_service m_io_service;
+    tcp::acceptor m_acceptor;
+    std::vector<tcp::socket> m_players;
+
+    const unsigned int m_players_count;
+    const unsigned short m_port;
+
+    void accept_players();
+    void play();
+public:
+    Server(unsigned int players_count = 0, unsigned short port = 0);
 
     void wait();
     bool running() const;
+    bool invalid() const;
+    Status status() const;
+
+    unsigned int players_count() const;
+    unsigned short port() const;
 };
