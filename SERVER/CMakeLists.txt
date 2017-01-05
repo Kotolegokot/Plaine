@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
+project(PlaneServer)
 
 set(EXECUTABLE_NAME server)
 
@@ -8,7 +9,9 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/../cmake/Modules)
+if (NOT COMMON_BUILD)
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/../cmake/Modules)
+endif()
 find_package(Bullet REQUIRED)
 find_package(Threads REQUIRED)
 find_package(ASIO REQUIRED)

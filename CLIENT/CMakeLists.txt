@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
+project(PlaineClient)
 
 set(EXECUTABLE_NAME client)
 
@@ -8,17 +9,20 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DDEBUG_OUTPUT=false")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/../cmake/Modules)
+if(NOT COMMON_BUILD)
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/../cmake/Modules)
+endif()
+
 find_package(Irrlicht REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(SFML REQUIRED COMPONENTS audio)
 find_package(Threads REQUIRED) 
 file(GLOB_RECURSE CPPs "src/*.cpp")
-file(GLOB_RECURSE Hs "include/*.h")
-add_executable(${EXECUTABLE_NAME} main.cpp ${CPPs} ${Hs})
+file(GLOB_RECURSE Hs   "src/*.h")
+add_executable(${EXECUTABLE_NAME} ${CPPs} ${Hs})
 
-include_directories("include/")
+include_directories("src/")
 include_directories(SYSTEM
 	${IRRLICHT_INCLUDE_DIR}
 	${BULLET_INCLUDE_DIRS}
