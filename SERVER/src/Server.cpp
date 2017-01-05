@@ -57,7 +57,11 @@ void Server::accept_players()
 void Server::play()
 {
     std::thread([this] {
+        m_status = GENERATING_CHUNKS;
+        auto chunk_db = ChunkGenerator::generate();
+
         m_status = PLAYING;
+        m_world = std::make_unique<World>(*chunk_db);
 
         std::cout << "Playing..." << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(5));

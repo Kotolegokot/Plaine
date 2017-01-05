@@ -23,6 +23,7 @@
 #include <asio.hpp>
 
 #include "Error.hpp"
+#include "ChunkGenerator.hpp"
 #include "World.hpp"
 
 using asio::ip::tcp;
@@ -32,8 +33,10 @@ class Server
 {
     // when INVALID, server must not be started
     // again, it should be recreated instead
-    enum Status { STOPPED, LISTENING, PLAYING, INVALID };
+    enum Status { STOPPED, LISTENING, GENERATING_CHUNKS, PLAYING, INVALID };
     std::atomic<Status> m_status { STOPPED };
+
+    std::unique_ptr<World> m_world;
 
     asio::io_service m_io_service;
     tcp::acceptor m_acceptor;

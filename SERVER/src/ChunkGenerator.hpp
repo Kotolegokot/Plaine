@@ -14,6 +14,8 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
+
 #include <memory>
 #include <thread>
 #include <vector>
@@ -22,7 +24,7 @@
 
 struct ChunkGenerator
 {
-    std::unique_ptr<ChunkDB> generate()
+    static std::unique_ptr<ChunkDB> generate()
     {
         auto chunk_db = std::make_unique<ChunkDB>();
 
@@ -32,15 +34,16 @@ struct ChunkGenerator
 
         auto generate_range = [&chunk_db](std::size_t begin, std::size_t end) mutable
         {
-            for (std::size_t i = begin; i < end; i++)
+            for (std::size_t i = begin; i < end; i++) {
                 chunk_db->at(i).generate();
+            }
         };
 
         std::vector<std::thread> threads;
 
         for (std::size_t i = 0; i < THREADS - 1; i++)
             threads.emplace_back(generate_range, i * CHUNKS_PER_THREAD,
-                                                  (i + 1) * CHUNKS_PER_THREAD);
+                                                 (i + 1) * CHUNKS_PER_THREAD);
 
         generate_range((THREADS - 1) * CHUNKS_PER_THREAD, chunk_db->size());
 

@@ -18,12 +18,12 @@
 
 void check_collisions(btDynamicsWorld *physicsWorld, btScalar timeStep);
 
-World::World(const ChunkDB &chunkDB) :
+World::World(const ChunkDB &chunk_db) :
     m_broadphase(std::make_unique<btDbvtBroadphase>()),
     m_collisionConfiguration(std::make_unique<btDefaultCollisionConfiguration>()),
     m_dispatcher(std::make_unique<btCollisionDispatcher>(m_collisionConfiguration.get())),
     m_solver(std::make_unique<btSequentialImpulseConstraintSolver>()),
-    m_chunkDB(chunkDB)
+    m_chunk_db(chunk_db)
 {
     btGImpactCollisionAlgorithm::registerAlgorithm(m_dispatcher.get());
 
@@ -51,7 +51,7 @@ void World::step_simulation(btScalar timeStep, int maxSubSteps, btScalar fixedTi
 
 void World::generate()
 {
-    m_generator->generate(m_plane->rigid_body().getCenterOfMassPosition(), m_chunkDB);
+    m_generator->generate(m_plane->rigid_body().getCenterOfMassPosition(), m_chunk_db);
 }
 
 bool World::game_over() const

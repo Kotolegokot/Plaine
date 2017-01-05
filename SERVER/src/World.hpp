@@ -43,12 +43,12 @@ class World {
     std::unique_ptr<Plane> m_plane;
     std::unique_ptr<Explosion> m_explosion;
 
-    const ChunkDB &m_chunkDB;
+    const ChunkDB &m_chunk_db;
 
     std::atomic<bool> m_game_over { false };
 
 public:
-    World(const ChunkDB &chunkDB);
+    World(const ChunkDB &chunk_db);
 
     void step_simulation(btScalar timeStep, int maxSubSteps = 1,
                         btScalar fixedTimeStep = btScalar(1.) / btScalar(60.));

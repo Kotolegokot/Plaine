@@ -17,10 +17,12 @@
 #include <iostream>
 
 #include "ConsoleInterface.hpp"
+#include "ChunkGenerator.hpp"
 
 int main()
 {
-    ConsoleInterface().run();
+    //ConsoleInterface().run();
+    ChunkGenerator::generate();
 
     return 0;
 }
