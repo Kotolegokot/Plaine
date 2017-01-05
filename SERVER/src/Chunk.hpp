@@ -27,18 +27,8 @@
 template <int Size>
 class Chunk {
 private:
-    struct PatternPos {
-        PatternPos() = default;
-        PatternPos(std::shared_ptr<IPattern> pattern, Vector3i pos) :
-            pattern(pattern), pos(pos) {}
-        PatternPos(const PatternPos &) = default;
-        PatternPos &operator =(const PatternPos &) = default;
-        PatternPos(PatternPos &&) noexcept = default;
-        PatternPos &operator =(PatternPos &&) noexcept = default;
-
-        std::shared_ptr<IPattern> pattern;
-        Vector3i pos;
-    };
+    // Point is a combination of a pattern and its position in a chunk
+    using Point = std::pair<std::shared_ptr<IPattern>, Vector3i>;
 
     enum Type { CLOUD, RANDOM, NOT_GENERATED };
 public:
@@ -46,22 +36,22 @@ public:
 
     void generate()
     {
-        std::vector<PatternPos> poss;
+        std::vector<Point> points;
 
         switch (Randomizer::get_int(0, 2)) {
         case 0: { // cloud of crystals
             std::size_t n;
             do {
-                poss.clear();
+                points.clear();
 
-                poss.reserve(Size * Size / 4);
+                points.reserve(Size * Size / 4);
                 for (std::size_t i = 0; i < Size * Size / 4; i++) {
-                    const int patternIndex = Randomizer::get_int(0, Patterns::crystals.size() - 1);
+                    const int pattern_i = Randomizer::get_int(0, Patterns::crystals.size() - 1);
 
-                    poss.push_back(random_pos(Patterns::crystals[patternIndex]));
+                    points.push_back(random_pos(Patterns::crystals[pattern_i]));
                 }
-            } while ((n = collisions(poss)) < Size * Size / 8);
-            poss.resize(n);
+            } while ((n = collisions(points)) < Size * Size / 8);
+            points.resize(n);
             type = CLOUD;
 
             break;
@@ -70,16 +60,16 @@ public:
         case 1: { // cloud of cubes
             std::size_t n;
             do {
-                poss.clear();
+                points.clear();
 
-                poss.reserve(Size * Size / 4);
+                points.reserve(Size * Size / 4);
                 for (std::size_t i = 0; i < Size * Size / 4; i++) {
-                    const int patternIndex = Randomizer::get_int(0, Patterns::cubes.size() - 1);
+                    const int pattern_i = Randomizer::get_int(0, Patterns::cubes.size() - 1);
 
-                    poss.push_back(random_pos(Patterns::cubes[patternIndex]));
+                    points.push_back(random_pos(Patterns::cubes[pattern_i]));
                 }
-            } while ((n = collisions(poss)) < Size * Size / 8);
-            poss.resize(n);
+            } while ((n = collisions(points)) < Size * Size / 8);
+            points.resize(n);
             type = CLOUD;
 
             break;
@@ -87,16 +77,16 @@ public:
 
         case 2: // absolutely random chunk
             do {
-                poss.clear();
+                points.clear();
 
                 const std::size_t count = Randomizer::get_int(5, 10);
-                poss.reserve(count);
+                points.reserve(count);
                 for (std::size_t i = 0; i < count; i++) {
-                    const int patternIndex = Randomizer::get_int(0, Patterns::all.size() - 1);
+                    const int pattern_i = Randomizer::get_int(0, Patterns::all.size() - 1);
 
-                    poss.push_back(random_pos(Patterns::all[patternIndex]));
+                    points.push_back(random_pos(Patterns::all[pattern_i]));
                 }
-            } while (collisions(poss) != poss.size());
+            } while (collisions(points) != points.size());
             type = RANDOM;
 
             break;
@@ -105,7 +95,7 @@ public:
             break;
         }
 
-        generate_map(poss);
+        generate_map(points);
     }
 
     // creates objects and returns number of bodies generated
@@ -132,7 +122,7 @@ public:
 
 private:
     // returns how many obstacles it managed to fit into the chunk
-    std::size_t collisions(const std::vector<PatternPos> &poss)
+    std::size_t collisions(const std::vector<Point> &points)
     {
         std::size_t result = 0;
         /* 0     = empty
@@ -141,19 +131,19 @@ private:
         Array3<std::uintptr_t, Size> data;
         data.fill(0);
 
-        for (const auto &pos : poss) {
-            const auto &pattern = pos.pattern;
-            const Vector3i &ppos = pos.pos;
+        for (const auto &point : points) {
+            const auto &pattern = point.first;
+            const Vector3i &pos = point.second;
 
             for (int x = 0; x < pattern->size().x; x++)
             for (int y = 0; y < pattern->size().y; y++)
             for (int z = 0; z < pattern->size().z; z++) {
-                std::uintptr_t &current_cell = data.at(ppos + Vector3i(x, y, z));
+                std::uintptr_t &current_cell = data.at(pos + Vector3i(x, y, z));
 
                 if (current_cell != 0)
                     return result;
                 else
-                    data.at(ppos + Vector3i(x, y, z)) = reinterpret_cast<std::uintptr_t>(pattern.get());
+                    data.at(pos + Vector3i(x, y, z)) = reinterpret_cast<std::uintptr_t>(pattern.get());
             }
 
             result++;
@@ -162,27 +152,27 @@ private:
         return result;
     }
 
-    void generate_map(const std::vector<PatternPos> &poss)
+    void generate_map(const std::vector<Point> &points)
     {
         // clear the map
         std::for_each(map.begin(), map.end(), [](auto &v) { v.clear(); });
 
-        for (const auto &pos : poss) {
-            const auto &pattern = *pos.pattern;
-            const Vector3i &ppos = pos.pos;
+        for (const auto &point : points) {
+            const auto pattern = point.first;
+            const Vector3i &pos = point.second;
 
-            for (auto &producer : pattern.factories()) {
-                // producer pos relative to pattern
-                btVector3 &origin = producer->rel_trans.getOrigin();
-                origin += ppos * CELL_LENGTH;
+            for (auto &factory : pattern->factories()) {
+                // factory position relative to pattern
+                btVector3 &origin = factory->rel_trans.getOrigin();
+                origin += pos * CELL_LENGTH;
 
-                // producer cell relative to chunk
+                // factory cell relative to chunk
                 const Vector3i cell = static_cast<Vector3i>((Vector3i(origin) / CELL_LENGTH));
 
-                // producer pos relative to cell
+                // factory position relative to cell
                 origin -= cell * CELL_LENGTH;
 
-                map[cell].push_back(std::move(producer));
+                map[cell].push_back(std::move(factory));
             }
         }
     }
@@ -197,12 +187,12 @@ private:
         return pos - cell * CELL_LENGTH;
     }
 
-    static PatternPos random_pos(std::shared_ptr<IPattern> pattern)
+    static Point random_pos(std::shared_ptr<IPattern> pattern)
     {
-        return { pattern,
-                 { Randomizer::get_int(0, Size - pattern->size().x),
-                   Randomizer::get_int(0, Size - pattern->size().y),
-                   Randomizer::get_int(-1, Size - pattern->size().z) } };
+        Vector3i pos { Randomizer::get_int(0, Size - pattern->size().x),
+                       Randomizer::get_int(0, Size - pattern->size().y),
+                       Randomizer::get_int(0, Size - pattern->size().z) };
+        return std::make_pair(pattern, pos);
     }
 
     Array3<std::vector<std::unique_ptr<IBodyFactory>>, Size> map;
