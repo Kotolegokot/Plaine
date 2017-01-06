@@ -28,9 +28,11 @@
 #include "gui/screens/SettingsScreen.hpp"
 #include "gui/screens/GameOverScreen.hpp"
 #include "gui/screens/ScoreboardScreen.hpp"
+#include "gui/screens/ConnectScreen.hpp"
 
 struct Screen {
-    enum { TERMINATED, MAIN_MENU, SETTINGS, CONTROL_SETTINGS, PAUSE_MENU, HUD, GAME_OVER, SCOREBOARD };
+    enum { TERMINATED, MAIN_MENU, CONNECT, SETTINGS, CONTROL_SETTINGS,
+           PAUSE_MENU, HUD, GAME_OVER, SCOREBOARD };
 };
 
 class GUI
@@ -62,6 +64,11 @@ public:
     PauseMenuScreen &getCurrentScreenAsPauseMenu()
     {
         return static_cast<PauseMenuScreen &>(getCurrentScreen());
+    }
+
+    ConnectScreen &getCurrentScreenAsConnect()
+    {
+        return static_cast<ConnectScreen &>(getCurrentScreen());
     }
 
     SettingsScreen &getCurrentScreenAsSettings()

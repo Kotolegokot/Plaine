@@ -17,17 +17,19 @@ find_package(Irrlicht REQUIRED)
 find_package(Bullet REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(SFML REQUIRED COMPONENTS audio)
+find_package(ASIO REQUIRED)
 find_package(Threads REQUIRED) 
 file(GLOB_RECURSE CPPs "src/*.cpp")
-file(GLOB_RECURSE Hs   "src/*.hpp")
-add_executable(${EXECUTABLE_NAME} ${CPPs} ${Hs})
+file(GLOB_RECURSE HPPs "src/*.hpp")
+add_executable(${EXECUTABLE_NAME} ${CPPs} ${HPPs})
 
 include_directories("src/")
 include_directories(SYSTEM
 	${IRRLICHT_INCLUDE_DIR}
 	${BULLET_INCLUDE_DIRS}
 	${FREETYPE_INCLUDE_DIRS}
-    ${SFML_INCLUDE_DIR})
+    ${SFML_INCLUDE_DIR}
+    ${ASIO_INCLUDE_DIR})
 
 target_link_libraries(${EXECUTABLE_NAME}
 	${IRRLICHT_LIBRARY}

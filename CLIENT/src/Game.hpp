@@ -30,6 +30,7 @@
 #include "gui/screens/ControlSettingsScreen.hpp"
 #include "gui/screens/HUDScreen.hpp"
 #include "gui/screens/MainMenuScreen.hpp"
+#include "gui/screens/ConnectScreen.hpp"
 #include "gui/screens/PauseMenuScreen.hpp"
 #include "gui/screens/SettingsScreen.hpp"
 #include "gui/screens/GameOverScreen.hpp"

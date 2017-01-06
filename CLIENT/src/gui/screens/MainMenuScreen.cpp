@@ -32,8 +32,7 @@ void MainMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
     buttonStart->setID(ID_BUTTON_START);
     setCustomButtonSkin(*buttonStart);
 
-    buttonScoreboard = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
-    buttonScoreboard->setID(ID_BUTTON_SCOREBOARD);
+    buttonScoreboard = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0)); buttonScoreboard->setID(ID_BUTTON_SCOREBOARD);
     setCustomButtonSkin(*buttonScoreboard);
 
     buttonSettings = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
@@ -52,8 +51,8 @@ void MainMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
 void MainMenuScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 {
-    buttonStart->setText(_wp("Start"));
-    buttonStart->setToolTipText(_wp("Start game"));
+    buttonStart->setText(_wp("Play"));
+    buttonStart->setToolTipText(_wp("Play game"));
 
     buttonScoreboard->setText(_wp("Scoreboard"));
     buttonScoreboard->setToolTipText(_wp("Scoreboard screen"));

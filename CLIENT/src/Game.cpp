@@ -49,6 +49,7 @@ void Game::initializeGUI()
     Game::setSpriteBank(true);
     gui = std::make_unique<GUI>(configuration, *guiEnvironment);
     gui->addScreen(std::make_unique<MainMenuScreen>(configuration, *guiEnvironment), Screen::MAIN_MENU);
+    gui->addScreen(std::make_unique<ConnectScreen>(configuration, *guiEnvironment), Screen::CONNECT);
     gui->addScreen(std::make_unique<SettingsScreen>(configuration, *guiEnvironment), Screen::SETTINGS);
     gui->addScreen(std::make_unique<ControlSettingsScreen>(configuration, *guiEnvironment), Screen::CONTROL_SETTINGS);
     gui->addScreen(std::make_unique<PauseMenuScreen>(configuration, *guiEnvironment), Screen::PAUSE_MENU);
@@ -174,14 +175,8 @@ void Game::mainMenu()
         switch (gui->getCurrentScreenIndex()) {
         case Screen::MAIN_MENU:
             if (eventReceiver->checkEvent(ID_BUTTON_START)) {
-                menu.pause();
-                if (run()) {
-                    menu.play();
-                    gui->initialize(Screen::MAIN_MENU);
-                    continue;
-                } else {
-                    return;
-                }
+                gui->initialize(Screen::CONNECT);
+                continue;
             }
             else if (eventReceiver->checkEvent(ID_BUTTON_SCOREBOARD)) {
                 gui->initialize(Screen::SCOREBOARD);
@@ -196,6 +191,25 @@ void Game::mainMenu()
                 eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
                 eventReceiver->checkKeyPressed(KEY_LEFT))
                 return;
+            break;
+        case Screen::CONNECT:
+            if (eventReceiver->checkEvent(ID_BUTTON_CONNECT)) {
+                menu.pause();
+                if (run()) {
+                    menu.play();
+                    gui->initialize(Screen::MAIN_MENU);
+                    continue;
+                } else {
+                    return;
+                }
+            } else if (eventReceiver->checkEvent(ID_BUTTON_MENU) ||
+                eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
+                eventReceiver->checkKeyPressed(KEY_LEFT)) {
+                gui->initialize(Screen::MAIN_MENU);
+                continue;
+            } else if (eventReceiver->checkEvent(ID_BUTTON_QUIT)) {
+                return;
+            }
             break;
         case Screen::SCOREBOARD:
             if (eventReceiver->checkEvent(ID_BUTTON_MENU) ||

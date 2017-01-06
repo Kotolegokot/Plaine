@@ -14,8 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SETTINGSSCREEN_H
-#define SETTINGSSCREEN_H
+#pragma once
 
 #include <irrlicht.h>
 #include "interfaces/IGUIScreen.hpp"
@@ -54,5 +53,3 @@ public:
     gui::IGUIButton *buttonMenu;
     gui::IGUIButton *buttonQuit;
 };
-
-#endif // SETTINGSSCREEN_H
