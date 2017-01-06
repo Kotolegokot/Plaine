@@ -9,7 +9,7 @@ if [ -z "$1" ]; then
 	show_usage
 fi
 
-CXX_FILES=`find include/ src/ | grep -P '.*\.(cpp|h)$' | grep -v 'CGUITTFont'`\ main.cpp
+CXX_FILES=`find CLIENT/src SERVER/src | grep -P '.*\.(cpp|h)$' | grep -v 'CGUITTFont'`
 
 if [ "$1" == "ls" ]; then
 	for file in $CXX_FILES; do
