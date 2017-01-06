@@ -14,8 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GAME_H
-#define GAME_H
+#pragma once
 
 #include <iostream>
 #include <thread>
@@ -24,7 +23,6 @@
 #include <functional>
 #include <exception>
 #include <irrlicht.h>
-#include <btBulletDynamicsCommon.h>
 #include <ITimer.h>
 #include "World.hpp"
 #include "gui/GUI.hpp"
@@ -39,13 +37,6 @@
 #include "EventReceiver.hpp"
 #include "Config.hpp"
 #include "Scoreboard.hpp"
-#include "ObstacleGenerator.hpp"
-#include "Plane.hpp"
-#include "PlaneControl.hpp"
-#include "DebugDrawer.hpp"
-#include "Explosion.hpp"
-#include "Patterns.hpp"
-#include "Chunk.hpp"
 #include "util/i18n.hpp"
 #include "util/CGUITTFont.hpp"
 #include "util/options.hpp"
@@ -61,9 +52,7 @@ public:
     void start();
 
 private:
-    bool initialized = false;
-
-    bool run(std::unique_ptr<ChunkDB> chunkDB);
+    bool run();
     void mainMenu();
 
     ConfigData configuration;
@@ -78,7 +67,6 @@ private:
     ITimer *timer;
 
     std::unique_ptr<World> world;
-    std::unique_ptr<PlaneControl> planeControl;
 
     void initializeDevice();
     void initializeGUI();
@@ -87,8 +75,4 @@ private:
 
     void updateHUD();
     void handleSelecting();
-
-    static std::unique_ptr<ChunkDB> generateChunkDB();
 };
-
-#endif // GAME_H

@@ -14,8 +14,7 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef RANDOMIZER_H
-#define RANDOMIZER_H
+#pragma once
 
 #include <random>
 
@@ -25,7 +24,7 @@ public:
     Randomizer() = delete;
 
     template <typename RealType>
-    static RealType getReal(RealType min = 0, RealType max = 1)
+    static RealType get_real(RealType min = 0, RealType max = 1)
     {
         std::uniform_real_distribution<RealType> distribution(min, max);
 
@@ -33,24 +32,22 @@ public:
     }
 
     template <typename IntType>
-    static IntType getInteger(IntType min = 0, IntType max = std::numeric_limits<IntType>::max())
+    static IntType get_integer(IntType min = 0, IntType max = std::numeric_limits<IntType>::max())
     {
         std::uniform_int_distribution<IntType> distribution(min, max);
 
         return distribution(engine);
     }
 
-    static int getInt(int min = 0, int max = std::numeric_limits<int>::max())
+    static int get_int(int min = 0, int max = std::numeric_limits<int>::max())
     {
-        return getInteger<int>(min, max);
+        return get_integer<int>(min, max);
     }
 
-    static float getFloat(float min = 0, float max = 1)
+    static float get_float(float min = 0, float max = 1)
     {
-        return getReal<float>(min, max);
+        return get_real<float>(min, max);
     }
 private:
     static std::default_random_engine engine;
 };
-
-#endif // RANDOMIZER_H

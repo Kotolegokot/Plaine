@@ -14,10 +14,6 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DEBUG_DRAWER_ENABLED
-    #define DEBUG_DRAWER_ENABLED false
-#endif // DEBUG_DRAWER_ENABLED
-
 #ifndef FOG_ENABLED
     #define FOG_ENABLED true
 #endif // FOG_ENABLED

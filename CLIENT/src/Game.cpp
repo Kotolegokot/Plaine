@@ -59,9 +59,6 @@ void Game::initializeGUI()
 
 void Game::initializeDevice()
 {
-    if (initialized)
-        throw repeated_initialization();
-
     // if fullscreen is enabled, create an empty device
     //      to get screen resolution
     if (configuration.fullscreen)
@@ -95,8 +92,6 @@ void Game::initializeDevice()
 
     timer->setTime(0);
     timer->start();
-
-    initialized = true;
 }
 
 void Game::terminateDevice()
@@ -106,8 +101,6 @@ void Game::terminateDevice()
     device->closeDevice();
     device->run();
     device->drop();
-
-    initialized = false;
 }
 
 void Game::setSpriteBank(bool isControlButton)
@@ -181,16 +174,14 @@ void Game::mainMenu()
         switch (gui->getCurrentScreenIndex()) {
         case Screen::MAIN_MENU:
             if (eventReceiver->checkEvent(ID_BUTTON_START)) {
-                auto chunkDB = generateChunkDB();
                 menu.pause();
-                if (run(std::move(chunkDB)))
-                {
+                if (run()) {
                     menu.play();
                     gui->initialize(Screen::MAIN_MENU);
                     continue;
-                }
-                else
+                } else {
                     return;
+                }
             }
             else if (eventReceiver->checkEvent(ID_BUTTON_SCOREBOARD)) {
                 gui->initialize(Screen::SCOREBOARD);
@@ -392,7 +383,7 @@ void Game::mainMenu()
 
 // start the game itself
 // returns false if quit is pressed
-bool Game::run(std::unique_ptr<ChunkDB> chunkDB)
+bool Game::run()
 {
     // start background music
     sf::Sound background = Audio::getInstance().background();
@@ -400,14 +391,7 @@ bool Game::run(std::unique_ptr<ChunkDB> chunkDB)
     background.play();
 
     gui->initialize(Screen::HUD);
-    world = std::make_unique<World>(*device, configuration, *chunkDB);
-    planeControl = std::make_unique<PlaneControl>(world->plane(), configuration.controls);
-
-    constexpr unsigned int tick = 1000.0f / 60.0f;
-    u32 timePrevious, timeCurrent;
-    u64 accumulator, deltaTime = 0;
-
-    timePrevious = timeCurrent = accumulator = timer->getTime();
+    world = std::make_unique<World>(*device, configuration);
 
     while (device->run())
     {
@@ -462,29 +446,16 @@ bool Game::run(std::unique_ptr<ChunkDB> chunkDB)
                     return false;
                 }
 
-                timeCurrent = timePrevious = timer->getTime();
-                accumulator = timer->getTime() - deltaTime;
-
                 break;
 
             case Screen::GAME_OVER: {
                 {
                     core::stringw score(_w("Your score: "));
-                    score += world->plane().score();
                     gui->getCurrentScreenAsGameOver().textScore->setText(score.c_str());
                 }
 
                 // set cursor visible
                 device->getCursorControl()->setVisible(true);
-
-                // still continue simulation as we wanna see plane blowing up when we lose
-                Log::getInstance().debug("=== BEGIN SIMULATION STEP ===");
-
-                timeCurrent = timer->getTime();
-                const float step = timeCurrent - timePrevious;
-                world->stepSimulation((step / 1000.0), 10, tick / 1000.0f);
-                timePrevious = timeCurrent;
-                Log::getInstance().debug("=== END SIMULATION STEP ===");
 
                 world->render(color);
                 handleSelecting();
@@ -500,11 +471,6 @@ bool Game::run(std::unique_ptr<ChunkDB> chunkDB)
                 Log::getInstance().debug("=== BEGIN SIMULATION STEP ===");
 
                 // physics simulation
-                timeCurrent = timer->getTime();
-                const float step = timeCurrent - timePrevious;
-                world->stepSimulation((step / 1000.0), 10, tick / 1000.0f);
-                timePrevious = timeCurrent;
-
                 if (eventReceiver->checkKeyPressed(KEY_ESCAPE)) {
                     gui->initialize(Screen::PAUSE_MENU);
                     continue;
@@ -519,23 +485,10 @@ bool Game::run(std::unique_ptr<ChunkDB> chunkDB)
 
                     gui->initialize(Screen::GAME_OVER);
                     std::vector<s32> score = Scoreboard::loadScore("score.txt");
-                    score.push_back((world->plane().score()));
                     std::sort(score.begin(), score.end(), std::greater<int>());
                     Scoreboard::saveScore("score.txt", score);
                     continue;
                 }
-
-                deltaTime = timer->getTime() - accumulator;
-                Log::getInstance().debug("generation and control handling delta = ", deltaTime, "ms");
-                while (deltaTime >= tick) {
-                    deltaTime -= tick;
-                    accumulator += tick;
-
-                    world->generate();
-                    planeControl->handle(*eventReceiver); // handle plane controls
-                    world->plane().addScore(2);
-                }
-
                 Log::getInstance().debug("=== END SIMULATION STEP ===");
 
                 world->render(color);
@@ -552,22 +505,20 @@ bool Game::run(std::unique_ptr<ChunkDB> chunkDB)
             driver->endScene();
         } else {
             if (gui->getCurrentScreenIndex() == Screen::PAUSE_MENU) {
-                timeCurrent = timePrevious = timer->getTime();
-                accumulator = timer->getTime() - deltaTime;
                 device->yield();
-            } else
+            } else {
                 gui->initialize(Screen::PAUSE_MENU);
+            }
         }
     }
 
-//    Audio::getInstance().background.stop();
     world.reset();
     return false;
 }
 
 void Game::updateHUD()
 {
-    // camera position
+   /* // camera position
     {
         core::stringw cameraPosition = _w("Plane position: (");
         core::vector3df position = world->plane().node().getPosition();
@@ -635,7 +586,7 @@ void Game::updateHUD()
         gui->getCurrentScreenAsHUD().textScore->setText(score.c_str());
 
         Log::getInstance().debug("score = ", world->plane().score());
-    }
+    }*/
 }
 
 void Game::handleSelecting()
@@ -666,35 +617,4 @@ void Game::handleSelecting()
             event.GUIEvent.EventType = gui::EGET_BUTTON_CLICKED;
             device->postEventFromUser(event);
         }
-}
-
-
-std::unique_ptr<ChunkDB> Game::generateChunkDB()
-{
-    auto chunkDB = std::make_unique<ChunkDB>();
-
-    static const std::size_t THREADS = std::max(1u, std::thread::hardware_concurrency());
-
-    static const std::size_t CHUNKS_PER_THREAD = CHUNK_DB_SIZE / THREADS;
-
-    auto generateRange =
-        [&chunkDB](std::size_t begin, std::size_t end) mutable
-        {
-            for (std::size_t i = begin; i < end; i++)
-                chunkDB->at(i).generate();
-        };
-
-    std::vector<std::thread> threads;
-
-    // first THREADS - 1 pieces
-    for (std::size_t i = 0; i < THREADS - 1; i++)
-        threads.emplace_back(generateRange, i * CHUNKS_PER_THREAD, (i + 1) * CHUNKS_PER_THREAD);
-
-    // last piece
-    generateRange((THREADS - 1) * CHUNKS_PER_THREAD, chunkDB->size());
-
-    // waiting for all the threads to get done
-    std::for_each(threads.begin(), threads.end(), std::mem_fn(&std::thread::join));
-
-    return chunkDB;
 }

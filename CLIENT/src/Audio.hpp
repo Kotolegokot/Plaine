@@ -23,7 +23,6 @@
 #include <list>
 #include <SFML/Audio.hpp>
 #include "Log.hpp"
-#include "util/Vector3.hpp"
 
 #define COLLISION_FILE "media/sounds/collision.ogg"
 #define EXPLOSION_FILE "media/sounds/explosion.ogg"
@@ -54,7 +53,7 @@ public:
     sf::Sound menu() const;
 
     static void play(sf::Sound sound, float volume = -1);
-    static void playAt(sf::Sound sound, const Vector3<float> &position, float volume = -1);
+    static void playAt(sf::Sound sound, const sf::Vector3f &position, float volume = -1);
 };
 
 #endif // AUDIO_H

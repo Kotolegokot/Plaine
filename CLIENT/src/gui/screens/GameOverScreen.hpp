@@ -14,13 +14,11 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GAMEOVERSCREEN_H
-#define GAMEOVERSCREEN_H
+#pragma once
 
 #include <irrlicht.h>
 #include "interfaces/IGUIScreen.hpp"
 #include "Config.hpp"
-#include "Plane.hpp"
 #include "util/i18n.hpp"
 #include "gui/GUIID.hpp"
 
@@ -45,5 +43,3 @@ public:
     gui::IGUIStaticText *textScore;
     gui::IGUIButton *buttonOK;
 };
-
-#endif // GAMEOVERSCREEN_H

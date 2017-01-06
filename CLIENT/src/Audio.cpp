@@ -64,7 +64,7 @@ void Audio::play(sf::Sound sound, float volume)
     clearQueue();
 }
 
-void Audio::playAt(sf::Sound sound, const Vector3<float> &position, float volume)
+void Audio::playAt(sf::Sound sound, const sf::Vector3f &position, float volume)
 {
     sound.setPosition(position);
     if (volume >= 0)
