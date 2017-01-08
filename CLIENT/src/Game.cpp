@@ -18,7 +18,8 @@
 
 using namespace irr;
 
-Game::Game(const ConfigData &data)
+Game::Game(const ConfigData &data) :
+    m_resolver(m_io_service)
 {
     // load configuration, initialize device and GUI
     configuration = data;
@@ -194,14 +195,30 @@ void Game::mainMenu()
             break;
         case Screen::CONNECT:
             if (eventReceiver->checkEvent(ID_BUTTON_CONNECT)) {
-                menu.pause();
-                if (run()) {
-                    menu.play();
+
+                try {
+                    tcp::resolver::query query(wide_to_utf8(gui->getCurrentScreenAsConnect()
+                                                            .editbox_host->getText()),
+                                               std::to_string(gui->getCurrentScreenAsConnect()
+                                                            .spinbox_port->getValue()));
+                    tcp::resolver::iterator endpoint_it = m_resolver.resolve(query);
+                    tcp::socket socket(m_io_service);
+                    asio::connect(socket, endpoint_it);
+
+                    menu.pause();
+                    if (run()) {
+                        menu.play();
+                        gui->initialize(Screen::MAIN_MENU);
+                        continue;
+                    } else {
+                        return;
+                    }
+                } catch (const std::exception &e) {
+                    std::cerr << e.what() << std::endl;
                     gui->initialize(Screen::MAIN_MENU);
                     continue;
-                } else {
-                    return;
                 }
+
             } else if (eventReceiver->checkEvent(ID_BUTTON_MENU) ||
                 eventReceiver->checkKeyPressed(KEY_ESCAPE) ||
                 eventReceiver->checkKeyPressed(KEY_LEFT)) {

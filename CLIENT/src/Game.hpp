@@ -22,6 +22,7 @@
 #include <memory>
 #include <functional>
 #include <exception>
+#include <asio.hpp>
 #include <irrlicht.h>
 #include <ITimer.h>
 #include "World.hpp"
@@ -43,18 +44,17 @@
 #include "util/options.hpp"
 #include "util/exceptions.hpp"
 
+using asio::ip::tcp;
+using asio::ip::udp;
 using namespace irr;
 
 class Game
 {
-public:
-    Game(const struct ConfigData &data = ConfigData());
-    ~Game();
-    void start();
-
-private:
     bool run();
     void mainMenu();
+
+    asio::io_service m_io_service;
+    tcp::resolver m_resolver;
 
     ConfigData configuration;
     std::unique_ptr<GUI> gui;
@@ -76,4 +76,10 @@ private:
 
     void updateHUD();
     void handleSelecting();
+
+public:
+    Game(const struct ConfigData &data = ConfigData());
+    ~Game();
+
+    void start();
 };
