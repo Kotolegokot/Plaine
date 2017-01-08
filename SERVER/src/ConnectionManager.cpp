@@ -14,30 +14,32 @@
  * along with Plaine. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "ConnectionManager.hpp"
 
-#include <atomic>
-#include <iostream>
-#include <thread>
-#include <string>
-#include <list>
-#include <memory>
-#include <exception>
-#include <asio.hpp>
+void ConnectionManager::start(connection_ptr c)
+{
+    m_connections.insert(c);
+    c->start();
+}
 
-#include "Error.hpp"
-#include "Lexeme.hpp"
-#include "Server.hpp"
+void ConnectionManager::stop(connection_ptr c)
+{
+    m_connections.erase(c);
+    c->stop();
+}
 
-class ConsoleInterface {
-    void parse_string(const std::string &str);
-    void execute_cmd(const std::string &cmd, const std::list<Lexeme> &args);
-    static std::string usage(const std::string &cmd);
+void ConnectionManager::stop_all()
+{
+    std::for_each(m_connections.begin(), m_connections.end(), std::mem_fn(&Connection::stop));
+    m_connections.clear();
+}
 
-    std::unique_ptr<Server> m_server;
-    asio::io_service m_io_service;
-public:
-    void run();
+bool ConnectionManager::all_ready() const
+{
+    return std::all_of(m_connections.cbegin(), m_connections.cend(), std::mem_fn(&Connection::ready));
+}
 
-    ~ConsoleInterface();
-};
+std::size_t ConnectionManager::count() const
+{
+    return m_connections.size();
+}

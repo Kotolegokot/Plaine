@@ -16,42 +16,45 @@
 
 #include <Server.hpp>
 
-Server::Server(unsigned int players_count, unsigned short port) :
-     m_acceptor(m_io_service, tcp::endpoint(tcp::v4(), port)),
-     m_players_count(players_count),
-     m_port(port)
+Server::Server(asio::io_service &io_service,
+               unsigned int players_count, unsigned short port) :
+    m_io_service(io_service),
+    m_acceptor(io_service, tcp::endpoint(tcp::v4(), port)),
+    m_players_count(players_count),
+    m_port(port)
 {
-    m_io_service.run();
-
     std::cout << "Listening..." << std::endl;
     m_status = LISTENING;
-    accept_players();
+    //m_acceptor.listen();
+    start_accept();
 }
 
-void Server::accept_players()
+void Server::start_accept()
 {
-    if (m_players_count == 0) {
-        play();
-        return;
+//    if (m_players_count - m_manager.count() == 0) {
+//        while (!m_manager.all_ready());
+//        play();
+//        return;
+//    }
+
+    new_connection.reset(new Connection(m_io_service, m_manager));
+    m_acceptor.async_accept(new_connection->socket(), std::bind(&Server::handle_accept,
+                                                                this,
+                                                                std::placeholders::_1));
+}
+
+void Server::handle_accept(const asio::error_code &e)
+{
+    if (!e) {
+        m_manager.start(new_connection);
+        std::cout << "client accepted, "
+                  << m_players_count - m_manager.count()
+                  << " left" << std::endl;
+    } else {
+        std::cerr << "Error: " << e.message() << std::endl;
     }
 
-    m_players.emplace_back(m_io_service);
-    m_acceptor.async_accept(m_players.back(), [this](const asio::error_code &error)
-    {
-        if (error) {
-            m_players.pop_back();
-        } else {
-            std::cout << "player accepted, "
-                      << m_players_count - m_players.size()
-                      << " left" << std::endl;
-        }
-
-        if (m_players_count - m_players.size() == 0) {
-            play();
-        } else {
-            accept_players();
-        }
-    });
+    start_accept();
 }
 
 void Server::play()
@@ -71,13 +74,12 @@ void Server::play()
         std::cout << "Game Over" << std::endl;
 
         // close connections
-        for (tcp::socket &player : m_players)
-            player.close();
+        m_manager.stop_all();
         m_acceptor.close();
     }).detach();
 }
 
-void Server::wait()
+void Server::wait() const
 {
     while (m_status != STOPPED ||
            m_status != INVALID);

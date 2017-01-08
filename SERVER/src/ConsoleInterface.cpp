@@ -64,7 +64,8 @@ void ConsoleInterface::execute_cmd(const std::string &cmd, const std::list<Lexem
             throw Error("start: server is still running");
 
         // if everything's alright
-        m_server = std::make_unique<Server>(players_count, 36363);
+        m_server = std::make_unique<Server>(m_io_service, players_count, 36363);
+        m_io_service.run();
     } else if (cmd == "help") {
         //check arguments
         if (args.size() > 1)
@@ -135,7 +136,7 @@ std::string ConsoleInterface::usage(const std::string &cmd)
 
 void ConsoleInterface::run()
 {
-    unsigned long line = 0;
+    unsigned long line = 1;
     while (!std::cin.fail()) {
         try {
             std::cout << '[' << line << "]> ";

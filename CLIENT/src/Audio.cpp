@@ -20,7 +20,7 @@ Audio Audio::instance;
 std::queue<sf::Sound, std::list<sf::Sound>> Audio::queue;
 
 Audio::Audio() {
-    if (!collisionBuffer.loadFromFile(COLLISION_FILE))
+    /*if (!collisionBuffer.loadFromFile(COLLISION_FILE))
         Log::getInstance().warning("couldn't open file '", COLLISION_FILE, "'");
 
     if (!explosionBuffer.loadFromFile(EXPLOSION_FILE))
@@ -30,7 +30,7 @@ Audio::Audio() {
         Log::getInstance().warning("couldn't open file '", BACKGROUND_FILE, "'");
 
     if (!menuBuffer.loadFromFile(MENU_FILE))
-        Log::getInstance().warning("couldn't open file '", MENU_FILE, "'");
+        Log::getInstance().warning("couldn't open file '", MENU_FILE, "'");*/
 }
 
 sf::Sound Audio::collision() const

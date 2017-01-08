@@ -18,8 +18,7 @@
 
 using namespace irr;
 
-Game::Game(const ConfigData &data) :
-    m_resolver(m_io_service)
+Game::Game(const ConfigData &data)
 {
     // load configuration, initialize device and GUI
     configuration = data;
@@ -197,13 +196,16 @@ void Game::mainMenu()
             if (eventReceiver->checkEvent(ID_BUTTON_CONNECT)) {
 
                 try {
-                    tcp::resolver::query query(wide_to_utf8(gui->getCurrentScreenAsConnect()
-                                                            .editbox_host->getText()),
-                                               std::to_string(gui->getCurrentScreenAsConnect()
-                                                            .spinbox_port->getValue()));
-                    tcp::resolver::iterator endpoint_it = m_resolver.resolve(query);
-                    tcp::socket socket(m_io_service);
-                    asio::connect(socket, endpoint_it);
+                    std::string host = wide_to_utf8(gui->getCurrentScreenAsConnect()
+                                                    .editbox_host->getText());
+                    unsigned short port = gui->getCurrentScreenAsConnect()
+                                                    .spinbox_port->getValue();
+                    std::string nick = wide_to_utf8(gui->getCurrentScreenAsConnect()
+                                                    .editbox_nick->getText());
+
+                    Client client(m_io_service);
+                    client.start(nick, host, port);
+                    m_io_service.run();
 
                     menu.pause();
                     if (run()) {

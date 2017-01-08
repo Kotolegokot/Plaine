@@ -43,6 +43,7 @@
 #include "util/CGUITTFont.hpp"
 #include "util/options.hpp"
 #include "util/exceptions.hpp"
+#include "Client.hpp"
 
 using asio::ip::tcp;
 using asio::ip::udp;
@@ -54,7 +55,6 @@ class Game
     void mainMenu();
 
     asio::io_service m_io_service;
-    tcp::resolver m_resolver;
 
     ConfigData configuration;
     std::unique_ptr<GUI> gui;

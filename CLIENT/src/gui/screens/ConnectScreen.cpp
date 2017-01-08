@@ -33,12 +33,12 @@ void ConnectScreen::initialize(s32 button_width, s32 button_height)
 
     text_host = guiEnvironment.addStaticText(_wp(""), core::rect<s32>());
 
-    editbox_host = guiEnvironment.addEditBox(L"", core::rect<s32>());
+    editbox_host = guiEnvironment.addEditBox(L"127.0.0.1", core::rect<s32>());
     editbox_host->setID(ID_EDITBOX_HOST);
 
     text_port = guiEnvironment.addStaticText(_wp(""), core::rect<s32>());
 
-    spinbox_port = guiEnvironment.addSpinBox(L"Port", core::rect<s32>());
+    spinbox_port = guiEnvironment.addSpinBox(L"36363", core::rect<s32>());
     spinbox_port->setID(ID_SPINBOX_PORT);
 
     button_connect = guiEnvironment.addButton(core::rect<s32>());

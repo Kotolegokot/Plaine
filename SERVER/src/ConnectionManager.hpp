@@ -16,28 +16,26 @@
 
 #pragma once
 
-#include <atomic>
-#include <iostream>
-#include <thread>
-#include <string>
-#include <list>
-#include <memory>
-#include <exception>
-#include <asio.hpp>
+#include <set>
+#include <algorithm>
+#include "Connection.hpp"
 
-#include "Error.hpp"
-#include "Lexeme.hpp"
-#include "Server.hpp"
+class ConnectionManager {
+    std::set<connection_ptr> m_connections;
 
-class ConsoleInterface {
-    void parse_string(const std::string &str);
-    void execute_cmd(const std::string &cmd, const std::list<Lexeme> &args);
-    static std::string usage(const std::string &cmd);
-
-    std::unique_ptr<Server> m_server;
-    asio::io_service m_io_service;
 public:
-    void run();
+    // add the specified connection to the manager and start it
+    void start(connection_ptr c);
 
-    ~ConsoleInterface();
+    // stop the specified connection
+    void stop(connection_ptr c);
+
+    // stop all connections
+    void stop_all();
+
+    // checks if all players are ready
+    bool all_ready() const;
+
+    // number of active connections
+    std::size_t count() const;
 };
