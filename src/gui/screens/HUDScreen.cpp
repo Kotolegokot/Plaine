@@ -26,6 +26,8 @@ HUDScreen::~HUDScreen()
 
 void HUDScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
+    guiEnvironment.getSkin()->setColor(gui::EGDC_BUTTON_TEXT,video::SColor(255,230,230,230));
+
     textCameraPosition = guiEnvironment.addStaticText(L"CAMERA_POS", core::rect<s32>(10, 10, 400, 30));
     textCameraPosition->setBackgroundColor(video::SColor(120, 255, 255, 255));
 

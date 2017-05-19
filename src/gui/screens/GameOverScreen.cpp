@@ -28,6 +28,7 @@ GameOverScreen::~GameOverScreen()
 
 void GameOverScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
+    guiEnvironment.getSkin()->setColor(gui::EGDC_BUTTON_TEXT,video::SColor(255,230,230,230));
     textMessage = guiEnvironment.addStaticText(L"LOSER!!1", core::rect<s32>(0, 0, 0, 0));
     textScore = guiEnvironment.addStaticText(L"SCORE", core::rect<s32>(0, 0, 0, 0));
 

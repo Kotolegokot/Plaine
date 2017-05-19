@@ -28,6 +28,7 @@ MainMenuScreen::~MainMenuScreen()
 
 void MainMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
+    guiEnvironment.getSkin()->setColor(gui::EGDC_BUTTON_TEXT,video::SColor(255,30,30,30));
     buttonStart = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));
     buttonStart->setID(ID_BUTTON_START);
     setCustomButtonSkin(*buttonStart);
