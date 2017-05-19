@@ -27,7 +27,6 @@ ControlSettingsScreen::~ControlSettingsScreen()
 void ControlSettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
     textScreenSize = guiEnvironment.addStaticText(L"SCREEN_SIZE", core::rect<s32>(0, 0, 0, 0));
-
     static constexpr std::array<u32, CONTROLS_COUNT>
             ids { { ID_BUTTON_CONTROL_UP, ID_BUTTON_CONTROL_LEFT,
                     ID_BUTTON_CONTROL_DOWN, ID_BUTTON_CONTROL_RIGHT,
