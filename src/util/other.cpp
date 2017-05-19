@@ -21,7 +21,7 @@ using namespace irr;
 video::SColor iridescentColor(const u32 &currentTime)
 {
     static video::SColor color = video::SColor(0, Randomizer::getFloat(0, 255), Randomizer::getFloat(0, 255), Randomizer::getFloat(0, 255));
-    static video::SColor oldColor = color;
+    static video::SColor oldColor;
     static f32 diff = 0;
     static u32 time = 0;
     if (int(time - currentTime) > COLOR_CHANGE_INTERVAL)
@@ -29,7 +29,13 @@ video::SColor iridescentColor(const u32 &currentTime)
     if (currentTime >= time)
         {
             oldColor = color;
-            color = video::SColor(0, Randomizer::getFloat(100, 255), Randomizer::getFloat(100, 255), Randomizer::getFloat(100, 255));
+            int rnd = Randomizer::getInt(0, 2);
+            if (rnd == 0)
+                color = video::SColor(0, Randomizer::getFloat(225, 255), Randomizer::getFloat(0, 30), Randomizer::getFloat(0, 30));
+            else if (rnd == 1)
+                color = video::SColor(0, Randomizer::getFloat(0, 30), Randomizer::getFloat(225, 255), Randomizer::getFloat(0, 30));
+            else
+                color = video::SColor(0, Randomizer::getFloat(0, 30), Randomizer::getFloat(0, 30), Randomizer::getFloat(225, 255));
             time = currentTime + COLOR_CHANGE_INTERVAL;
         }
     diff = (time - currentTime)/COLOR_CHANGE_INTERVAL;

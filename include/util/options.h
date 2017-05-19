@@ -27,7 +27,7 @@
 #endif // TEXTURES_ENABLED
 
 #ifndef IRIDESCENT_BACKGROUND
-    #define IRIDESCENT_BACKGROUND true
+    #define IRIDESCENT_BACKGROUND false
 #endif // IRIDESCENT_BACKGROUND
 
 #ifndef IRIDESCENT_LIGHT
@@ -39,7 +39,7 @@
 #endif // IRIDESCENT_FOG
 
 #ifndef DEFAULT_COLOR
-    #define DEFAULT_COLOR video::SColor(0, 200, 200, 200)
+    #define DEFAULT_COLOR video::SColor(0, 0, 0, 0)
 #endif // DEFAULT_COLOR
 
 #ifndef DEFAULT_LIGHT_COLOR
