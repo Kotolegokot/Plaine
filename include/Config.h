@@ -68,6 +68,7 @@ struct ConfigData {
     bool vsync = true;
     bool stencilBuffer = true;
     u32 renderDistance = 2000;
+    int volume = 100;
     Controls controls;
 
     bool needRestart(const ConfigData &another) const

@@ -27,6 +27,15 @@ SettingsScreen::~SettingsScreen()
 void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
     textScreenSize = guiEnvironment.addStaticText(L"SCREEN_SIZE", core::rect<s32>(0, 0, 0, 0));
+
+    textVolume = guiEnvironment.addStaticText(_wp(""), core::rect<s32>(0, 0, 0, 0));
+      
+    scrollBarVolume = guiEnvironment.addScrollBar(true, core::rect<s32>(0, 0, 0, 0));
+    scrollBarVolume->setID(ID_SCROLLBAR_VOLUME);
+    scrollBarVolume->setMin(0);
+    scrollBarVolume->setMax(100);
+    //    scrollBarVolume->setSmallStep(1);
+
     textLanguage = guiEnvironment.addStaticText(_wp(""), core::rect<s32>(0, 0, 0, 0));
 
     comboBoxLanguage = guiEnvironment.addComboBox(core::rect<s32>(0, 0, 0, 0));
@@ -72,6 +81,8 @@ void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 
 void SettingsScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 {
+    textVolume->setText(_wp("Volume:"));
+    scrollBarVolume->setPos(configuration.volume);
     comboBoxLanguage->clear();
     comboBoxResolution->clear();
     textResolution->setText(_wp("Resolution:"));
@@ -161,6 +172,8 @@ void SettingsScreen::reload(s32 /*buttonWidth*/, s32 /*buttonHeight*/)
 void SettingsScreen::terminate()
 {
     if (initialized) {
+        textVolume->remove();
+        scrollBarVolume->remove();
         textScreenSize->remove();
         textLanguage->remove();
         textResolution->remove();
@@ -181,6 +194,16 @@ void SettingsScreen::terminate()
 
 void SettingsScreen::resize(s32 buttonWidth, s32 buttonHeight)
 {
+    textVolume->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3 * buttonWidth / 2 - 2 * SPACE,
+  						    configuration.resolution.Height - 10 * buttonHeight - 10 * SPACE,
+  						    configuration.resolution.Width - 2 * SPACE,
+  						    configuration.resolution.Height - 9 * buttonHeight - 10 * SPACE));
+
+    scrollBarVolume->setRelativePosition(core::rect<s32>(configuration.resolution.Width - buttonWidth - 2 * SPACE,
+                                                         configuration.resolution.Height - 10 * buttonHeight - 10 * SPACE,
+                                                         configuration.resolution.Width - 2 * SPACE,
+                                                         configuration.resolution.Height - 9 * buttonHeight - 10 * SPACE));
+  
     textLanguage->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3 * buttonWidth / 2 - 2 * SPACE,
                                                       configuration.resolution.Height - 9 * buttonHeight - 9 * SPACE,
                                                       configuration.resolution.Width - buttonWidth - 2 * SPACE,
@@ -254,12 +277,14 @@ void SettingsScreen::resize(s32 buttonWidth, s32 buttonHeight)
 
 std::vector<gui::IGUIElement *> SettingsScreen::getSelectableElements()
 {
-    return { checkBoxVSync, checkBoxStencilBuffer, buttonToggleFullscreen,
+    return { scrollBarVolume, checkBoxVSync, checkBoxStencilBuffer, buttonToggleFullscreen,
         buttonControlSettings, buttonMenu, buttonQuit };
 }
 
 void SettingsScreen::setVisible(bool visible)
 {
+    textVolume->setVisible(visible);
+    scrollBarVolume->setVisible(visible);
     textScreenSize->setVisible(visible);
     textLanguage->setVisible(visible);
     textResolution->setVisible(visible);

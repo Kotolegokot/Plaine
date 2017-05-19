@@ -41,6 +41,8 @@ public:
     virtual void setVisible(bool visible) override;
 
     gui::IGUIStaticText *textScreenSize;
+    gui::IGUIScrollBar *scrollBarVolume;
+    gui::IGUIStaticText *textVolume;
     gui::IGUIStaticText *textLanguage;
     gui::IGUIStaticText *textResolution;
     gui::IGUIStaticText *textRenderDistance;

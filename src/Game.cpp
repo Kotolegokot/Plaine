@@ -161,6 +161,7 @@ void Game::mainMenu()
 {
     sf::Sound menu = Audio::getInstance().menu();
     menu.setLoop(true);
+    menu.setVolume(configuration.volume);
     menu.play();
 
     // set resolution to actual screen size
@@ -216,6 +217,10 @@ void Game::mainMenu()
                 return;
             break;
         case Screen::SETTINGS:
+  	    if (eventReceiver->checkEvent(ID_SCROLLBAR_VOLUME)) {
+  	        configuration.volume = gui->getCurrentScreenAsSettings().scrollBarVolume->getPos();
+		menu.setVolume(configuration.volume);
+	    }
             if (eventReceiver->checkEvent(ID_COMBOBOX_LANGUAGE)) {
                 switch (gui->getCurrentScreenAsSettings().comboBoxLanguage->getSelected()) {
                 case 0:
@@ -397,6 +402,7 @@ bool Game::run(std::unique_ptr<ChunkDB> chunkDB)
     // start background music
     sf::Sound background = Audio::getInstance().background();
     background.setLoop(true);
+    background.setVolume(configuration.volume);
     background.play();
 
     gui->initialize(Screen::HUD);

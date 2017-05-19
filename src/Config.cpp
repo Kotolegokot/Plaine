@@ -161,7 +161,7 @@ ConfigData Config::loadConfig(const std::string &filename)
     } */
 
     bool goToNextNEWLINE = false;
-    enum { NONE, RESOLUTION, FULLSCREEN, LANGUAGE, RESIZABLE, VSYNC, STENCILBUFFER, RENDER_DISTANCE, CONTROLS,
+    enum { NONE, RESOLUTION, FULLSCREEN, VOLUME, LANGUAGE, RESIZABLE, VSYNC, STENCILBUFFER, RENDER_DISTANCE, CONTROLS,
     CONTROL_UP, CONTROL_LEFT, CONTROL_DOWN, CONTROL_RIGHT, CONTROL_CW_ROLL, CONTROL_CCW_ROLL} state = NONE;
 
     for (std::vector<Item>::const_iterator i = items.cbegin(); i != items.cend(); ++i) {
@@ -177,7 +177,9 @@ ConfigData Config::loadConfig(const std::string &filename)
                     state = RESOLUTION;
                 else if (i->getString() == "fullscreen")
                     state = FULLSCREEN;
-                else if (i->getString() == "language")
+		else if (i->getString() == "volume") {
+  		    state = VOLUME;
+                } else if (i->getString() == "language")
                     state = LANGUAGE;
                 else if (i->getString() == "resizable")
                     state = RESIZABLE;
@@ -238,6 +240,18 @@ ConfigData Config::loadConfig(const std::string &filename)
                 state = NONE;
                 break;
             }
+	    case VOLUME: {
+  	        EXPECT(Item::OP_EQUAL);
+		++i;
+
+		EXPECT(Item::INT);
+		data.volume = i->getInt();
+		++i;
+		EXPECT(Item::NEWLINE);
+
+		state = NONE;
+		break;
+	    }
             case LANGUAGE: {
                 EXPECT(Item::OP_EQUAL);
                 ++i;
@@ -417,6 +431,7 @@ void Config::saveConfig(const std::string &filename, const ConfigData &data)
 
     outputFile << "resolution=" << data.resolution.Width << "," << data.resolution.Height << std::endl;
     outputFile << "fullscreen=" << (data.fullscreen ? "on" : "off") << std::endl;
+    outputFile << "volume=" << data.volume << std::endl;
     outputFile << "language=" << "\"" << std::string(data.language.c_str()) << "\"" << std::endl;
     outputFile << "resizable=" << (data.resizable ? "on" : "off") << std::endl;
     outputFile << "vsync=" << (data.vsync ? "on" : "off") << std::endl;

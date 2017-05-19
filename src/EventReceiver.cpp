@@ -47,9 +47,9 @@ bool EventReceiver::OnEvent(const SEvent &event)
         case gui::EGET_BUTTON_CLICKED:
         case gui::EGET_COMBO_BOX_CHANGED:
         case gui::EGET_CHECKBOX_CHANGED:
+	case gui::EGET_SCROLL_BAR_CHANGED:
         case gui::EGET_SPINBOX_CHANGED:
             guiEvents[id] = true;
-            break;
         default:
             {
                 break;
