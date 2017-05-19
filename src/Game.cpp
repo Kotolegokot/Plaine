@@ -384,10 +384,10 @@ void Game::mainMenu()
         }
 
         if (device->isWindowActive()) {
-            if (IRIDESCENT_BACKGROUND)
+            //if (IRIDESCENT_BACKGROUND)
                 driver->beginScene(true, true, iridescentColor(timer->getTime()));
-            else
-                driver->beginScene(true, true, DEFAULT_COLOR);
+            //else
+            //    driver->beginScene(true, true, DEFAULT_COLOR);
             guiEnvironment->drawAll();
             driver->endScene();
         } else {
