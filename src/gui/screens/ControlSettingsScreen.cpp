@@ -26,8 +26,8 @@ ControlSettingsScreen::~ControlSettingsScreen()
 
 void ControlSettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
+    guiEnvironment.getSkin()->setColor(gui::EGDC_BUTTON_TEXT,video::SColor(255,30,30,30));
     textScreenSize = guiEnvironment.addStaticText(L"SCREEN_SIZE", core::rect<s32>(0, 0, 0, 0));
-
     static constexpr std::array<u32, CONTROLS_COUNT>
             ids { { ID_BUTTON_CONTROL_UP, ID_BUTTON_CONTROL_LEFT,
                     ID_BUTTON_CONTROL_DOWN, ID_BUTTON_CONTROL_RIGHT,

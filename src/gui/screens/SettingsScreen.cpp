@@ -26,10 +26,12 @@ SettingsScreen::~SettingsScreen()
 
 void SettingsScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
+    guiEnvironment.getSkin()->setColor(gui::EGDC_BUTTON_TEXT,video::SColor(255,30,30,30));
+
     textScreenSize = guiEnvironment.addStaticText(L"SCREEN_SIZE", core::rect<s32>(0, 0, 0, 0));
 
     textVolume = guiEnvironment.addStaticText(_wp(""), core::rect<s32>(0, 0, 0, 0));
-      
+
     scrollBarVolume = guiEnvironment.addScrollBar(true, core::rect<s32>(0, 0, 0, 0));
     scrollBarVolume->setID(ID_SCROLLBAR_VOLUME);
     scrollBarVolume->setMin(0);
@@ -203,7 +205,7 @@ void SettingsScreen::resize(s32 buttonWidth, s32 buttonHeight)
                                                          configuration.resolution.Height - 10 * buttonHeight - 10 * SPACE,
                                                          configuration.resolution.Width - 2 * SPACE,
                                                          configuration.resolution.Height - 9 * buttonHeight - 10 * SPACE));
-  
+
     textLanguage->setRelativePosition(core::rect<s32>(configuration.resolution.Width - 3 * buttonWidth / 2 - 2 * SPACE,
                                                       configuration.resolution.Height - 9 * buttonHeight - 9 * SPACE,
                                                       configuration.resolution.Width - buttonWidth - 2 * SPACE,

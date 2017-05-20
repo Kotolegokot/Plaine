@@ -26,6 +26,8 @@ PauseMenuScreen::~PauseMenuScreen()
 
 void PauseMenuScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
+    guiEnvironment.getSkin()->setColor(gui::EGDC_BUTTON_TEXT,video::SColor(255,230,230,230));
+
     textScreenSize = guiEnvironment.addStaticText(L"SCREEN_SIZE",core::rect<s32>(10, 10, 200, 30));
 
     buttonResume = guiEnvironment.addButton(core::rect<s32>(0, 0, 0, 0));

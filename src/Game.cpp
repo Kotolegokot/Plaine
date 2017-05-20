@@ -55,6 +55,7 @@ void Game::initializeGUI()
     gui->addScreen(std::make_unique<HUDScreen>(configuration, *guiEnvironment), Screen::HUD);
     gui->addScreen(std::make_unique<GameOverScreen>(configuration, *guiEnvironment), Screen::GAME_OVER);
     gui->addScreen(std::make_unique<ScoreboardScreen>(configuration, *guiEnvironment), Screen::SCOREBOARD);
+    //device->getGUIEnvironment()->getSkin()->setColor(gui::EGDC_BUTTON_TEXT,video::SColor(255,200,200,200));
 }
 
 void Game::initializeDevice()
@@ -383,10 +384,10 @@ void Game::mainMenu()
         }
 
         if (device->isWindowActive()) {
-            if (IRIDESCENT_BACKGROUND)
+            //if (IRIDESCENT_BACKGROUND)
                 driver->beginScene(true, true, iridescentColor(timer->getTime()));
-            else
-                driver->beginScene(true, true, DEFAULT_COLOR);
+            //else
+            //    driver->beginScene(true, true, DEFAULT_COLOR);
             guiEnvironment->drawAll();
             driver->endScene();
         } else {

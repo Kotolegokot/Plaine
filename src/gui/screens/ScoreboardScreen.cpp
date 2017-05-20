@@ -26,6 +26,8 @@ ScoreboardScreen::~ScoreboardScreen()
 
 void ScoreboardScreen::initialize(s32 buttonWidth, s32 buttonHeight)
 {
+    guiEnvironment.getSkin()->setColor(gui::EGDC_BUTTON_TEXT,video::SColor(255,30,30,30));
+
     tableScore = guiEnvironment.addTable(core::rect<s32>(0, 0, 0, 0));
     tableScore->setID(ID_LISTBOX_SCORE);
     tableScore->setResizableColumns(false);

@@ -20,6 +20,7 @@
 #include <unordered_map>
 #include <vector>
 #include <memory>
+#include <IGUIStaticText.h>
 #include "interfaces/IGUIScreen.h"
 #include "gui/screens/ControlSettingsScreen.h"
 #include "gui/screens/HUDScreen.h"
